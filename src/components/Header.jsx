@@ -1,12 +1,26 @@
 
 import React from 'react';
 import { Search, RefreshCw, Filter } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const isLeadsPage = location.pathname === '/leads';
   const isCreateLeadPage = location.pathname === '/leads/create';
+  
+  const handleCreateLead = () => {
+    navigate('/leads/create');
+  };
+  
+  const handleCancel = () => {
+    navigate('/leads');
+  };
+  
+  const handleSubmit = () => {
+    // Submit form logic would go here
+    navigate('/leads');
+  };
   
   return (
     <header className="w-full bg-white shadow-card">
@@ -45,7 +59,10 @@ const Header = () => {
             </div>
             
             <div className="flex items-center gap-3">
-              <button className="btn-primary flex items-center gap-2">
+              <button 
+                className="btn-primary flex items-center gap-2"
+                onClick={handleCreateLead}
+              >
                 <span>+ Create Lead</span>
               </button>
               <button className="btn-secondary flex items-center gap-2">
@@ -81,8 +98,16 @@ const Header = () => {
           </div>
           
           <div className="flex items-center gap-3">
-            <button className="btn-secondary">Cancel</button>
-            <button className="btn-primary flex items-center gap-2">
+            <button 
+              className="btn-secondary"
+              onClick={handleCancel}
+            >
+              Cancel
+            </button>
+            <button 
+              className="btn-primary flex items-center gap-2"
+              onClick={handleSubmit}
+            >
               <span>Submit</span>
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M3.33301 8H12.6663" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
