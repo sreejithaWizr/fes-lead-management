@@ -2,6 +2,10 @@
 import React from 'react';
 import { Search, RefreshCw, Filter } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import UserProf from "../assets/user-image.svg";
+import FilterIcon from "../assets/filter.svg";
+import MenuIcon from "../assets/menu.svg";
+import { CustomButton} from "react-mui-tailwind"
 
 const Header = () => {
   const location = useLocation();
@@ -29,9 +33,10 @@ const Header = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <img
-                src="/lovable-uploads/13088430-a0a9-46fa-b35d-c0c5529f19db.png"
+                src={UserProf}
                 alt="Profile"
-                className="w-10 h-10 rounded-full"
+                className="w-[61px] h-[61px] rounded-[12px]"
+
               />
               <div>
                 <h2 className="text-sm font-normal text-[#757575]">Hello,</h2>
@@ -58,27 +63,31 @@ const Header = () => {
               <span className="bg-primary text-white px-2 py-0.5 rounded-md text-xs font-medium">8,467</span>
             </div>
             
-            <div className="flex items-center gap-3">
-              <button 
+            <div className="flex items-center gap-3 w-[405px]">
+              {/* <button 
                 className="btn-primary flex items-center gap-2"
                 onClick={handleCreateLead}
               >
                 <span>+ Create Lead</span>
-              </button>
-              <button className="btn-secondary flex items-center gap-2">
+              </button> */}
+              <CustomButton text="Create Lead" endIcon= {false} />
+              {/* <button className="btn-secondary flex items-center gap-2">
                 <span>Bulk Upload</span>
-              </button>
-              <button className="w-10 h-10 flex items-center justify-center rounded-lg border border-[#E0E0E0] text-[#757575]">
+              </button> */}
+              <CustomButton text="Bulk Upload" variant="secondary" endIcon= {false} />
+              {/* <button className="w-10 h-10 flex items-center justify-center rounded-lg border border-[#E0E0E0] text-[#757575]">
                 <Filter size={18} />
-              </button>
-              <button className="w-10 h-10 flex items-center justify-center rounded-lg border border-[#E0E0E0] text-[#757575]">
+              </button> */}
+              <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={FilterIcon} />
+              <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={MenuIcon} />
+              {/* <button className="w-10 h-10 flex items-center justify-center rounded-lg border border-[#E0E0E0] text-[#757575]">
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M8 1H1V8H8V1Z" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   <path d="M17 1H10V8H17V1Z" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   <path d="M17 10H10V17H17V10Z" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   <path d="M8 10H1V17H8V10Z" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
