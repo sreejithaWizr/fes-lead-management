@@ -5,27 +5,27 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import UserProf from "../assets/user-image.svg";
 import FilterIcon from "../assets/filter.svg";
 import MenuIcon from "../assets/menu.svg";
-import { CustomButton} from "react-mui-tailwind"
+import { CustomButton } from "react-mui-tailwind"
 
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isLeadsPage = location.pathname === '/leads';
   const isCreateLeadPage = location.pathname === '/leads/create';
-  
+
   const handleCreateLead = () => {
     navigate('/leads/create');
   };
-  
+
   const handleCancel = () => {
     navigate('/leads');
   };
-  
+
   const handleSubmit = () => {
     // Submit form logic would go here
     navigate('/leads');
   };
-  
+
   return (
     <header className="w-full bg-white shadow-card">
       {isLeadsPage && (
@@ -43,7 +43,7 @@ const Header = () => {
                 <h1 className="text-base font-medium">Deego Chaithanyan!</h1>
               </div>
             </div>
-            
+
             <div className="relative">
               <input
                 type="text"
@@ -56,13 +56,13 @@ const Header = () => {
               </button>
             </div>
           </div>
-          
+
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <h2 className="text-lg font-medium">Kochi Leads</h2>
               <span className="bg-primary text-white px-2 py-0.5 rounded-md text-xs font-medium">8,467</span>
             </div>
-            
+
             <div className="flex items-center gap-3 w-[405px]">
               {/* <button 
                 className="btn-primary flex items-center gap-2"
@@ -70,11 +70,11 @@ const Header = () => {
               >
                 <span>+ Create Lead</span>
               </button> */}
-              <CustomButton text="Create Lead" endIcon= {false} />
+              <CustomButton text="Create Lead" endIcon={false} onClick={handleCreateLead} />
               {/* <button className="btn-secondary flex items-center gap-2">
                 <span>Bulk Upload</span>
               </button> */}
-              <CustomButton text="Bulk Upload" variant="secondary" endIcon= {false} />
+              <CustomButton text="Bulk Upload" variant="secondary" endIcon={false} />
               {/* <button className="w-10 h-10 flex items-center justify-center rounded-lg border border-[#E0E0E0] text-[#757575]">
                 <Filter size={18} />
               </button> */}
@@ -92,7 +92,7 @@ const Header = () => {
           </div>
         </div>
       )}
-      
+
       {isCreateLeadPage && (
         <div className="py-6 px-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -105,22 +105,22 @@ const Header = () => {
               <h1 className="text-xl font-medium">Create a new lead</h1>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-3">
-            <button 
+            <button
               className="btn-secondary"
               onClick={handleCancel}
             >
               Cancel
             </button>
-            <button 
+            <button
               className="btn-primary flex items-center gap-2"
               onClick={handleSubmit}
             >
               <span>Submit</span>
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3.33301 8H12.6663" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M8 3.33337L12.6667 8.00004L8 12.6667" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M3.33301 8H12.6663" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M8 3.33337L12.6667 8.00004L8 12.6667" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
           </div>
