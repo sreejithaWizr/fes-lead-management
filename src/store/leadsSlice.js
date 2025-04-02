@@ -4,7 +4,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 // Mock data for initial leads
 const initialLeads = [
   {
-    id: 'LEAD001',
+    id: 1,
+    leadNo: 'LEAD001',
     firstName: 'John',
     lastName: 'Doe',
     email: 'john.doe@example.com',
@@ -16,7 +17,8 @@ const initialLeads = [
     location: 'Kochi, India',
   },
   {
-    id: 'LEAD002',
+    id: 2,
+    leadNo: 'LEAD002',
     firstName: 'Jane',
     lastName: 'Smith',
     email: 'jane.smith@example.com',
@@ -28,7 +30,8 @@ const initialLeads = [
     location: 'Kochi, India',
   },
   {
-    id: 'LEAD003',
+    id: 3,
+    leadNo: 'LEAD003',
     firstName: 'Michael',
     lastName: 'Johnson',
     email: 'michael.j@example.com',
@@ -40,7 +43,8 @@ const initialLeads = [
     location: 'Kochi, India',
   },
   {
-    id: 'LEAD004',
+    id: 5,
+    leadNo: 'LEAD004',
     firstName: 'Emily',
     lastName: 'Davis',
     email: 'emily.davis@example.com',
@@ -52,7 +56,8 @@ const initialLeads = [
     location: 'Kochi, India',
   },
   {
-    id: 'LEAD005',
+    id: 6,
+    leadNo: 'LEAD005',
     firstName: 'Robert',
     lastName: 'Wilson',
     email: 'robert.w@example.com',
@@ -86,7 +91,7 @@ export const createLead = createAsyncThunk(
     
     // Create a new lead with the form data
     const newLead = {
-      id: leadData.leadNumber,
+      leadNo: leadData.leadNumber,
       firstName: leadData.firstName,
       lastName: leadData.lastName,
       email: leadData.email,
