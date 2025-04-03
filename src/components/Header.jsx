@@ -5,7 +5,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import UserProf from "../assets/user-image.svg";
 import FilterIcon from "../assets/filter.svg";
 import MenuIcon from "../assets/menu.svg";
-import { CustomButton } from "react-mui-tailwind"
+import RefreshIcon from "../assets/refresh.svg";
+import { CustomButton, CustomSearch } from "react-mui-tailwind"
 
 const Header = () => {
   const location = useLocation();
@@ -27,7 +28,7 @@ const Header = () => {
   };
 
   return (
-    <header className="w-full bg-white shadow-card">
+    <header className="w-full shadow-card">
       {isLeadsPage && (
         <div className="py-6 px-6 flex flex-col gap-6">
           <div className="flex items-center justify-between">
@@ -44,23 +45,24 @@ const Header = () => {
               </div>
             </div>
 
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search"
-                className="w-[300px] h-10 pl-10 pr-4 rounded-full border border-[#E0E0E0] text-sm"
-              />
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#757575]" size={18} />
-              <button className="absolute right-3 top-1/2 transform -translate-y-1/2 text-primary">
-                <RefreshCw size={18} />
-              </button>
+            <div className="flex items-center gap-2">
+              <div className="relative flex-1">
+                <CustomSearch />
+              </div>
+              {/* <button className="w-10 h-10 flex items-center justify-center rounded-xl bg-white shadow-md border border-gray-200 text-primary hover:bg-gray-100 transition">
+                <RefreshCw size={20} className="text-blue-500" />
+              </button> */}
+              <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={RefreshIcon} />
             </div>
+
           </div>
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <h2 className="text-lg font-medium">Kochi Leads</h2>
               <span className="bg-primary text-white px-2 py-0.5 rounded-md text-xs font-medium">8,467</span>
+              {/* <CustomDropdown label="Value" options={["Option 1", "Option 2", "Option 3"]} required={true} initialValue="Option 2" //  Pre-selects "Option 2"
+          /> */}
             </div>
 
             <div className="flex items-center gap-3 w-[405px]">

@@ -109,99 +109,95 @@ const LeadsTable = () => {
   
   const totalPages = Math.ceil(totalLeads / itemsPerPage);
   
-  const renderPagination = () => {
-    const pages = [];
-    const maxDisplayedPages = 5;
+  // const renderPagination = () => {
+  //   const pages = [];
+  //   const maxDisplayedPages = 5;
     
-    let startPage = Math.max(1, currentPage - Math.floor(maxDisplayedPages / 2));
-    let endPage = Math.min(totalPages, startPage + maxDisplayedPages - 1);
+  //   let startPage = Math.max(1, currentPage - Math.floor(maxDisplayedPages / 2));
+  //   let endPage = Math.min(totalPages, startPage + maxDisplayedPages - 1);
     
-    if (endPage - startPage + 1 < maxDisplayedPages) {
-      startPage = Math.max(1, endPage - maxDisplayedPages + 1);
-    }
+  //   if (endPage - startPage + 1 < maxDisplayedPages) {
+  //     startPage = Math.max(1, endPage - maxDisplayedPages + 1);
+  //   }
     
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(
-        <button
-          key={i}
-          className={`w-8 h-8 rounded-md flex items-center justify-center ${
-            currentPage === i ? 'bg-primary text-white' : 'bg-white text-[#1A1A1A]'
-          }`}
-          onClick={() => dispatch(setCurrentPage(i))}
-        >
-          {i}
-        </button>
-      );
-    }
+  //   for (let i = startPage; i <= endPage; i++) {
+  //     pages.push(
+  //       <button
+  //         key={i}
+  //         className={`w-8 h-8 rounded-md flex items-center justify-center ${
+  //           currentPage === i ? 'bg-primary text-white' : 'bg-white text-[#1A1A1A]'
+  //         }`}
+  //         onClick={() => dispatch(setCurrentPage(i))}
+  //       >
+  //         {i}
+  //       </button>
+  //     );
+  //   }
     
-    return (
-      <div className="flex items-center gap-2">
-        <button
-          className="w-8 h-8 rounded-md flex items-center justify-center bg-white text-[#1A1A1A] disabled:opacity-50"
-          disabled={currentPage === 1}
-          onClick={() => dispatch(setCurrentPage(currentPage - 1))}
-        >
-          <ChevronLeft size={16} />
-        </button>
+  //   return (
+  //     <div className="flex items-center gap-2">
+  //       <button
+  //         className="w-8 h-8 rounded-md flex items-center justify-center bg-white text-[#1A1A1A] disabled:opacity-50"
+  //         disabled={currentPage === 1}
+  //         onClick={() => dispatch(setCurrentPage(currentPage - 1))}
+  //       >
+  //         <ChevronLeft size={16} />
+  //       </button>
         
-        {pages}
+  //       {pages}
         
-        {endPage < totalPages && (
-          <>
-            <span className="px-1">...</span>
-            <button
-              className="w-8 h-8 rounded-md flex items-center justify-center bg-white text-[#1A1A1A]"
-              onClick={() => dispatch(setCurrentPage(totalPages))}
-            >
-              {totalPages}
-            </button>
-          </>
-        )}
+  //       {endPage < totalPages && (
+  //         <>
+  //           <span className="px-1">...</span>
+  //           <button
+  //             className="w-8 h-8 rounded-md flex items-center justify-center bg-white text-[#1A1A1A]"
+  //             onClick={() => dispatch(setCurrentPage(totalPages))}
+  //           >
+  //             {totalPages}
+  //           </button>
+  //         </>
+  //       )}
         
-        <button
-          className="w-8 h-8 rounded-md flex items-center justify-center bg-white text-[#1A1A1A] disabled:opacity-50"
-          disabled={currentPage === totalPages}
-          onClick={() => dispatch(setCurrentPage(currentPage + 1))}
-        >
-          <ChevronRight size={16} />
-        </button>
-      </div>
-    );
-  };
+  //       <button
+  //         className="w-8 h-8 rounded-md flex items-center justify-center bg-white text-[#1A1A1A] disabled:opacity-50"
+  //         disabled={currentPage === totalPages}
+  //         onClick={() => dispatch(setCurrentPage(currentPage + 1))}
+  //       >
+  //         <ChevronRight size={16} />
+  //       </button>
+  //     </div>
+  //   );
+  // };
   
   if (status === 'loading') {
     return <div className="flex justify-center p-8">Loading leads...</div>;
   }
   
   return (
-    <div className="bg-white rounded-xl shadow-card overflow-hidden">
-      <div className="w-full overflow-x-auto">
-        <CustomTable columns={columns} data={leads} showCheckboxes={true} getRow={getRow} />
+    <>
+      <div className="bg-white shadow-card overflow-hidden">
+        <div className="w-full overflow-x-auto">
+          <div className="min-w-max">
+            <CustomTable 
+              columns={columns} 
+              data={leads} 
+              showCheckboxes={true} 
+              getRow={getRow} 
+            />
+          </div>
+        </div>
       </div>
       
-      <div className="p-4 flex items-center justify-between border-t">
-        {/* <div className="flex items-center gap-2">
-          <span className="text-sm text-[#757575]">Lines per page:</span>
-          <select 
-            className="bg-white border border-[#E0E0E0] rounded p-1 text-sm"
-            value={itemsPerPage}
-            onChange={(e) => dispatch(setItemsPerPage(Number(e.target.value)))}
-          >
-            <option value={15}>15</option>
-            <option value={30}>30</option>
-            <option value={50}>50</option>
-          </select>
-        </div> */}
-        
-        {/* {renderPagination()} */}
-        <CustomPagination
-            totalPages={8}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-          />
+      <div className="p-4 flex items-center justify-end border-t">
+        <CustomPagination 
+          totalPages={8} 
+          currentPage={currentPage} 
+          setCurrentPage={setCurrentPage} 
+        />
       </div>
-    </div>
+    </>
   );
+  
 };
 
 const LeadsPage = () => {
