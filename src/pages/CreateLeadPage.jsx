@@ -3,12 +3,12 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createLead } from '../store/leadsSlice';
 import { useNavigate } from 'react-router-dom';
-import { Check } from 'lucide-react';
+import { CustomButton, CustomInputField } from "react-mui-tailwind";
 
 const CreateLeadPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('All');
+  const [activeTab, setActiveTab] = useState('All Info');
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -23,7 +23,6 @@ const CreateLeadPage = () => {
     leadCreated: new Date().toISOString().split('T')[0],
     leadNumber: `LEAD${Math.floor(Math.random() * 900000) + 100000}`,
     agreeToReceive: false,
-    
     highestQualification: '',
     graduationYear: '',
     fieldOfStudy: '',
@@ -34,42 +33,58 @@ const CreateLeadPage = () => {
     testRequired: false,
     testName: '',
   });
-  
+
+  // State for input field value
+  const [textValue, setTextValue] = useState("Value");
+
   const handleChange = (e) => {
+    setTextValue(e.target.value)
+
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
       [name]: type === 'checkbox' ? checked : value,
     });
   };
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(createLead(formData)).then(() => {
       navigate('/leads');
     });
   };
-  
-  const tabs = ['All', 'Lead Information', 'Education Qualification', 'Lead Status', 'Lead Source'];
-  
+
+  const tabs = ['All Info', 'Lead Information', 'Education Qualification', 'Lead Status', 'Lead Source'];
+
+  // Lead Information
   const renderLeadInformationForm = () => (
     <div className="form-section animate-fade-in">
-      <h2 className="text-lg font-medium mb-4">Lead Information</h2>
+      <h2 className="font-bold text-[19px] leading-[140%] tracking-[0%] text-[#17222B] font-[Proxima Nova] mb-4">
+        Lead Information
+      </h2>
+
       <div className="form-grid">
         <div className="form-field">
-          <label className="form-label">First Name*</label>
-          <input
-            type="text"
-            name="firstName"
+          <CustomInputField
+            state="default"
+            label="First Name"
             value={formData.firstName}
+            // onChange={(e) => setTextValue(e.target.value)}
             onChange={handleChange}
-            className="form-input"
             placeholder="Enter first name"
           />
         </div>
-        
+
         <div className="form-field">
-          <label className="form-label">Last Name*</label>
+          <CustomInputField
+            state="default"
+            label="Last Name"
+            value={formData.lastName}
+            // onChange={(e) => setTextValue(e.target.value)}
+            onChange={handleChange}
+            placeholder="Enter last name"
+          />
+          {/* <label className="form-label">Last Name*</label>
           <input
             type="text"
             name="lastName"
@@ -77,9 +92,9 @@ const CreateLeadPage = () => {
             onChange={handleChange}
             className="form-input"
             placeholder="Enter last name"
-          />
+          /> */}
         </div>
-        
+
         <div className="form-field">
           <label className="form-label">Email*</label>
           <input
@@ -91,7 +106,7 @@ const CreateLeadPage = () => {
             placeholder="test@gmail.com"
           />
         </div>
-        
+
         <div className="form-field">
           <label className="form-label">Secondary Email</label>
           <input
@@ -103,7 +118,7 @@ const CreateLeadPage = () => {
             placeholder="-"
           />
         </div>
-        
+
         <div className="form-field">
           <label className="form-label">Mobile Number*</label>
           <input
@@ -115,7 +130,7 @@ const CreateLeadPage = () => {
             placeholder="(884) 819-3264"
           />
         </div>
-        
+
         <div className="form-field">
           <label className="form-label">Alternative Number</label>
           <input
@@ -127,7 +142,7 @@ const CreateLeadPage = () => {
             placeholder="-"
           />
         </div>
-        
+
         <div className="form-field">
           <label className="form-label">Whatsapp Number</label>
           <input
@@ -139,7 +154,7 @@ const CreateLeadPage = () => {
             placeholder="(884) 819-3264"
           />
         </div>
-        
+
         <div className="form-field">
           <label className="form-label">Lead Owner*</label>
           <div className="relative">
@@ -155,12 +170,12 @@ const CreateLeadPage = () => {
             </select>
             <div className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
           </div>
         </div>
-        
+
         <div className="form-field">
           <label className="form-label">Lead Status*</label>
           <div className="relative">
@@ -178,12 +193,12 @@ const CreateLeadPage = () => {
             </select>
             <div className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
           </div>
         </div>
-        
+
         <div className="form-field">
           <label className="form-label">Priority*</label>
           <div className="relative">
@@ -200,12 +215,12 @@ const CreateLeadPage = () => {
             </select>
             <div className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
           </div>
         </div>
-        
+
         <div className="form-field">
           <label className="form-label">Tele Caller</label>
           <div className="relative">
@@ -221,12 +236,12 @@ const CreateLeadPage = () => {
             </select>
             <div className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
           </div>
         </div>
-        
+
         <div className="form-field">
           <label className="form-label">Lead Created</label>
           <div className="relative">
@@ -239,16 +254,16 @@ const CreateLeadPage = () => {
             />
             <div className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5.33301 1.33337V3.33337" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M10.667 1.33337V3.33337" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M2.33301 6.06006H13.6663" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M14 5.66663V11.3333C14 13.3333 13 14.6666 10.6667 14.6666H5.33333C3 14.6666 2 13.3333 2 11.3333V5.66663C2 3.66663 3 2.33329 5.33333 2.33329H10.6667C13 2.33329 14 3.66663 14 5.66663Z" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M5.33301 1.33337V3.33337" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M10.667 1.33337V3.33337" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M2.33301 6.06006H13.6663" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M14 5.66663V11.3333C14 13.3333 13 14.6666 10.6667 14.6666H5.33333C3 14.6666 2 13.3333 2 11.3333V5.66663C2 3.66663 3 2.33329 5.33333 2.33329H10.6667C13 2.33329 14 3.66663 14 5.66663Z" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
           </div>
         </div>
       </div>
-      
+
       <div className="mt-6">
         <div className="form-field">
           <label className="form-label">Lead Number</label>
@@ -261,7 +276,7 @@ const CreateLeadPage = () => {
           />
         </div>
       </div>
-      
+
       <div className="mt-6 flex items-center gap-2">
         <input
           type="checkbox"
@@ -277,10 +292,13 @@ const CreateLeadPage = () => {
       </div>
     </div>
   );
-  
+
+  // Education Qualification
   const renderEducationQualificationForm = () => (
     <div className="form-section animate-fade-in">
-      <h2 className="text-lg font-medium mb-4">Education Qualification</h2>
+      <h2 className="font-bold text-[19px] leading-[140%] tracking-[0%] text-[#17222B] font-[Proxima Nova] mb-4">
+        Education Qualification
+      </h2>
       <div className="form-grid">
         <div className="form-field">
           <label className="form-label">Highest Qualification*</label>
@@ -298,12 +316,12 @@ const CreateLeadPage = () => {
             </select>
             <div className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
           </div>
         </div>
-        
+
         <div className="form-field">
           <label className="form-label">Graduation Year*</label>
           <div className="relative">
@@ -320,12 +338,12 @@ const CreateLeadPage = () => {
             </select>
             <div className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
           </div>
         </div>
-        
+
         <div className="form-field">
           <label className="form-label">Field of Study*</label>
           <div className="relative">
@@ -343,12 +361,12 @@ const CreateLeadPage = () => {
             </select>
             <div className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
           </div>
         </div>
-        
+
         <div className="form-field">
           <label className="form-label">CGPA/Grade</label>
           <input
@@ -360,7 +378,7 @@ const CreateLeadPage = () => {
             placeholder="-"
           />
         </div>
-        
+
         <div className="form-field">
           <label className="form-label">Work Experience (Years)</label>
           <div className="relative">
@@ -377,12 +395,12 @@ const CreateLeadPage = () => {
             </select>
             <div className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
           </div>
         </div>
-        
+
         <div className="form-field">
           <label className="form-label">Preferred Study Destination</label>
           <div className="relative">
@@ -396,7 +414,7 @@ const CreateLeadPage = () => {
             />
           </div>
         </div>
-        
+
         <div className="form-field">
           <label className="form-label">Other Countries</label>
           <div className="relative">
@@ -415,13 +433,13 @@ const CreateLeadPage = () => {
             </select>
             <div className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
           </div>
         </div>
       </div>
-      
+
       <div className="mt-6">
         <div className="form-field">
           <label className="flex items-center gap-2">
@@ -435,7 +453,7 @@ const CreateLeadPage = () => {
             <span className="text-sm font-medium">Test Training Required</span>
           </label>
         </div>
-        
+
         {formData.testRequired && (
           <div className="mt-4">
             <div className="form-field">
@@ -454,10 +472,13 @@ const CreateLeadPage = () => {
       </div>
     </div>
   );
-  
+
+  // Lead Status
   const renderLeadStatusForm = () => (
     <div className="form-section animate-fade-in">
-      <h2 className="text-lg font-medium mb-4">Lead Status</h2>
+      <h2 className="font-bold text-[19px] leading-[140%] tracking-[0%] text-[#17222B] font-[Proxima Nova] mb-4">
+        Lead Status
+      </h2>
       <div className="form-grid">
         <div className="form-field">
           <label className="form-label">Status</label>
@@ -476,12 +497,12 @@ const CreateLeadPage = () => {
             </select>
             <div className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
           </div>
         </div>
-        
+
         <div className="form-field">
           <label className="form-label">Priority</label>
           <div className="relative">
@@ -498,7 +519,7 @@ const CreateLeadPage = () => {
             </select>
             <div className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
           </div>
@@ -506,10 +527,13 @@ const CreateLeadPage = () => {
       </div>
     </div>
   );
-  
+
+  // Lead Source
   const renderLeadSourceForm = () => (
     <div className="form-section animate-fade-in">
-      <h2 className="text-lg font-medium mb-4">Lead Source</h2>
+      <h2 className="font-bold text-[19px] leading-[140%] tracking-[0%] text-[#17222B] font-[Proxima Nova] mb-4">
+        Lead Source
+      </h2>
       <div className="form-grid">
         <div className="form-field">
           <label className="form-label">Lead Source</label>
@@ -528,7 +552,7 @@ const CreateLeadPage = () => {
             </select>
             <div className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M4 6L8 10L12 6" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
           </div>
@@ -536,32 +560,31 @@ const CreateLeadPage = () => {
       </div>
     </div>
   );
-  
+
   return (
     <div className="pb-8">
       <div className="mb-4">
         <div className="flex space-x-2">
           {tabs.map((tab) => (
-            <button
+            <CustomButton
               key={tab}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                activeTab === tab
-                  ? 'bg-primary text-white'
-                  : 'bg-white text-[#757575] hover:bg-gray-100'
-              }`}
+              text={tab}
+              variant="chips"
+              rounded="full"
+              startIcon={false}
+              endIcon={false}
               onClick={() => setActiveTab(tab)}
-            >
-              {tab}
-            </button>
+              selected={activeTab === tab}
+            />
           ))}
         </div>
       </div>
-      
+
       <form onSubmit={handleSubmit}>
-        {(activeTab === 'All' || activeTab === 'Lead Information') && renderLeadInformationForm()}
-        {(activeTab === 'All' || activeTab === 'Education Qualification') && renderEducationQualificationForm()}
-        {(activeTab === 'All' || activeTab === 'Lead Status') && renderLeadStatusForm()}
-        {(activeTab === 'All' || activeTab === 'Lead Source') && renderLeadSourceForm()}
+        {(activeTab === 'All Info' || activeTab === 'Lead Information') && renderLeadInformationForm()}
+        {(activeTab === 'All Info' || activeTab === 'Education Qualification') && renderEducationQualificationForm()}
+        {/* {(activeTab === 'All Info' || activeTab === 'Lead Status') && renderLeadStatusForm()} */}
+        {/* {(activeTab === 'All Info' || activeTab === 'Lead Source') && renderLeadSourceForm()} */}
       </form>
     </div>
   );
