@@ -108,8 +108,8 @@ const CreateLeadPage = () => {
 
   const tabs = ['All Info', 'Lead Information', 'Education Qualification', 'Lead Status', 'Lead Source'];
 
-  const yearOptions = ["Select", ...Array.from({ length: 20 }, (_, i) => `${new Date().getFullYear() - i}`)];
-  const numberOfYears = ["Select", ...Array.from({ length: 21 }, (_, i) => i)];
+  const yearOptions = [...Array.from({ length: 20 }, (_, i) => `${new Date().getFullYear() - i}`)];
+  const numberOfYears = [...Array.from({ length: 21 }, (_, i) => i)];
 
   // Lead Information
   const renderLeadInformationForm = () => (
@@ -196,9 +196,9 @@ const CreateLeadPage = () => {
         <div className="form-field">
           <CustomDropDown
             label="Lead Owner"
-            options={["Select", "Option 1", "Option 2", "Option 3"]}
+            options={["Option 1", "Option 2", "Option 3"]}
             required={true}
-            initialValue="Select"
+            placeHolder="Select"
             onChange={handleChange}
             value={formData.leadOwner}
           />
@@ -207,9 +207,9 @@ const CreateLeadPage = () => {
         <div className="form-field">
           <CustomDropDown
             label="Lead Status"
-            options={["Select", "Potential", "Inactive", "Enrolled", "May be Prospective"]}
+            options={["Potential", "Inactive", "Enrolled", "May be Prospective"]}
             required={true}
-            initialValue="Select"
+            placeHolder="Select"
             onChange={handleChange}
             value={formData.leadStatus}
           />
@@ -218,9 +218,9 @@ const CreateLeadPage = () => {
         <div className="form-field">
           <CustomDropDown
             label="Priority"
-            options={["Select", "High", "Medium", "Low"]}
+            options={["High", "Medium", "Low"]}
             required={true}
-            initialValue="Select"
+            placeHolder="Select"
             onChange={handleChange}
             value={formData.priority}
           />
@@ -229,10 +229,10 @@ const CreateLeadPage = () => {
         <div className="form-field">
           <CustomDropDown
             label="Tele Caller"
-            options={["Select", "John", "Jane"]}
+            options={["John", "Jane"]}
             required={false}
             showAsterisk={false}
-            initialValue="Select"
+            placeHolder="Select"
             onChange={handleChange}
             value={formData.teleCallerName}
           />
@@ -285,10 +285,10 @@ const CreateLeadPage = () => {
         <div className="form-field">
           <CustomDropDown
             label="Highest Qualification"
-            options={["Select", "Bachelor's", "Master's", "PhD"]}
+            options={["Bachelor's", "Master's", "PhD"]}
             required={true}
             showAsterisk={false}
-            initialValue="Select"
+            placeHolder="Select"
             onChange={handleChange}
             value={formData.highestQualification}
           />
@@ -298,10 +298,10 @@ const CreateLeadPage = () => {
           <CustomDropDown
             label="Graduation Year"
             options={yearOptions}
-            // options={["Select", "Bachelor's", "Master's", "PhD"]}
+            // options={["Bachelor's", "Master's", "PhD"]}
             required={true}
             showAsterisk={false}
-            initialValue="Select"
+            placeHolder="Select"
             onChange={handleChange}
             value={formData.graduationYear}
           />
@@ -310,10 +310,10 @@ const CreateLeadPage = () => {
         <div className="form-field">
           <CustomDropDown
             label="Field of Study"
-            options={["Select", "Computer Science", "Engineering", "Business", "Arts"]}
+            options={["Computer Science", "Engineering", "Business", "Arts"]}
             required={true}
             showAsterisk={false}
-            initialValue="Select"
+            placeHolder="Select"
             onChange={handleChange}
             value={formData.fieldOfStudy}
           />
@@ -336,7 +336,7 @@ const CreateLeadPage = () => {
             options={numberOfYears}
             required={false}
             showAsterisk={false}
-            initialValue="Select"
+            placeHolder="Select"
             onChange={handleChange}
             value={formData.workExperience}
           />
@@ -345,10 +345,10 @@ const CreateLeadPage = () => {
         <div className="form-field">
           <CustomDropDown
             label="Preferred Study Destination"
-            options={["Select", "US", "Australia", "Canada", "London"]}
+            options={["US", "Australia", "Canada", "London"]}
             required={false}
             showAsterisk={false}
-            initialValue="Select"
+            placeHolder="Select"
             onChange={handleChange}
             value={formData.preferredDestination}
           />
@@ -357,10 +357,10 @@ const CreateLeadPage = () => {
         <div className="form-field">
           <CustomDropDown
             label="Other Countries"
-            options={["Select", "US", "Australia", "Canada", "Germany"]}
+            options={["US", "Australia", "Canada", "Germany"]}
             required={false}
             showAsterisk={false}
-            initialValue="Select"
+            placeHolder="Select"
             onChange={handleChange}
             value={formData.otherCountries}
           />
@@ -404,10 +404,10 @@ const CreateLeadPage = () => {
         <div className="form-field">
           <CustomDropDown
             label="Status"
-            options={["Select", "Potential", "Inactive", "Enrolled", "May be Prospective"]}
+            options={["Potential", "Inactive", "Enrolled", "May be Prospective"]}
             required={true}
             showAsterisk={false}
-            initialValue="Select"
+            placeHolder="Select"
             onChange={handleChange}
             value={formData.leadStatus}
           />
@@ -416,10 +416,10 @@ const CreateLeadPage = () => {
         <div className="form-field">
           <CustomDropDown
             label="Category"
-            options={["Select", "Potential", "Inactive", "Enrolled", "May be Prospective"]}
+            options={["Potential", "Inactive", "Enrolled", "May be Prospective"]}
             required={true}
             showAsterisk={false}
-            initialValue="Select"
+            placeHolder="Select"
             onChange={handleChange}
             value={formData.category}
           />
@@ -428,10 +428,10 @@ const CreateLeadPage = () => {
         <div className="form-field">
           <CustomDropDown
             label="Subcategory"
-            options={["Select", "Subcategory 1", "Subcategory 2", "Subcategory 3"]}
+            options={["Subcategory 1", "Subcategory 2", "Subcategory 3"]}
             required={true}
             showAsterisk={false}
-            initialValue="Select"
+            placeHolder="Select"
             onChange={handleChange}
             value={formData.subCategory}
           />
@@ -440,10 +440,10 @@ const CreateLeadPage = () => {
         <div className="form-field">
           <CustomDropDown
             label="Branch"
-            options={["Select", "Branch 1", "Branch 2", "Branch 3"]}
+            options={["Branch 1", "Branch 2", "Branch 3"]}
             required={true}
             showAsterisk={false}
-            initialValue="Select"
+            placeHolder="Select"
             onChange={handleChange}
             value={formData.branch}
           />
@@ -452,10 +452,10 @@ const CreateLeadPage = () => {
         <div className="form-field">
           <CustomDropDown
             label="Counselor"
-            options={["Select", "Counselor 1", "Counselor 2", "Counselor 3"]}
+            options={["Counselor 1", "Counselor 2", "Counselor 3"]}
             required={true}
             showAsterisk={false}
-            initialValue="Select"
+            placeHolder="Select"
             onChange={handleChange}
             value={formData.counselor}
           />
@@ -485,10 +485,10 @@ const CreateLeadPage = () => {
         <div className="form-field">
           <CustomDropDown
             label="Source 1"
-            options={["Select", "Meta", "Google Ads", "Referral", "Website"]}
+            options={["Meta", "Google Ads", "Referral", "Website"]}
             required={true}
             showAsterisk={false}
-            initialValue="Select"
+            placeHolder="Select"
             onChange={handleChange}
             value={formData.leadSource_1}
           />
@@ -497,10 +497,10 @@ const CreateLeadPage = () => {
         <div className="form-field">
           <CustomDropDown
             label="Source 2"
-            options={["Select", "Meta", "Google Ads", "Referral", "Website"]}
+            options={["Meta", "Google Ads", "Referral", "Website"]}
             required={false}
             showAsterisk={false}
-            initialValue="Select"
+            placeHolder="Select"
             onChange={handleChange}
             value={formData.leadSource_2}
           />
@@ -509,10 +509,10 @@ const CreateLeadPage = () => {
         <div className="form-field">
           <CustomDropDown
             label="Source 3"
-            options={["Select", "Meta", "Google Ads", "Referral", "Website"]}
+            options={["Meta", "Google Ads", "Referral", "Website"]}
             required={false}
             showAsterisk={false}
-            initialValue="Select"
+            placeHolder="Select"
             onChange={handleChange}
             value={formData.leadSource_3}
           />
@@ -521,10 +521,10 @@ const CreateLeadPage = () => {
         <div className="form-field">
           <CustomDropDown
             label="Location 1"
-            options={["Select", "Location 1", "Location 2", "Location 3"]}
+            options={["Location 1", "Location 2", "Location 3"]}
             required={true}
             showAsterisk={false}
-            initialValue="Select"
+            placeHolder="Select"
             onChange={handleChange}
             value={formData.location_1}
           />
@@ -533,10 +533,10 @@ const CreateLeadPage = () => {
         <div className="form-field">
           <CustomDropDown
             label="Location 2"
-            options={["Select", "Location 1", "Location 2", "Location 3"]}
+            options={["Location 1", "Location 2", "Location 3"]}
             required={false}
             showAsterisk={false}
-            initialValue="Select"
+            placeHolder="Select"
             onChange={handleChange}
             value={formData.location_2}
           />
@@ -567,10 +567,10 @@ const CreateLeadPage = () => {
         <div className="form-field">
           <CustomDropDown
             label="Vertical"
-            options={["Select", "Vertical 1", "Vertical 2", "Vertical 3"]}
+            options={["Vertical 1", "Vertical 2", "Vertical 3"]}
             required={true}
             showAsterisk={false}
-            initialValue="Select"
+            placeHolder="Select"
             onChange={handleChange}
             value={formData.vertical}
           />
@@ -579,10 +579,10 @@ const CreateLeadPage = () => {
         <div className="form-field">
           <CustomDropDown
             label="Desired Program"
-            options={["Select", "Desired Program 1", "Desired Program 2", "Desired Program 3"]}
+            options={["Desired Program 1", "Desired Program 2", "Desired Program 3"]}
             required={true}
             showAsterisk={false}
-            initialValue="Select"
+            placeHolder="Select"
             onChange={handleChange}
             value={formData.desiredProgram}
           />
@@ -591,10 +591,10 @@ const CreateLeadPage = () => {
         <div className="form-field">
           <CustomDropDown
             label="Internship Option"
-            options={["Select", "Option 1", "Option 2", "Option 3"]}
+            options={["Option 1", "Option 2", "Option 3"]}
             required={false}
             showAsterisk={false}
-            initialValue="Select"
+            placeHolder="Select"
             onChange={handleChange}
             value={formData.internshipOption}
           />
@@ -662,15 +662,15 @@ const CreateLeadPage = () => {
               onClick={() => setActiveTab(tab)}
               selected={activeTab === tab}
             />
-    //         {
-    //   !tabValidation[tab] && (
-    //     <img
-    //       src={WarningIcon}
-    //       alt="warning"
-    //       className="absolute -top-1 -right-1 w-4 h-4"
-    //     />
-    //   )
-    // }
+            //         {
+            //   !tabValidation[tab] && (
+            //     <img
+            //       src={WarningIcon}
+            //       alt="warning"
+            //       className="absolute -top-1 -right-1 w-4 h-4"
+            //     />
+            //   )
+            // }
           ))}
         </div>
       </div>
