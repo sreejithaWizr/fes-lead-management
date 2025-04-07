@@ -188,7 +188,7 @@ const LeadsTable = () => {
         </div>
       </div>
       
-      <div className="p-4 flex items-center justify-end border-t">
+      <div className="p-4 justify-end">
         <CustomPagination 
           totalPages={8} 
           currentPage={currentPage} 
