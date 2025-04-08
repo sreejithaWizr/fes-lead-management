@@ -4,6 +4,13 @@ import { useDispatch } from 'react-redux';
 import { createLead } from '../store/leadsSlice';
 import { useNavigate } from 'react-router-dom';
 import { CustomButton, CustomInputField, CustomDropDown, CustomDatePicker } from "react-mui-tailwind";
+import {
+  isEmailValid,
+  isPhoneNumberValid,
+  validateRequiredFields,
+  runFieldValidations
+} from '../utils/validationUtils';
+
 // import { WarningIcon } from "../assets/warning-icon.svg";
 
 const CreateLeadPage = () => {
