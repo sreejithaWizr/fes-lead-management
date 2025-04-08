@@ -6,8 +6,8 @@ import UserProf from "../assets/user-image.svg";
 import FilterIcon from "../assets/filter.svg";
 import MenuIcon from "../assets/menu.svg";
 import RefreshIcon from "../assets/refresh.svg";
-import { CustomButton, CustomSearch, CustomDropDown, CustomOffCanvasModal } from "react-mui-tailwind";
-// import  CustomOffCanvasModal  from "./OffcanvasModal"
+import { CustomButton, CustomSearch, CustomDropDown } from "react-mui-tailwind";
+import  CustomOffCanvasModal  from "./OffcanvasModal"
 import FilterContent from '../pages/FilterContent';
 
 const Header = () => {
