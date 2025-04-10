@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 import Layout from "./components/Layout";
-import LeadsPage from "./pages/LeadsPage";
+import LeadsPage from "./pages/LeadsListPage";
 import CreateLeadPage from "./pages/CreateLeadPage";
 import NotFound from "./pages/NotFound";
 

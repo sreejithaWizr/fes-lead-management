@@ -13,23 +13,11 @@ import LoactionIcon from "../assets/location.svg";
 const LeadsTable = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { leads, status, itemsPerPage, totalLeads } = useSelector((state) => state.leads);
+  const { leads, status, itemsPerPage, totalLeads, columns } = useSelector((state) => state.leads);
   const [selectedLeads, setSelectedLeads] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Sample data for the custom table
-  const columns = [
-    { id: "leadNo", label: "Lead no", showSort: true, isDrag: true },
-    { id: "firstName", label: "Title", showSort: true, isDrag: true },
-    { id: "lastName", label: "Last Name", showSort: true, isDrag: true },
-    { id: "status", label: "Status", showSort: true, isDrag: true },
-    { id: "branch", label: "Branch", showSort: true, isDrag: true },
-    { id: "createdDate", label: "Created Date", showSort: true, isDrag: true },
-    { id: "phone", label: "Phone", showSort: true, isDrag: true },
-    { id: "email", label: "Email", showSort: true, isDrag: true },
-    { id: "leadSource", label: "Lead Source", showSort: true, isDrag: true },
-    { id: "location", label: "Location", showSort: true, isDrag: true },
-  ];
+  
 
   const getRow = (columnId, value) => {
     switch (columnId) {

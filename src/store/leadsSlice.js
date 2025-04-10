@@ -70,6 +70,20 @@ const initialLeads = [
   },
 ];
 
+// Sample data for the custom table
+  const columns = [
+    { id: "leadNo", label: "Lead no", showSort: true, isDrag: true, isFilter: true },
+    { id: "firstName", label: "Title", showSort: true, isDrag: true, isFilter: true },
+    { id: "lastName", label: "Last Name", showSort: true, isDrag: true, isFilter: true },
+    { id: "status", label: "Status", showSort: true, isDrag: true, isFilter: true },
+    { id: "branch", label: "Branch", showSort: true, isDrag: true, isFilter: true },
+    { id: "createdDate", label: "Created Date", showSort: true, isDrag: true, isFilter: true },
+    { id: "phone", label: "Phone", showSort: true, isDrag: true, isFilter: true },
+    { id: "email", label: "Email", showSort: true, isDrag: true, isFilter: true },
+    { id: "leadSource", label: "Lead Source", showSort: true, isDrag: true, isFilter: true },
+    { id: "location", label: "Location", showSort: true, isDrag: true, isFilter: true },
+  ];
+
 // Simulate API call to fetch leads
 export const fetchLeads = createAsyncThunk(
   'leads/fetchLeads',
@@ -121,6 +135,7 @@ const leadsSlice = createSlice({
     currentPage: 1,
     itemsPerPage: 15,
     totalLeads: initialLeads.length,
+    columns: columns,
   },
   reducers: {
     setCurrentPage: (state, action) => {
