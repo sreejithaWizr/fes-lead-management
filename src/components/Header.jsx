@@ -1,13 +1,15 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Search, RefreshCw, Filter } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import UserProf from "../assets/user-image.svg";
 import FilterIcon from "../assets/filter.svg";
 import MenuIcon from "../assets/menu.svg";
+import RefreshIcon from "../assets/refresh.svg";
+import { CustomButton, CustomSearch, CustomDropDown, CustomOffCanvasModal } from "react-mui-tailwind";
+import FilterContent from '../pages/FilterContent';
 import LeftArrowIcon from "../assets/arrow-left.svg";
 import RightArrowIcon from "../assets/arrow-right.svg";
-import { CustomButton } from "react-mui-tailwind";
 import { formRef } from './forms/leadCreation';
 
 const Header = () => {
@@ -15,6 +17,10 @@ const Header = () => {
   const navigate = useNavigate();
   const isLeadsPage = location.pathname === '/leads';
   const isCreateLeadPage = location.pathname === '/leads/create';
+
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const toggleFilter = () => setIsFilterOpen(prev => !prev);
+
 
   const handleCreateLead = () => {
     navigate('/leads/create');
@@ -52,54 +58,60 @@ const Header = () => {
     }
   };
 
+  console.log("value", isFilterOpen)
   return (
-    <header className="w-full bg-white shadow-card">
-      {isLeadsPage && (
-        <div className="py-6 px-6 flex flex-col gap-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <img
-                src={UserProf}
-                alt="Profile"
-                className="w-[61px] h-[61px] rounded-[12px]"
+    <>
+      <header className="w-full shadow-card">
+        {isLeadsPage && (
+          <div className="py-6 px-6 flex flex-col gap-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <img
+                  src={UserProf}
+                  alt="Profile"
+                  className="w-[61px] h-[61px] rounded-[12px]"
 
-              />
-              <div>
-                <h2 className="text-sm font-normal text-[#757575]">Hello,</h2>
-                <h1 className="text-base font-medium">Deego Chaithanyan!</h1>
+                />
+                <div>
+                  <h2 className="text-sm font-normal text-[#757575]">Hello,</h2>
+                  <h1 className="text-base font-medium">Deego Chaithanyan!</h1>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <div className="relative flex-1">
+                  <CustomSearch />
+                </div>
+                <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={RefreshIcon} />
+              </div>
+
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                {/* <h2 className="text-lg font-medium">Kochi Leads</h2>
+              <span className="bg-primary text-white px-2 py-0.5 rounded-md text-xs font-medium">8,467</span> */}
+                <CustomDropDown options={[
+                  { name: "Kochi Leads", count: 8467 },
+                  { name: "Mumbai Leads", count: 5321 },
+                  { name: "Delhi Leads", count: 6789 }
+                ]}
+                  // required={true}
+                  placeHolder="Select Branch"
+                />
+              </div>
+
+              <div className="flex items-center gap-3 w-[405px]">
+                <CustomButton text="Create Lead" endIcon={false} onClick={handleCreateLead} />
+                <CustomButton text="Bulk Upload" variant="secondary" endIcon={false} />
+                <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={FilterIcon} onClick={() => toggleFilter()} />
+                <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={MenuIcon} />
               </div>
             </div>
-
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search"
-                className="w-[300px] h-10 pl-10 pr-4 rounded-full border border-[#E0E0E0] text-sm"
-              />
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#757575]" size={18} />
-              <button className="absolute right-3 top-1/2 transform -translate-y-1/2 text-primary">
-                <RefreshCw size={18} />
-              </button>
-            </div>
           </div>
+        )}
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <h2 className="text-lg font-medium">Kochi Leads</h2>
-              <span className="bg-primary text-white px-2 py-0.5 rounded-md text-xs font-medium">8,467</span>
-            </div>
-
-            <div className="flex items-center gap-3 w-[405px]">
-              <CustomButton text="Create Lead" endIcon={false} onClick={handleCreateLead} />
-              <CustomButton text="Bulk Upload" variant="secondary" endIcon={false} />
-              <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={FilterIcon} />
-              <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={MenuIcon} />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {isCreateLeadPage && (
+{isCreateLeadPage && (
         <div className="py-6 px-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <img
@@ -123,6 +135,19 @@ const Header = () => {
         </div>
       )}
     </header>
+      {isFilterOpen && (
+        <CustomOffCanvasModal
+          isOpen={isFilterOpen}
+          onClose={toggleFilter}
+          title="Filter"
+          position="right" // ensure it's from left
+          width="649px"
+        >
+          <FilterContent onClose={toggleFilter} />
+        </CustomOffCanvasModal>
+      )}
+
+    </>
   );
 };
 

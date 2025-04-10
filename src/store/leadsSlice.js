@@ -4,7 +4,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 // Mock data for initial leads
 const initialLeads = [
   {
-    id: 'LEAD001',
+    id: 1,
+    leadNo: 'LEAD001',
     firstName: 'John',
     lastName: 'Doe',
     email: 'john.doe@example.com',
@@ -16,7 +17,8 @@ const initialLeads = [
     location: 'Kochi, India',
   },
   {
-    id: 'LEAD002',
+    id: 2,
+    leadNo: 'LEAD002',
     firstName: 'Jane',
     lastName: 'Smith',
     email: 'jane.smith@example.com',
@@ -28,7 +30,8 @@ const initialLeads = [
     location: 'Kochi, India',
   },
   {
-    id: 'LEAD003',
+    id: 3,
+    leadNo: 'LEAD003',
     firstName: 'Michael',
     lastName: 'Johnson',
     email: 'michael.j@example.com',
@@ -40,7 +43,8 @@ const initialLeads = [
     location: 'Kochi, India',
   },
   {
-    id: 'LEAD004',
+    id: 5,
+    leadNo: 'LEAD004',
     firstName: 'Emily',
     lastName: 'Davis',
     email: 'emily.davis@example.com',
@@ -52,7 +56,8 @@ const initialLeads = [
     location: 'Kochi, India',
   },
   {
-    id: 'LEAD005',
+    id: 6,
+    leadNo: 'LEAD005',
     firstName: 'Robert',
     lastName: 'Wilson',
     email: 'robert.w@example.com',
@@ -64,6 +69,20 @@ const initialLeads = [
     location: 'Kochi, India',
   },
 ];
+
+// Sample data for the custom table
+  const columns = [
+    { id: "leadNo", label: "Lead no", showSort: true, isDrag: true, isFilter: true },
+    { id: "firstName", label: "Title", showSort: true, isDrag: true, isFilter: true },
+    { id: "lastName", label: "Last Name", showSort: true, isDrag: true, isFilter: true },
+    { id: "status", label: "Status", showSort: true, isDrag: true, isFilter: true },
+    { id: "branch", label: "Branch", showSort: true, isDrag: true, isFilter: true },
+    { id: "createdDate", label: "Created Date", showSort: true, isDrag: true, isFilter: true },
+    { id: "phone", label: "Phone", showSort: true, isDrag: true, isFilter: true },
+    { id: "email", label: "Email", showSort: true, isDrag: true, isFilter: true },
+    { id: "leadSource", label: "Lead Source", showSort: true, isDrag: true, isFilter: true },
+    { id: "location", label: "Location", showSort: true, isDrag: true, isFilter: true },
+  ];
 
 // Simulate API call to fetch leads
 export const fetchLeads = createAsyncThunk(
@@ -86,7 +105,7 @@ export const createLead = createAsyncThunk(
     
     // Create a new lead with the form data
     const newLead = {
-      id: leadData.leadNumber,
+      leadNo: leadData.leadNumber,
       firstName: leadData.firstName,
       lastName: leadData.lastName,
       email: leadData.email,
@@ -116,6 +135,7 @@ const leadsSlice = createSlice({
     currentPage: 1,
     itemsPerPage: 15,
     totalLeads: initialLeads.length,
+    columns: columns,
   },
   reducers: {
     setCurrentPage: (state, action) => {
