@@ -8,6 +8,7 @@ import MenuIcon from "../assets/menu.svg";
 import LeftArrowIcon from "../assets/arrow-left.svg";
 import RightArrowIcon from "../assets/arrow-right.svg";
 import { CustomButton } from "react-mui-tailwind";
+import { formRef } from './forms/leadCreation';
 
 const Header = () => {
   const location = useLocation();
@@ -26,6 +27,29 @@ const Header = () => {
   const handleSubmit = () => {
     // Submit form logic would go here
     // navigate('/leads');
+  };
+
+  const handleFormSubmit = () => {
+    if (formRef.current) {
+      // Set all fields as touched to trigger validation
+      formRef.current.setTouched(
+        Object.keys(formRef.current.values).reduce((acc, key) => {
+          acc[key] = true;
+          return acc;
+        }, {})
+      );
+      
+      formRef.current.submitForm();
+      // formRef.current.validateForm().then(errors => {
+      //   if (Object.keys(errors).length === 0) {
+      //     // No errors, submit the form
+      //     formRef.current.submitForm();
+      //   } else {
+      //     console.log('Form has validation errors:', errors);
+      //     // Form has errors, don't submit
+      //   }
+      // });
+    }
   };
 
   return (
@@ -94,7 +118,7 @@ const Header = () => {
 
           <div className="flex items-center gap-3">
             <CustomButton text="Cancel" variant="secondary" startIcon={false} endIcon={false} onClick={handleCancel} />
-            <CustomButton text="Submit" startIcon={false} endIcon={true} iconImg={RightArrowIcon} onClick={handleSubmit} />
+            <CustomButton text="Submit" startIcon={false} endIcon={true} iconImg={RightArrowIcon} onClick={handleFormSubmit} />
           </div>
         </div>
       )}
