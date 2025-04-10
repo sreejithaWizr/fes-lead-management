@@ -1,0 +1,200 @@
+import React from 'react';
+import { CustomInputField, CustomDropDown, CustomDatePicker } from "react-mui-tailwind";
+
+const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => {
+  return (
+    <div className="form-section animate-fade-in ml-0 mb-6">
+      <h2 className="font-bold text-[19px] leading-[140%] tracking-[0%] text-[#17222B] font-[Proxima Nova] mb-4">
+        Lead Information
+      </h2>
+      <div className="form-grid">
+        <div className="form-field">
+          <CustomInputField
+            state="default"
+            label="First Name"
+            value={values.firstName}
+            onChange={(value) => {
+              setFieldValue('firstName', value.target.value)
+            }}
+            onBlur={handleBlur}
+            placeholder="Enter first name"
+            hasError={touched.firstName && Boolean(errors.firstName)}
+            error={touched.firstName && errors.firstName}
+          />
+        </div>
+
+        <div className="form-field">
+          <CustomInputField
+            state="default"
+            label="Last Name"
+            value={values.lastName}
+            onChange={(value) => {
+              setFieldValue('lastName', value.target.value)
+            }}
+            placeholder="Enter last name"
+            onBlur={handleBlur}
+            hasError={touched.lastName && Boolean(errors.lastName)}
+            error={touched.lastName && errors.lastName}
+          />
+        </div>
+
+        <div className="form-field">
+          <CustomInputField
+            state="default"
+            label="Email"
+            value={values.email}
+            onChange={(value) => {
+              setFieldValue('email', value.target.value)
+            }}
+            placeholder="Enter email"
+            onBlur={handleBlur}
+            hasError={touched.email && Boolean(errors.email)}
+            error={touched.email && errors.email}
+          />
+        </div>
+
+        <div className="form-field">
+          <CustomInputField
+            state="default"
+            label="Secondary Email"
+            value={values.secondaryEmail}
+            showAsterisk={false}
+            onChange={(value) => {
+              setFieldValue('secondaryEmail', value.target.value)
+            }}
+            placeholder="Enter secondary email"
+            onBlur={handleBlur}
+            hasError={touched.secondaryEmail && Boolean(errors.secondaryEmail)}
+            error={touched.secondaryEmail && errors.secondaryEmail}
+          />
+        </div>
+
+        <div className="form-field">
+          <CustomInputField
+            state="default"
+            label="Mobile Number"
+            value={values.mobileNumber}
+            onChange={(value) => {
+              setFieldValue('mobileNumber', value.target.value)
+            }}
+            placeholder="Enter mobile number"
+            onBlur={handleBlur}
+            hasError={touched.mobileNumber && Boolean(errors.mobileNumber)}
+            error={touched.mobileNumber && errors.mobileNumber}
+          />
+        </div>
+
+        <div className="form-field">
+          <CustomInputField
+            state="default"
+            label="Alternative Number"
+            value={values.alternativeNumber}
+            showAsterisk={false}
+            onChange={(value) => {
+              setFieldValue('alternativeNumber', value.target.value)
+            }}
+            placeholder="Enter alternative number"
+            onBlur={handleBlur}
+            hasError={touched.alternativeNumber && Boolean(errors.alternativeNumber)}
+            error={touched.alternativeNumber && errors.alternativeNumber}
+          />
+        </div>
+
+        <div className="form-field">
+          <CustomInputField
+            state="default"
+            label="Whatsapp Number"
+            value={values.whatsappNumber}
+            showAsterisk={false}
+            onChange={(value) => {
+              setFieldValue('whatsappNumber', value.target.value)
+            }}
+            placeholder="Enter whatsapp number"
+            onBlur={handleBlur}
+            hasError={touched.whatsappNumber && Boolean(errors.whatsappNumber)}
+            error={touched.whatsappNumber && errors.whatsappNumber}
+          />
+        </div>
+
+        <div className="form-field">
+          <CustomDropDown
+            name="leadOwner"
+            label="Lead Owner"
+            options={["Option 1", "Option 2", "Option 3"]}
+            required={true}
+            placeHolder="Select"
+            initialValue={values.leadOwner}
+            onChange={(value) => {
+              setFieldValue('leadOwner', value.target.value);
+            }}
+            onBlur={() => handleBlur({ target: { name: 'leadOwner' } })}
+            hasError={touched.leadOwner && Boolean(errors.leadOwner)}
+            errorMessage={touched.leadOwner && errors.leadOwner}
+            key={`leadStatus-${values.leadStatus}`}
+          />
+        </div>
+
+        <div className="form-field">
+          <CustomDropDown
+            label="Lead Status"
+            options={["Potential", "Inactive", "Enrolled", "May be Prospective"]}
+            required={true}
+            placeHolder="Select"
+            initialValue={values.leadStatusInfo}
+            onChange={(value) => {
+              setFieldValue('leadStatusInfo', value.target.value);
+            }}
+            onBlur={() => handleBlur({ target: { name: 'leadStatusInfo' } })}
+            hasError={touched.leadStatusInfo && Boolean(errors.leadStatusInfo)}
+            errorMessage={touched.leadStatusInfo && errors.leadStatusInfo}
+          />
+        </div>
+
+        <div className="form-field">
+          <CustomDropDown
+            label="Priority"
+            options={["High", "Medium", "Low"]}
+            required={true}
+            placeHolder="Select"
+            initialValue={values.priority}
+            onChange={(value) => {
+              setFieldValue('priority', value.target.value);
+            }}
+            onBlur={() => handleBlur({ target: { name: 'priority' } })}
+            hasError={touched.priority && Boolean(errors.priority)}
+            errorMessage={touched.priority && errors.priority}
+          />
+        </div>
+
+        <div className="form-field">
+          <CustomDropDown
+            label="Tele Caller"
+            options={["John", "Jane"]}
+            required={false}
+            showAsterisk={false}
+            placeHolder="Select"
+            initialValue={values.teleCallerName}
+            onChange={(value) => {
+              setFieldValue('teleCallerName', value.target.value);
+            }}
+            onBlur={() => handleBlur({ target: { name: 'teleCallerName' } })}
+            hasError={touched.teleCallerName && Boolean(errors.teleCallerName)}
+            errorMessage={touched.teleCallerName && errors.teleCallerName}
+          />
+        </div>
+
+        <div className="form-field">
+          <CustomDatePicker
+            label="Lead Created"
+            value={values.leadCreated}
+            onChange={(value) => {
+              setFieldValue('leadCreated', value.target.value)
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default LeadInformationForm;

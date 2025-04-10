@@ -5,7 +5,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import UserProf from "../assets/user-image.svg";
 import FilterIcon from "../assets/filter.svg";
 import MenuIcon from "../assets/menu.svg";
-import { CustomButton } from "react-mui-tailwind"
+import LeftArrowIcon from "../assets/arrow-left.svg";
+import RightArrowIcon from "../assets/arrow-right.svg";
+import { CustomButton } from "react-mui-tailwind";
+import { formRef } from './forms/leadCreation';
 
 const Header = () => {
   const location = useLocation();
@@ -18,12 +21,35 @@ const Header = () => {
   };
 
   const handleCancel = () => {
-    navigate('/leads');
+    // navigate('/leads');
   };
 
   const handleSubmit = () => {
     // Submit form logic would go here
-    navigate('/leads');
+    // navigate('/leads');
+  };
+
+  const handleFormSubmit = () => {
+    if (formRef.current) {
+      // Set all fields as touched to trigger validation
+      formRef.current.setTouched(
+        Object.keys(formRef.current.values).reduce((acc, key) => {
+          acc[key] = true;
+          return acc;
+        }, {})
+      );
+      
+      formRef.current.submitForm();
+      // formRef.current.validateForm().then(errors => {
+      //   if (Object.keys(errors).length === 0) {
+      //     // No errors, submit the form
+      //     formRef.current.submitForm();
+      //   } else {
+      //     console.log('Form has validation errors:', errors);
+      //     // Form has errors, don't submit
+      //   }
+      // });
+    }
   };
 
   return (
@@ -64,30 +90,10 @@ const Header = () => {
             </div>
 
             <div className="flex items-center gap-3 w-[405px]">
-              {/* <button 
-                className="btn-primary flex items-center gap-2"
-                onClick={handleCreateLead}
-              >
-                <span>+ Create Lead</span>
-              </button> */}
               <CustomButton text="Create Lead" endIcon={false} onClick={handleCreateLead} />
-              {/* <button className="btn-secondary flex items-center gap-2">
-                <span>Bulk Upload</span>
-              </button> */}
               <CustomButton text="Bulk Upload" variant="secondary" endIcon={false} />
-              {/* <button className="w-10 h-10 flex items-center justify-center rounded-lg border border-[#E0E0E0] text-[#757575]">
-                <Filter size={18} />
-              </button> */}
               <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={FilterIcon} />
               <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={MenuIcon} />
-              {/* <button className="w-10 h-10 flex items-center justify-center rounded-lg border border-[#E0E0E0] text-[#757575]">
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M8 1H1V8H8V1Z" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M17 1H10V8H17V1Z" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M17 10H10V17H17V10Z" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M8 10H1V17H8V10Z" stroke="#757575" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button> */}
             </div>
           </div>
         </div>
@@ -97,32 +103,22 @@ const Header = () => {
         <div className="py-6 px-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <img
-              src="/lovable-uploads/2fa973f3-5336-4eec-a0b2-67687fc62b0e.png"
+              src={LeftArrowIcon}
               alt="FES Logo"
-              className="w-14 h-8 rounded-md"
+              className="size-[24px] rounded-md cursor-pointer"
+              onClick={handleCancel}
             />
             <div className="flex items-center gap-2">
-              <h1 className="text-xl font-medium">Create a new lead</h1>
+              <h1
+                className="font-proxima font-bold text-[28px] leading-[140%] align-middle text-[#17222B]">
+                Create a new lead
+              </h1>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <button
-              className="btn-secondary"
-              onClick={handleCancel}
-            >
-              Cancel
-            </button>
-            <button
-              className="btn-primary flex items-center gap-2"
-              onClick={handleSubmit}
-            >
-              <span>Submit</span>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3.33301 8H12.6663" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M8 3.33337L12.6667 8.00004L8 12.6667" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
+            <CustomButton text="Cancel" variant="secondary" startIcon={false} endIcon={false} onClick={handleCancel} />
+            <CustomButton text="Submit" startIcon={false} endIcon={true} iconImg={RightArrowIcon} onClick={handleFormSubmit} />
           </div>
         </div>
       )}
