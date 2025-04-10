@@ -7,6 +7,7 @@ import Layout from "./components/Layout";
 import LeadsPage from "./pages/LeadsListPage";
 import CreateLeadPage from "./pages/CreateLeadPage";
 import NotFound from "./pages/NotFound";
+import CreateLeadComponent from "./components/forms/leadCreation/index"
 
 const App = () => {
   return (
@@ -16,7 +17,7 @@ const App = () => {
           <Route path="/" element={<Layout />}>
             <Route index element={<Navigate to="/leads" replace />} />
             <Route path="leads" element={<LeadsPage />} />
-            <Route path="leads/create" element={<CreateLeadPage />} />
+            <Route path="leads/create" element={<CreateLeadComponent />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

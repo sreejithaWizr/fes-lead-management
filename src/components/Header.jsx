@@ -8,6 +8,9 @@ import MenuIcon from "../assets/menu.svg";
 import RefreshIcon from "../assets/refresh.svg";
 import { CustomButton, CustomSearch, CustomDropDown, CustomOffCanvasModal } from "react-mui-tailwind";
 import FilterContent from '../pages/FilterContent';
+import LeftArrowIcon from "../assets/arrow-left.svg";
+import RightArrowIcon from "../assets/arrow-right.svg";
+import { formRef } from './forms/leadCreation';
 
 const Header = () => {
   const location = useLocation();
@@ -24,12 +27,35 @@ const Header = () => {
   };
 
   const handleCancel = () => {
-    navigate('/leads');
+    // navigate('/leads');
   };
 
   const handleSubmit = () => {
     // Submit form logic would go here
-    navigate('/leads');
+    // navigate('/leads');
+  };
+
+  const handleFormSubmit = () => {
+    if (formRef.current) {
+      // Set all fields as touched to trigger validation
+      formRef.current.setTouched(
+        Object.keys(formRef.current.values).reduce((acc, key) => {
+          acc[key] = true;
+          return acc;
+        }, {})
+      );
+      
+      formRef.current.submitForm();
+      // formRef.current.validateForm().then(errors => {
+      //   if (Object.keys(errors).length === 0) {
+      //     // No errors, submit the form
+      //     formRef.current.submitForm();
+      //   } else {
+      //     console.log('Form has validation errors:', errors);
+      //     // Form has errors, don't submit
+      //   }
+      // });
+    }
   };
 
   console.log("value", isFilterOpen)
@@ -85,40 +111,30 @@ const Header = () => {
           </div>
         )}
 
-        {isCreateLeadPage && (
-          <div className="py-6 px-6 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <img
-                src="/lovable-uploads/2fa973f3-5336-4eec-a0b2-67687fc62b0e.png"
-                alt="FES Logo"
-                className="w-14 h-8 rounded-md"
-              />
-              <div className="flex items-center gap-2">
-                <h1 className="text-xl font-medium">Create a new lead</h1>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <button
-                className="btn-secondary"
-                onClick={handleCancel}
-              >
-                Cancel
-              </button>
-              <button
-                className="btn-primary flex items-center gap-2"
-                onClick={handleSubmit}
-              >
-                <span>Submit</span>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M3.33301 8H12.6663" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M8 3.33337L12.6667 8.00004L8 12.6667" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
+{isCreateLeadPage && (
+        <div className="py-6 px-6 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <img
+              src={LeftArrowIcon}
+              alt="FES Logo"
+              className="size-[24px] rounded-md cursor-pointer"
+              onClick={handleCancel}
+            />
+            <div className="flex items-center gap-2">
+              <h1
+                className="font-proxima font-bold text-[28px] leading-[140%] align-middle text-[#17222B]">
+                Create a new lead
+              </h1>
             </div>
           </div>
-        )}
-      </header>
+
+          <div className="flex items-center gap-3">
+            <CustomButton text="Cancel" variant="secondary" startIcon={false} endIcon={false} onClick={handleCancel} />
+            <CustomButton text="Submit" startIcon={false} endIcon={true} iconImg={RightArrowIcon} onClick={handleFormSubmit} />
+          </div>
+        </div>
+      )}
+    </header>
       {isFilterOpen && (
         <CustomOffCanvasModal
           isOpen={isFilterOpen}
@@ -132,7 +148,6 @@ const Header = () => {
       )}
 
     </>
-
   );
 };
 
