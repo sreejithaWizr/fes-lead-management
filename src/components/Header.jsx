@@ -8,10 +8,10 @@ import MenuIcon from "../assets/menu.svg";
 import LeftArrowIcon from "../assets/arrow-left.svg";
 import RightArrowIcon from "../assets/arrow-right.svg";
 import { CustomButton } from "react-mui-tailwind";
-import { formRef } from './forms/leadCreation';
+import { formRef } from '../pages/CreateLeadPage';
 
 const Header = () => {
-  const location = useLocation();
+  const location = useLocation(); 
   const navigate = useNavigate();
   const isLeadsPage = location.pathname === '/leads';
   const isCreateLeadPage = location.pathname === '/leads/create';
@@ -21,7 +21,7 @@ const Header = () => {
   };
 
   const handleCancel = () => {
-    // navigate('/leads');
+    navigate('/leads');
   };
 
   const handleSubmit = () => {
