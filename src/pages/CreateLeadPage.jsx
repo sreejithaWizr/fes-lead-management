@@ -1,695 +1,253 @@
+import React, { useEffect, useState } from 'react';
+import { Formik, useFormikContext } from 'formik';
+import LeadInformationForm from '../components/forms/createLead/leadInfoForm';
+import EducationQualificationForm from '../components/forms/createLead/leadEducationForm';
+import LeadStatusForm from '../components/forms/createLead/leadStatusForm';
+import LeadSourceForm from '../components/forms/createLead/leadSourceForm';
+import { validationSchema } from '../components/forms/createLead/schema';
+import { CustomButton } from 'react-mui-tailwind'
+import WarningIcon from '../assets/warning-icon.svg'
 
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { createLead } from '../store/leadsSlice';
-import { useNavigate } from 'react-router-dom';
-import { CustomButton, CustomInputField, CustomDropDown, CustomDatePicker } from "react-mui-tailwind";
-import {
-  isEmailValid,
-  isPhoneNumberValid,
-  validateRequiredFields,
-  runFieldValidations
-} from '../utils/validationUtils';
+const ErrorObserver = ({ setTabErrors }) => {
+    const { errors, touched } = useFormikContext();
 
-// import { WarningIcon } from "../assets/warning-icon.svg";
+    useEffect(() => {
+        // Group errors by tab sections
+        const leadInfoFields = ['firstName', 'lastName', 'email', 'secondaryEmail', 'mobileNumber', 'alternativeNumber', 'whatsappNumber', 'leadOwner', 'leadStatusInfo', 'priority', 'teleCallerName', 'leadCreated', 'leadNumber', 'agreeToReceiveBoolean'];
+        const educationFields = ['highestQualification', 'graduationYear', 'fieldOfStudy', 'cgpaGrade', 'workExperience', 'preferredDestination', 'otherCountries', 'testName', 'testTrainingBoolean'];
+        const statusFields = ['leadStatus', 'category', 'subCategory', 'branch', 'counselor', 'notes'];
+        const sourceFields = ['leadSource_1', 'leadSource_2', 'leadSource_3', 'location_1', 'location_2', 'referrerName', 'referrerEmployeeId', 'vertical', 'desiredProgram', 'internshipOption', 'adName', 'adCampaign', 'leadForm', 'ipAddress'];
+
+        // For checking any touched errors in each section
+        const hasLeadInfoErrors = leadInfoFields.some(field => errors[field] && touched[field]);
+        const hasEducationErrors = educationFields.some(field => errors[field] && touched[field]);
+        const hasStatusErrors = statusFields.some(field => errors[field] && touched[field]);
+        const hasSourceErrors = sourceFields.some(field => errors[field] && touched[field]);
+
+        setTabErrors({
+            'Lead Information': hasLeadInfoErrors,
+            'Education Qualification': hasEducationErrors,
+            'Lead Status': hasStatusErrors,
+            'Lead Source': hasSourceErrors,
+            'All Info': hasLeadInfoErrors || hasEducationErrors || hasStatusErrors || hasSourceErrors
+        });
+    }, [errors, touched, setTabErrors]);
+
+    return null;
+};
+
+// ref to expose the submit function
+export const formRef = React.createRef();
 
 const CreateLeadPage = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('All Info');
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    secondaryEmail: '',
-    mobileNumber: '',
-    alternativeNumber: '',
-    whatsappNumber: '',
-    leadStatus: '',
-    category: '',
-    subCategory: '',
-    branch: '',
-    counselor: '',
-    notes: '',
-    leadSource_1: '',
-    leadSource_2: '',
-    leadSource_3: '',
-    location_1: '',
-    location_2: '',
-    referrerName: '',
-    referrerEmployeeId: '',
-    vertical: '',
-    desiredProgram: '',
-    internshipOption: '',
-    adName: '',
-    adCampaign: '',
-    leadForm: '',
-    ipAddress: '192.168.1.1',
-    priority: '',
-    teleCallerName: '',
-    leadCreated: new Date().toISOString().split('T')[0],
-    leadNumber: `LEAD${Math.floor(Math.random() * 900000) + 100000}`,
-    agreeToReceive: false,
-    highestQualification: '',
-    graduationYear: '',
-    fieldOfStudy: '',
-    cgpaGrade: '',
-    workExperience: '',
-    preferredDestination: '',
-    otherCountries: '',
-    testName: '',
-  });
+    const [activeTab, setActiveTab] = useState('All Info');
+    const tabs = ['All Info', 'Lead Information', 'Education Qualification', 'Lead Status', 'Lead Source'];
+    const [tabErrors, setTabErrors] = useState({});
 
-  // This state is used to track the validation status of each tab
-  const [tabValidation, setTabValidation] = useState({
-    "Lead Information": true,
-    "Education Qualification": true,
-    "Lead Status": true,
-    "Lead Source": true,
-  });
+    const initialValues = {
+        // Lead Information
+        firstName: '',
+        lastName: '',
+        email: '',
+        secondaryEmail: '',
+        mobileNumber: '',
+        alternativeNumber: '',
+        whatsappNumber: '',
+        leadOwner: '',
+        leadStatusInfo: '',
+        priority: '',
+        teleCallerName: '',
+        leadCreated: '',
+        leadNumber: `LEAD${Math.floor(Math.random() * 900000) + 100000}`,
+        agreeToReceiveBoolean: false,
 
-  // This function validates the fields in the current tab
-  const validateFields = (fields) => {
-    return fields.every((field) => formData[field]?.trim() !== "");
-  };
+        // Education Qualification
+        highestQualification: '',
+        graduationYear: '',
+        fieldOfStudy: '',
+        cgpaGrade: '',
+        workExperience: '',
+        preferredDestination: '',
+        otherCountries: '',
+        testName: '',
+        testTrainingBoolean: false,
 
-  // This function validates all tabs and sets the validation state
-  const validateTabs = () => {
-    const validations = {
-      "Lead Information": validateFields(["firstName", "lastName", "email", "mobileNumber", "leadOwner", "leadStatus", "priority"]),
-      "Education Qualification": validateFields(["highestQualification", "graduationYear", "fieldOfStudy"]),
-      "Lead Status": validateFields(["leadStatus", "category", "subCategory", "branch", "counselor"]),
-      "Lead Source": validateFields(["leadSource_1", "location_1", "vertical", "desiredProgram"]),
+        // Lead Status
+        leadStatus: '',
+        category: '',
+        subCategory: '',
+        branch: '',
+        counselor: '',
+        notes: '',
+
+        // Lead Source
+        leadSource_1: '',
+        leadSource_2: '',
+        leadSource_3: '',
+        location_1: '',
+        location_2: '',
+        referrerName: '',
+        referrerEmployeeId: '',
+        vertical: '',
+        desiredProgram: '',
+        internshipOption: '',
+        adName: '',
+        adCampaign: '',
+        leadForm: '',
+        ipAddress: '192.168.1.1',
     };
 
-    setTabValidation(validations);
-    return validations;
-  };
 
-  // State for input field value
-  const [textValue, setTextValue] = useState("Value");
+    const handleSubmit = (values, { setSubmitting }) => {
+        console.log('Form submitted with values:', values);
 
-  const handleChange = (e) => {
-    setTextValue(e.target.value)
+        console.log('Lead Information:', {
+            firstName: values.firstName,
+            lastName: values.lastName,
+            email: values.email,
+            secondaryEmail: values.secondaryEmail,
+            mobileNumber: values.mobileNumber,
+            alternativeNumber: values.alternativeNumber,
+            whatsappNumber: values.whatsappNumber,
+            leadOwner: values.leadOwner,
+            leadStatusInfo: values.leadStatusInfo,
+            priority: values.priority,
+            teleCallerName: values.teleCallerName,
+            leadCreated: values.leadCreated,
+        });
 
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === 'checkbox' ? checked : value,
-    });
-  };
+        console.log('Education Qualification:', {
+            highestQualification: values?.highestQualification,
+            graduationYear: values?.graduationYear,
+            fieldOfStudy: values?.fieldOfStudy,
+            cgpaGrade: values?.cgpaGrade,
+            workExperience: values?.workExperience,
+            preferredDestination: values?.preferredDestination,
+            otherCountries: values?.otherCountries,
+            testName: values?.testName,
+            testTrainingBoolean: values?.testTrainingBoolean,
+            leadNumber: `LEAD${Math.floor(Math.random() * 900000) + 100000}`,
+            agreeToReceiveBoolean: values?.agreeToReceiveBoolean,
+        });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+        console.log('Lead Status:', {
+            leadStatus: values.leadStatus,
+            category: values.category,
+            subCategory: values.subCategory,
+            branch: values.branch,
+            counselor: values.counselor,
+            notes: values.notes,
+        });
 
-    const validations = validateTabs();
-    if (Object.values(validations).some((isValid) => !isValid)) {
-      // Don't submit if any tab has invalid fields
-      return;
-    }
+        console.log('Lead Source:', {
+            leadSource_1: values?.leadSource_1,
+            leadSource_2: values?.leadSource_2,
+            leadSource_3: values?.leadSource_3,
+            location_1: values?.location_1,
+            location_2: values?.location_2,
+            referrerName: values?.referrerName,
+            referrerEmployeeId: values?.referrerEmployeeId,
+            vertical: values?.vertical,
+            desiredProgram: values?.desiredProgram,
+            internshipOption: values?.internshipOption,
+            adName: values?.adName,
+            adCampaign: values?.adCampaign,
+            leadForm: values?.leadForm,
+            ipAddress: values?.ipAddress,
+        });
+    };
 
-    dispatch(createLead(formData)).then(() => {
-      navigate('/leads');
-    });
-  };
+    return (
+        <div className="w-full">
+            <Formik
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={handleSubmit}
+                innerRef={formRef}
+            // enableReinitialize={true}
+            >
+                {({
+                    values,
+                    errors,
+                    touched,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    isSubmitting,
+                    setFieldValue,
+                }) => (
+                    <form onSubmit={handleSubmit}>
+                        <ErrorObserver setTabErrors={setTabErrors} />
+                        <div className="pb-8">
+                            <div className="mb-4">
+                                <div className="flex space-x-2">
+                                    {tabs.map((tab) => (
+                                        <div key={tab}>
+                                            <CustomButton
+                                                key={tab}
+                                                text={tab}
+                                                variant="chips"
+                                                rounded="full"
+                                                startIcon={false}
+                                                endIcon={tabErrors[tab] || false}
+                                                iconImg={tabErrors[tab] ? WarningIcon : undefined}
+                                                onClick={() => setActiveTab(tab)}
+                                                selected={activeTab === tab}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
 
-  const tabs = ['All Info', 'Lead Information', 'Education Qualification', 'Lead Status', 'Lead Source'];
+                        {(activeTab === 'All Info' || activeTab === 'Lead Information') && (
+                            <LeadInformationForm
+                                values={values}
+                                errors={errors}
+                                touched={touched}
+                                handleChange={handleChange}
+                                handleBlur={handleBlur}
+                                setFieldValue={setFieldValue}
+                            />
+                        )}
 
-  const yearOptions = [...Array.from({ length: 20 }, (_, i) => `${new Date().getFullYear() - i}`)];
-  const numberOfYears = [...Array.from({ length: 21 }, (_, i) => i)];
+                        {(activeTab === 'All Info' || activeTab === 'Education Qualification') && (
+                            <EducationQualificationForm
+                                values={values}
+                                errors={errors}
+                                touched={touched}
+                                handleChange={handleChange}
+                                handleBlur={handleBlur}
+                                setFieldValue={setFieldValue}
+                            />
+                        )}
 
-  // Lead Information
-  const renderLeadInformationForm = () => (
-    <div className="form-section animate-fade-in ml-0">
-      <h2 className="font-bold text-[19px] leading-[140%] tracking-[0%] text-[#17222B] font-[Proxima Nova] mb-4">
-        Lead Information
-      </h2>
+                        {(activeTab === 'All Info' || activeTab === 'Lead Status') && (
+                            <LeadStatusForm
+                                values={values}
+                                errors={errors}
+                                touched={touched}
+                                handleChange={handleChange}
+                                handleBlur={handleBlur}
+                                setFieldValue={setFieldValue}
+                            />
+                        )}
 
-      <div className="form-grid">
-        <div className="form-field">
-          <CustomInputField
-            state="default"
-            label="First Name"
-            value={formData.firstName}
-            // onChange={(e) => setTextValue(e.target.value)}
-            onChange={handleChange}
-            placeholder="Enter first name"
-          />
+                        {(activeTab === 'All Info' || activeTab === 'Lead Source') && (
+                            <LeadSourceForm
+                                values={values}
+                                errors={errors}
+                                touched={touched}
+                                handleChange={handleChange}
+                                handleBlur={handleBlur}
+                                setFieldValue={setFieldValue}
+                            />
+                        )}
+                    </form>
+                )}
+            </Formik>
         </div>
-
-        <div className="form-field">
-          <CustomInputField
-            state="default"
-            label="Last Name"
-            value={formData.lastName}
-            onChange={handleChange}
-            placeholder="Enter last name"
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomInputField
-            state="default"
-            label="Email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Enter email"
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomInputField
-            state="default"
-            label="Secondary Email"
-            value={formData.secondaryEmail}
-            showAsterisk={false}
-            onChange={handleChange}
-            placeholder="Enter secondary email"
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomInputField
-            state="default"
-            label="Mobile Number"
-            value={formData.mobileNumber}
-            onChange={handleChange}
-            placeholder="Enter mobile number"
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomInputField
-            state="default"
-            label="Alternative Number"
-            value={formData.alternativeNumber}
-            showAsterisk={false}
-            onChange={handleChange}
-            placeholder="Enter alternative number"
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomInputField
-            state="default"
-            label="Whatsapp Number"
-            value={formData.whatsappNumber}
-            showAsterisk={false}
-            onChange={handleChange}
-            placeholder="Enter whatsapp number"
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomDropDown
-            label="Lead Owner"
-            options={["Option 1", "Option 2", "Option 3"]}
-            required={true}
-            placeHolder="Select"
-            onChange={handleChange}
-            value={formData.leadOwner}
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomDropDown
-            label="Lead Status"
-            options={["Potential", "Inactive", "Enrolled", "May be Prospective"]}
-            required={true}
-            placeHolder="Select"
-            onChange={handleChange}
-            value={formData.leadStatus}
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomDropDown
-            label="Priority"
-            options={["High", "Medium", "Low"]}
-            required={true}
-            placeHolder="Select"
-            onChange={handleChange}
-            value={formData.priority}
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomDropDown
-            label="Tele Caller"
-            options={["John", "Jane"]}
-            required={false}
-            showAsterisk={false}
-            placeHolder="Select"
-            onChange={handleChange}
-            value={formData.teleCallerName}
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomDatePicker label="Lead Created" value={formData.leadCreated} onChange={handleChange} />
-        </div>
-      </div>
-
-      <div className="mt-6">
-        <div className="form-field">
-          <CustomInputField
-            state="non-editable"
-            label="Lead Number"
-            valueType="default"
-            value={formData.leadNumber}
-            showAsterisk={false}
-            readOnly
-            onChange={handleChange}
-            placeholder="LEAD355451001"
-            className="bg-gray-50"
-          />
-        </div>
-      </div>
-
-      <div className="mt-6 flex items-center gap-2">
-        <input
-          type="checkbox"
-          id="agreeToReceive"
-          name="agreeToReceive"
-          checked={formData.agreeToReceive}
-          onChange={handleChange}
-          className="w-4 h-4 gap-[10px] rounded border"
-        />
-        <label htmlFor="agreeToReceive" className="text-base font-normal leading-[140%] text-[#17222B] font-[Proxima Nova]">
-          I agree to receive communications <span className='text-red-600'>*</span>
-        </label>
-      </div>
-    </div>
-  );
-
-  // Education Qualification
-  const renderEducationQualificationForm = () => (
-    <div className="form-section animate-fade-in ml-0">
-      <h2 className="font-bold text-[19px] leading-[140%] tracking-[0%] text-[#17222B] font-[Proxima Nova] mb-4">
-        Education Qualification
-      </h2>
-      <div className="form-grid">
-        <div className="form-field">
-          <CustomDropDown
-            label="Highest Qualification"
-            options={["Bachelor's", "Master's", "PhD"]}
-            required={true}
-            showAsterisk={false}
-            placeHolder="Select"
-            onChange={handleChange}
-            value={formData.highestQualification}
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomDropDown
-            label="Graduation Year"
-            options={yearOptions}
-            // options={["Bachelor's", "Master's", "PhD"]}
-            required={true}
-            showAsterisk={false}
-            placeHolder="Select"
-            onChange={handleChange}
-            value={formData.graduationYear}
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomDropDown
-            label="Field of Study"
-            options={["Computer Science", "Engineering", "Business", "Arts"]}
-            required={true}
-            showAsterisk={false}
-            placeHolder="Select"
-            onChange={handleChange}
-            value={formData.fieldOfStudy}
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomInputField
-            state="default"
-            label="CGPA/Grade"
-            value={formData.cgpaGrade}
-            showAsterisk={false}
-            onChange={handleChange}
-            placeholder="Enter CGPA/Grade"
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomDropDown
-            label="Work Experience (Years)"
-            options={numberOfYears}
-            required={false}
-            showAsterisk={false}
-            placeHolder="Select"
-            onChange={handleChange}
-            value={formData.workExperience}
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomDropDown
-            label="Preferred Study Destination"
-            options={["US", "Australia", "Canada", "London"]}
-            required={false}
-            showAsterisk={false}
-            placeHolder="Select"
-            onChange={handleChange}
-            value={formData.preferredDestination}
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomDropDown
-            label="Other Countries"
-            options={["US", "Australia", "Canada", "Germany"]}
-            required={false}
-            showAsterisk={false}
-            placeHolder="Select"
-            onChange={handleChange}
-            value={formData.otherCountries}
-          />
-        </div>
-      </div>
-
-      <div className="mt-6 flex items-center gap-2">
-        <input
-          type="checkbox"
-          id="agreeToReceive"
-          name="agreeToReceive"
-          checked={formData.agreeToReceive}
-          onChange={handleChange}
-          className="w-4 h-4 gap-[10px] rounded border"
-        />
-        <label htmlFor="agreeToReceive" className="text-base font-normal leading-[140%] text-[#17222B] font-[Proxima Nova]">
-          Test Training Required
-        </label>
-      </div>
-
-      <div className="form-field mt-4">
-        <CustomInputField
-          state="default"
-          label="Test Name"
-          value={formData.testName}
-          showAsterisk={false}
-          onChange={handleChange}
-          placeholder="Enter test name"
-        />
-      </div>
-    </div>
-  );
-
-  // Lead Status
-  const renderLeadStatusForm = () => (
-    <div className="form-section animate-fade-in ml-0">
-      <h2 className="font-bold text-[19px] leading-[140%] tracking-[0%] text-[#17222B] font-[Proxima Nova] mb-4">
-        Lead Status
-      </h2>
-      <div className="form-grid">
-        <div className="form-field">
-          <CustomDropDown
-            label="Status"
-            options={["Potential", "Inactive", "Enrolled", "May be Prospective"]}
-            required={true}
-            showAsterisk={false}
-            placeHolder="Select"
-            onChange={handleChange}
-            value={formData.leadStatus}
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomDropDown
-            label="Category"
-            options={["Potential", "Inactive", "Enrolled", "May be Prospective"]}
-            required={true}
-            showAsterisk={false}
-            placeHolder="Select"
-            onChange={handleChange}
-            value={formData.category}
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomDropDown
-            label="Subcategory"
-            options={["Subcategory 1", "Subcategory 2", "Subcategory 3"]}
-            required={true}
-            showAsterisk={false}
-            placeHolder="Select"
-            onChange={handleChange}
-            value={formData.subCategory}
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomDropDown
-            label="Branch"
-            options={["Branch 1", "Branch 2", "Branch 3"]}
-            required={true}
-            showAsterisk={false}
-            placeHolder="Select"
-            onChange={handleChange}
-            value={formData.branch}
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomDropDown
-            label="Counselor"
-            options={["Counselor 1", "Counselor 2", "Counselor 3"]}
-            required={true}
-            showAsterisk={false}
-            placeHolder="Select"
-            onChange={handleChange}
-            value={formData.counselor}
-          />
-        </div>
-      </div>
-
-      <div className="form-field mt-4">
-        <CustomInputField
-          state="default"
-          label="Notes"
-          value={formData.notes}
-          showAsterisk={false}
-          onChange={handleChange}
-          placeholder="Type your notes here"
-        />
-      </div>
-    </div>
-  );
-
-  // Lead Source
-  const renderLeadSourceForm = () => (
-    <div className="form-section animate-fade-in ml-0">
-      <h2 className="font-bold text-[19px] leading-[140%] tracking-[0%] text-[#17222B] font-[Proxima Nova] mb-4">
-        Lead Source
-      </h2>
-      <div className="form-grid">
-        <div className="form-field">
-          <CustomDropDown
-            label="Source 1"
-            options={["Meta", "Google Ads", "Referral", "Website"]}
-            required={true}
-            showAsterisk={false}
-            placeHolder="Select"
-            onChange={handleChange}
-            value={formData.leadSource_1}
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomDropDown
-            label="Source 2"
-            options={["Meta", "Google Ads", "Referral", "Website"]}
-            required={false}
-            showAsterisk={false}
-            placeHolder="Select"
-            onChange={handleChange}
-            value={formData.leadSource_2}
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomDropDown
-            label="Source 3"
-            options={["Meta", "Google Ads", "Referral", "Website"]}
-            required={false}
-            showAsterisk={false}
-            placeHolder="Select"
-            onChange={handleChange}
-            value={formData.leadSource_3}
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomDropDown
-            label="Location 1"
-            options={["Location 1", "Location 2", "Location 3"]}
-            required={true}
-            showAsterisk={false}
-            placeHolder="Select"
-            onChange={handleChange}
-            value={formData.location_1}
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomDropDown
-            label="Location 2"
-            options={["Location 1", "Location 2", "Location 3"]}
-            required={false}
-            showAsterisk={false}
-            placeHolder="Select"
-            onChange={handleChange}
-            value={formData.location_2}
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomInputField
-            state="default"
-            label="Referrer Name"
-            value={formData.referrerName}
-            showAsterisk={false}
-            onChange={handleChange}
-            placeholder="Enter referrer name"
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomInputField
-            state="default"
-            label="Referrer Employee ID"
-            value={formData.referrerEmployeeId}
-            showAsterisk={false}
-            onChange={handleChange}
-            placeholder="Enter referrer employee ID"
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomDropDown
-            label="Vertical"
-            options={["Vertical 1", "Vertical 2", "Vertical 3"]}
-            required={true}
-            showAsterisk={false}
-            placeHolder="Select"
-            onChange={handleChange}
-            value={formData.vertical}
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomDropDown
-            label="Desired Program"
-            options={["Desired Program 1", "Desired Program 2", "Desired Program 3"]}
-            required={true}
-            showAsterisk={false}
-            placeHolder="Select"
-            onChange={handleChange}
-            value={formData.desiredProgram}
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomDropDown
-            label="Internship Option"
-            options={["Option 1", "Option 2", "Option 3"]}
-            required={false}
-            showAsterisk={false}
-            placeHolder="Select"
-            onChange={handleChange}
-            value={formData.internshipOption}
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomInputField
-            state="default"
-            label="Ad Name"
-            value={formData.adName}
-            showAsterisk={false}
-            onChange={handleChange}
-            placeholder="Enter ad name"
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomInputField
-            state="default"
-            label="Ad Campaign"
-            value={formData.adCampaign}
-            showAsterisk={false}
-            onChange={handleChange}
-            placeholder="Enter ad campaign"
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomInputField
-            state="default"
-            label="Lead Form"
-            value={formData.leadForm}
-            showAsterisk={false}
-            onChange={handleChange}
-            placeholder="Enter lead form"
-          />
-        </div>
-
-        <div className="form-field">
-          <CustomInputField
-            state="non-editable"
-            label="IP Address"
-            value={formData.ipAddress}
-            showAsterisk={false}
-            onChange={handleChange}
-            placeholder="192.168.1.1"
-          />
-        </div>
-      </div>
-    </div>
-  );
-
-  return (
-    <div className="pb-8">
-      <div className="mb-4">
-        <div className="flex space-x-2">
-          {tabs.map((tab) => (
-            <CustomButton
-              key={tab}
-              text={tab}
-              variant="chips"
-              rounded="full"
-              startIcon={false}
-              endIcon={false}
-              onClick={() => setActiveTab(tab)}
-              selected={activeTab === tab}
-            />
-            //         {
-            //   !tabValidation[tab] && (
-            //     <img
-            //       src={WarningIcon}
-            //       alt="warning"
-            //       className="absolute -top-1 -right-1 w-4 h-4"
-            //     />
-            //   )
-            // }
-          ))}
-        </div>
-      </div>
-
-      <form onSubmit={handleSubmit}>
-        {(activeTab === 'All Info' || activeTab === 'Lead Information') && renderLeadInformationForm()}
-        {(activeTab === 'All Info' || activeTab === 'Education Qualification') && renderEducationQualificationForm()}
-        {(activeTab === 'All Info' || activeTab === 'Lead Status') && renderLeadStatusForm()}
-        {(activeTab === 'All Info' || activeTab === 'Lead Source') && renderLeadSourceForm()}
-      </form>
-    </div>
-  );
+    );
 };
 
 export default CreateLeadPage;

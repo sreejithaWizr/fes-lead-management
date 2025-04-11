@@ -49,3 +49,36 @@ export const runFieldValidations = (fieldName, value) => {
             return isEmpty(value) ? 'This field is required' : '';
     }
 };
+
+import * as Yup from 'yup'
+
+//Basic validations
+export const requiredStringField = () => Yup.string().required(`Required`);
+
+export const requiredEmailField = () =>
+    Yup.string().email('Invalid email format').required(`Required`);
+
+export const optionalEmailField = () =>
+    Yup.string().email('Invalid email format').nullable();
+
+export const requiredTenDigitNumber = () =>
+    Yup.string()
+        .matches(/^[0-9]{10}$/, `Must be exactly 10 digits`)
+        .required(`Required`);
+
+export const optionalTenDigitNumber = () =>
+    Yup.string()
+        .matches(/^[0-9]{10}$/, `Must be exactly 10 digits`)
+        .nullable();
+
+export const requiredBooleanTrue = () =>
+    Yup.boolean().oneOf([true], "Required");
+
+export const requiredDropdown = () =>
+    Yup.string()
+        .required(`Required`)
+        .nullable();
+
+export const optionalDropdown = () =>
+    Yup.string()
+        .nullable();         
