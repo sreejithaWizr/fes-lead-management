@@ -134,13 +134,13 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
             <div className="mt-6 flex items-center gap-2">
                 <input
                     type="checkbox"
-                    id="testTrainindBoolean"
-                    name="testTrainindBoolean"
-                    checked={values.testTrainindBoolean}
+                    id="testTrainingBoolean"
+                    name="testTrainingBoolean"
+                    checked={values.testTrainingBoolean}
                     onChange={handleChange}
                     className="w-4 h-4 gap-[10px] rounded border"
                 />
-                <label htmlFor="testTrainindBoolean" className="text-base font-normal leading-[140%] text-[#17222B] font-[Proxima Nova]">
+                <label htmlFor="testTrainingBoolean" className="text-base font-normal leading-[140%] text-[#17222B] font-[Proxima Nova]">
                     Test Training Required
                 </label>
             </div>

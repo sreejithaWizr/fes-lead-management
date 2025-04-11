@@ -193,6 +193,36 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
           />
         </div>
       </div>
+      <div className="mt-6">
+        <div className="form-field">
+          <CustomInputField
+            state="non-editable"
+            label="Lead Number"
+            valueType="default"
+            value={values.leadNumber}
+            showAsterisk={false}
+            readOnly
+            onChange={handleChange}
+            placeholder="LEAD355451001"
+            className="bg-gray-50"
+          />
+        </div>
+      </div>
+
+      <div className="mt-6 flex items-center gap-2">
+        <input
+          type="checkbox"
+          id="agreeToReceiveBoolean"
+          name="agreeToReceiveBoolean"
+          checked={values.agreeToReceiveBoolean}
+          onChange={handleChange}
+          className="w-4 h-4 gap-[10px] rounded border"
+        />
+        <label htmlFor="agreeToReceiveBoolean" className="text-base font-normal leading-[140%] text-[#17222B] font-[Proxima Nova]">
+          I agree to receive communications <span className='text-red-600'>*</span>
+        </label>
+      </div>
+
     </div>
   );
 };
