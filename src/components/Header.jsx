@@ -10,7 +10,6 @@ import { CustomButton, CustomSearch, CustomDropDown, CustomOffCanvasModal } from
 import FilterContent from '../pages/FilterContent';
 import LeftArrowIcon from "../assets/arrow-left.svg";
 import RightArrowIcon from "../assets/arrow-right.svg";
-import { CustomButton } from "react-mui-tailwind";
 import { formRef } from '../pages/CreateLeadPage';
 
 const Header = () => {
