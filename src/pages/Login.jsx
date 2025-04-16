@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import FesLogo from '../assets/fes-logo-full.svg';
+import KeyIcon from '../assets/key-icon.svg';
 import DisplayDashboardImage from '../assets/login-display-image-static.svg';
-import { CustomInputField, CustomButton, CustomCheckboxField } from 'react-mui-tailwind';
+import { CustomButton, CustomCheckboxField, CustomInputField } from 'react-mui-tailwind';
 
 
 const Login = () => {
@@ -18,19 +19,30 @@ const Login = () => {
         </p>
 
         <CustomInputField
-          // className="w-[356px] h-10"
           label="Username"
+      
           width="356px"
-          placeholder="UserName or Email"
-          value=""
+          placeholder="Username or Email"
+          // value={values.username}
+          // onChange={(value) => {
+          //   setFieldValue('Username', value.target.value)
+          // }}
+          // onBlur={handleBlur}
+          // hasError={touched.username && Boolean(errors.username)}
+          // error={touched.username && errors.username}
         />
         <CustomInputField
-          type = "password"
-          // className="w-[356px] h-10"
+         isPassword
           label="Password"
           width="356px"
           placeholder="Password"
-          value=""
+          // value={values.password}
+          // onChange={(value) => {
+          //   setFieldValue('Username', value.target.value)
+          // }}
+          // onBlur={handleBlur}
+          // hasError={touched.password && Boolean(errors.password)}
+          // error={touched.password && errors.password}
         />
 
         <div className="flex flex-row justify-between items-center">
@@ -53,17 +65,30 @@ const Login = () => {
           startIcon={false}
           endIcon={false}
           width="356px"
+          // onSubmit={handleSubmit}
         />
+
+<p className="flex justify-center font-proxima font-normal text-[16px] text-neutral-500" > Or continue with </p>
+        <CustomButton 
+        text="SSO Login" 
+        iconImg ={KeyIcon}
+        variant="secondary"
+        startIcon={true}
+        endIcon={false}
+        width="356px" />
+
       </div>
 
+
       {/* Dashboard Image */}
-      <div className="w-[874px] h-[944] rounded-[12px]">
+      <div className="w-[874px] h-[944px] rounded-[12px]">
         <img
           src={DisplayDashboardImage}
           alt="Dashboard Display"
-          className=" object-cover rounded-[12px]"
+          className="object-cover rounded-[12px]"
         />
       </div>
+    
     </div>
   );
 };
