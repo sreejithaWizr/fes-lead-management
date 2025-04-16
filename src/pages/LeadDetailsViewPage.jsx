@@ -7,6 +7,7 @@ import LeadSourceForm from '../components/forms/createLead/leadSourceForm';
 import { validationSchema } from '../components/forms/createLead/schema';
 import { CustomButton } from 'react-mui-tailwind'
 import WarningIcon from '../assets/warning-icon.svg'
+import LeadOpportunity from '../components/forms/createLead/leadOpportunity/opportunityList';
 
 const ErrorObserver = ({ setTabErrors }) => {
   const { errors, touched } = useFormikContext();
@@ -41,7 +42,7 @@ export const formRef = React.createRef();
 
 const LeadDetailsViewPage = () => {
   const [activeTab, setActiveTab] = useState('All Info');
-  const tabs = ['All Info', 'Lead Information', 'Education Qualification', 'Lead Status', 'Lead Source'];
+  const tabs = ['Opportunity', 'All Info', 'Lead Information', 'Education Qualification', 'Lead Status', 'Lead Source'];
   const [tabErrors, setTabErrors] = useState({});
 
   const initialValues = {
@@ -242,6 +243,10 @@ const LeadDetailsViewPage = () => {
                 handleBlur={handleBlur}
                 setFieldValue={setFieldValue}
               />
+            )}
+            {(activeTab === "Opportunity" && (
+              <LeadOpportunity />
+            )
             )}
           </form>
         )}
