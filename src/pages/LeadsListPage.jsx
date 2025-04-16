@@ -17,8 +17,6 @@ const LeadsTable = () => {
   const [selectedLeads, setSelectedLeads] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  
-
   const getRow = (columnId, value) => {
     switch (columnId) {
       case "createdDate":

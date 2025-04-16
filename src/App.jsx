@@ -6,6 +6,7 @@ import { store } from "./store/store";
 import Layout from "./components/Layout";
 import LeadsPage from "./pages/LeadsListPage";
 import CreateLeadPage from "./pages/CreateLeadPage";
+import LeadDetailsViewPage from "./pages/LeadDetailsViewPage";
 import NotFound from "./pages/NotFound";
 
 const App = () => {
@@ -17,6 +18,7 @@ const App = () => {
             <Route index element={<Navigate to="/leads" replace />} />
             <Route path="leads" element={<LeadsPage />} />
             <Route path="leads/create" element={<CreateLeadPage />} />
+            <Route path="leads/detailsview" element={<LeadDetailsViewPage />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
