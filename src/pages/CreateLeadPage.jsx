@@ -7,6 +7,7 @@ import LeadSourceForm from '../components/forms/createLead/leadSourceForm';
 import { validationSchema } from '../components/forms/createLead/schema';
 import { CustomButton } from 'react-mui-tailwind'
 import WarningIcon from '../assets/warning-icon.svg'
+import LeadOpportunity from '../components/forms/createLead/leadOpportunity/opportunityList';
 
 const ErrorObserver = ({ setTabErrors }) => {
     const { errors, touched } = useFormikContext();
@@ -97,7 +98,7 @@ const CreateLeadPage = () => {
         ipAddress: '192.168.1.1',
     };
 
-
+    
     const handleSubmit = (values, { setSubmitting }) => {
         console.log('Form submitted with values:', values);
 
@@ -243,6 +244,10 @@ const CreateLeadPage = () => {
                                 setFieldValue={setFieldValue}
                             />
                         )}
+                        {/* {( activeTab === "Opportunity" && (
+                            <LeadOpportunity/>
+                        )
+                        )} */}
                     </form>
                 )}
             </Formik>

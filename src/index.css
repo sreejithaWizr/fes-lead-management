@@ -69,7 +69,7 @@
   
   /* Create Lead Form Styles */
   .form-section {
-    @apply bg-white p-4 rounded-xl shadow-card mb-6 w-full max-w-[1288px] mx-auto backdrop-blur-[30px];
+    @apply bg-white p-4 rounded-xl shadow-card mb-6 w-full max-w-full mx-auto backdrop-blur-[30px];
   }
   
   .form-grid {
