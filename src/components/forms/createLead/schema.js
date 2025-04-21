@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { optionalDropdown, optionalEmailField, optionalTenDigitNumber, requiredBooleanTrue, requiredDropdown, requiredEmailField, requiredStringField, requiredTenDigitNumber } from '../../../utils/validationUtils';
+import { optionalDropdown, optionalEmailField, optionalTenDigitNumber, requiredBooleanTrue, requiredDropdown, requiredEmailField, requiredMultiSelect, requiredStringField, requiredTenDigitNumber } from '../../../utils/validationUtils';
 
 export const validationSchema = Yup.object({
   // Lead Information validation
@@ -26,6 +26,7 @@ export const validationSchema = Yup.object({
   graduationYear: requiredDropdown(),
   fieldOfStudy: requiredDropdown(),
   cgpaGrade: Yup.string(),
+  preferredDestination:requiredMultiSelect(),
 
 
   // Lead Status validation
@@ -44,8 +45,8 @@ export const validationSchema = Yup.object({
   // location_2: Yup.string().required('Required'),
   // referrerName: Yup.string().required('Required'),
   // referrerEmployeeId: Yup.string().required('Required'),
-  vertical: requiredDropdown(),
-  desiredProgram: requiredDropdown(),
+  // vertical: requiredDropdown(),
+  // desiredProgram: requiredDropdown(),
   // internshipOption: Yup.string().required('Required'),
   // adName: Yup.string().required('Required'),
   // adCampaign: Yup.string().required('Required'),

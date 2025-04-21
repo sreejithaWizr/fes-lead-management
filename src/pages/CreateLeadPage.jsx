@@ -68,7 +68,7 @@ const CreateLeadPage = () => {
         fieldOfStudy: '',
         cgpaGrade: '',
         workExperience: '',
-        preferredDestination: '',
+        preferredDestination: [],
         otherCountries: '',
         testName: '',
         testTrainingBoolean: false,
@@ -85,6 +85,7 @@ const CreateLeadPage = () => {
         leadSource_1: '',
         leadSource_2: '',
         leadSource_3: '',
+        leadSource_4: '',
         location_1: '',
         location_2: '',
         referrerName: '',
@@ -96,6 +97,24 @@ const CreateLeadPage = () => {
         adCampaign: '',
         leadForm: '',
         ipAddress: '192.168.1.1',
+
+        preferredTimeSlot:'',
+        gclID:'',
+        zcGad:'',
+        adID:'',
+        keyIdentifier:'',
+        campaignType:'',
+        referrerEmail:'',
+        referrerPhoneNumber:'',
+        userAgent:'',
+        importLead:'',
+        invokeBlueprint:'',
+        verseID:'',
+        shortlistedCourseID:'',
+        counsellorFESTech1Name:'',
+        counsellorFESTech1EmailID :'',
+
+
     };
 
     
