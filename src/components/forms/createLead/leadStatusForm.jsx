@@ -19,7 +19,7 @@ const LeadStatusForm = ({ values, errors, touched, handleChange, handleBlur, set
                             setFieldValue('leadStatus', value.target.value);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'leadStatus' } })}
-                        initialValue={values.leadStatus}
+                        value={values.leadStatus}
                         hasError={touched.leadStatus && Boolean(errors.leadStatus)}
                         errorMessage={touched.leadStatus && errors.leadStatus}
                     />
@@ -36,7 +36,7 @@ const LeadStatusForm = ({ values, errors, touched, handleChange, handleBlur, set
                             setFieldValue('category', value.target.value);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'category' } })}
-                        initialValue={values.category}
+                        value={values.category}
                         hasError={touched.category && Boolean(errors.category)}
                         errorMessage={touched.category && errors.category}
                     />
@@ -53,7 +53,7 @@ const LeadStatusForm = ({ values, errors, touched, handleChange, handleBlur, set
                             setFieldValue('subCategory', value.target.value);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'subCategory' } })}
-                        initialValue={values.subCategory}
+                        value={values.subCategory}
                         hasError={touched.subCategory && Boolean(errors.subCategory)}
                         errorMessage={touched.subCategory && errors.subCategory}
                     />
@@ -70,7 +70,7 @@ const LeadStatusForm = ({ values, errors, touched, handleChange, handleBlur, set
                             setFieldValue('branch', value.target.value);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'branch' } })}
-                        initialValue={values.branch}
+                        value={values.branch}
                         hasError={touched.branch && Boolean(errors.branch)}
                         errorMessage={touched.branch && errors.branch}
                     />
@@ -87,7 +87,7 @@ const LeadStatusForm = ({ values, errors, touched, handleChange, handleBlur, set
                             setFieldValue('counselor', value.target.value);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'counselor' } })}
-                        initialValue={values.counselor}
+                        value={values.counselor}
                         hasError={touched.counselor && Boolean(errors.counselor)}
                         errorMessage={touched.counselor && errors.counselor}
                     />
