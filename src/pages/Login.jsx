@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import FesLogo from '../assets/fes-logo-full.svg';
 import KeyIcon from '../assets/key-icon.svg';
@@ -8,6 +8,9 @@ import { CustomButton, CustomCheckboxField, CustomInputField } from 'react-mui-t
 import { LoginValidationSchema } from '../utils/LoginValidationUtils';
 
 const Login = () => {
+  const navigate = useNavigate(); // <-- for redirecting
+  const [loginSuccess, setLoginSuccess] = useState(false); // <-- for showing success message
+
   const initialValues = {
     username: '',
     password: '',
@@ -16,6 +19,13 @@ const Login = () => {
 
   const handleSubmit = (values, { setSubmitting }) => {
     console.log('Form submitted with values:', values);
+    setLoginSuccess(true); // show success message
+
+    // fake login simulation - use actual login API here
+    setTimeout(() => {
+      navigate('/leads'); // redirect after short delay
+    }, 2000);
+
     setSubmitting(false);
   };
 
@@ -38,7 +48,7 @@ const Login = () => {
           validateOnBlur={true}
         >
           {({ values, errors, touched, handleChange, handleBlur, setFieldValue, isSubmitting }) => {
-            console.log('Formik State:', { values, errors, touched });
+            // console.log('Formik State:', { values, errors, touched });
             return (
               <Form className="flex flex-col gap-[24px]">
                 {/* Username Field */}
@@ -107,8 +117,12 @@ const Login = () => {
                   disabled={isSubmitting}
                 />
 
-                
-               
+                {loginSuccess && (
+                <p className="text-green-600 font-medium text-sm text-center">
+                Thank you ! Login Successful!
+                </p>
+                )}
+
               </Form>
               
             );
