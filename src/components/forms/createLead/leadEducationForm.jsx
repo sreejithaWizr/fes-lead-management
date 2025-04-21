@@ -18,7 +18,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
-                        initialValue={values.highestQualification}
+                        value={values.highestQualification}
                         onChange={(value) => {
                             setFieldValue('highestQualification', value.target.value);
                         }}
@@ -35,7 +35,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
-                        initialValue={values.graduationYear}
+                        value={values.graduationYear}
                         onChange={(value) => {
                             setFieldValue('graduationYear', value.target.value);
                         }}
@@ -52,7 +52,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
-                        initialValue={values.fieldOfStudy}
+                        value={values.fieldOfStudy}
                         onChange={(value) => {
                             setFieldValue('fieldOfStudy', value.target.value);
                         }}
@@ -85,7 +85,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"
-                        initialValue={values.workExperience}
+                        value={values.workExperience}
                         onChange={(value) => {
                             setFieldValue('workExperience', value.target.value)
                         }}
@@ -99,11 +99,10 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                     <CustomDropDown
                         label="Preferred Study Destination"
                         options={["US", "Australia", "Canada", "London"]}
-                        required={false}
-                        // multiple={true}
-                        showAsterisk={false}
+                        required={true}
+                        multiple={true}
                         placeHolder="Select"
-                        initialValue={values.preferredDestination}
+                        value={values.preferredDestination}
                         onChange={(value) => {
                             setFieldValue('preferredDestination', value.target.value)
                         }}
@@ -114,17 +113,16 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                 </div>
 
                 <div className="form-field">
-                    <CustomDropDown
+                    <CustomInputField
+                        state="default"
                         label="Other Countries"
-                        options={["US", "Australia", "Canada", "Germany"]}
-                        required={false}
                         showAsterisk={false}
-                        placeHolder="Select"
-                        initialValue={values.otherCountries}
+                        placeHolder="Enter Country Name"
+                        values={values.otherCountries}
                         onChange={(value) => {
                             setFieldValue('otherCountries', value.target.value)
                         }}
-                        onBlur={() => handleBlur({ target: { name: 'otherCountries' } })}
+                        onBlur={handleBlur}
                         hasError={touched.otherCountries && Boolean(errors.otherCountries)}
                         errorMessage={touched.otherCountries && errors.otherCountries}
                     />
