@@ -34,8 +34,8 @@ const Login = () => {
           initialValues={initialValues}
           validationSchema={LoginValidationSchema}
           onSubmit={handleSubmit}
-          // validateOnChange={true}
-          // validateOnBlur={true}
+          validateOnChange={true}
+          validateOnBlur={true}
         >
           {({ values, errors, touched, handleChange, handleBlur, setFieldValue, isSubmitting }) => {
             console.log('Formik State:', { values, errors, touched });
@@ -49,29 +49,12 @@ const Login = () => {
                     width="356px"
                     placeholder="Username or Email"
                     value={values.username}
-                    onChange={(value) => {
-                      console.log('Username onChange:', value.target.value);
-                      setFieldValue('username', value.target.value);
-                    }}
-                    onBlur = { handleBlur }
-                    // onBlur={() => {
-                    //   console.log('Username onBlur:', { name: 'username', value: values.username });
-                    //   handleBlur({ target: { name: 'username' } });
-                    // }}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                     name="username"
                     hasError={touched.username && Boolean(errors.username)}
                     error={touched.username && errors.username}
                   />
-                  {/* Fallback error display */}
-                  {/* {touched.username && errors.username && (
-                    <span className="text-red-500 text-sm">{errors.username}</span>
-                  )} */}
-                  {/* Debug props */}
-                  {/* {console.log('Username CustomInputField props:', {
-                    value: values.username,
-                    hasError: touched.username && Boolean(errors.username),
-                    error: touched.username && errors.username,
-                  })} */}
                 </div>
 
                 {/* Password Field */}
@@ -83,39 +66,26 @@ const Login = () => {
                     width="356px"
                     placeholder="Password"
                     value={values.password}
-                    onChange={(value) => {
-                      console.log('Password onChange:', value.target.value);
-                      setFieldValue('password', value.target.value);
-                    }}
+                    onChange={handleChange}
                     onBlur={handleBlur} 
                     name="password"
                     hasError={touched.password && Boolean(errors.password)}
                     error={touched.password && errors.password}
                   />
-
-                        {/* Fallback error display */}
-                        {/* {touched.password && errors.password && (
-                    <span className="text-red-500 text-sm">{errors.password}</span>
-                  )} */}
-                  {/* Debug props */}
-                  {/* {console.log('Password CustomInputField props:', {
-                    value: values.password,
-                    hasError: touched.password && Boolean(errors.password),
-                    error: touched.password && errors.password,
-                  })} */}
                 </div>
 
                 {/* Remember Me and Forgot Password */}
                 <div className="flex flex-row justify-between items-center">
-                  <CustomCheckboxField
+                <CustomCheckboxField
+                  type='checkbox'
                     label="Remember me"
                     name="rememberMe"
                     checked={values.rememberMe}
                     onChange={handleChange}
-                     onBlur={handleBlur} 
+                    onBlur={handleBlur} 
                     className="flex items-center space-x-2.5"
                     inputClassName="w-4 h-4 rounded-sm border border-[#17222B] bg-[#17222B]"
-                    labelClassName="w-[103px] h-[22px] font-proxima-nova text-base font-normal text-[#17222B] leading-tight"
+                    labelClassName="font-proxima-nova text-base font-normal text-[#17222B] leading-tight"
                     hasError={touched.rememberMe && Boolean(errors.rememberMe)}
                     error={touched.rememberMe && errors.rememberMe}
                   />
@@ -136,8 +106,11 @@ const Login = () => {
                   type="submit"
                   disabled={isSubmitting}
                 />
-                {JSON.stringify(errors)}
+
+                
+               
               </Form>
+              
             );
           }}
         </Formik>
