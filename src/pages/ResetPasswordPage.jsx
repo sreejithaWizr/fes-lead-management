@@ -5,7 +5,7 @@ import FesLogo from '../assets/fes-logo-full.svg';
 import { CustomButton, CustomDropDown, CustomInputField } from 'react-mui-tailwind';
 import DisplayDashboardImage from '../assets/login-display-image-static.svg';
 import InfoIcon from '@mui/icons-material/Info';
-
+import { ResetPasswordValidationSchema } from '../utils/LoginValidationUtils';
 
 
 const ResetPasswordPage = () => {
@@ -35,7 +35,7 @@ const ResetPasswordPage = () => {
 <div className="flex bg-gradient-to-tr from-[#c5deec] via-[#F2FAFF] to-white py-[39px] pl-[100px] gap-[100px]">
 
          {/* Reset Container */}
-    <div className="flex flex-col w-[424px] h-[593px] rounded-[12px] pt-[79px] gap-[24px]">
+    <div className="flex flex-col w-[424px] h-[593px] rounded-[12px] pt-[79px] gap-[18px]">
     <img src={FesLogo} alt="Logo" className="w-[132px] h-[32px]" />
 
     <h1 className="font-proxima font-bold text-[28px] text-black">Reset your Password</h1>
@@ -115,7 +115,7 @@ const ResetPasswordPage = () => {
                           placeholder="Your Answer"
                           showAsterisk={false}
                           required={false}
-                            value={values.securityAnswer}
+                          value={values.securityAnswer}
                           onChange={handleChange}
                           onBlur={handleBlur} 
                           name="securityAnswer"
