@@ -73,7 +73,7 @@ const EditLeadPage = () => {
         fieldOfStudy: 'Computer Science',
         cgpaGrade: '8.5',
         workExperience: '2 years',
-        preferredDestination: 'Canada',
+        preferredDestination: ['Canada'] || [],
         otherCountries: 'UK, Australia',
         testName: 'IELTS',
         testTrainingBoolean: true,
@@ -99,6 +99,22 @@ const EditLeadPage = () => {
         adCampaign: 'Spring 2025',
         leadForm: 'LeadGenForm1',
         ipAddress: '192.168.1.101',
+
+        preferredTimeSlot:'',
+        gclID:'',
+        zcGad:'',
+        adID:'',
+        keyIdentifier:'',
+        campaignType:'',
+        referrerEmail:'',
+        referrerPhoneNumber:'',
+        userAgent:'',
+        importLead:'',
+        invokeBlueprint:'',
+        verseID:'',
+        shortlistedCourseID:'',
+        counsellorFESTech1Name:'',
+        counsellorFESTech1EmailID :'',
     };
 
     // Simulate prefetch and set as initial values

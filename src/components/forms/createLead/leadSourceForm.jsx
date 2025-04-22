@@ -15,7 +15,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
-                        initialValue={values.leadSource_1}
+                        value={values.leadSource_1}
                         onChange={(value) => {
                             setFieldValue('leadSource_1', value.target.value);
                         }}
@@ -32,7 +32,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"
-                        initialValue={values.leadSource_2}
+                        value={values.leadSource_2}
                         onChange={(value) => {
                             setFieldValue('leadSource_2', value.target.value);
                         }}
@@ -49,7 +49,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"
-                        initialValue={values.leadSource_3}
+                        value={values.leadSource_3}
                         onChange={(value) => {
                             setFieldValue('leadSource_3', value.target.value);
                         }}
@@ -61,12 +61,29 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
 
                 <div className="form-field">
                     <CustomDropDown
+                        label="Source 4"
+                        options={["Meta", "Google Ads", "Referral", "Website"]}
+                        required={false}
+                        showAsterisk={false}
+                        placeHolder="Select"
+                        value={values.leadSource_4}
+                        onChange={(value) => {
+                            setFieldValue('leadSource_4', value.target.value);
+                        }}
+                        onBlur={() => handleBlur({ target: { name: 'leadSource_4' } })}
+                        hasError={touched.leadSource_4 && Boolean(errors.leadSource_4)}
+                        errorMessage={touched.leadSource_4 && errors.leadSource_4}
+                    />
+                </div>
+
+                <div className="form-field">
+                    <CustomDropDown
                         label="Location 1"
                         options={["Location 1", "Location 2", "Location 3"]}
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
-                        initialValue={values.location_1}
+                        value={values.location_1}
                         onChange={(value) => {
                             setFieldValue('location_1', value.target.value);
                         }}
@@ -83,7 +100,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"
-                        initialValue={values.location_2}
+                        value={values.location_2}
                         onChange={(value) => {
                             setFieldValue('location_2', value.target.value);
                         }}
@@ -94,45 +111,13 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                 </div>
 
                 <div className="form-field">
-                    <CustomInputField
-                        state="default"
-                        label="Referrer Name"
-                        value={values.referrerName}
-                        showAsterisk={false}
-                        placeholder="Enter referrer name"
-                        onChange={(value) => {
-                            setFieldValue('referrerName', value.target.value)
-                        }}
-                        onBlur={handleBlur}
-                        hasError={touched.referrerName && Boolean(errors.referrerName)}
-                        error={touched.referrerName && errors.referrerName}
-                    />
-                </div>
-
-                <div className="form-field">
-                    <CustomInputField
-                        state="default"
-                        label="Referrer Employee ID"
-                        value={values.referrerEmployeeId}
-                        showAsterisk={false}
-                        placeholder="Enter referrer employee ID"
-                        onChange={(value) => {
-                            setFieldValue('referrerEmployeeId', value.target.value)
-                        }}
-                        onBlur={handleBlur}
-                        hasError={touched.referrerEmployeeId && Boolean(errors.referrerEmployeeId)}
-                        error={touched.referrerEmployeeId && errors.referrerEmployeeId}
-                    />
-                </div>
-
-                <div className="form-field">
                     <CustomDropDown
                         label="Vertical"
                         options={["Vertical 1", "Vertical 2", "Vertical 3"]}
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
-                        initialValue={values.vertical}
+                        value={values.vertical}
                         onChange={(value) => {
                             setFieldValue('vertical', value.target.value);
                         }}
@@ -143,36 +128,66 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                 </div>
 
                 <div className="form-field">
-                    <CustomDropDown
-                        label="Desired Program"
-                        options={["Desired Program 1", "Desired Program 2", "Desired Program 3"]}
-                        required={true}
+                    <CustomInputField
+                        state="default"
+                        label="Preferred Time Slot"
+                        value={values?.preferredTimeSlot}
                         showAsterisk={false}
-                        placeHolder="Select"
-                        initialValue={values.desiredProgram}
+                        placeholder="Enter Preferred Time Slot"
                         onChange={(value) => {
-                            setFieldValue('desiredProgram', value.target.value);
+                            setFieldValue('preferredTimeSlot', value.target.value)
                         }}
-                        onBlur={() => handleBlur({ target: { name: 'desiredProgram' } })}
-                        hasError={touched.desiredProgram && Boolean(errors.desiredProgram)}
-                        errorMessage={touched.desiredProgram && errors.desiredProgram}
+                        onBlur={handleBlur}
+                        hasError={touched.preferredTimeSlot && Boolean(errors.preferredTimeSlot)}
+                        error={touched.preferredTimeSlot && errors.preferredTimeSlot}
                     />
                 </div>
 
                 <div className="form-field">
-                    <CustomDropDown
-                        label="Internship Option"
-                        options={["Option 1", "Option 2", "Option 3"]}
-                        required={false}
+                    <CustomInputField
+                        state="default"
+                        label="GCLID"
+                        value={values?.gclID}
                         showAsterisk={false}
-                        placeHolder="Select"
-                        initialValue={values.internshipOption}
+                        placeholder="Enter GCLID"
                         onChange={(value) => {
-                            setFieldValue('internshipOption', value.target.value);
+                            setFieldValue('gclID', value.target.value)
                         }}
-                        onBlur={() => handleBlur({ target: { name: 'internshipOption' } })}
-                        hasError={touched.internshipOption && Boolean(errors.internshipOption)}
-                        errorMessage={touched.internshipOption && errors.internshipOption}
+                        onBlur={handleBlur}
+                        hasError={touched.gclID && Boolean(errors.gclID)}
+                        error={touched.gclID && errors.gclID}
+                    />
+                </div>
+
+                <div className="form-field">
+                    <CustomInputField
+                        state="default"
+                        label="ZC GAD"
+                        value={values?.zcGad}
+                        showAsterisk={false}
+                        placeholder="Enter ZC GAD"
+                        onChange={(value) => {
+                            setFieldValue('zcGad', value.target.value)
+                        }}
+                        onBlur={handleBlur}
+                        hasError={touched.zcGad && Boolean(errors.zcGad)}
+                        error={touched.zcGad && errors.zcGad}
+                    />
+                </div>
+
+                <div className="form-field">
+                    <CustomInputField
+                        state="default"
+                        label="Ad ID"
+                        value={values?.adID}
+                        showAsterisk={false}
+                        placeholder="Enter Ad ID"
+                        onChange={(value) => {
+                            setFieldValue('adID', value.target.value)
+                        }}
+                        onBlur={handleBlur}
+                        hasError={touched.adID && Boolean(errors.adID)}
+                        error={touched.adID && errors.adID}
                     />
                 </div>
 
@@ -211,6 +226,102 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                 <div className="form-field">
                     <CustomInputField
                         state="default"
+                        label="Key Identifier"
+                        value={values?.keyIdentifier}
+                        showAsterisk={false}
+                        placeholder="Enter Key Identifier"
+                        onChange={(value) => {
+                            setFieldValue('keyIdentifier', value.target.value)
+                        }}
+                        onBlur={handleBlur}
+                        hasError={touched.keyIdentifier && Boolean(errors.keyIdentifier)}
+                        error={touched.keyIdentifier && errors.keyIdentifier}
+                    />
+                </div>
+
+                <div className="form-field">
+                    <CustomInputField
+                        state="default"
+                        label="Campaign Type"
+                        value={values?.campaignType}
+                        showAsterisk={false}
+                        placeholder="Enter Campaign Type"
+                        onChange={(value) => {
+                            setFieldValue('campaignType', value.target.value)
+                        }}
+                        onBlur={handleBlur}
+                        hasError={touched.campaignType && Boolean(errors.campaignType)}
+                        error={touched.campaignType && errors.campaignType}
+                    />
+                </div>
+
+                <div className="form-field">
+                    <CustomInputField
+                        state="default"
+                        label="Referrer Name"
+                        value={values.referrerName}
+                        showAsterisk={false}
+                        placeholder="Enter referrer name"
+                        onChange={(value) => {
+                            setFieldValue('referrerName', value.target.value)
+                        }}
+                        onBlur={handleBlur}
+                        hasError={touched.referrerName && Boolean(errors.referrerName)}
+                        error={touched.referrerName && errors.referrerName}
+                    />
+                </div>
+
+                <div className="form-field">
+                    <CustomInputField
+                        state="default"
+                        label="Referrer Email"
+                        value={values?.referrerEmail}
+                        showAsterisk={false}
+                        placeholder="Enter Referrer Email"
+                        onChange={(value) => {
+                            setFieldValue('referrerEmail', value.target.value)
+                        }}
+                        onBlur={handleBlur}
+                        hasError={touched.referrerEmail && Boolean(errors.referrerEmail)}
+                        error={touched.referrerEmail && errors.referrerEmail}
+                    />
+                </div>
+
+                <div className="form-field">
+                    <CustomInputField
+                        state="default"
+                        label="Referrer Employee ID"
+                        value={values.referrerEmployeeId}
+                        showAsterisk={false}
+                        placeholder="Enter referrer employee ID"
+                        onChange={(value) => {
+                            setFieldValue('referrerEmployeeId', value.target.value)
+                        }}
+                        onBlur={handleBlur}
+                        hasError={touched.referrerEmployeeId && Boolean(errors.referrerEmployeeId)}
+                        error={touched.referrerEmployeeId && errors.referrerEmployeeId}
+                    />
+                </div>
+
+                <div className="form-field">
+                    <CustomInputField
+                        state="default"
+                        label="Referrer Phone Number"
+                        value={values?.referrerPhoneNumber}
+                        showAsterisk={false}
+                        placeholder="Enter Referrer Phone Number"
+                        onChange={(value) => {
+                            setFieldValue('referrerPhoneNumber', value.target.value)
+                        }}
+                        onBlur={handleBlur}
+                        hasError={touched.referrerPhoneNumber && Boolean(errors.referrerPhoneNumber)}
+                        error={touched.referrerPhoneNumber && errors.referrerPhoneNumber}
+                    />
+                </div>
+
+                <div className="form-field">
+                    <CustomInputField
+                        state="default"
                         label="Lead Form"
                         value={values.leadForm}
                         showAsterisk={false}
@@ -239,6 +350,153 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                         error={touched.ipAddress && errors.ipAddress}
                     />
                 </div>
+
+                <div className="form-field">
+                    <CustomInputField
+                        state="default"
+                        label="User Agent"
+                        value={values?.userAgent}
+                        showAsterisk={false}
+                        placeholder="Enter User Agent"
+                        onChange={(value) => {
+                            setFieldValue('userAgent', value.target.value)
+                        }}
+                        onBlur={handleBlur}
+                        hasError={touched.userAgent && Boolean(errors.userAgent)}
+                        error={touched.userAgent && errors.userAgent}
+                    />
+                </div>
+
+                <div className="form-field">
+                    <CustomDropDown
+                        label="Import Lead"
+                        options={["Option 1", "Option 2", "Option 3"]}
+                        // required={true}
+                        placeHolder="Select"
+                        value={values?.importLead}
+                        onChange={(value) => {
+                            setFieldValue('importLead', value.target.value);
+                        }}
+                        onBlur={() => handleBlur({ target: { name: 'importLead' } })}
+                        hasError={touched.importLead && Boolean(errors.importLead)}
+                        errorMessage={touched.importLead && errors.importLead}
+                    />
+                </div>
+
+                <div className="form-field">
+                    <CustomDropDown
+                        label="Invoke Blueprint"
+                        options={["Option 1", "Option 2", "Option 3"]}
+                        // required={true}
+                        placeHolder="Select"
+                        value={values?.invokeBlueprint}
+                        onChange={(value) => {
+                            setFieldValue('invokeBlueprint', value.target.value);
+                        }}
+                        onBlur={() => handleBlur({ target: { name: 'invokeBlueprint' } })}
+                        hasError={touched.invokeBlueprint && Boolean(errors.invokeBlueprint)}
+                        errorMessage={touched.invokeBlueprint && errors.invokeBlueprint}
+                    />
+                </div>
+
+                <div className="form-field">
+                    <CustomDropDown
+                        label="Verse ID"
+                        options={["Option 1", "Option 2", "Option 3"]}
+                        // required={true}
+                        placeHolder="Select"
+                        value={values?.verseID}
+                        onChange={(value) => {
+                            setFieldValue('verseID', value.target.value);
+                        }}
+                        onBlur={() => handleBlur({ target: { name: 'verseID' } })}
+                        hasError={touched.verseID && Boolean(errors.verseID)}
+                        errorMessage={touched.verseID && errors.verseID}
+                    />
+                </div>
+
+                <div className="form-field">
+                    <CustomDropDown
+                        label="Desired Program"
+                        options={["Desired Program 1", "Desired Program 2", "Desired Program 3"]}
+                        required={true}
+                        showAsterisk={false}
+                        placeHolder="Select"
+                        value={values.desiredProgram}
+                        onChange={(value) => {
+                            setFieldValue('desiredProgram', value.target.value);
+                        }}
+                        onBlur={() => handleBlur({ target: { name: 'desiredProgram' } })}
+                        hasError={touched.desiredProgram && Boolean(errors.desiredProgram)}
+                        errorMessage={touched.desiredProgram && errors.desiredProgram}
+                    />
+                </div>
+
+                <div className="form-field">
+                    <CustomDropDown
+                        label="Internship Option"
+                        options={["Option 1", "Option 2", "Option 3"]}
+                        required={false}
+                        showAsterisk={false}
+                        placeHolder="Select"
+                        value={values.internshipOption}
+                        onChange={(value) => {
+                            setFieldValue('internshipOption', value.target.value);
+                        }}
+                        onBlur={() => handleBlur({ target: { name: 'internshipOption' } })}
+                        hasError={touched.internshipOption && Boolean(errors.internshipOption)}
+                        errorMessage={touched.internshipOption && errors.internshipOption}
+                    />
+                </div>
+
+                <div className="form-field">
+                    <CustomInputField
+                        state="default"
+                        label="Shortlisted Course ID"
+                        value={values?.shortlistedCourseID}
+                        showAsterisk={false}
+                        placeholder="Enter Course ID"
+                        onChange={(value) => {
+                            setFieldValue('shortlistedCourseID', value.target.value)
+                        }}
+                        onBlur={handleBlur}
+                        hasError={touched.shortlistedCourseID && Boolean(errors.shortlistedCourseID)}
+                        error={touched.shortlistedCourseID && errors.shortlistedCourseID}
+                    />
+                </div>
+
+                <div className="form-field">
+                    <CustomDropDown
+                        label="Preferred Counsellor for FESTech1 Name "
+                        options={["Option 1", "Option 2", "Option 3"]}
+                        // required={true}
+                        placeHolder="Select"
+                        value={values?.counsellorFESTech1Name}
+                        onChange={(value) => {
+                            setFieldValue('counsellorFESTech1Name', value.target.value);
+                        }}
+                        onBlur={() => handleBlur({ target: { name: 'counsellorFESTech1Name' } })}
+                        hasError={touched.counsellorFESTech1Name && Boolean(errors.counsellorFESTech1Name)}
+                        errorMessage={touched.counsellorFESTech1Name && errors.counsellorFESTech1Name}
+                    />
+                </div>
+
+                <div className="form-field">
+                    <CustomDropDown
+                        label="Preferred Counsellor for FESTech1 Email id"
+                        options={["Option 1", "Option 2", "Option 3"]}
+                        // required={true}
+                        placeHolder="Select"
+                        value={values?.counsellorFESTech1EmailID}
+                        onChange={(value) => {
+                            setFieldValue('counsellorFESTech1EmailID', value.target.value);
+                        }}
+                        onBlur={() => handleBlur({ target: { name: 'counsellorFESTech1EmailID' } })}
+                        hasError={touched.counsellorFESTech1EmailID && Boolean(errors.counsellorFESTech1EmailID)}
+                        errorMessage={touched.counsellorFESTech1EmailID && errors.counsellorFESTech1EmailID}
+                    />
+                </div>
+
             </div>
         </div>
     );
