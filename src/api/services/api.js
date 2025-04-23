@@ -2,7 +2,7 @@ import apiClient from "../config/axios";
 
 export const getUsers = async () => {
     try {
-      const response = await apiClient.get('api/Cuntry');
+      const response = await apiClient.get('api/Country');
       console.log('Users fetched:', response?.data);
       return response?.data;
     } catch (error) {
@@ -11,4 +11,4 @@ export const getUsers = async () => {
     }
   };
 
-export const getUser = () => apiClient.get('api/Cuntry');
+export const getUser = () => apiClient.get('api/Country');
