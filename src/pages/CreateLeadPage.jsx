@@ -8,6 +8,7 @@ import { validationSchema } from '../components/forms/createLead/schema';
 import { CustomButton } from 'react-mui-tailwind'
 import WarningIcon from '../assets/warning-icon.svg'
 import LeadOpportunity from '../components/forms/createLead/leadOpportunity/opportunityList';
+import { getUser, getUsers } from '../api/services/api';
 
 const ErrorObserver = ({ setTabErrors }) => {
     const { errors, touched } = useFormikContext();
@@ -113,11 +114,23 @@ const CreateLeadPage = () => {
         shortlistedCourseID:'',
         counsellorFESTech1Name:'',
         counsellorFESTech1EmailID :'',
-
-
     };
 
-    
+    useEffect(() => {
+        getUsers();
+    }, [])
+
+    // useEffect(() => {
+    //     getUser()
+    //       .then((res) => {
+    //         console.log("res", res);
+    //       })
+    //       .catch((err) => {
+    //         console.error('Error loading users:', err);
+    //       })
+    //       .finally();
+    //   }, []);
+
     const handleSubmit = (values, { setSubmitting }) => {
         console.log('Form submitted with values:', values);
 
