@@ -4,6 +4,7 @@ import { Formik, Form } from 'formik';
 import FesLogo from '../assets/fes-logo-full.svg';
 import { CustomButton, CustomDropDown, CustomInputField } from 'react-mui-tailwind';
 import DisplayDashboardImage from '../assets/login-display-image-static.svg';
+// import DisplayDashboardImage from '../assets/dashboard-static-image.svg';
 import InfoIcon from '@mui/icons-material/Info';
 import { ResetPasswordValidationSchema } from '../utils/LoginValidationUtils';
 
@@ -58,7 +59,7 @@ const ResetPasswordPage = () => {
             w-full max-w-[424px] h-auto 
             rounded-[12px] 
             flex flex-col justify-center items-center 
-            gap-[12px] py-[34px]
+            gap-[12px]
           "
         >
           <img src={FesLogo} alt="Logo" className="w-[132px] h-[32px]" />
@@ -81,7 +82,7 @@ const ResetPasswordPage = () => {
             validateOnChange
             validateOnBlur
           >
-            {({ values, errors, touched, handleChange, handleBlur, isSubmitting }) => (
+            {({ values, errors, touched, handleChange, handleBlur, setFieldValue, isSubmitting }) => (
               <Form className="flex flex-col gap-[12px] w-full max-w-[356px]">
                 <CustomInputField
                   label="Email Address"
@@ -134,8 +135,10 @@ const ResetPasswordPage = () => {
                     options={['What is pet name?', 'What is your Mother name?', 'What is your Fav actor?']}
                     placeHolder="Select a security question"
                     value={values.securityQuestion}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
+                    onChange={(value) => {
+                      setFieldValue('securityQuestion', value.target.value);
+                  }}
+                  onBlur={() => handleBlur({ target: { name: 'securityQuestion' } })}
                     name="securityQuestion"
                     hasError={touched.securityQuestion && Boolean(errors.securityQuestion)}
                     error={touched.securityQuestion && errors.securityQuestion}
@@ -205,7 +208,7 @@ const ResetPasswordPage = () => {
         <img
           src={DisplayDashboardImage}
           alt="Dashboard Display"
-          className="xl:object-cover xl:object-top lg:object-contain w-full h-full rounded-[12px]"
+          className="xl:object-cover xl:object-top lg:object-cover lg:object-top w-full h-full rounded-[12px]"
         />
       </div>
     </div>

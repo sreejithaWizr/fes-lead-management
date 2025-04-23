@@ -60,7 +60,7 @@ overflow-hidden">
         validateOnBlur
       >
         {({ values, errors, touched, handleChange, handleBlur, isSubmitting }) => (
-          <Form className="flex flex-col gap-[24px] w-full">
+          <Form className="flex flex-col gap-[20px] w-full max-w-[356px]">
             <CustomInputField
               state="default"
               label="Username"
@@ -124,11 +124,7 @@ overflow-hidden">
                 Thank you! Login Successful!
               </p>
             )}
-          </Form>
-        )}
-      </Formik>
-
-      <p className="font-proxima font-normal text-[16px] text-neutral-500 text-center">
+                  <p className="font-proxima font-normal text-[16px] text-neutral-500 text-center">
         Or continue with
       </p>
       <CustomButton
@@ -139,6 +135,10 @@ overflow-hidden">
         endIcon={false}
         width="100%"
       />
+          </Form>
+        )}
+      </Formik>
+
     </div>
   </div>
 
@@ -147,7 +147,7 @@ overflow-hidden">
   <img
     src={DisplayDashboardImage}
     alt="Dashboard Display"
-    className="xl:object-cover xl:object-top lg:object-contain w-full h-full rounded-[12px]"
+    className="xl:object-cover xl:object-top lg:object-cover lg:object-top w-full h-full rounded-[12px]"
   />
 </div>
 </div>
