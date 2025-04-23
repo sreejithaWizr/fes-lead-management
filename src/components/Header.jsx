@@ -13,7 +13,7 @@ import RightArrowIcon from "../assets/arrow-right.svg";
 import { formRef } from '../pages/CreateLeadPage';
 
 const Header = () => {
-  const location = useLocation(); 
+  const location = useLocation();
   const navigate = useNavigate();
   const isLeadsPage = location.pathname === '/leads';
   const isCreateLeadPage = location.pathname === '/leads/create';
@@ -44,7 +44,7 @@ const Header = () => {
           return acc;
         }, {})
       );
-      
+
       formRef.current.submitForm();
       // formRef.current.validateForm().then(errors => {
       //   if (Object.keys(errors).length === 0) {
@@ -111,30 +111,30 @@ const Header = () => {
           </div>
         )}
 
-{isCreateLeadPage && (
-        <div className="py-6 px-6 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <img
-              src={LeftArrowIcon}
-              alt="FES Logo"
-              className="size-[24px] rounded-md cursor-pointer"
-              onClick={handleCancel}
-            />
-            <div className="flex items-center gap-2">
-              <h1
-                className="font-proxima font-bold text-[28px] leading-[140%] align-middle text-[#17222B]">
-                Create a new lead
-              </h1>
+        {isCreateLeadPage && (
+          <div className="py-6 px-6 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <img
+                src={LeftArrowIcon}
+                alt="FES Logo"
+                className="size-[24px] rounded-md cursor-pointer"
+                onClick={handleCancel}
+              />
+              <div className="flex items-center gap-2">
+                <h1
+                  className="font-proxima font-bold text-[28px] leading-[140%] align-middle text-[#17222B]">
+                  Create a new lead
+                </h1>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <CustomButton text="Cancel" variant="secondary" startIcon={false} endIcon={false} onClick={handleCancel} />
+              <CustomButton text="Submit" startIcon={false} endIcon={true} iconImg={RightArrowIcon} onClick={handleFormSubmit} />
             </div>
           </div>
-
-          <div className="flex items-center gap-3">
-            <CustomButton text="Cancel" variant="secondary" startIcon={false} endIcon={false} onClick={handleCancel} />
-            <CustomButton text="Submit" startIcon={false} endIcon={true} iconImg={RightArrowIcon} onClick={handleFormSubmit} />
-          </div>
-        </div>
-      )}
-    </header>
+        )}
+      </header>
       {isFilterOpen && (
         <CustomOffCanvasModal
           isOpen={isFilterOpen}

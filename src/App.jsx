@@ -8,6 +8,7 @@ import Layout from "./components/Layout";
 import LeadsPage from "./pages/LeadsListPage";
 import CreateLeadPage from "./pages/CreateLeadPage";
 import NotFound from "./pages/NotFound";
+import EditLeadPage from "./pages/EditLeadPage";
 import Login from "./pages/Login";
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
             <Route index element={<Navigate to="/leads" replace />} />
             <Route path="leads" element={<LeadsPage />} />
             <Route path="leads/create" element={<CreateLeadPage />} />
+            <Route path="leads/edit" element={<EditLeadPage />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

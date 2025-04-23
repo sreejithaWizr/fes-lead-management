@@ -9,6 +9,7 @@ import PhoneIcon from "../assets/phone-icon.svg";
 import CalenderIcon from "../assets/calendar.svg";
 import MailIcon from "../assets/mail.svg";
 import LoactionIcon from "../assets/location.svg";
+import EditIcon from '../assets/edit-icon.svg'
 
 const LeadsTable = () => {
   const dispatch = useDispatch();
@@ -49,9 +50,19 @@ const LeadsTable = () => {
                 <span>{value}</span>
             </div>
         );
+        case "action":
+          return (
+            <div className="flex items-center gap-2">
+                <img src={EditIcon} alt="actions" className="w-4 h-4" onClick={hanldeEdit}/>
+            </div>
+        );
         default:
             return value;
     }
+};
+
+const hanldeEdit = () => {
+  navigate('/leads/edit');
 };
   
   useEffect(() => {
