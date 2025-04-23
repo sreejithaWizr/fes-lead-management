@@ -76,7 +76,7 @@ const LeadStatusForm = ({ values, errors, touched, handleChange, handleBlur, set
                     />
                 </div>
 
-                <div className="form-field">
+                {/* <div className="form-field">
                     <CustomDropDown
                         label="Counselor"
                         options={["Counselor 1", "Counselor 2", "Counselor 3"]}
@@ -91,7 +91,7 @@ const LeadStatusForm = ({ values, errors, touched, handleChange, handleBlur, set
                         hasError={touched.counselor && Boolean(errors.counselor)}
                         errorMessage={touched.counselor && errors.counselor}
                     />
-                </div>
+                </div> */}
             </div>
 
             <div className="form-field mt-4">

@@ -116,7 +116,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
           />
         </div>
 
-        <div className="form-field">
+        {/* <div className="form-field">
           <CustomDropDown
             name="leadOwner"
             label="Lead Owner"
@@ -148,7 +148,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
             hasError={touched.leadStatusInfo && Boolean(errors.leadStatusInfo)}
             errorMessage={touched.leadStatusInfo && errors.leadStatusInfo}
           />
-        </div>
+        </div> */}
 
         <div className="form-field">
           <CustomDropDown
