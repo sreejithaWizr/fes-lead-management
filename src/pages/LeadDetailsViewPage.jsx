@@ -12,6 +12,7 @@ import LeadNumberIcon from '../assets/personalcard.svg';
 import LeadMailIcon from '../assets/sms.svg';
 import LeadCallIcon from '../assets/phone-icon.svg';
 import EditIcon from '../assets/edit.svg';
+import { getLeadById } from '../api/services/leadAPI/leadAPIs';
 
 // Ref for external form submit
 export const formRef = React.createRef();
@@ -51,16 +52,37 @@ const LeadDetailsViewPage = () => {
 
   const tabs = ['Opportunity', 'All Info', 'Lead Information', 'Education Qualification', 'Lead Status', 'Lead Source'];
 
-  // Simulated data fetching
+  const [leadData, setLeadData] = useState(null);
+
   useEffect(() => {
-    const mockLeadData = {
-      firstName: 'Nandhana',
-      lastName: 'Krishna',
-      email: 'test@gmail.com',
-      secondaryEmail: 'alt@gmail.com',
-      mobileNumber: '8848193264',
-      alternativeNumber: '9876543210',
-      whatsappNumber: '1234567890',
+    fetchLead();
+  }, [leadData]);
+
+  useEffect(() => {
+    const fetchLead = async () => {
+      try {
+        const data = await getLeadById('1');
+        setLeadData(data?.data);
+        console.log("Lead data fetched:", data?.data);
+      } catch (err) {
+        console.error("Failed to fetch lead:", err);
+      } finally {
+        // setLoading(false);
+      }
+    };
+  }, [leadData])
+
+  useEffect(() => {
+    console.log("leadData", leadData);
+
+    const fetchedLeadData = {
+      firstName: leadData.first_name,
+      lastName: leadData.last_name,
+      email: leadData.email,
+      secondaryEmail: leadData.secondary_email,
+      mobileNumber: leadData.mobile_number,
+      alternativeNumber: leadData.alternative_number,
+      whatsappNumber: whatsapp_number,
       leadOwner: 'John Doe',
       leadStatusInfo: 'Initial Contact',
       priority: 'High',

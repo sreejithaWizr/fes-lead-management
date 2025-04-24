@@ -3,9 +3,9 @@ import { setupInterceptors } from "./interceptors";
 
 // Environment variables
 // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const API_BASE_URL = " https://92cf-103-181-238-22.ngrok-free.app/"
+const API_BASE_URL = "https://35d7-103-181-238-22.ngrok-free.app/"
 // const API_TIMEOUT = parseInt(import.meta.env.VITE_API_TIMEOUT || "30000", 10);
- const API_TIMEOUT = parseInt("30000")
+const API_TIMEOUT = parseInt("30000")
 
 /**
  * Validates essential environment variables
@@ -15,7 +15,7 @@ const API_BASE_URL = " https://92cf-103-181-238-22.ngrok-free.app/"
 const validateEnvVars = () => {
   if (!API_BASE_URL) {
     throw new Error(
-      "VITE_API_BASE_URL is not defined in environment variables" 
+      "VITE_API_BASE_URL is not defined in environment variables"
     );
   }
 };
