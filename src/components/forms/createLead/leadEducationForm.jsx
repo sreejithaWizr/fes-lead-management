@@ -1,9 +1,44 @@
+import { useEffect, useState } from "react";
 import { CustomInputField, CustomDropDown } from "react-mui-tailwind";
+import { getAreaOfStudy, getCountry, getQualification } from "../../../api/services/masterAPIs/createLeadApi";
 
 const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => {
 
-    const yearOptions = [...Array.from({ length: 20 }, (_, i) => `${new Date().getFullYear() - i}`)];
-    const numberOfYears = [...Array.from({ length: 21 }, (_, i) => i)];
+    const yearOptions = [...Array.from({ length: 26 }, (_, i) => `${new Date().getFullYear() - i}`)];
+    const numberOfYears = [...Array.from({ length: 26 }, (_, i) => i)];
+
+    const [areaOfStudyOptions, setAreaOfStudyOptions] = useState([]);
+    const [qualificationOptions, setqualificationOptions] = useState([]);
+    const [preferredCountryOptions, setPreferredCountryOptions] = useState([]);
+
+    useEffect(() => {
+        const fetchDropdownData = async () => {
+            try {
+                const [areaOfStudy, qualification, preferredCountry] = await Promise.allSettled([
+                    getAreaOfStudy(),
+                    getQualification(),
+                    getCountry(),
+                ]);
+
+                if (areaOfStudy?.status === 'fulfilled') {
+                    setAreaOfStudyOptions(areaOfStudy?.data?.data || []);
+                }
+    
+                if (qualification?.status === 'fulfilled') {
+                    setqualificationOptions(qualification?.data?.data || []);
+                }
+
+                if (preferredCountry?.status === 'fulfilled') {
+                    setPreferredCountryOptions(preferredCountry?.data?.data || []);
+                }
+
+            } catch (error) {
+                console.error('Error loading dropdown data:', error);
+            }
+        };
+
+        fetchDropdownData();
+    }, []);
 
     return (
         <div className="form-section animate-fade-in ml-0 mb-6">
@@ -48,7 +83,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                 <div className="form-field">
                     <CustomDropDown
                         label="Field of Study"
-                        options={["Computer Science", "Engineering", "Business", "Arts"]}
+                        options={areaOfStudyOptions}
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
@@ -98,7 +133,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                 <div className="form-field">
                     <CustomDropDown
                         label="Preferred Study Destination"
-                        options={["US", "Australia", "Canada", "London"]}
+                        options={preferredCountryOptions}
                         required={true}
                         multiple={true}
                         placeHolder="Select"
