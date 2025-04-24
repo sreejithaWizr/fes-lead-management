@@ -15,6 +15,7 @@ const initialLeads = [
     createdDate: '10 Sep 2023',
     leadSource: 'Website',
     location: 'Kochi, India',
+    action: ""
   },
   {
     id: 2,
@@ -28,6 +29,7 @@ const initialLeads = [
     createdDate: '15 Oct 2023',
     leadSource: 'Meta',
     location: 'Kochi, India',
+    action: ""
   },
   {
     id: 3,
@@ -41,6 +43,7 @@ const initialLeads = [
     createdDate: '05 Aug 2023',
     leadSource: 'Google Ads',
     location: 'Kochi, India',
+    action: ""
   },
   {
     id: 5,
@@ -54,6 +57,7 @@ const initialLeads = [
     createdDate: '22 Nov 2023',
     leadSource: 'Referral',
     location: 'Kochi, India',
+    action: ""
   },
   {
     id: 6,
@@ -67,6 +71,7 @@ const initialLeads = [
     createdDate: '30 Dec 2023',
     leadSource: 'Website',
     location: 'Kochi, India',
+    action: ""
   },
 ];
 
@@ -82,6 +87,7 @@ const initialLeads = [
     { id: "email", label: "Email", showSort: true, isDrag: true, isFilter: true },
     { id: "leadSource", label: "Lead Source", showSort: true, isDrag: true, isFilter: true },
     { id: "location", label: "Location", showSort: true, isDrag: true, isFilter: true },
+    { id: "action", label: "Actions", showSort: false, isDrag: true, isFilter: false },
   ];
 
 // Simulate API call to fetch leads

@@ -135,7 +135,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
             options={["Option 1", "Option 2", "Option 3"]}
             required={true}
             placeHolder="Select"
-            initialValue={values.leadOwner}
+            value={values.leadOwner}
             onChange={(value) => {
               setFieldValue('leadOwner', value.target.value);
             }}
@@ -152,7 +152,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
             options={["Potential", "Inactive", "Enrolled", "May be Prospective"]}
             required={true}
             placeHolder="Select"
-            initialValue={values.leadStatusInfo}
+            value={values.leadStatusInfo}
             onChange={(value) => {
               setFieldValue('leadStatusInfo', value.target.value);
             }}
@@ -168,7 +168,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
             options={["High", "Medium", "Low"]}
             required={true}
             placeHolder="Select"
-            initialValue={values.priority}
+            value={values.priority}
             onChange={(value) => {
               setFieldValue('priority', value.target.value);
             }}
@@ -185,7 +185,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
             required={false}
             showAsterisk={false}
             placeHolder="Select"
-            initialValue={values.teleCallerName}
+            value={values.teleCallerName}
             onChange={(value) => {
               setFieldValue('teleCallerName', value.target.value);
             }}
@@ -198,9 +198,9 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
         <div className="form-field">
           <CustomDatePicker
             label="Lead Created"
-            value={values.leadCreated}
+            value={values?.leadCreated}
             onChange={(value) => {
-              setFieldValue('leadCreated', value.target.value)
+              setFieldValue('leadCreated', value)
             }}
           />
         </div>

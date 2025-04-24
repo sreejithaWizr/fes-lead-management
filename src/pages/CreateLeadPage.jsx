@@ -8,6 +8,7 @@ import { validationSchema } from '../components/forms/createLead/schema';
 import { CustomButton } from 'react-mui-tailwind'
 import WarningIcon from '../assets/warning-icon.svg'
 import LeadOpportunity from '../components/forms/createLead/leadOpportunity/opportunityList';
+import { getUser, getUsers } from '../api/services/api';
 
 const ErrorObserver = ({ setTabErrors }) => {
     const { errors, touched } = useFormikContext();
@@ -68,7 +69,7 @@ const CreateLeadPage = () => {
         fieldOfStudy: '',
         cgpaGrade: '',
         workExperience: '',
-        preferredDestination: '',
+        preferredDestination: [],
         otherCountries: '',
         testName: '',
         testTrainingBoolean: false,
@@ -85,6 +86,7 @@ const CreateLeadPage = () => {
         leadSource_1: '',
         leadSource_2: '',
         leadSource_3: '',
+        leadSource_4: '',
         location_1: '',
         location_2: '',
         referrerName: '',
@@ -96,9 +98,39 @@ const CreateLeadPage = () => {
         adCampaign: '',
         leadForm: '',
         ipAddress: '192.168.1.1',
+
+        preferredTimeSlot:'',
+        gclID:'',
+        zcGad:'',
+        adID:'',
+        keyIdentifier:'',
+        campaignType:'',
+        referrerEmail:'',
+        referrerPhoneNumber:'',
+        userAgent:'',
+        importLead:'',
+        invokeBlueprint:'',
+        verseID:'',
+        shortlistedCourseID:'',
+        counsellorFESTech1Name:'',
+        counsellorFESTech1EmailID :'',
     };
 
-    
+    useEffect(() => {
+        getUsers();
+    }, [])
+
+    // useEffect(() => {
+    //     getUser()
+    //       .then((res) => {
+    //         console.log("res", res);
+    //       })
+    //       .catch((err) => {
+    //         console.error('Error loading users:', err);
+    //       })
+    //       .finally();
+    //   }, []);
+
     const handleSubmit = (values, { setSubmitting }) => {
         console.log('Form submitted with values:', values);
 

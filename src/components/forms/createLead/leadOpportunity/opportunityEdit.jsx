@@ -40,7 +40,7 @@ const EditOpportunityRow = ({ data, onCancel, onUpdate }) => {
                 <CustomDropDown
                     name="countryName"
                     options={['Canada', 'England']}
-                    initialValue={formik.values.countryName}
+                    value={formik.values.countryName}
                     disabled={true}
                     onChange={(e) => formik.setFieldValue('countryName', e.target.value)}
                     errorMessage={formik.touched.countryName && formik.errors.countryName}
@@ -80,7 +80,7 @@ const EditOpportunityRow = ({ data, onCancel, onUpdate }) => {
                 <CustomDropDown
                     name="intake"
                     options={['2024', '2025']}
-                    initialValue={formik.values.intake}
+                    value={formik.values.intake}
                     disabled={true}
                     hasLabel={false}
                     onChange={(e) => formik.setFieldValue('intake', e.target.value)}
@@ -95,7 +95,7 @@ const EditOpportunityRow = ({ data, onCancel, onUpdate }) => {
                 <CustomDropDown
                     name="opportunityStatus"
                     options={['Ready for Counsellor', 'Inprogress']}
-                    initialValue={formik.values.opportunityStatus}
+                    value={formik.values.opportunityStatus}
                     onChange={(e) => formik.setFieldValue('opportunityStatus', e.target.value)}
                     errorMessage={formik.touched.opportunityStatus && formik.errors.opportunityStatus}
                     hasError={formik.touched.opportunityStatus && Boolean(formik.errors.opportunityStatus)}
@@ -107,7 +107,7 @@ const EditOpportunityRow = ({ data, onCancel, onUpdate }) => {
                 <CustomDropDown
                     name="opportunityCategory"
                     options={['Interested', 'Not Interested']}
-                    initialValue={formik.values.opportunityCategory}
+                    value={formik.values.opportunityCategory}
                     onChange={(e) => formik.setFieldValue('opportunityCategory', e.target.value)}
                     errorMessage={formik.touched.opportunityCategory && formik.errors.opportunityCategory}
                     hasError={formik.touched.opportunityCategory && Boolean(formik.errors.opportunityCategory)}
@@ -119,7 +119,7 @@ const EditOpportunityRow = ({ data, onCancel, onUpdate }) => {
                 <CustomDropDown
                     name="opportunitySubCatergory"
                     options={['Contacted', 'Not Contacted']}
-                    initialValue={formik.values.opportunitySubCatergory}
+                    value={formik.values.opportunitySubCatergory}
                     onChange={(e) => formik.setFieldValue('opportunitySubCatergory', e.target.value)}
                     errorMessage={formik.touched.opportunitySubCatergory && formik.errors.opportunitySubCatergory}
                     hasError={formik.touched.opportunitySubCatergory && Boolean(formik.errors.opportunitySubCatergory)}
