@@ -27,8 +27,7 @@ export const getSource1 = () => apiClient.get('api/Source1');
 
 export const getStatus = () => apiClient.get('api/Status');
 
-export const getSubCategory = () => apiClient.get('api/SubCategory');
-
+export const getSubCategory = (id) => apiClient.get(`api/SubCategory/${id}`);
 export const getTestName = () => apiClient.get('api/TestName');
 
 export const getVertical = () => apiClient.get('api/Vertical');
