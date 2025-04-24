@@ -16,8 +16,8 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
           getPriority(),
         ]);
   
-        setUserOptions(userRes?.data?.data || []);
-        setPriorityOptions(priorityRes?.data?.data || []);
+        setUserOptions(userRes?.value?.data?.data || []);
+        setPriorityOptions(priorityRes?.value?.data?.data || []);
       } catch (err) {
         console.error('Error loading dropdown data:', err);
       }
