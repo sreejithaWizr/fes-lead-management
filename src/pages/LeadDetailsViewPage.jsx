@@ -73,7 +73,7 @@ const LeadDetailsViewPage = () => {
       fieldOfStudy: 'Computer Science',
       cgpaGrade: '8.5',
       workExperience: '2 years',
-      preferredDestination: 'Canada',
+      preferredDestination: ['USA', 'Canada'],
       otherCountries: 'USA, Australia',
       testName: 'IELTS',
       testTrainingBoolean: true,
@@ -184,7 +184,7 @@ const LeadDetailsViewPage = () => {
               <div className="pb-2">
                 <div className="mb-2">
                   <div className="flex items-center space-x-2">
-                    {tabs.map((tab) => (
+                    {tabs && tabs?.map((tab) => (
                       <React.Fragment key={tab}>
                         <CustomButton
                           text={tab}
