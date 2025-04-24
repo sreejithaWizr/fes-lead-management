@@ -10,7 +10,7 @@ import {
   getCategory,
   getSubCategory
 } from '../../../api/services/masterAPIs/createLeadApi';
-import { CloudCog } from 'lucide-react';
+// import { CloudCog } from 'lucide-react';
 
 const LeadStatusForm = ({
   values,
@@ -23,6 +23,7 @@ const LeadStatusForm = ({
   const [statusOptions, setStatusOptions] = useState([]);
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [subCategoryOptions, setSubCategoryOptions] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -74,7 +75,7 @@ const LeadStatusForm = ({
         <div className="form-field">
           <CustomDropDown
             label="Category"
-            options={categoryOptions?.data}
+            options={categoryOptions}
             required
             showAsterisk={false}
             placeHolder="Select"
@@ -91,7 +92,7 @@ const LeadStatusForm = ({
         <div className="form-field">
           <CustomDropDown
             label="Subcategory"
-            options={subCategoryOptions?.data}
+            options={subCategoryOptions}
             required
             showAsterisk={false}
             placeHolder="Select"
