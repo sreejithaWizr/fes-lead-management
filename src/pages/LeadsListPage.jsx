@@ -17,47 +17,57 @@ const LeadsTable = () => {
   const [selectedLeads, setSelectedLeads] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const handleView = () => {
+    navigate('/leads/detailsview');
+  }
+
   const getRow = (columnId, value) => {
     switch (columnId) {
+      case "leadNo":
+        return (
+          <div className="flex items-center gap-2">
+            <span className='font-bold cursor-pointer' onClick={handleView}>{value}</span>
+          </div>
+        );
       case "createdDate":
-          return (
-            <div className="flex items-center gap-2">
-                <img src={CalenderIcon} alt="Calender" className="w-4 h-4" />
-                <span>{value}</span>
-            </div>
+        return (
+          <div className="flex items-center gap-2">
+            <img src={CalenderIcon} alt="Calender" className="w-4 h-4" />
+            <span>{value}</span>
+          </div>
         );
-        case "phone":
-            return (
-                <div className="flex items-center gap-2">
-                    <img src={PhoneIcon} alt="Phone" className="w-4 h-4" />
-                    <span>{value}</span>
-                </div>
-            );
-        case "email":
-          return (
-            <div className="flex items-center gap-2">
-                <img src={MailIcon} alt="Mail" className="w-4 h-4" />
-                <span>{value}</span>
-            </div>
+      case "phone":
+        return (
+          <div className="flex items-center gap-2">
+            <img src={PhoneIcon} alt="Phone" className="w-4 h-4" />
+            <span>{value}</span>
+          </div>
         );
-        case "location":
-          return (
-            <div className="flex items-center gap-2">
-                <img src={LoactionIcon} alt="Location" className="w-4 h-4" />
-                <span>{value}</span>
-            </div>
+      case "email":
+        return (
+          <div className="flex items-center gap-2">
+            <img src={MailIcon} alt="Mail" className="w-4 h-4" />
+            <span>{value}</span>
+          </div>
         );
-        default:
-            return value;
+      case "location":
+        return (
+          <div className="flex items-center gap-2">
+            <img src={LoactionIcon} alt="Location" className="w-4 h-4" />
+            <span>{value}</span>
+          </div>
+        );
+      default:
+        return value;
     }
-};
-  
+  };
+
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchLeads());
     }
   }, [status, dispatch]);
-  
+
   const handleSelectAll = (e) => {
     if (e.target.checked) {
       setSelectedLeads(leads.map(lead => lead.id));
@@ -65,7 +75,7 @@ const LeadsTable = () => {
       setSelectedLeads([]);
     }
   };
-  
+
   const handleSelectLead = (e, leadId) => {
     if (e.target.checked) {
       setSelectedLeads([...selectedLeads, leadId]);
@@ -73,7 +83,7 @@ const LeadsTable = () => {
       setSelectedLeads(selectedLeads.filter(id => id !== leadId));
     }
   };
-  
+
   const getStatusClass = (status) => {
     switch (status) {
       case 'Potential':
@@ -88,24 +98,24 @@ const LeadsTable = () => {
         return 'bg-gray-100 text-gray-600';
     }
   };
-  
+
   const handleCreateLead = () => {
     navigate('/leads/create');
   };
-  
+
   const totalPages = Math.ceil(totalLeads / itemsPerPage);
-  
+
   // const renderPagination = () => {
   //   const pages = [];
   //   const maxDisplayedPages = 5;
-    
+
   //   let startPage = Math.max(1, currentPage - Math.floor(maxDisplayedPages / 2));
   //   let endPage = Math.min(totalPages, startPage + maxDisplayedPages - 1);
-    
+
   //   if (endPage - startPage + 1 < maxDisplayedPages) {
   //     startPage = Math.max(1, endPage - maxDisplayedPages + 1);
   //   }
-    
+
   //   for (let i = startPage; i <= endPage; i++) {
   //     pages.push(
   //       <button
@@ -119,7 +129,7 @@ const LeadsTable = () => {
   //       </button>
   //     );
   //   }
-    
+
   //   return (
   //     <div className="flex items-center gap-2">
   //       <button
@@ -129,9 +139,9 @@ const LeadsTable = () => {
   //       >
   //         <ChevronLeft size={16} />
   //       </button>
-        
+
   //       {pages}
-        
+
   //       {endPage < totalPages && (
   //         <>
   //           <span className="px-1">...</span>
@@ -143,7 +153,7 @@ const LeadsTable = () => {
   //           </button>
   //         </>
   //       )}
-        
+
   //       <button
   //         className="w-8 h-8 rounded-md flex items-center justify-center bg-white text-[#1A1A1A] disabled:opacity-50"
   //         disabled={currentPage === totalPages}
@@ -154,41 +164,41 @@ const LeadsTable = () => {
   //     </div>
   //   );
   // };
-  
+
   if (status === 'loading') {
     return <div className="flex justify-center p-8">Loading leads...</div>;
   }
-  
+
   return (
     <>
       <div className="bg-white shadow-card overflow-hidden">
         <div className="w-full overflow-x-auto">
           <div className="min-w-max">
-            <CustomTable 
-              columns={columns} 
-              data={leads} 
-              showCheckboxes={true} 
-              getRow={getRow} 
+            <CustomTable
+              columns={columns}
+              data={leads}
+              showCheckboxes={true}
+              getRow={getRow}
             />
           </div>
         </div>
       </div>
-      
+
       <div className="p-4 justify-end">
-        <CustomPagination 
-          totalPages={8} 
-          currentPage={currentPage} 
-          setCurrentPage={setCurrentPage} 
+        <CustomPagination
+          totalPages={8}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
         />
       </div>
     </>
   );
-  
+
 };
 
 const LeadsPage = () => {
   const navigate = useNavigate();
-  
+
   const handleCreateLead = () => {
     navigate('/leads/create');
   };

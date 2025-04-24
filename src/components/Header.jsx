@@ -12,10 +12,11 @@ import RightArrowIcon from "../assets/arrow-right.svg";
 import { formRef } from '../pages/CreateLeadPage';
 
 const Header = () => {
-  const location = useLocation(); 
+  const location = useLocation();
   const navigate = useNavigate();
   const isLeadsPage = location.pathname === '/leads';
   const isCreateLeadPage = location.pathname === '/leads/create';
+  const isLeadDetailsViewPage = location.pathname === '/leads/detailsview';
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const toggleFilter = () => setIsFilterOpen(prev => !prev);
@@ -43,7 +44,7 @@ const Header = () => {
           return acc;
         }, {})
       );
-      
+
       formRef.current.submitForm();
       // formRef.current.validateForm().then(errors => {
       //   if (Object.keys(errors).length === 0) {
@@ -62,9 +63,9 @@ const Header = () => {
     <>
       <header className="w-full shadow-card">
         {isLeadsPage && (
-          <div className="py-6 px-6 flex flex-col gap-6">
+          <div className="pt-2 px-6 flex flex-col gap-6">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
+              {/* <div className="flex items-center gap-4">
                 <img
                   src={UserProf}
                   alt="Profile"
@@ -75,14 +76,14 @@ const Header = () => {
                   <h2 className="text-sm font-normal text-[#757575]">Hello,</h2>
                   <h1 className="text-base font-medium">Deego Chaithanyan!</h1>
                 </div>
-              </div>
+              </div> */}
 
-              <div className="flex items-center gap-2">
+              {/* <div className="flex items-center gap-2">
                 <div className="relative flex-1">
                   <CustomSearch />
                 </div>
                 <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={RefreshIcon} />
-              </div>
+              </div> */}
 
             </div>
 
@@ -90,14 +91,14 @@ const Header = () => {
               <div className="flex items-center gap-4">
                 {/* <h2 className="text-lg font-medium">Kochi Leads</h2>
               <span className="bg-primary text-white px-2 py-0.5 rounded-md text-xs font-medium">8,467</span> */}
-                <CustomDropDown options={[
+                {/* <CustomDropDown options={[
                   { name: "Kochi Leads", count: 8467 },
                   { name: "Mumbai Leads", count: 5321 },
                   { name: "Delhi Leads", count: 6789 }
                 ]}
                   // required={true}
                   placeHolder="Select Branch"
-                />
+                /> */}
               </div>
 
               <div className="flex items-center gap-3 w-[405px]">
@@ -110,30 +111,56 @@ const Header = () => {
           </div>
         )}
 
-{isCreateLeadPage && (
-        <div className="py-6 px-6 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <img
-              src={LeftArrowIcon}
-              alt="FES Logo"
-              className="size-[24px] rounded-md cursor-pointer"
-              onClick={handleCancel}
-            />
-            <div className="flex items-center gap-2">
-              <h1
-                className="font-proxima font-bold text-[28px] leading-[140%] align-middle text-[#17222B]">
-                Create a new lead
-              </h1>
+        {isCreateLeadPage && (
+          <div className="pt-6 px-6 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <img
+                src={LeftArrowIcon}
+                alt="FES Logo"
+                className="size-[24px] rounded-md cursor-pointer"
+                onClick={handleCancel}
+              />
+              <div className="flex items-center gap-2">
+                <h1
+                  className="font-proxima font-bold text-[28px] leading-[140%] align-middle text-[#17222B]">
+                  Create a new lead
+                </h1>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <CustomButton text="Cancel" variant="secondary" startIcon={false} endIcon={false} onClick={handleCancel} />
+              <CustomButton text="Submit" startIcon={false} endIcon={true} iconImg={RightArrowIcon} onClick={handleFormSubmit} />
             </div>
           </div>
+        )}
 
-          <div className="flex items-center gap-3">
-            <CustomButton text="Cancel" variant="secondary" startIcon={false} endIcon={false} onClick={handleCancel} />
-            <CustomButton text="Submit" startIcon={false} endIcon={true} iconImg={RightArrowIcon} onClick={handleFormSubmit} />
+        {isLeadDetailsViewPage && (
+          <div className="pt-6 px-6 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <img
+                src={LeftArrowIcon}
+                alt="FES Logo"
+                className="size-[24px] rounded-md cursor-pointer"
+                onClick={handleCancel}
+              />
+              <div className="flex items-center gap-2">
+                <h1
+                  className="font-proxima font-bold text-[28px] leading-[140%] align-middle text-[#17222B]">
+                  Lead Details
+                </h1>
+              </div>
+            </div>
+
+            {/* <div className="flex items-center gap-2">
+              <div className="relative flex-1">
+                <CustomSearch />
+              </div>
+              <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={RefreshIcon} />
+            </div> */}
           </div>
-        </div>
-      )}
-    </header>
+        )}
+      </header>
       {isFilterOpen && (
         <CustomOffCanvasModal
           isOpen={isFilterOpen}

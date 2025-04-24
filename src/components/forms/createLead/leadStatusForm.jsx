@@ -98,6 +98,7 @@ const LeadStatusForm = ({ values, errors, touched, handleChange, handleBlur, set
                 <CustomInputField
                     state="default"
                     label="Notes"
+                    multiline={true}
                     value={values.notes}
                     showAsterisk={false}
                     onChange={(value) => {
