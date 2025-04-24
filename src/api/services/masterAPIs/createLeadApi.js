@@ -32,3 +32,5 @@ export const getSubCategory = () => apiClient.get('api/SubCategory');
 export const getTestName = () => apiClient.get('api/TestName');
 
 export const getVertical = () => apiClient.get('api/Vertical');
+ 
+export const getDesiredProgram = () => apiClient.get('api/DesiredProgram')

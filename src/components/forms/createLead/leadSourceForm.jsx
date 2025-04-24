@@ -1,7 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { CustomButton, CustomInputField, CustomDropDown, CustomDatePicker } from "react-mui-tailwind";
+import { getCity, getDesiredProgram, getRegion, getSource1, getVertical } from '../../../api/services/masterAPIs/createLeadApi';
 
 const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => {
+const [sourceOptions, setSourceOptions] = useState([]);
+const [cityOptions, setCityOptions] = useState([]);
+const [regionOptions, setRegionOptions] = useState([]);
+const [verticalOptions, setVerticalOptions] = useState([]);
+const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const [sourceRes, regionRes, cityRes, verticalRes, desiredProgramRes] = await Promise.allSettled([
+                getSource1(),
+                getCity(),
+                getRegion(),
+                getVertical(),
+                getDesiredProgram()
+            ]
+        );
+            console.log("statusRes", sourceRes?.data?.data || [])
+            setSourceOptions(sourceRes?.data?.data || []);
+            setCityOptions(cityRes?.data?.data || []);
+            setRegionOptions(regionRes?.data?.data || []);
+            setVerticalOptions(verticalRes?.data?.data || []);
+            setDesiredProgramOptions(desiredProgramRes?.data?.data || []);
+          } catch (err) {
+            console.error('Error loading filters:', err);
+          }
+        };
+    
+        fetchData();
+      }, []);
+
     return (
         <div className="form-section animate-fade-in ml-0 mb-6">
             <h2 className="font-bold text-[19px] leading-[140%] tracking-[0%] text-[#17222B] font-[Proxima Nova] mb-4">
@@ -11,7 +42,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                 <div className="form-field">
                     <CustomDropDown
                         label="Source 1"
-                        options={["Meta", "Google Ads", "Referral", "Website"]}
+                        options={sourceOptions}
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
@@ -28,7 +59,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                 <div className="form-field">
                     <CustomDropDown
                         label="Source 2"
-                        options={["Meta", "Google Ads", "Referral", "Website"]}
+                        options={sourceOptions}
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"
@@ -45,7 +76,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                 <div className="form-field">
                     <CustomDropDown
                         label="Source 3"
-                        options={["Meta", "Google Ads", "Referral", "Website"]}
+                        options={sourceOptions}
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"
@@ -62,7 +93,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                 <div className="form-field">
                     <CustomDropDown
                         label="Source 4"
-                        options={["Meta", "Google Ads", "Referral", "Website"]}
+                        options={sourceOptions}
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"
@@ -79,7 +110,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                 <div className="form-field">
                     <CustomDropDown
                         label="Location 1"
-                        options={["Location 1", "Location 2", "Location 3"]}
+                        options={cityOptions}
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
@@ -96,7 +127,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                 <div className="form-field">
                     <CustomDropDown
                         label="Location 2"
-                        options={["Location 1", "Location 2", "Location 3"]}
+                        options={regionOptions}
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"
@@ -113,7 +144,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                 <div className="form-field">
                     <CustomDropDown
                         label="Vertical"
-                        options={["Vertical 1", "Vertical 2", "Vertical 3"]}
+                        options={verticalOptions}
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
@@ -370,7 +401,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                 <div className="form-field">
                     <CustomDropDown
                         label="Import Lead"
-                        options={["Option 1", "Option 2", "Option 3"]}
+                        options={[{id: "Yes", name: "Yes"}, {id: "No", name: "No"}]}
                         // required={true}
                         placeHolder="Select"
                         value={values?.importLead}
@@ -386,7 +417,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                 <div className="form-field">
                     <CustomDropDown
                         label="Invoke Blueprint"
-                        options={["Option 1", "Option 2", "Option 3"]}
+                        options={[{id: "Yes", name: "Yes"}, {id: "No", name: "No"}]}
                         // required={true}
                         placeHolder="Select"
                         value={values?.invokeBlueprint}
@@ -399,7 +430,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                     />
                 </div>
 
-                <div className="form-field">
+                {/* <div className="form-field">
                     <CustomDropDown
                         label="Verse ID"
                         options={["Option 1", "Option 2", "Option 3"]}
@@ -413,12 +444,27 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                         hasError={touched.verseID && Boolean(errors.verseID)}
                         errorMessage={touched.verseID && errors.verseID}
                     />
+                </div> */}
+                <div className="form-field">
+                    <CustomInputField
+                        state="default"
+                        label="Verse ID"
+                        value={values?.verseID}
+                        showAsterisk={false}
+                        placeholder="Enter Verse ID"
+                        onChange={(value) => {
+                            setFieldValue('verseID', value.target.value)
+                        }}
+                        onBlur={handleBlur}
+                        hasError={touched.verseID && Boolean(errors.verseID)}
+                        error={touched.verseID && errors.verseID}
+                    />
                 </div>
 
                 <div className="form-field">
                     <CustomDropDown
                         label="Desired Program"
-                        options={["Desired Program 1", "Desired Program 2", "Desired Program 3"]}
+                        options={desiredProgramOptions}
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
@@ -435,7 +481,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                 <div className="form-field">
                     <CustomDropDown
                         label="Internship Option"
-                        options={["Option 1", "Option 2", "Option 3"]}
+                        options={[{id: "Yes", name: "Yes"}, {id: "No", name: "No"}]}
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"
@@ -481,7 +527,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                     />
                 </div>
 
-                <div className="form-field">
+                {/* <div className="form-field">
                     <CustomDropDown
                         label="Preferred Counsellor for FESTech1 Email id"
                         options={["Option 1", "Option 2", "Option 3"]}
@@ -494,6 +540,22 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                         onBlur={() => handleBlur({ target: { name: 'counsellorFESTech1EmailID' } })}
                         hasError={touched.counsellorFESTech1EmailID && Boolean(errors.counsellorFESTech1EmailID)}
                         errorMessage={touched.counsellorFESTech1EmailID && errors.counsellorFESTech1EmailID}
+                    />
+                </div> */}
+                <div className="form-field">
+                    <CustomInputField
+                        state="disabled"
+                        label="Preferred Counsellor for FESTech1 Email id"
+                        value={values?.counsellorFESTech1EmailID}
+                        showAsterisk={false}
+                        placeholder="Enter Email id"
+                        disabled={true}
+                        onChange={(value) => {
+                            setFieldValue('counsellorFESTech1EmailID', value.target.value)
+                        }}
+                        onBlur={handleBlur}
+                        hasError={touched.counsellorFESTech1EmailID && Boolean(errors.counsellorFESTech1EmailID)}
+                        error={touched.counsellorFESTech1EmailID && errors.counsellorFESTech1EmailID}
                     />
                 </div>
 
