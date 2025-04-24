@@ -73,7 +73,7 @@ const LeadDetailsViewPage = () => {
       fieldOfStudy: 'Computer Science',
       cgpaGrade: '8.5',
       workExperience: '2 years',
-      preferredDestination: 'Canada',
+      preferredDestination: ['USA', 'Canada'],
       otherCountries: 'USA, Australia',
       testName: 'IELTS',
       testTrainingBoolean: true,
