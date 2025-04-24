@@ -126,7 +126,7 @@ const CreateLeadPage = () => {
     const handleSubmit = (values, { setSubmitting }) => {
         console.log('Form submitted with values:', values);
 
-        console.log('Lead Information:', {
+        console.log('Lead Information:', {    
             firstName: values.firstName,
             lastName: values.lastName,
             email: values.email,
@@ -160,7 +160,7 @@ const CreateLeadPage = () => {
             category: values.category,
             subCategory: values.subCategory,
             branch: values.branch,
-            counselor: values.counselor,
+            counselor: values.counselor,      
             notes: values.notes,
         });
 

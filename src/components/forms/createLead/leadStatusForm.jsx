@@ -11,7 +11,7 @@ import {
   getSubCategory,
   getBranch
 } from '../../../api/services/masterAPIs/createLeadApi';
-import { CloudCog } from 'lucide-react';
+// import { CloudCog } from 'lucide-react';
 
 const LeadStatusForm = ({
   values,
@@ -25,6 +25,7 @@ const LeadStatusForm = ({
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [subCategoryOptions, setSubCategoryOptions] = useState([]);
   const [branchOptions, setBranchOptions] = useState([])
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
