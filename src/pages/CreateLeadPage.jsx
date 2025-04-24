@@ -203,7 +203,7 @@ const CreateLeadPage = () => {
                 }) => (
                     <form onSubmit={handleSubmit}>
                         <ErrorObserver setTabErrors={setTabErrors} />
-                        <div className="pb-8">
+                        <div className="pb-2">
                             <div className="mb-4">
                                 <div className="flex space-x-2">
                                     {tabs.map((tab) => (

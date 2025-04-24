@@ -23,7 +23,6 @@ const LeadStatusForm = ({
   const [statusOptions, setStatusOptions] = useState([]);
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [subCategoryOptions, setSubCategoryOptions] = useState([]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {

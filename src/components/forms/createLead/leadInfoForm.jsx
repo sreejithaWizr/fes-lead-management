@@ -1,14 +1,23 @@
 import React from 'react';
 import { CustomInputField, CustomDropDown, CustomDatePicker } from "react-mui-tailwind";
+import EditableFieldWrapper from '../../../utils/EditableFieldWrapper';
 
 const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => {
+
   return (
     <div className="form-section animate-fade-in ml-0 mb-6">
       <h2 className="font-bold text-[19px] leading-[140%] tracking-[0%] text-[#17222B] font-[Proxima Nova] mb-4">
         Lead Information
       </h2>
       <div className="form-grid">
-        <div className="form-field">
+        <div className="form-field flex flex-row items-start">
+          {/* <EditableFieldWrapper
+            fieldName="firstName"
+            value={values.firstName}
+            onSave={(field, updatedValue) => setFieldValue(field, updatedValue)}
+            onCancel={() => setFieldValue('firstName', values.firstName)} // or previous value
+          >
+            {(isEditing, val, setVal) => ( */}
           <CustomInputField
             state="default"
             label="First Name"
@@ -20,7 +29,10 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
             placeholder="Enter first name"
             hasError={touched.firstName && Boolean(errors.firstName)}
             error={touched.firstName && errors.firstName}
+            className="w-full max-w-[calc(100%-40px)]"
           />
+          {/* )}
+          </EditableFieldWrapper> */}
         </div>
 
         <div className="form-field">
