@@ -32,7 +32,14 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
         Lead Information
       </h2>
       <div className="form-grid">
-        <div className="form-field">
+        <div className="form-field flex flex-row items-start">
+          {/* <EditableFieldWrapper
+            fieldName="firstName"
+            value={values.firstName}
+            onSave={(field, updatedValue) => setFieldValue(field, updatedValue)}
+            onCancel={() => setFieldValue('firstName', values.firstName)} // or previous value
+          >
+            {(isEditing, val, setVal) => ( */}
           <CustomInputField
             state="default"
             label="First Name"
@@ -44,7 +51,10 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
             placeholder="Enter first name"
             hasError={touched.firstName && Boolean(errors.firstName)}
             error={touched.firstName && errors.firstName}
+            className="w-full max-w-[calc(100%-40px)]"
           />
+          {/* )}
+          </EditableFieldWrapper> */}
         </div>
 
         <div className="form-field">
@@ -140,7 +150,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
           />
         </div>
 
-        <div className="form-field">
+        {/* <div className="form-field">
           <CustomDropDown
             name="leadOwner"
             label="Lead Owner"
@@ -172,7 +182,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
             hasError={touched.leadStatusInfo && Boolean(errors.leadStatusInfo)}
             errorMessage={touched.leadStatusInfo && errors.leadStatusInfo}
           />
-        </div>
+        </div> */}
 
         <div className="form-field">
           <CustomDropDown

@@ -9,6 +9,7 @@ import { CustomButton } from 'react-mui-tailwind'
 import WarningIcon from '../assets/warning-icon.svg'
 import LeadOpportunity from '../components/forms/createLead/leadOpportunity/opportunityList';
 import { getUser, getUsers } from '../api/services/api';
+import { getStatus } from '../api/services/masterAPIs/createLeadApi';
 
 const ErrorObserver = ({ setTabErrors }) => {
     const { errors, touched } = useFormikContext();
@@ -116,9 +117,11 @@ const CreateLeadPage = () => {
         counsellorFESTech1EmailID :'',
     };
 
-    useEffect(() => {
-        getUsers();
-    }, [])
+    // useEffect(() => {
+    //     getUsers();
+    // }, [])
+
+    
 
     const handleSubmit = (values, { setSubmitting }) => {
         console.log('Form submitted with values:', values);
@@ -200,7 +203,7 @@ const CreateLeadPage = () => {
                 }) => (
                     <form onSubmit={handleSubmit}>
                         <ErrorObserver setTabErrors={setTabErrors} />
-                        <div className="pb-8">
+                        <div className="pb-2">
                             <div className="mb-4">
                                 <div className="flex space-x-2">
                                     {tabs.map((tab) => (
