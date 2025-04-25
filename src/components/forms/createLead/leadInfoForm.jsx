@@ -33,6 +33,8 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
     setFieldValue('agreeToReceiveBoolean', checked);
   }
 
+  console.log('lead: ', values);
+
   return (
     <div className="form-section animate-fade-in ml-0 mb-6">
       <h2 className="font-bold text-[19px] leading-[140%] tracking-[0%] text-[#17222B] font-[Proxima Nova] mb-4">
@@ -197,10 +199,11 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
             options={priorityOptions}
             required={true}
             placeHolder="Select"
-            value={values.priority}
+            value={priorityOptions?.find(option => option.id === values.priority) || ""}
             disabled={!isEditable}
             onChange={(value) => {
-              setFieldValue('priority', value.target.value);
+              // setFieldValue('priority', value.target.value);
+              setFieldValue('priority', value.id);
             }}
             onBlur={() => handleBlur({ target: { name: 'priority' } })}
             hasError={touched.priority && Boolean(errors.priority)}
@@ -211,11 +214,12 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
         <div className="form-field">
           <CustomDropDown
             label="Tele Caller"
-            options={["John", "Jane"]}
+            options={userOptions}
             required={false}
             showAsterisk={false}
             placeHolder="Select"
-            value={values.teleCallerName}
+            // value={values.teleCallerName}
+            value={userOptions?.find(option => option.id === values.teleCallerName) || ""}
             disabled={!isEditable}
             onChange={(value) => {
               setFieldValue('teleCallerName', value.target.value);

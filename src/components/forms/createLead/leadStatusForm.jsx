@@ -28,7 +28,7 @@ const LeadStatusForm = ({
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [subCategoryOptions, setSubCategoryOptions] = useState([]);
   const [branchOptions, setBranchOptions] = useState([])
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -37,7 +37,7 @@ const LeadStatusForm = ({
           getCategory(),
           getBranch()
         ]
-    );
+        );
         console.log("statusRes", branchRes || [])
         setStatusOptions(statusRes?.value?.data?.data || []);
         setCategoryOptions(categoryRes?.value?.data?.data || []);
@@ -53,13 +53,13 @@ const LeadStatusForm = ({
   const handleCategory = (value) => {
     console.log("valll", value.target.value)
     setFieldValue('category', value.target.value);
-    
+
     const fetchData = async () => {
       try {
         const [subCategoryRes] = await Promise.allSettled([
           getSubCategory(value.target.value.id)
         ]
-    );
+        );
         console.log("statusRes", subCategoryRes?.value?.data?.data || [])
         setSubCategoryOptions(subCategoryRes?.value?.data?.data || []);
       } catch (err) {
@@ -102,6 +102,7 @@ const LeadStatusForm = ({
             required
             showAsterisk={false}
             placeHolder="Select"
+            disabled={!isEditable}
             onChange={(value) => {
               handleCategory(value);
             }}
@@ -117,6 +118,7 @@ const LeadStatusForm = ({
             label="Subcategory"
             options={subCategoryOptions}
             required
+            disabled={!isEditable}
             showAsterisk={false}
             placeHolder="Select"
             onChange={(value) => setFieldValue('subCategory', value.target.value)}
@@ -132,6 +134,7 @@ const LeadStatusForm = ({
             label="Branch"
             options={branchOptions}
             required
+            disabled={!isEditable}
             showAsterisk={false}
             placeHolder="Select"
             onChange={(value) => setFieldValue('branch', value.target.value)}
@@ -145,7 +148,7 @@ const LeadStatusForm = ({
 
       <div className="form-field mt-4">
         <CustomInputField
-          state="default"
+          state={isEditable ? "default" : "non-editable"}
           label="Notes"
           value={values.notes}
           showAsterisk={false}

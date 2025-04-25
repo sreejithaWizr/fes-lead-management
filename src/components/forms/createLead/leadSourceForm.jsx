@@ -64,6 +64,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                         label="Source 2"
                         options={sourceOptions}
                         required={false}
+                        disabled={!isEditable}
                         showAsterisk={false}
                         placeHolder="Select"
                         value={values.leadSource_2}
@@ -80,6 +81,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                     <CustomDropDown
                         label="Source 3"
                         options={sourceOptions}
+                        disabled={!isEditable}
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"
@@ -97,6 +99,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                     <CustomDropDown
                         label="Source 4"
                         options={sourceOptions}
+                        disabled={!isEditable}
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"
@@ -114,6 +117,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                     <CustomDropDown
                         label="Location 1"
                         options={cityOptions}
+                        disabled={!isEditable}
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
@@ -131,6 +135,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                     <CustomDropDown
                         label="Location 2"
                         options={regionOptions}
+                        disabled={!isEditable}
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"
@@ -148,6 +153,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                     <CustomDropDown
                         label="Vertical"
                         options={verticalOptions}
+                        disabled={!isEditable}
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
@@ -163,7 +169,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Preferred Time Slot"
                         value={values?.preferredTimeSlot}
                         showAsterisk={false}
@@ -179,7 +185,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="GCLID"
                         value={values?.gclID}
                         showAsterisk={false}
@@ -195,7 +201,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="ZC GAD"
                         value={values?.zcGad}
                         showAsterisk={false}
@@ -211,7 +217,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Ad ID"
                         value={values?.adID}
                         showAsterisk={false}
@@ -227,7 +233,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Ad Name"
                         value={values.adName}
                         showAsterisk={false}
@@ -243,7 +249,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Ad Campaign"
                         value={values.adCampaign}
                         showAsterisk={false}
@@ -259,7 +265,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Key Identifier"
                         value={values?.keyIdentifier}
                         showAsterisk={false}
@@ -275,7 +281,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Campaign Type"
                         value={values?.campaignType}
                         showAsterisk={false}
@@ -291,7 +297,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Referrer Name"
                         value={values.referrerName}
                         showAsterisk={false}
@@ -307,7 +313,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Referrer Email"
                         value={values?.referrerEmail}
                         showAsterisk={false}
@@ -323,7 +329,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Referrer Employee ID"
                         value={values.referrerEmployeeId}
                         showAsterisk={false}
@@ -339,7 +345,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Referrer Phone Number"
                         value={values?.referrerPhoneNumber}
                         showAsterisk={false}
@@ -355,7 +361,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Lead Form"
                         value={values.leadForm}
                         showAsterisk={false}
@@ -371,7 +377,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
 
                 <div className="form-field">
                     <CustomInputField
-                        state="non-editable"
+                        state={isEditable ? "default" : "non-editable"}
                         label="IP Address"
                         value={values.ipAddress}
                         showAsterisk={false}
@@ -387,7 +393,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="User Agent"
                         value={values?.userAgent}
                         showAsterisk={false}
@@ -407,6 +413,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                         options={[{ id: "Yes", name: "Yes" }, { id: "No", name: "No" }]}
                         // required={true}
                         placeHolder="Select"
+                        disabled={!isEditable}
                         value={values?.importLead}
                         onChange={(value) => {
                             setFieldValue('importLead', value.target.value);
@@ -423,6 +430,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                         options={[{ id: "Yes", name: "Yes" }, { id: "No", name: "No" }]}
                         // required={true}
                         placeHolder="Select"
+                        disabled={!isEditable}
                         value={values?.invokeBlueprint}
                         onChange={(value) => {
                             setFieldValue('invokeBlueprint', value.target.value);
@@ -450,7 +458,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                 </div> */}
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Verse ID"
                         value={values?.verseID}
                         showAsterisk={false}
@@ -468,6 +476,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                     <CustomDropDown
                         label="Desired Program"
                         options={desiredProgramOptions}
+                        disabled={!isEditable}
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
@@ -484,6 +493,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                 <div className="form-field">
                     <CustomDropDown
                         label="Internship Option"
+                        disabled={!isEditable}
                         options={[{ id: "Yes", name: "Yes" }, { id: "No", name: "No" }]}
                         required={false}
                         showAsterisk={false}
@@ -500,7 +510,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Shortlisted Course ID"
                         value={values?.shortlistedCourseID}
                         showAsterisk={false}
@@ -516,7 +526,8 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
 
                 <div className="form-field">
                     <CustomDropDown
-                        label="Preferred Counsellor for FESTech1 Name "
+                        label="Preferred Counsellor for FESTech1 Name"
+                        disabled={!isEditable}
                         options={["Option 1", "Option 2", "Option 3"]}
                         // required={true}
                         placeHolder="Select"
@@ -547,7 +558,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                 </div> */}
                 <div className="form-field">
                     <CustomInputField
-                        state="disabled"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Preferred Counsellor for FESTech1 Email id"
                         value={values?.counsellorFESTech1EmailID}
                         showAsterisk={false}

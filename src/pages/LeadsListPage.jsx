@@ -21,13 +21,13 @@ const LeadsTable = () => {
 
   const [leads, setLeads] = useState([])
 
-useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const [leadRes] = await Promise.allSettled([
           getLeadList(),
         ]
-    );
+        );
         console.log("statusRes", leadRes?.value?.data?.data || [])
         setLeads(leadRes?.value?.data?.data || [])
       } catch (err) {
@@ -36,10 +36,12 @@ useEffect(() => {
     };
 
     fetchData();
-  }, []); 
+  }, []);
 
-  const handleView = () => {
-    navigate('/leads/detailsview');
+  const handleView = (value) => {
+    const selectedLeadId = leads.find(lead => lead.leadNumber === value);
+    console.log("selectedLeadId", selectedLeadId);
+    navigate(`/leads/detailsview/${selectedLeadId?.id}`);
   }
 
   const getRow = (columnId, value) => {
@@ -48,7 +50,7 @@ useEffect(() => {
       case "leadNumber":
         return (
           <div className="flex items-center gap-2">
-            <span className='font-bold cursor-pointer' onClick={handleView}>{value}</span>
+            <span className='font-bold cursor-pointer' onClick={() => handleView(value)}>{value}</span>
           </div>
         );
       case "createdAt":
@@ -79,26 +81,26 @@ useEffect(() => {
             <span>{value}</span>
           </div>
         );
-  //     default:
-  //       return value;
-  //   }
-  // };
+      //     default:
+      //       return value;
+      //   }
+      // };
 
-        case "action":
-          return (
-            <div className="flex items-center gap-2">
-                <img src={EditIcon} alt="actions" className="w-4 h-4" onClick={hanldeEdit}/>
-            </div>
+      case "action":
+        return (
+          <div className="flex items-center gap-2">
+            <img src={EditIcon} alt="actions" className="w-4 h-4" onClick={hanldeEdit} />
+          </div>
         );
-        default:
-            return value;
+      default:
+        return value;
     }
-};
+  };
 
-const hanldeEdit = () => {
-  navigate('/leads/edit');
-};
-  
+  const hanldeEdit = () => {
+    navigate('/leads/edit');
+  };
+
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchLeads());

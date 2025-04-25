@@ -1,3 +1,4 @@
+import { useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { Formik, useFormikContext } from 'formik';
 import LeadInformationForm from '../components/forms/createLead/leadInfoForm';
@@ -44,6 +45,8 @@ const ErrorObserver = ({ setTabErrors }) => {
 };
 
 const LeadDetailsViewPage = () => {
+  const { id } = useParams();
+
   const [activeTab, setActiveTab] = useState('All Info');
   const [initialValues, setInitialValues] = useState(null);
   const [tabErrors, setTabErrors] = useState({});
@@ -57,9 +60,9 @@ const LeadDetailsViewPage = () => {
   useEffect(() => {
     const fetchLead = async () => {
       try {
-        const response = await getLeadById('1');
+        const response = await getLeadById(id);
         setLeadData(response?.data);
-        console.log("Lead data fetched:", response?.data);
+        // console.log("Lead data fetched:", response?.data);
       } catch (err) {
         console.error("Failed to fetch lead:", err);
       } finally {
@@ -68,12 +71,13 @@ const LeadDetailsViewPage = () => {
     };
 
     fetchLead();
-  }, []);
+  }, [id]);
 
   useEffect(() => {
-    console.log("leadData", leadData);
+    // console.log("leadData", leadData);
 
     const fetchedLeadData = {
+      // Lead Information
       firstName: leadData?.first_name,
       lastName: leadData?.last_name,
       email: leadData?.email,
@@ -83,11 +87,13 @@ const LeadDetailsViewPage = () => {
       whatsappNumber: leadData?.whatsapp_number,
       // leadOwner: leadData?.lead_owner,
       // leadStatusInfo: 'Initial Contact',
-      priority: 'High',
-      teleCallerName: 'Agent 47',
+      priority: leadData?.priority_id,
+      teleCallerName: leadData?.tele_callerid,
       leadCreated: leadData?.created_at,
       leadNumber: leadData?.lead_number,
       agreeToReceiveBoolean: leadData?.consent,
+
+      // Education Qualification
       highestQualification: 'Bachelor\'s',
       graduationYear: '2022',
       fieldOfStudy: 'Computer Science',
@@ -97,12 +103,16 @@ const LeadDetailsViewPage = () => {
       otherCountries: 'USA, Australia',
       testName: 'IELTS',
       testTrainingBoolean: leadData?.consent,
+
+      // Lead Status
       leadStatus: 'Interested',
       category: 'Student',
       subCategory: 'UG',
       branch: 'Main Branch',
       // counselor: 'Jane Smith',
       notes: '',
+
+      // Lead Source
       leadSource_1: leadData?.leadProfile_LeadSource,
       leadSource_2: 'Referral',
       leadSource_3: 'Webinar',

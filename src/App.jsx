@@ -18,12 +18,12 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="login" element={<Login />} />
-           <Route path="reset-password" element={<ResetPasswordPage />} />
-           <Route path="/" element={<Layout />}>
+          <Route path="reset-password" element={<ResetPasswordPage />} />
+          <Route path="/" element={<Layout />}>
             <Route index element={<Navigate to="/leads" replace />} />
             <Route path="leads" element={<LeadsPage />} />
             <Route path="leads/create" element={<CreateLeadPage />} />
-            <Route path="leads/detailsview" element={<LeadDetailsViewPage />} />
+            <Route path="leads/detailsview/:id" element={<LeadDetailsViewPage />} />
             <Route path="leads/edit" element={<EditLeadPage />} />
             <Route path="*" element={<NotFound />} />
           </Route>

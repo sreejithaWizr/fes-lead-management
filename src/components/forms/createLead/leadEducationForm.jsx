@@ -14,6 +14,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
     const [testNameOptions, setTestNameOptions] = useState([]);
 
     useEffect(() => {
+        console.log('values', values);
         const fetchDropdownData = async () => {
             try {
                 const [areaOfStudy, qualification, preferredCountry, testName] = await Promise.allSettled([
@@ -209,6 +210,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                     required={false}
                     placeHolder="Select"
                     value={values?.testName}
+                    disabled={!isEditable}
                     onChange={(value) => {
                         setFieldValue('testName', value.target.value)
                     }}
