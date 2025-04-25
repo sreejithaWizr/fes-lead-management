@@ -40,7 +40,7 @@ const UserProfileMenu = ({ onClose }) => {
       onClick={handleBackdropClick} // Attach click handler to backdrop
     >
     <div 
-      className="absolute left-0 bottom-0 mt-2 w-[252px] h-[auto] bg-white shadow-lg rounded-[12px] p-8 flex flex-col gap-4 border border-gray-200 z-50"
+      className="absolute left-[75px] bottom-[35px] mt-2 w-[252px] h-[auto] bg-white shadow-lg rounded-[12px] p-8 flex flex-col gap-4 border border-gray-200 z-50"
       ref={menuRef}
     >
       {/* Profile Image and Name */}
