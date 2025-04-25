@@ -18,8 +18,11 @@ const LeadStatusForm = ({
   touched,
   handleChange,
   handleBlur,
-  setFieldValue
+  setFieldValue,
+  mode = "edit"
 }) => {
+  const isEditable = mode === "edit";
+
   const [statusOptions, setStatusOptions] = useState([]);
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [subCategoryOptions, setSubCategoryOptions] = useState([]);
@@ -30,7 +33,7 @@ const LeadStatusForm = ({
           getStatus(),
           getCategory(),
         ]
-    );
+        );
         console.log("statusRes", statusRes?.data?.data || [])
         setStatusOptions(statusRes?.data?.data || []);
         setCategoryOptions(categoryRes?.data?.data || []);
@@ -55,10 +58,11 @@ const LeadStatusForm = ({
       </h2>
 
       <div className="form-grid">
-            <div className="form-field">
+        <div className="form-field">
           <CustomDropDown
             label="Status"
             options={statusOptions}
+            disabled={!isEditable}
             required
             showAsterisk={false}
             placeHolder="Select"
@@ -69,7 +73,7 @@ const LeadStatusForm = ({
             errorMessage={touched.leadStatus && errors.leadStatus}
           />
         </div>
-        
+
 
         <div className="form-field">
           <CustomDropDown
@@ -80,7 +84,7 @@ const LeadStatusForm = ({
             placeHolder="Select"
             onChange={(value) => {
               handleCategory(value);
-              }}
+            }}
             onBlur={() => handleBlur({ target: { name: 'category' } })}
             value={values.category}
             hasError={touched.category && Boolean(errors.category)}

@@ -3,7 +3,7 @@ import { setupInterceptors } from "./interceptors";
 
 // Environment variables
 // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const API_BASE_URL = "https://35d7-103-181-238-22.ngrok-free.app/"
+const API_BASE_URL = "https://2665-103-181-238-22.ngrok-free.app"
 // const API_TIMEOUT = parseInt(import.meta.env.VITE_API_TIMEOUT || "30000", 10);
 const API_TIMEOUT = parseInt("30000")
 

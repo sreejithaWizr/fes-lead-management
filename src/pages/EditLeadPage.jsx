@@ -53,6 +53,7 @@ const EditLeadPage = () => {
 
     // JSON object to simulate prefilled data (could come from API)
     const prefilledData = {
+        // Lead Information
         firstName: 'Nandhana',
         lastName: 'Krishna',
         email: 'nandhana@example.com',
@@ -60,14 +61,15 @@ const EditLeadPage = () => {
         mobileNumber: '9876543210',
         alternativeNumber: '1234567890',
         whatsappNumber: '9876543210',
-        leadOwner: 'John Doe',
-        leadStatusInfo: 'New',
+        // leadOwner: 'John Doe',
+        // leadStatusInfo: 'New',
         priority: 'High',
         teleCallerName: 'Priya',
         leadCreated: '2025-04-01',
         leadNumber: 'LEAD355451001',
         agreeToReceiveBoolean: true,
 
+        // Education Qualification
         highestQualification: 'Bachelor’s Degree',
         graduationYear: '2020',
         fieldOfStudy: 'Computer Science',
@@ -78,6 +80,7 @@ const EditLeadPage = () => {
         testName: 'IELTS',
         testTrainingBoolean: true,
 
+        // Lead Status
         leadStatus: 'Prospective',
         category: 'Hot',
         subCategory: 'Enquired',
@@ -85,36 +88,36 @@ const EditLeadPage = () => {
         counselor: 'Meera',
         notes: 'Very interested in Canada',
 
+        // Lead Source
         leadSource_1: 'Google Ads',
         leadSource_2: 'Instagram',
         leadSource_3: 'Referral',
         location_1: 'Chennai',
         location_2: 'Bangalore',
-        referrerName: 'Ravi Kumar',
-        referrerEmployeeId: 'EMP12345',
         vertical: 'Education',
-        desiredProgram: 'MS in Data Science',
-        internshipOption: 'Yes',
+        preferredTimeSlot: '',
+        gclID: '',
+        zcGad: '',
+        adID: '',
         adName: 'Canada Campaign',
         adCampaign: 'Spring 2025',
+        keyIdentifier: '',
+        campaignType: '',
+        referrerName: 'Ravi Kumar',
+        referrerEmail: '',
+        referrerEmployeeId: 'EMP12345',
+        desiredProgram: 'MS in Data Science',
+        internshipOption: 'Yes',
         leadForm: 'LeadGenForm1',
         ipAddress: '192.168.1.101',
-
-        preferredTimeSlot:'',
-        gclID:'',
-        zcGad:'',
-        adID:'',
-        keyIdentifier:'',
-        campaignType:'',
-        referrerEmail:'',
-        referrerPhoneNumber:'',
-        userAgent:'',
-        importLead:'',
-        invokeBlueprint:'',
-        verseID:'',
-        shortlistedCourseID:'',
-        counsellorFESTech1Name:'',
-        counsellorFESTech1EmailID :'',
+        referrerPhoneNumber: '',
+        userAgent: '',
+        importLead: '',
+        invokeBlueprint: '',
+        verseID: '',
+        shortlistedCourseID: '',
+        counsellorFESTech1Name: '',
+        counsellorFESTech1EmailID: '',
     };
 
     // Simulate prefetch and set as initial values
@@ -183,6 +186,7 @@ const EditLeadPage = () => {
                                     handleChange={handleChange}
                                     handleBlur={handleBlur}
                                     setFieldValue={setFieldValue}
+                                    mode="edit"
                                 />
                             )}
 
@@ -194,6 +198,7 @@ const EditLeadPage = () => {
                                     handleChange={handleChange}
                                     handleBlur={handleBlur}
                                     setFieldValue={setFieldValue}
+                                    mode="edit"
                                 />
                             )}
 
@@ -205,6 +210,7 @@ const EditLeadPage = () => {
                                     handleChange={handleChange}
                                     handleBlur={handleBlur}
                                     setFieldValue={setFieldValue}
+                                    mode="edit"
                                 />
                             )}
 
@@ -216,6 +222,7 @@ const EditLeadPage = () => {
                                     handleChange={handleChange}
                                     handleBlur={handleBlur}
                                     setFieldValue={setFieldValue}
+                                    mode="edit"
                                 />
                             )}
                         </form>

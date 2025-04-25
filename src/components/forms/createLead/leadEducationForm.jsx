@@ -1,6 +1,7 @@
 import { CustomInputField, CustomDropDown } from "react-mui-tailwind";
 
-const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => {
+const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode = "edit" }) => {
+    const isEditable = mode === "edit";
 
     const yearOptions = [...Array.from({ length: 20 }, (_, i) => `${new Date().getFullYear() - i}`)];
     const numberOfYears = [...Array.from({ length: 21 }, (_, i) => i)];
@@ -19,6 +20,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                         showAsterisk={false}
                         placeHolder="Select"
                         value={values.highestQualification}
+                        disabled={!isEditable}
                         onChange={(value) => {
                             setFieldValue('highestQualification', value.target.value);
                         }}
@@ -36,6 +38,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                         showAsterisk={false}
                         placeHolder="Select"
                         value={values.graduationYear}
+                        disabled={!isEditable}
                         onChange={(value) => {
                             setFieldValue('graduationYear', value.target.value);
                         }}
@@ -53,6 +56,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                         showAsterisk={false}
                         placeHolder="Select"
                         value={values.fieldOfStudy}
+                        disabled={!isEditable}
                         onChange={(value) => {
                             setFieldValue('fieldOfStudy', value.target.value);
                         }}
@@ -64,7 +68,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="CGPA/Grade"
                         value={values.cgpaGrade}
                         showAsterisk={false}
@@ -86,6 +90,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                         showAsterisk={false}
                         placeHolder="Select"
                         value={values.workExperience}
+                        disabled={!isEditable}
                         onChange={(value) => {
                             setFieldValue('workExperience', value.target.value)
                         }}
@@ -103,6 +108,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                         multiple={true}
                         placeHolder="Select"
                         value={values.preferredDestination}
+                        disabled={!isEditable}
                         onChange={(value) => {
                             setFieldValue('preferredDestination', value.target.value)
                         }}
@@ -114,7 +120,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Other Countries"
                         showAsterisk={false}
                         placeHolder="Enter Country Name"
@@ -145,7 +151,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
 
             <div className="form-field mt-4">
                 <CustomInputField
-                    state="default"
+                    state={isEditable ? "default" : "non-editable"}
                     label="Test Name"
                     value={values.testName}
                     showAsterisk={false}

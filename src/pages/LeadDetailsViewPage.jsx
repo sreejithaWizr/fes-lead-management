@@ -55,57 +55,55 @@ const LeadDetailsViewPage = () => {
   const [leadData, setLeadData] = useState(null);
 
   useEffect(() => {
-    fetchLead();
-  }, [leadData]);
-
-  useEffect(() => {
     const fetchLead = async () => {
       try {
-        const data = await getLeadById('1');
-        setLeadData(data?.data);
-        console.log("Lead data fetched:", data?.data);
+        const response = await getLeadById('1');
+        setLeadData(response?.data);
+        console.log("Lead data fetched:", response?.data);
       } catch (err) {
         console.error("Failed to fetch lead:", err);
       } finally {
         // setLoading(false);
       }
     };
-  }, [leadData])
+
+    fetchLead();
+  }, []);
 
   useEffect(() => {
     console.log("leadData", leadData);
 
     const fetchedLeadData = {
-      firstName: leadData.first_name,
-      lastName: leadData.last_name,
-      email: leadData.email,
-      secondaryEmail: leadData.secondary_email,
-      mobileNumber: leadData.mobile_number,
-      alternativeNumber: leadData.alternative_number,
-      whatsappNumber: whatsapp_number,
-      leadOwner: 'John Doe',
-      leadStatusInfo: 'Initial Contact',
+      firstName: leadData?.first_name,
+      lastName: leadData?.last_name,
+      email: leadData?.email,
+      secondaryEmail: leadData?.secondary_email,
+      mobileNumber: leadData?.mobile_number,
+      alternativeNumber: leadData?.alternative_number,
+      whatsappNumber: leadData?.whatsapp_number,
+      // leadOwner: leadData?.lead_owner,
+      // leadStatusInfo: 'Initial Contact',
       priority: 'High',
       teleCallerName: 'Agent 47',
-      leadCreated: '2025-04-20',
-      leadNumber: 'LEAD355451001',
-      agreeToReceiveBoolean: true,
+      leadCreated: leadData?.created_at,
+      leadNumber: leadData?.lead_number,
+      agreeToReceiveBoolean: leadData?.consent,
       highestQualification: 'Bachelor\'s',
       graduationYear: '2022',
       fieldOfStudy: 'Computer Science',
-      cgpaGrade: '8.5',
+      cgpaGrade: '',
       workExperience: '2 years',
       preferredDestination: ['USA', 'Canada'],
       otherCountries: 'USA, Australia',
       testName: 'IELTS',
-      testTrainingBoolean: true,
+      testTrainingBoolean: leadData?.consent,
       leadStatus: 'Interested',
       category: 'Student',
       subCategory: 'UG',
       branch: 'Main Branch',
-      counselor: 'Jane Smith',
-      notes: 'Interested in fast-track programs',
-      leadSource_1: 'Facebook',
+      // counselor: 'Jane Smith',
+      notes: '',
+      leadSource_1: leadData?.leadProfile_LeadSource,
       leadSource_2: 'Referral',
       leadSource_3: 'Webinar',
       location_1: 'Chennai',
@@ -123,9 +121,9 @@ const LeadDetailsViewPage = () => {
 
     // Simulate delay and set data
     setTimeout(() => {
-      setInitialValues(mockLeadData);
+      setInitialValues(fetchedLeadData);
     }, 1000);
-  }, []);
+  }, [leadData]);
 
   const handleSubmit = (values, { setSubmitting }) => {
     console.log('Form submitted with values:', values);
@@ -229,16 +227,16 @@ const LeadDetailsViewPage = () => {
 
               {/* Forms by Tab */}
               {(activeTab === 'All Info' || activeTab === 'Lead Information') && (
-                <LeadInformationForm {...{ values, errors, touched, handleChange, handleBlur, setFieldValue }} />
+                <LeadInformationForm {...{ values, errors, touched, handleChange, handleBlur, setFieldValue, mode: "view" }} />
               )}
               {(activeTab === 'All Info' || activeTab === 'Education Qualification') && (
-                <EducationQualificationForm {...{ values, errors, touched, handleChange, handleBlur, setFieldValue }} />
+                <EducationQualificationForm {...{ values, errors, touched, handleChange, handleBlur, setFieldValue, mode: "view" }} />
               )}
               {(activeTab === 'All Info' || activeTab === 'Lead Status') && (
-                <LeadStatusForm {...{ values, errors, touched, handleChange, handleBlur, setFieldValue }} />
+                <LeadStatusForm {...{ values, errors, touched, handleChange, handleBlur, setFieldValue, mode: "view" }} />
               )}
               {(activeTab === 'All Info' || activeTab === 'Lead Source') && (
-                <LeadSourceForm {...{ values, errors, touched, handleChange, handleBlur, setFieldValue }} />
+                <LeadSourceForm {...{ values, errors, touched, handleChange, handleBlur, setFieldValue, mode: "view" }} />
               )}
               {activeTab === 'Opportunity' && (
                 <LeadOpportunity />

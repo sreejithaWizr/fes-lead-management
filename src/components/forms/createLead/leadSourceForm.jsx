@@ -2,36 +2,38 @@ import React, { useEffect, useState } from 'react';
 import { CustomButton, CustomInputField, CustomDropDown, CustomDatePicker } from "react-mui-tailwind";
 import { getCity, getDesiredProgram, getRegion, getSource1, getVertical } from '../../../api/services/masterAPIs/createLeadApi';
 
-const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => {
-const [sourceOptions, setSourceOptions] = useState([]);
-const [cityOptions, setCityOptions] = useState([]);
-const [regionOptions, setRegionOptions] = useState([]);
-const [verticalOptions, setVerticalOptions] = useState([]);
-const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
+const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode = "edit" }) => {
+    const isEditable = mode === "edit";
+
+    const [sourceOptions, setSourceOptions] = useState([]);
+    const [cityOptions, setCityOptions] = useState([]);
+    const [regionOptions, setRegionOptions] = useState([]);
+    const [verticalOptions, setVerticalOptions] = useState([]);
+    const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
-          try {
-            const [sourceRes, regionRes, cityRes, verticalRes, desiredProgramRes] = await Promise.allSettled([
-                getSource1(),
-                getCity(),
-                getRegion(),
-                getVertical(),
-                getDesiredProgram()
-            ]
-        );
-            console.log("statusRes", sourceRes?.data?.data || [])
-            setSourceOptions(sourceRes?.data?.data || []);
-            setCityOptions(cityRes?.data?.data || []);
-            setRegionOptions(regionRes?.data?.data || []);
-            setVerticalOptions(verticalRes?.data?.data || []);
-            setDesiredProgramOptions(desiredProgramRes?.data?.data || []);
-          } catch (err) {
-            console.error('Error loading filters:', err);
-          }
+            try {
+                const [sourceRes, regionRes, cityRes, verticalRes, desiredProgramRes] = await Promise.allSettled([
+                    getSource1(),
+                    getCity(),
+                    getRegion(),
+                    getVertical(),
+                    getDesiredProgram()
+                ]
+                );
+                console.log("statusRes", sourceRes?.data?.data || [])
+                setSourceOptions(sourceRes?.data?.data || []);
+                setCityOptions(cityRes?.data?.data || []);
+                setRegionOptions(regionRes?.data?.data || []);
+                setVerticalOptions(verticalRes?.data?.data || []);
+                setDesiredProgramOptions(desiredProgramRes?.data?.data || []);
+            } catch (err) {
+                console.error('Error loading filters:', err);
+            }
         };
-    
+
         fetchData();
-      }, []);
+    }, []);
 
     return (
         <div className="form-section animate-fade-in ml-0 mb-6">
@@ -44,6 +46,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                         label="Source 1"
                         options={sourceOptions}
                         required={true}
+                        disabled={!isEditable}
                         showAsterisk={false}
                         placeHolder="Select"
                         value={values.leadSource_1}
@@ -401,7 +404,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                 <div className="form-field">
                     <CustomDropDown
                         label="Import Lead"
-                        options={[{id: "Yes", name: "Yes"}, {id: "No", name: "No"}]}
+                        options={[{ id: "Yes", name: "Yes" }, { id: "No", name: "No" }]}
                         // required={true}
                         placeHolder="Select"
                         value={values?.importLead}
@@ -417,7 +420,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                 <div className="form-field">
                     <CustomDropDown
                         label="Invoke Blueprint"
-                        options={[{id: "Yes", name: "Yes"}, {id: "No", name: "No"}]}
+                        options={[{ id: "Yes", name: "Yes" }, { id: "No", name: "No" }]}
                         // required={true}
                         placeHolder="Select"
                         value={values?.invokeBlueprint}
@@ -481,7 +484,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                 <div className="form-field">
                     <CustomDropDown
                         label="Internship Option"
-                        options={[{id: "Yes", name: "Yes"}, {id: "No", name: "No"}]}
+                        options={[{ id: "Yes", name: "Yes" }, { id: "No", name: "No" }]}
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"

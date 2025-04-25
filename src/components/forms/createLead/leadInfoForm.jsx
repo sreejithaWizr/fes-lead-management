@@ -1,8 +1,9 @@
 import React from 'react';
-import { CustomInputField, CustomDropDown, CustomDatePicker } from "react-mui-tailwind";
+import { CustomInputField, CustomDropDown, CustomDatePicker, CustomCheckboxField } from "react-mui-tailwind";
 import EditableFieldWrapper from '../../../utils/EditableFieldWrapper';
 
-const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => {
+const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode = "edit" }) => {
+  const isEditable = mode === "edit";
 
   return (
     <div className="form-section animate-fade-in ml-0 mb-6">
@@ -19,7 +20,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
           >
             {(isEditing, val, setVal) => ( */}
           <CustomInputField
-            state="default"
+            state={isEditable ? "default" : "non-editable"}
             label="First Name"
             value={values.firstName}
             onChange={(value) => {
@@ -37,7 +38,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
         <div className="form-field">
           <CustomInputField
-            state="default"
+            state={isEditable ? "default" : "non-editable"}
             label="Last Name"
             value={values.lastName}
             onChange={(value) => {
@@ -52,7 +53,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
         <div className="form-field">
           <CustomInputField
-            state="default"
+            state={isEditable ? "default" : "non-editable"}
             label="Email"
             value={values.email}
             onChange={(value) => {
@@ -67,7 +68,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
         <div className="form-field">
           <CustomInputField
-            state="default"
+            state={isEditable ? "default" : "non-editable"}
             label="Secondary Email"
             value={values.secondaryEmail}
             showAsterisk={false}
@@ -83,7 +84,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
         <div className="form-field">
           <CustomInputField
-            state="default"
+            state={isEditable ? "default" : "non-editable"}
             label="Mobile Number"
             value={values.mobileNumber}
             onChange={(value) => {
@@ -98,7 +99,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
         <div className="form-field">
           <CustomInputField
-            state="default"
+            state={isEditable ? "default" : "non-editable"}
             label="Alternative Number"
             value={values.alternativeNumber}
             showAsterisk={false}
@@ -114,7 +115,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
         <div className="form-field">
           <CustomInputField
-            state="default"
+            state={isEditable ? "default" : "non-editable"}
             label="Whatsapp Number"
             value={values.whatsappNumber}
             showAsterisk={false}
@@ -169,6 +170,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
             required={true}
             placeHolder="Select"
             value={values.priority}
+            disabled={!isEditable}
             onChange={(value) => {
               setFieldValue('priority', value.target.value);
             }}
@@ -186,6 +188,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
             showAsterisk={false}
             placeHolder="Select"
             value={values.teleCallerName}
+            disabled={!isEditable}
             onChange={(value) => {
               setFieldValue('teleCallerName', value.target.value);
             }}
@@ -199,6 +202,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
           <CustomDatePicker
             label="Lead Created"
             value={values?.leadCreated}
+            disabled={!isEditable}
             onChange={(value) => {
               setFieldValue('leadCreated', value)
             }}
@@ -228,11 +232,17 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
           name="agreeToReceiveBoolean"
           checked={values.agreeToReceiveBoolean}
           onChange={handleChange}
-          className="w-4 h-4 gap-[10px] rounded border"
+          // className="w-4 h-4 gap-[10px] rounded border"
+          className={`
+            w-4 h-4 rounded border accent-[#009CDC]
+            ${!isEditable ? 'pointer-events-none' : ''}
+          `}
         />
         <label htmlFor="agreeToReceiveBoolean" className="text-base font-normal leading-[140%] text-[#17222B] font-[Proxima Nova]">
           I agree to receive communications <span className='text-red-600'>*</span>
         </label>
+
+        <CustomCheckboxField label="I agree to receive communications" disabled={true} checked={true} />
       </div>
 
     </div>
