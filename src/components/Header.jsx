@@ -61,7 +61,7 @@ const Header = () => {
   console.log("value", isFilterOpen)
   return (
     <>
-      <header className="w-full shadow-card">
+      <header className="w-full shadow-card ">
         {isLeadsPage && (
           <div className="pt-2 px-6 flex flex-col gap-6">
             <div className="flex items-center justify-between">
@@ -105,7 +105,7 @@ const Header = () => {
                 <CustomButton text="Create Lead" endIcon={false} onClick={handleCreateLead} />
                 <CustomButton text="Bulk Upload" variant="secondary" endIcon={false} />
                 <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={FilterIcon} onClick={() => toggleFilter()} />
-                <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={MenuIcon} />
+                {/* <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={MenuIcon} /> */}
               </div>
             </div>
           </div>

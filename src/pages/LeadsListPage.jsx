@@ -10,34 +10,55 @@ import CalenderIcon from "../assets/calendar.svg";
 import MailIcon from "../assets/mail.svg";
 import LoactionIcon from "../assets/location.svg";
 import EditIcon from '../assets/edit-icon.svg'
+import { getLeadList } from '../api/services/masterAPIs/createLeadApi';
 
 const LeadsTable = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { leads, status, itemsPerPage, totalLeads, columns } = useSelector((state) => state.leads);
+  const { status, itemsPerPage, totalLeads, columns } = useSelector((state) => state.leads);
   const [selectedLeads, setSelectedLeads] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [leads, setLeads] = useState([])
+
+useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [leadRes] = await Promise.allSettled([
+          getLeadList(),
+        ]
+    );
+        console.log("statusRes", leadRes?.value?.data?.data || [])
+        setLeads(leadRes?.value?.data?.data || [])
+      } catch (err) {
+        console.error('Error loading filters:', err);
+      }
+    };
+
+    fetchData();
+  }, []); 
 
   const handleView = () => {
     navigate('/leads/detailsview');
   }
 
   const getRow = (columnId, value) => {
+    console.log("colu", columnId)
     switch (columnId) {
-      case "leadNo":
+      case "leadNumber":
         return (
           <div className="flex items-center gap-2">
             <span className='font-bold cursor-pointer' onClick={handleView}>{value}</span>
           </div>
         );
-      case "createdDate":
+      case "createdAt":
         return (
           <div className="flex items-center gap-2">
             <img src={CalenderIcon} alt="Calender" className="w-4 h-4" />
             <span>{value}</span>
           </div>
         );
-      case "phone":
+      case "mobileNumber":
         return (
           <div className="flex items-center gap-2">
             <img src={PhoneIcon} alt="Phone" className="w-4 h-4" />
@@ -202,7 +223,7 @@ const hanldeEdit = () => {
 
       <div className="p-4 justify-end">
         <CustomPagination
-          totalPages={8}
+          totalPages={1}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
         />

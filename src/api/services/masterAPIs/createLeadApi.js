@@ -33,3 +33,5 @@ export const getTestName = () => apiClient.get('api/TestName');
 export const getVertical = () => apiClient.get('api/Vertical');
  
 export const getDesiredProgram = () => apiClient.get('api/DesiredProgram')
+
+export const getLeadList = () => apiClient.get('api/LeadListView')
