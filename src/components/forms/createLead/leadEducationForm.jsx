@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CustomInputField, CustomDropDown } from "react-mui-tailwind";
+import { CustomInputField, CustomDropDown, CustomCheckboxField } from "react-mui-tailwind";
 import { getAreaOfStudy, getCountry, getQualification, getTestName } from "../../../api/services/masterAPIs/createLeadApi";
 
 const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode = "edit" }) => {
@@ -46,6 +46,11 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
 
         fetchDropdownData();
     }, []);
+
+    const handleTestTrainingRequiredOnChange = (event) => {
+        const { checked } = event.target;
+        setFieldValue('testTrainingBoolean', checked);
+    }
 
     return (
         <div className="form-section animate-fade-in ml-0 mb-6">
@@ -177,17 +182,8 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
             </div>
 
             <div className="mt-5 mb-5 flex items-center gap-2">
-                <input
-                    type="checkbox"
-                    id="testTrainingBoolean"
-                    name="testTrainingBoolean"
-                    checked={values?.testTrainingBoolean}
-                    onChange={handleChange}
-                    className="w-4 h-4 gap-[10px] rounded border"
-                />
-                <label htmlFor="testTrainingBoolean" className="text-base font-normal leading-[140%] text-[#17222B] font-[Proxima Nova]">
-                    Test Training Required
-                </label>
+                <CustomCheckboxField name="testTrainingBoolean" label="Test Training Required" disabled={!isEditable ? true : false} onChange={handleTestTrainingRequiredOnChange} checked={values?.testTrainingBoolean} />
+                {/* <span className='text-red-600'>*</span> */}
             </div>
 
             {/* <div className="form-field mt-4">

@@ -17,16 +17,21 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
           getFESUser(),
           getPriority(),
         ]);
-  
+
         setUserOptions(userRes?.value?.data?.data || []);
         setPriorityOptions(priorityRes?.value?.data?.data || []);
       } catch (err) {
         console.error('Error loading dropdown data:', err);
       }
     };
-  
+
     fetchDropdownData();
   }, []);
+
+  const handleAgreeToReceiveOnChange = (event) => {
+    const { checked } = event.target;
+    setFieldValue('agreeToReceiveBoolean', checked);
+  }
 
   return (
     <div className="form-section animate-fade-in ml-0 mb-6">
@@ -249,23 +254,8 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
       </div>
 
       <div className="mt-6 flex items-center gap-2">
-        <input
-          type="checkbox"
-          id="agreeToReceiveBoolean"
-          name="agreeToReceiveBoolean"
-          checked={values.agreeToReceiveBoolean}
-          onChange={handleChange}
-          // className="w-4 h-4 gap-[10px] rounded border"
-          className={`
-            w-4 h-4 rounded border accent-[#009CDC]
-            ${!isEditable ? 'pointer-events-none' : ''}
-          `}
-        />
-        <label htmlFor="agreeToReceiveBoolean" className="text-base font-normal leading-[140%] text-[#17222B] font-[Proxima Nova]">
-          I agree to receive communications <span className='text-red-600'>*</span>
-        </label>
-
-        <CustomCheckboxField label="I agree to receive communications" disabled={true} checked={true} />
+        <CustomCheckboxField name="agreeToReceiveBoolean" label="I agree to receive communications" disabled={!isEditable ? true : false} onChange={handleAgreeToReceiveOnChange} checked={values.agreeToReceiveBoolean} />
+        {/* <span className='text-red-600'>*</span> */}
       </div>
 
     </div>

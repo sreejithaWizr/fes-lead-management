@@ -186,7 +186,7 @@ const CreateLeadPage = () => {
         <div className="w-full">
             <Formik
                 initialValues={initialValues}
-                validationSchema={validationSchema}
+                // validationSchema={validationSchema}
                 onSubmit={handleSubmit}
                 innerRef={formRef}
             // enableReinitialize={true}
