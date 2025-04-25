@@ -1,36 +1,85 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import FesLogo from '../assets/fes-logo-full.svg';
-import { CustomButton, CustomDropDown, CustomInputField } from 'react-mui-tailwind';
+import { CustomButton, CustomInputField } from 'react-mui-tailwind';
 import DisplayDashboardImage from '../assets/login-display-image-static.svg';
-// import DisplayDashboardImage from '../assets/dashboard-static-image.svg';
 import InfoIcon from '@mui/icons-material/Info';
 import { ResetPasswordValidationSchema } from '../utils/LoginValidationUtils';
-  import OtpInput from "../utils/OtpInput"
-
+import OtpInput from '../utils/OtpInput';
+import { generateOtp, resetPassword } from '../api/services/Login/loginEndpoints'; 
 
 const ResetPasswordPage = () => {
-  const navigate = useNavigate(); // <-- for redirecting
-  const [loginPasswordReset, setLoginPasswordReset] = useState(false); // <-- for showing success message
-const [genreateOTP, setgenreateOTP] = useState(false)
+  const navigate = useNavigate();
+  const [loginPasswordReset, setLoginPasswordReset] = useState(false);
+  const [generateOTP, setGenerateOTP] = useState(false);
+  const [otpCooldown, setOtpCooldown] = useState(0);
+  const [apiError, setApiError] = useState('');
+
   const initialValues = {
     email: '',
     newPassword: '',
     confirmPassword: '',
     verificationCode: '',
-    // securityQuestion: '',
-    // securityAnswer: '',
   };
 
-  const handleReset = (values, { setSubmitting }) => {
-    console.log('Form submitted with values:', values);
-    setLoginPasswordReset(true);// show success message
-      // fake login simulation - use actual login API here
-    setTimeout(() => {
-      navigate('/login');// redirect after short delay
-    }, 2000);
+  useEffect(() => {
+    let timer;
+    if (otpCooldown > 0) {
+      timer = setInterval(() => {
+        setOtpCooldown((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [otpCooldown]);
 
+  const handleGetOTP = async (validateForm, setFieldTouched, email) => {
+    const errors = await validateForm();
+    if (errors.email) {
+      setFieldTouched('email', true);
+      return;
+    }
+
+    try {
+      setApiError('');
+      const data = await generateOtp(email);
+      if (data.success) {
+        setGenerateOTP(true);
+        setOtpCooldown(60);
+      } else {
+        setApiError(data.message || 'Failed to generate OTP. Please try again.');
+      }
+    } catch (error) {
+      setApiError(
+        error.response?.data?.message ||
+          'Network error. Please check your connection and try again.'
+      );
+    }
+  };
+
+  const handleReset = async (values, { setSubmitting, resetForm }) => {
+    try {
+      setApiError('');
+      const data = await resetPassword(
+        values.email,
+        values.newPassword,
+        values.verificationCode
+      );
+      if (data.success) {
+        setLoginPasswordReset(true);
+        resetForm();
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000);
+      } else {
+        setApiError(data.message || 'Failed to reset password. Please check your OTP.');
+      }
+    } catch (error) {
+      setApiError(
+        error.response?.data?.message ||
+          'Network error. Please check your connection and try again.'
+      );
+    }
     setSubmitting(false);
   };
 
@@ -43,7 +92,6 @@ const [genreateOTP, setgenreateOTP] = useState(false)
         overflow-hidden
       "
     >
-      {/* Reset Container */}
       <div
         className="
           w-full lg:w-[40%] xl:w-[45%] 
@@ -84,21 +132,7 @@ const [genreateOTP, setgenreateOTP] = useState(false)
             validateOnChange
             validateOnBlur
           >
-            {({ values, errors, touched, handleChange, handleBlur, setFieldValue, setFieldTouched, isSubmitting, validateForm  }) => { 
-              const handleGetOTP = async () => {
-                const errors = await validateForm();
-              
-                if (errors.email) {
-                  setFieldTouched('email', true); // ensures error shows up if user hasn't blurred
-                  return;
-                }
-              
-                setgenreateOTP(true);
-              
-                // your OTP API call can go here
-              };
-            
-            return (
+            {({ values, errors, touched, handleChange, handleBlur, setFieldValue, setFieldTouched, isSubmitting, validateForm }) => (
               <Form className="flex flex-col gap-[12px] w-full max-w-[356px]">
                 <CustomInputField
                   label="Email Address"
@@ -112,24 +146,24 @@ const [genreateOTP, setgenreateOTP] = useState(false)
                   error={touched.email && errors.email}
                 />
                 <div className="flex flex-col gap-[2px]">
-                <CustomInputField
-                  isPassword
-                  label="New Password"
-                  width="100%"
-                  placeholder="Enter New Password"
-                  value={values.newPassword}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  name="newPassword"
-                  hasError={touched.newPassword && Boolean(errors.newPassword)}
-                  error={touched.newPassword && errors.newPassword}
-                  
-                />
-                  <span><p className="font-proxima font-normal text-[11px] text-neutral-900">
-                  Must be at least 8 characters with numbers and symbols
-                </p></span>
+                  <CustomInputField
+                    isPassword
+                    label="New Password"
+                    width="100%"
+                    placeholder="Enter New Password"
+                    value={values.newPassword}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    name="newPassword"
+                    hasError={touched.newPassword && Boolean(errors.newPassword)}
+                    error={touched.newPassword && errors.newPassword}
+                  />
+                  <span>
+                    <p className="font-proxima font-normal text-[11px] text-neutral-900">
+                      Must be at least 8 characters with numbers and symbols
+                    </p>
+                  </span>
                 </div>
-          
 
                 <CustomInputField
                   isPassword
@@ -144,26 +178,36 @@ const [genreateOTP, setgenreateOTP] = useState(false)
                   error={touched.confirmPassword && errors.confirmPassword}
                 />
 
-                    
-                        <OtpInput
-                          length={6}
-                          label="Enter 6-digit OTP"
-                          value={values.verificationCode}
-                          onChange={(val) => setFieldValue('verificationCode', val)}
-                          error={touched.verificationCode && Boolean(errors.verificationCode)}
-                          helperText={ genreateOTP && 'Please enter your reset code sent to your email'}
-                          hasError={touched.verificationCode && Boolean(errors.verificationCode)} // Show error if touched and invalid
+                <OtpInput
+                  length={6}
+                  label="Enter 6-digit OTP"
+                  value={values.verificationCode}
+                  onChange={(val) => setFieldValue('verificationCode', val)}
+                  error={touched.verificationCode && Boolean(errors.verificationCode)}
+                  helperText={generateOTP && !values.verificationCode && 'Please enter your reset code sent to your email'}
+                  hasError={touched.verificationCode && errors.verificationCode}
+                />
 
-                        />
+                {loginPasswordReset && (
+                  <p className="text-green-600 font-medium text-sm text-center" aria-live="polite">
+                    Thank you! Password Reset Successful!
+                  </p>
+                )}
+                {apiError && (
+                  <p className="text-red-600 font-medium text-sm text-center" aria-live="polite">
+                    {apiError}
+                  </p>
+                )}
 
-                      <CustomButton
-                        text="Generate OTP"
-                        variant="secondary"
-                        startIcon={false}
-                        endIcon={false}
-                        width="100%"
-                        onClick={handleGetOTP}
-                        />
+                <CustomButton
+                  text={otpCooldown > 0 ? `Re-Generate OTP after ${otpCooldown} sec` : 'Generate OTP'}
+                  variant="secondary"
+                  startIcon={false}
+                  endIcon={false}
+                  width="100%"
+                  onClick={() => handleGetOTP(validateForm, setFieldTouched, values.email)}
+                  disabled={otpCooldown > 0}
+                />
 
                 {/* <div className="flex flex-col gap-[2px]">
                   <CustomDropDown
@@ -202,29 +246,26 @@ const [genreateOTP, setgenreateOTP] = useState(false)
                   text="Reset Password"
                   startIcon={false}
                   endIcon={false}
-                   width="100%"
+                  width="100%"
                   type="submit"
                   disabled={isSubmitting}
                 />
 
-                {loginPasswordReset && (
-                  <p className="text-green-600 font-medium text-sm text-center">
-                    Thank you! Password Reset Successful!
-                  </p>
-                )}
-                  <CustomButton
-                text="Return to Login"
-                variant="secondary"
-                startIcon={false}
-                endIcon={false}
-                width="100%"
-                onClick={() => navigate('/login')}
+
+                <CustomButton
+                  text="Return to Login"
+                  variant="secondary"
+                  startIcon={false}
+                  endIcon={false}
+                  width="100%"
+                  onClick={() => {
+                    setApiError('');
+                    navigate('/login');
+                  }}
                 />
               </Form>
-            )}}
+            )}
           </Formik>
-
-
 
           <div className="flex items-start w-full max-w-[356px] h-[70px] rounded-[12px] gap-2 p-2 border border-[#CBDBE4]">
             <InfoIcon className="w-4 h-4 text-[#17222B] scale-y-[-1] mt-0.5" fontSize="small" />
@@ -252,7 +293,7 @@ const [genreateOTP, setgenreateOTP] = useState(false)
       </div>
     </div>
   );
-  
+
 };
 
 export default ResetPasswordPage;

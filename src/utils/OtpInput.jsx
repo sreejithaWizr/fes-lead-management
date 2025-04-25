@@ -8,10 +8,10 @@ const OtpInput = ({
   length = 6,
   value = '',
   onChange,
-  error = false,
+  error = false, // This is a boolean indicating if there's an error
   helperText = '',
   disabled = false,
-  hasError = '',
+  hasError = false, // This is the error message string
 }) => {
   const inputRefs = useRef([]);
 
@@ -45,78 +45,85 @@ const OtpInput = ({
 
   return (
     <Box>
-        {hasLabel && (
+      {hasLabel && (
         <Typography
           variant="body1"
           sx={{
-            width: "auto",
-            height: "auto",
-            color: "#737373",
-            fontFamily: "Proxima Nova, sans-serif",
+            width: 'auto',
+            height: 'auto',
+            color: '#737373',
+            fontFamily: 'Proxima Nova, sans-serif',
             fontWeight: 700,
-            fontSize: "11px",
-            lineHeight: "140%",
-            marginBottom: "4px",
+            fontSize: '11px',
+            lineHeight: '140%',
+            marginBottom: '4px',
           }}
         >
-          {label} {showAsterisk && <span style={{ color: "red" }}>*</span>}
+          {label} {showAsterisk && <span style={{ color: 'red' }}>*</span>}
         </Typography>
       )}
 
-    <Box display="flex" gap="25px">
-      {otpValues.map((val, i) => (
-        <TextField
-          key={i}
-          inputRef={(el) => (inputRefs.current[i] = el)}
-          value={val}
-          onChange={(e) => handleChange(e, i)}
-          onKeyDown={(e) => handleKeyDown(e, i)}
-          inputProps={{
-            maxLength: 1,
-            inputMode: 'numeric',
-            style: {
-              textAlign: 'center',
-              fontSize: '16px',
-              padding: '8px 12px',
-              height: '40px',
-              width: '40px',
-            },
-          }}
-          sx={{
-            '& .MuiOutlinedInput-root': {
-              borderRadius: '8px',
-              padding: 0,
-              height: '40px',
-              width: '40px',
-            },
-          }}
-          error={error}
-
-          disabled={disabled}
-        />
-      ))}
-    </Box>
-                {helperText && (
-                <Typography
-                sx={{
-                marginTop:'5px',
-                fontFamily: 'Proxima Nova, sans-serif',
-                fontWeight: 400,
-                fontSize: '11px',
-                color: '#111827', // Tailwind's text-neutral-900
-                }}
-                >
-                {helperText}
-                </Typography>
-                )}
-
-            {hasError && (
-            <Typography variant="caption" sx={{ color: "#EC221F" }}>
-            {error}
-            </Typography>
-            )}
-
+      <Box display="flex" gap="25px">
+        {otpValues.map((val, i) => (
+          <TextField
+            key={i}
+            inputRef={(el) => (inputRefs.current[i] = el)}
+            value={val}
+            onChange={(e) => handleChange(e, i)}
+            onKeyDown={(e) => handleKeyDown(e, i)}
+            inputProps={{
+              maxLength: 1,
+              inputMode: 'numeric',
+              style: {
+                textAlign: 'center',
+                fontSize: '16px',
+                padding: '8px 12px',
+                height: '40px',
+                width: '40px',
+              },
+            }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '8px',
+                padding: 0,
+                height: '40px',
+                width: '40px',
+              },
+            }}
+            error={error} // Red border when error is true
+            disabled={disabled}
+          />
+        ))}
       </Box>
+
+      {helperText && (
+        <Typography
+          sx={{
+            marginTop: '5px',
+            fontFamily: 'Proxima Nova, sans-serif',
+            fontWeight: 400,
+            fontSize: '11px',
+            color: '#111827',
+          }}
+        >
+          {helperText}
+        </Typography>
+      )}
+
+      {hasError && error && (
+        <Typography
+          variant="caption"
+          sx={{
+            color: '#EC221F',
+            fontFamily: 'Proxima Nova, sans-serif',
+            fontSize: '11px',
+            marginTop: '4px',
+          }}
+        >
+          {hasError} {/* Display the error message */}
+        </Typography>
+      )}
+    </Box>
   );
 };
 
