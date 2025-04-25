@@ -7,18 +7,20 @@ import DisplayDashboardImage from '../assets/login-display-image-static.svg';
 // import DisplayDashboardImage from '../assets/dashboard-static-image.svg';
 import InfoIcon from '@mui/icons-material/Info';
 import { ResetPasswordValidationSchema } from '../utils/LoginValidationUtils';
+  import OtpInput from "../utils/OtpInput"
 
 
 const ResetPasswordPage = () => {
   const navigate = useNavigate(); // <-- for redirecting
   const [loginPasswordReset, setLoginPasswordReset] = useState(false); // <-- for showing success message
-
+const [genreateOTP, setgenreateOTP] = useState(false)
   const initialValues = {
     email: '',
     newPassword: '',
     confirmPassword: '',
-    securityQuestion: '',
-    securityAnswer: '',
+    verificationCode: '',
+    // securityQuestion: '',
+    // securityAnswer: '',
   };
 
   const handleReset = (values, { setSubmitting }) => {
@@ -82,7 +84,21 @@ const ResetPasswordPage = () => {
             validateOnChange
             validateOnBlur
           >
-            {({ values, errors, touched, handleChange, handleBlur, setFieldValue, isSubmitting }) => (
+            {({ values, errors, touched, handleChange, handleBlur, setFieldValue, setFieldTouched, isSubmitting, validateForm  }) => { 
+              const handleGetOTP = async () => {
+                const errors = await validateForm();
+              
+                if (errors.email) {
+                  setFieldTouched('email', true); // ensures error shows up if user hasn't blurred
+                  return;
+                }
+              
+                setgenreateOTP(true);
+              
+                // your OTP API call can go here
+              };
+            
+            return (
               <Form className="flex flex-col gap-[12px] w-full max-w-[356px]">
                 <CustomInputField
                   label="Email Address"
@@ -128,7 +144,28 @@ const ResetPasswordPage = () => {
                   error={touched.confirmPassword && errors.confirmPassword}
                 />
 
-                <div className="flex flex-col gap-[2px]">
+                    
+                        <OtpInput
+                          length={6}
+                          label="Enter 6-digit OTP"
+                          value={values.verificationCode}
+                          onChange={(val) => setFieldValue('verificationCode', val)}
+                          error={touched.verificationCode && Boolean(errors.verificationCode)}
+                          helperText={ genreateOTP && 'Please enter your reset code sent to your email'}
+                          hasError={touched.verificationCode && Boolean(errors.verificationCode)} // Show error if touched and invalid
+
+                        />
+
+                      <CustomButton
+                        text="Generate OTP"
+                        variant="secondary"
+                        startIcon={false}
+                        endIcon={false}
+                        width="100%"
+                        onClick={handleGetOTP}
+                        />
+
+                {/* <div className="flex flex-col gap-[2px]">
                   <CustomDropDown
                     label="Security Question (Optional)"
                     width="100%"                  
@@ -159,7 +196,7 @@ const ResetPasswordPage = () => {
                     hasError={touched.securityAnswer && Boolean(errors.securityAnswer)}
                     error={touched.securityAnswer && errors.securityAnswer}
                   />
-                </div>
+                </div> */}
 
                 <CustomButton
                   text="Reset Password"
@@ -184,7 +221,7 @@ const ResetPasswordPage = () => {
                 onClick={() => navigate('/login')}
                 />
               </Form>
-            )}
+            )}}
           </Formik>
 
 
@@ -210,11 +247,12 @@ const ResetPasswordPage = () => {
         <img
           src={DisplayDashboardImage}
           alt="Dashboard Display"
-          className="xl:object-cover xl:object-top lg:object-cover lg:object-top w-full h-full rounded-[12px]"
+          className="xl:object-cover xl:object-top lg:object-cover lg:object-top w-full h-vh rounded-[12px]"
         />
       </div>
     </div>
   );
+  
 };
 
 export default ResetPasswordPage;
