@@ -203,7 +203,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
         <div className="form-field">
           <CustomDropDown
             label="Tele Caller"
-            options={["John", "Jane"]}
+            options={userOptions}
             required={false}
             showAsterisk={false}
             placeHolder="Select"

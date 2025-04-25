@@ -19,17 +19,16 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                 getDesiredProgram()
             ]
         );
-            console.log("statusRes", sourceRes?.data?.data || [])
-            setSourceOptions(sourceRes?.data?.data || []);
-            setCityOptions(cityRes?.data?.data || []);
-            setRegionOptions(regionRes?.data?.data || []);
-            setVerticalOptions(verticalRes?.data?.data || []);
-            setDesiredProgramOptions(desiredProgramRes?.data?.data || []);
+            // console.log("statusRes", sourceRes?.value?.data?.data || [])
+            setSourceOptions(sourceRes?.value?.data?.data || []);
+            setCityOptions(cityRes?.value?.data?.data || []);
+            setRegionOptions(regionRes?.value?.data?.data || []);
+            setVerticalOptions(verticalRes?.value?.data?.data || []);
+            setDesiredProgramOptions(desiredProgramRes?.value?.data?.data || []);
           } catch (err) {
             console.error('Error loading filters:', err);
           }
         };
-    
         fetchData();
       }, []);
 
