@@ -9,7 +9,7 @@ import { CustomButton } from 'react-mui-tailwind'
 import WarningIcon from '../assets/warning-icon.svg'
 import LeadOpportunity from '../components/forms/createLead/leadOpportunity/opportunityList';
 import { getUser, getUsers } from '../api/services/api';
-import { getStatus } from '../api/services/masterAPIs/createLeadApi';
+import { createLead, getStatus } from '../api/services/masterAPIs/createLeadApi';
 
 const ErrorObserver = ({ setTabErrors }) => {
     const { errors, touched } = useFormikContext();
@@ -70,9 +70,11 @@ const CreateLeadPage = () => {
         fieldOfStudy: '',
         cgpaGrade: '',
         workExperience: '',
+        intake_year: '',
+        intake_month: '',
         preferredDestination: [],
         otherCountries: '',
-        testName: '',
+        testName: [],
         testTrainingBoolean: false,
 
         // Lead Status
@@ -100,86 +102,107 @@ const CreateLeadPage = () => {
         leadForm: '',
         ipAddress: '192.168.1.1',
 
-        preferredTimeSlot:'',
-        gclID:'',
-        zcGad:'',
-        adID:'',
-        keyIdentifier:'',
-        campaignType:'',
-        referrerEmail:'',
-        referrerPhoneNumber:'',
-        userAgent:'',
-        importLead:'',
-        invokeBlueprint:'',
-        verseID:'',
-        shortlistedCourseID:'',
-        counsellorFESTech1Name:'',
-        counsellorFESTech1EmailID :'',
+        preferredTimeSlot: '',
+        gclID: '',
+        zcGad: '',
+        adID: '',
+        keyIdentifier: '',
+        campaignType: '',
+        referrerEmail: '',
+        referrerPhoneNumber: '',
+        userAgent: '',
+        importLead: '',
+        invokeBlueprint: '',
+        verseID: '',
+        shortlistedCourseID: '',
+        counsellorFESTech1Name: '',
+        counsellorFESTech1EmailID: '',
     };
 
-    // useEffect(() => {
-    //     getUsers();
-    // }, [])
+    const handleSubmit = async (values, { setSubmitting }) => {
+        // console.log('Form submitted with values:', values);
 
-    
+        const payload = {
+            first_name: values?.firstName,
+            last_name: values?.lastName,
+            email: values?.email,
+            secondary_email: values?.secondaryEmail,
+            mobile_number: values?.mobileNumber,
+            alternative_number: values?.alternativeNumber,
+            whatsapp_number: values?.whatsappNumber,
+            tele_callerid: values?.teleCallerName?.id,
+            priority_id: values?.priority?.id,
+            lead_number: values?.leadNumber,
+            consent: "Yes",
+            created_at: values?.leadCreated,
+            created_by: "Admin",
+            education: {
+                highest_qualification_id: values?.highestQualification?.id,
+                graduation_year: values?.graduationYear?.name,
+                fieldofstudy_id: values?.fieldOfStudy?.id,
+                cgpa_grade: 5,
+                work_experience: values?.workExperience?.name,
+                intake_year: values?.intake_year?.name,
+                intake_month: values?.intake_month?.name,
+                other_countries: values?.otherCountries,
+                test_training_required: values?.testTrainingBoolean,
+                preferred_countries: Array.isArray(values?.preferredDestination)
+                    ? values.preferredDestination.map(item => item.id)
+                    : [],
+                test_ids: Array.isArray(values?.testName)
+                    ? values.testName.map(item => item.id)
+                    : []
+            },
+            status: {
+                status: values?.leadStatus?.id,
+                category: values?.category?.id,
+                subcategory_id: values?.subCategory?.id,
+                branch_id: values?.branch?.id,
+            },
+            source: {
+                source1_id: values?.leadSource_1?.id,
+                source2_id: values?.leadSource_2?.id,
+                source3_id: values?.leadSource_3?.id,
+                source4_id: values?.leadSource_4?.id,
+                region_id: values?.location_1?.id,
+                city_id: values?.location_2?.id,
+                reference_name: values?.referrerName,
+                reference_employee_id: values?.referrerEmployeeId?.id,
+                vertical: values?.vertical?.id,
+                desired_program: values?.desiredProgram?.id,
+                internship_option: values?.internshipOption?.id,
+                adName: values?.adName,
+                adCampaign: values?.adCampaign,
+                lead_form: values?.leadForm,
+                ip_address: "197.168.1.1",
 
-    const handleSubmit = (values, { setSubmitting }) => {
-        console.log('Form submitted with values:', values);
+                preferredTimeSlot: values?.preferredTimeSlot,
+                gcl_id: values?.gclID,
+                zcGad: values?.zcGad,
+                ad_id: values?.adID,
+                keyIdentifier: values?.keyIdentifier,
+                campaignType: values?.campaignType,
+                referrerEmail: values?.referrerEmail,
+                referrerPhoneNumber: values?.referrerPhoneNumber,
+                userAgent: values?.userAgent,
+                importLead: values?.importLead?.id,
+                invokeBlueprint: values?.invokeBlueprint?.id,
+                verse_id: values?.verseID,
+                shortlisted_course_id: values?.shortlistedCourseID,
+                counsellorFESTech1Name: values?.counsellorFESTech1Name?.name,
+                counsellorFESTech1EmailID: values?.counsellorFESTech1EmailID
+            }
+        }
 
-        console.log('Lead Information:', {    
-            firstName: values.firstName,
-            lastName: values.lastName,
-            email: values.email,
-            secondaryEmail: values.secondaryEmail,
-            mobileNumber: values.mobileNumber,
-            alternativeNumber: values.alternativeNumber,
-            whatsappNumber: values.whatsappNumber,
-            leadOwner: values.leadOwner,
-            leadStatusInfo: values.leadStatusInfo,
-            priority: values.priority,
-            teleCallerName: values.teleCallerName,
-            leadCreated: values.leadCreated,
-        });
+        console.log("payload", payload)
 
-        console.log('Education Qualification:', {
-            highestQualification: values?.highestQualification,
-            graduationYear: values?.graduationYear,
-            fieldOfStudy: values?.fieldOfStudy,
-            cgpaGrade: values?.cgpaGrade,
-            workExperience: values?.workExperience,
-            preferredDestination: values?.preferredDestination,
-            otherCountries: values?.otherCountries,
-            testName: values?.testName,
-            testTrainingBoolean: values?.testTrainingBoolean,
-            leadNumber: `LEAD${Math.floor(Math.random() * 900000) + 100000}`,
-            agreeToReceiveBoolean: values?.agreeToReceiveBoolean,
-        });
-
-        console.log('Lead Status:', {
-            leadStatus: values.leadStatus,
-            category: values.category,
-            subCategory: values.subCategory,
-            branch: values.branch,
-            counselor: values.counselor,      
-            notes: values.notes,
-        });
-
-        console.log('Lead Source:', {
-            leadSource_1: values?.leadSource_1,
-            leadSource_2: values?.leadSource_2,
-            leadSource_3: values?.leadSource_3,
-            location_1: values?.location_1,
-            location_2: values?.location_2,
-            referrerName: values?.referrerName,
-            referrerEmployeeId: values?.referrerEmployeeId,
-            vertical: values?.vertical,
-            desiredProgram: values?.desiredProgram,
-            internshipOption: values?.internshipOption,
-            adName: values?.adName,
-            adCampaign: values?.adCampaign,
-            leadForm: values?.leadForm,
-            ipAddress: values?.ipAddress,
-        });
+        try {
+            const response = await createLead(payload);
+            console.log('User created:', response.data);
+            // Optional: reset form or show toast
+          } catch (err) {
+            console.error('Error creating user:', err);
+          }
     };
 
     return (

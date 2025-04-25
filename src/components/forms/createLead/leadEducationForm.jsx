@@ -7,6 +7,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
 
     const yearOptions = [...Array.from({ length: 26 }, (_, i) => `${new Date().getFullYear() - i}`)];
     const numberOfYears = [...Array.from({ length: 26 }, (_, i) => i)];
+    const monthOptions = [{id: "Q1", name: "Q1"}, {id: "Q2", name: "Q2"}, {id: "Q3", name: "Q3"}, {id: "Q4", name: "Q4"}]
 
     const [areaOfStudyOptions, setAreaOfStudyOptions] = useState([]);
     const [qualificationOptions, setqualificationOptions] = useState([]);
@@ -149,6 +150,40 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
 
                 <div className="form-field">
                     <CustomDropDown
+                        label="Intake Year"
+                        options={yearOptions}
+                        // required={true}
+                        showAsterisk={false}
+                        placeHolder="Select"
+                        value={values.intake_year}
+                        onChange={(value) => {
+                            setFieldValue('intake_year', value.target.value);
+                        }}
+                        onBlur={() => handleBlur({ target: { name: 'intake_year' } })}
+                        hasError={touched.intake_year && Boolean(errors.intake_year)}
+                        errorMessage={touched.intake_year && errors.intake_year}
+                    />
+                </div>
+   
+                <div className="form-field">
+                    <CustomDropDown
+                        label="Intake Month"
+                        options={monthOptions}
+                        // required={true}
+                        showAsterisk={false}
+                        placeHolder="Select"
+                        value={values?.intake_month}
+                        onChange={(value) => {
+                            setFieldValue('intake_month', value.target.value);
+                        }}
+                        onBlur={() => handleBlur({ target: { name: 'intake_month' } })}
+                        hasError={touched.intake_month && Boolean(errors.intake_month)}
+                        errorMessage={touched.intake_month && errors.intake_month}
+                    />
+                </div>
+                
+                <div className="form-field">
+                    <CustomDropDown
                         label="Preferred Study Destination"
                         options={preferredCountryOptions}
                         required={true}
@@ -171,7 +206,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                         label="Other Countries"
                         showAsterisk={false}
                         placeHolder="Enter Country Name"
-                        values={values.otherCountries}
+                        value={values?.otherCountries}
                         onChange={(value) => {
                             setFieldValue('otherCountries', value.target.value)
                         }}
@@ -208,6 +243,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                     label="Test Name"
                     options={testNameOptions}
                     required={false}
+                    multiple={true}
                     placeHolder="Select"
                     value={values?.testName}
                     disabled={!isEditable}

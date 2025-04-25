@@ -10,8 +10,8 @@ export const validationSchema = Yup.object({
   mobileNumber: requiredTenDigitNumber(),
   alternativeNumber: optionalTenDigitNumber(),
   whatsappNumber:optionalTenDigitNumber(),
-  leadOwner: requiredDropdown(),
-  leadStatusInfo: requiredDropdown(),
+  // leadOwner: requiredDropdown(),
+  // leadStatusInfo: requiredDropdown(),
   priority: requiredDropdown(),
   teleCallerName: optionalDropdown(),
   agreeToReceiveBoolean: requiredBooleanTrue() ,
@@ -34,7 +34,7 @@ export const validationSchema = Yup.object({
   category: requiredDropdown(),
   subCategory: requiredDropdown(),
   branch: requiredDropdown(),
-  counselor: requiredDropdown(),
+  // counselor: requiredDropdown(),
   // notes:Yup.string().required("Test validation"),
 
   // Lead Source validation

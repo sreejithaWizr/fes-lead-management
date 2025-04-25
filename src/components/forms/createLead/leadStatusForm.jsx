@@ -51,16 +51,18 @@ const LeadStatusForm = ({
   }, []);
 
   const handleCategory = (value) => {
-    console.log("valll", value.target.value)
-    setFieldValue('category', value.target.value);
-
+    // console.log("valll", value?.target?.value)
+    // const selectedValue = value?.target?.value || '';
+    // setFieldValue('category', selectedValue);
+    setFieldValue('subCategory', "")
+    
     const fetchData = async () => {
       try {
         const [subCategoryRes] = await Promise.allSettled([
           getSubCategory(value.target.value.id)
         ]
-        );
-        console.log("statusRes", subCategoryRes?.value?.data?.data || [])
+    );
+        // console.log("statusRes", subCategoryRes?.value?.data?.data || [])
         setSubCategoryOptions(subCategoryRes?.value?.data?.data || []);
       } catch (err) {
         console.error('Error loading filters:', err);
@@ -70,7 +72,7 @@ const LeadStatusForm = ({
     fetchData();
   }
 
-  console.log("resp", statusOptions, categoryOptions, subCategoryOptions)
+  // console.log("resp", statusOptions, categoryOptions, subCategoryOptions)
   return (
     <div className="form-section animate-fade-in ml-0 mb-6">
       <h2 className="font-bold text-[19px] leading-[140%] tracking-[0%] text-[#17222B] font-[Proxima Nova] mb-4">
@@ -104,7 +106,8 @@ const LeadStatusForm = ({
             placeHolder="Select"
             disabled={!isEditable}
             onChange={(value) => {
-              handleCategory(value);
+              handleCategory(value)
+              setFieldValue("category", value?.target?.value)
             }}
             onBlur={() => handleBlur({ target: { name: 'category' } })}
             value={values.category}

@@ -12,26 +12,25 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
     const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const [sourceRes, regionRes, cityRes, verticalRes, desiredProgramRes] = await Promise.allSettled([
-                    getSource1(),
-                    getCity(),
-                    getRegion(),
-                    getVertical(),
-                    getDesiredProgram()
-                ]
-                );
-                console.log("statusRes", sourceRes?.data?.data || [])
-                setSourceOptions(sourceRes?.data?.data || []);
-                setCityOptions(cityRes?.data?.data || []);
-                setRegionOptions(regionRes?.data?.data || []);
-                setVerticalOptions(verticalRes?.data?.data || []);
-                setDesiredProgramOptions(desiredProgramRes?.data?.data || []);
-            } catch (err) {
-                console.error('Error loading filters:', err);
-            }
+          try {
+            const [sourceRes, regionRes, cityRes, verticalRes, desiredProgramRes] = await Promise.allSettled([
+                getSource1(),
+                getCity(),
+                getRegion(),
+                getVertical(),
+                getDesiredProgram()
+            ]
+        );
+            // console.log("statusRes", sourceRes?.value?.data?.data || [])
+            setSourceOptions(sourceRes?.value?.data?.data || []);
+            setCityOptions(cityRes?.value?.data?.data || []);
+            setRegionOptions(regionRes?.value?.data?.data || []);
+            setVerticalOptions(verticalRes?.value?.data?.data || []);
+            setDesiredProgramOptions(desiredProgramRes?.value?.data?.data || []);
+          } catch (err) {
+            console.error('Error loading filters:', err);
+          }
         };
-
         fetchData();
     }, []);
 
