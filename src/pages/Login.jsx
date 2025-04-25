@@ -7,6 +7,7 @@ import DisplayDashboardImage from '../assets/login-display-image-static.svg';
 // import DisplayDashboardImage from '../assets/dashboard-static-image.svg';
 import { CustomButton, CustomCheckboxField, CustomInputField } from 'react-mui-tailwind';
 import { LoginValidationSchema } from '../utils/LoginValidationUtils';
+import { getLoginUser } from '../api/services/Login/loginEndpoints'; // update with correct path
 
 const Login = () => {
   const navigate = useNavigate(); // <-- for redirecting
@@ -18,17 +19,33 @@ const Login = () => {
     rememberMe: false,
   };
 
-  const handleSubmit = (values, { setSubmitting }) => {
-    console.log('Form submitted with values:', values);
-    setLoginSuccess(true); // show success message
-
-    // fake login simulation - use actual login API here
-    setTimeout(() => {
-      navigate('/leads'); // redirect after short delay
-    }, 2000);
-
-    setSubmitting(false);
+  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
+    console.log('setErrors', setErrors)
+    try {
+      console.log('Form submitted with values:', values);
+  
+      const data = await getLoginUser(values.username, values.password); // just returns the data
+  
+      if (data?.idToken?.succeeded === false) {
+        setErrors({ form: data?.idToken?.errors || 'Incorrect username or password' });
+        return;
+      }
+  
+      // Save token
+      localStorage.setItem("token", data?.idToken?.message);
+  
+      // Redirect
+      setLoginSuccess(true);
+      navigate('/leads');
+    } catch (error) {
+      console.error('Login error:', error);
+      setErrors({ form: 'Something went wrong. Please try again.' });
+    } finally {
+      setSubmitting(false);
+    }
   };
+  
+  
 
   return (
 <div className="flex flex-col lg:flex-row bg-gradient-to-tr from-[#c5deec] via-[#F2FAFF] to-white 2xl:px-[39px] xl:px-[10px] min-h-screen 
@@ -48,6 +65,9 @@ overflow-hidden">
         Please login to continue using FES platform
       </p></span>
       </h1>
+      
+      <div className="w-[356px] border-t border-[#CBDBE4]"></div>
+
       {/* <p className="font-proxima font-normal text-[16px] sm:text-[14px] text-neutral-500 text-center">
         Please login to continue using FES platform
       </p> */}
@@ -109,6 +129,12 @@ overflow-hidden">
                 Forgot Password?
               </Link>
             </div>
+
+                {errors.form && (
+                <p className="text-red-600 font-medium text-sm text-center">
+                {errors.form}
+                </p>
+                )}
 
             <CustomButton
               text="Sign In"
