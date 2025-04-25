@@ -8,9 +8,10 @@ import {
 import {
   getStatus,
   getCategory,
-  getSubCategory
+  getSubCategory,
+  getBranch
 } from '../../../api/services/masterAPIs/createLeadApi';
-import { CloudCog } from 'lucide-react';
+// import { CloudCog } from 'lucide-react';
 
 const LeadStatusForm = ({
   values,
@@ -26,18 +27,21 @@ const LeadStatusForm = ({
   const [statusOptions, setStatusOptions] = useState([]);
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [subCategoryOptions, setSubCategoryOptions] = useState([]);
+  const [branchOptions, setBranchOptions] = useState([])
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [statusRes, categoryRes, subCategoryRes] = await Promise.allSettled([
+        const [statusRes, categoryRes, branchRes] = await Promise.allSettled([
           getStatus(),
           getCategory(),
+          getBranch()
         ]
-        );
-        console.log("statusRes", statusRes?.data?.data || [])
-        setStatusOptions(statusRes?.data?.data || []);
-        setCategoryOptions(categoryRes?.data?.data || []);
-        setSubCategoryOptions(subCategoryRes?.data?.data || []);
+    );
+        console.log("statusRes", branchRes || [])
+        setStatusOptions(statusRes?.value?.data?.data || []);
+        setCategoryOptions(categoryRes?.value?.data?.data || []);
+        setBranchOptions(branchRes?.value?.data?.data || []);
       } catch (err) {
         console.error('Error loading filters:', err);
       }
@@ -47,7 +51,23 @@ const LeadStatusForm = ({
   }, []);
 
   const handleCategory = (value) => {
+    console.log("valll", value.target.value)
     setFieldValue('category', value.target.value);
+    
+    const fetchData = async () => {
+      try {
+        const [subCategoryRes] = await Promise.allSettled([
+          getSubCategory(value.target.value.id)
+        ]
+    );
+        console.log("statusRes", subCategoryRes?.value?.data?.data || [])
+        setSubCategoryOptions(subCategoryRes?.value?.data?.data || []);
+      } catch (err) {
+        console.error('Error loading filters:', err);
+      }
+    };
+
+    fetchData();
   }
 
   console.log("resp", statusOptions, categoryOptions, subCategoryOptions)
@@ -78,7 +98,7 @@ const LeadStatusForm = ({
         <div className="form-field">
           <CustomDropDown
             label="Category"
-            options={categoryOptions?.data}
+            options={categoryOptions}
             required
             showAsterisk={false}
             placeHolder="Select"
@@ -95,7 +115,7 @@ const LeadStatusForm = ({
         <div className="form-field">
           <CustomDropDown
             label="Subcategory"
-            options={subCategoryOptions?.data}
+            options={subCategoryOptions}
             required
             showAsterisk={false}
             placeHolder="Select"
@@ -110,7 +130,7 @@ const LeadStatusForm = ({
         <div className="form-field">
           <CustomDropDown
             label="Branch"
-            options={["Branch 1", "Branch 2", "Branch 3"]}
+            options={branchOptions}
             required
             showAsterisk={false}
             placeHolder="Select"

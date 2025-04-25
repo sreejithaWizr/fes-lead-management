@@ -1,9 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { CustomInputField, CustomDropDown, CustomDatePicker, CustomCheckboxField } from "react-mui-tailwind";
+import { getFESUser, getPriority } from "../../../api/services/masterAPIs/createLeadApi"
+import { data } from 'autoprefixer';
 import EditableFieldWrapper from '../../../utils/EditableFieldWrapper';
 
 const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode = "edit" }) => {
   const isEditable = mode === "edit";
+
+  const [userOptions, setUserOptions] = useState([]);
+  const [priorityOptions, setPriorityOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchDropdownData = async () => {
+      try {
+        const [userRes, priorityRes] = await Promise.allSettled([
+          getFESUser(),
+          getPriority(),
+        ]);
+  
+        setUserOptions(userRes?.value?.data?.data || []);
+        setPriorityOptions(priorityRes?.value?.data?.data || []);
+      } catch (err) {
+        console.error('Error loading dropdown data:', err);
+      }
+    };
+  
+    fetchDropdownData();
+  }, []);
 
   return (
     <div className="form-section animate-fade-in ml-0 mb-6">
@@ -166,7 +189,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
         <div className="form-field">
           <CustomDropDown
             label="Priority"
-            options={["High", "Medium", "Low"]}
+            options={priorityOptions}
             required={true}
             placeHolder="Select"
             value={values.priority}

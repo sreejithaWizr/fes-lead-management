@@ -1,10 +1,51 @@
+import { useEffect, useState } from "react";
 import { CustomInputField, CustomDropDown } from "react-mui-tailwind";
+import { getAreaOfStudy, getCountry, getQualification, getTestName } from "../../../api/services/masterAPIs/createLeadApi";
 
 const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode = "edit" }) => {
     const isEditable = mode === "edit";
 
-    const yearOptions = [...Array.from({ length: 20 }, (_, i) => `${new Date().getFullYear() - i}`)];
-    const numberOfYears = [...Array.from({ length: 21 }, (_, i) => i)];
+    const yearOptions = [...Array.from({ length: 26 }, (_, i) => `${new Date().getFullYear() - i}`)];
+    const numberOfYears = [...Array.from({ length: 26 }, (_, i) => i)];
+
+    const [areaOfStudyOptions, setAreaOfStudyOptions] = useState([]);
+    const [qualificationOptions, setqualificationOptions] = useState([]);
+    const [preferredCountryOptions, setPreferredCountryOptions] = useState([]);
+    const [testNameOptions, setTestNameOptions] = useState([]);
+
+    useEffect(() => {
+        const fetchDropdownData = async () => {
+            try {
+                const [areaOfStudy, qualification, preferredCountry, testName] = await Promise.allSettled([
+                    getAreaOfStudy(),
+                    getQualification(),
+                    getCountry(),
+                    getTestName(),
+                ]);
+
+                if (areaOfStudy?.status === 'fulfilled') {
+                    setAreaOfStudyOptions(areaOfStudy?.value?.data?.data || []);
+                }
+
+                if (qualification?.status === 'fulfilled') {
+                    setqualificationOptions(qualification?.value?.data?.data || []);
+                }
+
+                if (preferredCountry?.status === 'fulfilled') {
+                    setPreferredCountryOptions(preferredCountry?.value?.data?.data || []);
+                }
+
+                if (testName?.status === 'fulfilled') {
+                    setTestNameOptions(testName?.value?.data?.data || []);
+                }
+
+            } catch (error) {
+                console.error('Error loading dropdown data:', error);
+            }
+        };
+
+        fetchDropdownData();
+    }, []);
 
     return (
         <div className="form-section animate-fade-in ml-0 mb-6">
@@ -15,7 +56,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                 <div className="form-field">
                     <CustomDropDown
                         label="Highest Qualification"
-                        options={["Bachelor's", "Master's", "PhD"]}
+                        options={qualificationOptions}
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
@@ -51,7 +92,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                 <div className="form-field">
                     <CustomDropDown
                         label="Field of Study"
-                        options={["Computer Science", "Engineering", "Business", "Arts"]}
+                        options={areaOfStudyOptions}
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
@@ -103,7 +144,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                 <div className="form-field">
                     <CustomDropDown
                         label="Preferred Study Destination"
-                        options={["US", "Australia", "Canada", "London"]}
+                        options={preferredCountryOptions}
                         required={true}
                         multiple={true}
                         placeHolder="Select"
@@ -135,12 +176,12 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                 </div>
             </div>
 
-            <div className="mt-6 flex items-center gap-2">
+            <div className="mt-5 mb-5 flex items-center gap-2">
                 <input
                     type="checkbox"
                     id="testTrainingBoolean"
                     name="testTrainingBoolean"
-                    checked={values.testTrainingBoolean}
+                    checked={values?.testTrainingBoolean}
                     onChange={handleChange}
                     className="w-4 h-4 gap-[10px] rounded border"
                 />
@@ -149,7 +190,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                 </label>
             </div>
 
-            <div className="form-field mt-4">
+            {/* <div className="form-field mt-4">
                 <CustomInputField
                     state={isEditable ? "default" : "non-editable"}
                     label="Test Name"
@@ -162,6 +203,22 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                     onBlur={handleBlur}
                     hasError={touched.testName && Boolean(errors.testName)}
                     error={touched.testName && errors.testName}
+                />
+            </div> */}
+
+            <div className="form-field">
+                <CustomDropDown
+                    label="Test Name"
+                    options={testNameOptions}
+                    required={false}
+                    placeHolder="Select"
+                    value={values?.testName}
+                    onChange={(value) => {
+                        setFieldValue('testName', value.target.value)
+                    }}
+                    onBlur={() => handleBlur({ target: { name: 'testName' } })}
+                    hasError={touched.testName && Boolean(errors.testName)}
+                    errorMessage={touched.testName && errors.testName}
                 />
             </div>
         </div>
