@@ -105,7 +105,7 @@ const Header = () => {
                 <CustomButton text="Create Lead" endIcon={false} onClick={handleCreateLead} />
                 <CustomButton text="Bulk Upload" variant="secondary" endIcon={false} />
                 <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={FilterIcon} onClick={() => toggleFilter()} />
-                <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={MenuIcon} />
+                {/* <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={MenuIcon} /> */}
               </div>
             </div>
           </div>
