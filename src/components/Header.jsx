@@ -61,7 +61,7 @@ const Header = () => {
   console.log("value", isFilterOpen)
   return (
     <>
-      <header className="w-full shadow-card">
+      <header className="w-full shadow-card ">
         {isLeadsPage && (
           <div className="pt-2 px-6 flex flex-col gap-6">
             <div className="flex items-center justify-between">

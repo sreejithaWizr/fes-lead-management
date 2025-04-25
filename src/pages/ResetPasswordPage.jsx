@@ -135,10 +135,12 @@ const ResetPasswordPage = () => {
                     options={['What is pet name?', 'What is your Mother name?', 'What is your Fav actor?']}
                     placeHolder="Select a security question"
                     value={values.securityQuestion}
-                    onChange={(value) => {
-                      setFieldValue('securityQuestion', value.target.value);
-                  }}
-                  onBlur={() => handleBlur({ target: { name: 'securityQuestion' } })}
+                    onChange ={handleChange}
+                    onBlur = {handleBlur}
+                  //   onChange={(value) => {
+                  //     setFieldValue('securityQuestion', value.target.value);
+                  // }}
+                  // onBlur={() => handleBlur({ target: { name: 'securityQuestion' } })}
                     name="securityQuestion"
                     hasError={touched.securityQuestion && Boolean(errors.securityQuestion)}
                     error={touched.securityQuestion && errors.securityQuestion}
