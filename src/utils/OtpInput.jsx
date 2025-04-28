@@ -32,6 +32,21 @@ const OtpInput = ({
     }
   };
 
+  const handlePaste = (e) => {
+    e.preventDefault();
+    const pasteData = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, length);
+    
+    if (!pasteData) return;
+  
+    const pasteArray = pasteData.split('');
+    const newOtp = otpValues.map((v, i) => pasteArray[i] || v);
+    onChange(newOtp.join(''));
+  
+    // Focus the last filled input
+    const nextFocusIndex = pasteArray.length >= length ? length - 1 : pasteArray.length;
+    inputRefs.current[nextFocusIndex]?.focus();
+  };
+
   const handleKeyDown = (e, index) => {
     if (e.key === 'Backspace') {
       if (otpValues[index]) {
@@ -70,6 +85,7 @@ const OtpInput = ({
             inputRef={(el) => (inputRefs.current[i] = el)}
             value={val}
             onChange={(e) => handleChange(e, i)}
+            onPaste={handlePaste}
             onKeyDown={(e) => handleKeyDown(e, i)}
             inputProps={{
               maxLength: 1,

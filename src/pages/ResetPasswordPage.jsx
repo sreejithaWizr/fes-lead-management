@@ -7,7 +7,7 @@ import DisplayDashboardImage from '../assets/login-display-image-static.svg';
 import InfoIcon from '@mui/icons-material/Info';
 import { ResetPasswordValidationSchema } from '../utils/LoginValidationUtils';
 import OtpInput from '../utils/OtpInput';
-import { generateOtp, resetPassword } from '../api/services/Login/loginEndpoints'; 
+import { generateOtp, getResetPassword } from '../api/services/Login/loginEndpoints'; 
 
 const ResetPasswordPage = () => {
   const navigate = useNavigate();
@@ -39,11 +39,10 @@ const ResetPasswordPage = () => {
       setFieldTouched('email', true);
       return;
     }
-
     try {
-      setApiError('');
-      const data = await generateOtp(email);
-      if (data.success) {
+      const data = await generateOtp(email);      setApiError('');
+
+      if (data?.succeeded) {
         setGenerateOTP(true);
         setOtpCooldown(60);
       } else {
@@ -60,12 +59,12 @@ const ResetPasswordPage = () => {
   const handleReset = async (values, { setSubmitting, resetForm }) => {
     try {
       setApiError('');
-      const data = await resetPassword(
+      const data = await getResetPassword(
         values.email,
         values.newPassword,
-        values.verificationCode
+        values.verificationCode,
       );
-      if (data.success) {
+      if (data?.succeeded) {
         setLoginPasswordReset(true);
         resetForm();
         setTimeout(() => {
