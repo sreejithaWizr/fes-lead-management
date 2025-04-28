@@ -20,25 +20,23 @@ const Login = () => {
   };
 
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
-    console.log('setErrors', setErrors)
     try {
       console.log('Form submitted with values:', values);
   
       const data = await getLoginUser(values.username, values.password); // just returns the data
-  
-      if (data?.idToken?.succeeded === false) {
-        setErrors({ form: data?.idToken?.errors || 'Incorrect username or password' });
+      if (!data?.token?.succeeded) {
+
+        setErrors({ form: data?.errors || 'Incorrect username or password' });
         return;
       }
   
       // Save token
-      localStorage.setItem("token", data?.idToken?.message);
+      localStorage.setItem("token", data?.token?.refreshToken);
   
       // Redirect
       setLoginSuccess(true);
       navigate('/leads');
     } catch (error) {
-      console.error('Login error:', error);
       setErrors({ form: 'Something went wrong. Please try again.' });
     } finally {
       setSubmitting(false);
@@ -150,17 +148,17 @@ overflow-hidden">
                 Thank you! Login Successful!
               </p>
             )}
-                  <p className="font-proxima font-normal text-[16px] text-neutral-500 text-center">
+                  {/* <p className="font-proxima font-normal text-[16px] text-neutral-500 text-center">
         Or continue with
-      </p>
-      <CustomButton
+      </p> */}
+      {/* <CustomButton
         text="SSO Login"
         iconImg={KeyIcon}
         variant="secondary"
         startIcon={true}
         endIcon={false}
         width="100%"
-      />
+      /> */}
           </Form>
         )}
       </Formik>
