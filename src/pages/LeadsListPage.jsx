@@ -21,23 +21,44 @@ const LeadsTable = () => {
 
   const [leads, setLeads] = useState([])
 
-useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [leadRes] = await Promise.allSettled([
-          getLeadList(),
-        ]
-    );
-        console.log("statusRes", leadRes?.value?.data?.data || [])
-        setLeads(leadRes?.value?.data?.data || [])
-      } catch (err) {
-        console.error('Error loading filters:', err);
-      }
+// useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const [leadRes] = await Promise.allSettled([
+//           getLeadList(),
+//         ]
+//     );
+//         console.log("statusRes", leadRes?.value?.data?.data || [])
+//         setLeads(leadRes?.value?.data?.data || [])
+//       } catch (err) {
+//         console.error('Error loading filters:', err);
+//       }
+//     };
+
+//     fetchData();
+//   }, []); 
+
+  useEffect(() => {
+    const payload = {
+      filters: [],
+      pageSize: 15,
+      pageNumber: 1
     };
+  
+    let leadRes;
+  
+    getLeadList(payload)
+      .then(response => {
+        leadRes = response;
+        console.log('leadRes', leadRes?.data?.data || []);
+        setLeads(leadRes?.data?.data || []);
+      })
+      .catch(error => {
+        console.error('Error fetching leads:', error);
+      });
+  }, []);
 
-    fetchData();
-  }, []); 
-
+  
   const handleView = () => {
     navigate('/leads/detailsview');
   }

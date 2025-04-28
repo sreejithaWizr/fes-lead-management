@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Search, RefreshCw, Filter } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import UserProf from "../assets/user-image.svg";
@@ -10,6 +10,7 @@ import FilterContent from '../pages/FilterContent';
 import LeftArrowIcon from "../assets/arrow-left.svg";
 import RightArrowIcon from "../assets/arrow-right.svg";
 import { formRef } from '../pages/CreateLeadPage';
+import { getLeadList } from '../api/services/masterAPIs/createLeadApi';
 
 const Header = () => {
   const location = useLocation();
@@ -20,6 +21,38 @@ const Header = () => {
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const toggleFilter = () => setIsFilterOpen(prev => !prev);
+
+  const [leads, setLeads] = useState([]);
+  const [filters, setFilters] = useState([]);
+  const [pageSize, setPageSize] = useState(10);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [selectedFilters, setSelectedFilters] = useState({});
+
+
+
+  const fetchLeads = (customFilters = filters) => {
+    console.log("customFilters", customFilters)
+    const payload = {
+      filters: customFilters,
+      pageSize,
+      pageNumber
+    };
+
+    // getLeadList(payload)
+    //   .then((response) => {
+    //     console.log('Leads:', response.data?.data || []);
+    //     setLeads(response.data?.data || []);
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error fetching leads:', error);
+    //   });
+  };
+
+  // Initial load
+  // useEffect(() => {
+  //   fetchLeads();
+  // }, []);
+
 
 
   const handleCreateLead = () => {
@@ -59,6 +92,20 @@ const Header = () => {
   };
 
   console.log("value", isFilterOpen)
+
+  const handleApplyFilter = (newFiltersArray) => {
+    // Convert array format to object for internal use
+    const filterMap = {};
+    newFiltersArray.forEach(({ field, operator, value }) => {
+      filterMap[field] = { condition: operator, value: value[0] };
+    });
+
+    setSelectedFilters(filterMap); // for form prefill
+    setFilters(newFiltersArray);   // for API usage
+    fetchLeads(newFiltersArray);   // trigger API
+  };
+
+
   return (
     <>
       <header className="w-full shadow-card ">
@@ -101,9 +148,9 @@ const Header = () => {
                 /> */}
               </div>
 
-              <div className="flex items-center gap-3 w-[405px]">
+              <div className="flex items-center gap-3 ">
                 <CustomButton text="Create Lead" endIcon={false} onClick={handleCreateLead} />
-                <CustomButton text="Bulk Upload" variant="secondary" endIcon={false} />
+                {/* <CustomButton text="Bulk Upload" variant="secondary" endIcon={false} /> */}
                 <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={FilterIcon} onClick={() => toggleFilter()} />
                 {/* <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={MenuIcon} /> */}
               </div>
@@ -169,7 +216,12 @@ const Header = () => {
           position="right" // ensure it's from left
           width="649px"
         >
-          <FilterContent onClose={toggleFilter} />
+          <FilterContent
+            onClose={toggleFilter}
+            onApplyFilter={handleApplyFilter}
+            initialFilters={selectedFilters}
+          />
+
         </CustomOffCanvasModal>
       )}
 

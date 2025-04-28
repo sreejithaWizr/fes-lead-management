@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik, Form } from 'formik';
+import { Formik, Form, useFormikContext } from 'formik';
 import { useSelector } from 'react-redux';
 import { CustomSearch, CustomDropDown, CustomCheckboxField } from "react-mui-tailwind";
 
@@ -15,7 +15,7 @@ const transformFilters = (filters) => {
   }));
 };
 
-const FilterContent = ({ onClose }) => {
+const FilterContent = ({ onClose, onApplyFilter, initialFilters = {} }) => {
   const { columns } = useSelector((state) => state.leads);
   const [searchTerm, setSearchTerm] = React.useState('');
 
@@ -27,11 +27,13 @@ const FilterContent = ({ onClose }) => {
 
   return (
     <Formik
-      initialValues={{ filters: {} }}
+      initialValues={{ filters: initialFilters }}
+      enableReinitialize={true}
       onSubmit={(values) => {
         const transformed = transformFilters(values.filters);
-        console.log("🚀 Transformed Filters:", transformed);
-        onClose();
+        console.log("🚀 Transformed Filters:", transformed, values);
+        onApplyFilter(transformed); // pass to parent
+        onClose(); // close modal or drawer
       }}
     >
       {({ values, setFieldValue, resetForm }) => {
@@ -55,6 +57,7 @@ const FilterContent = ({ onClose }) => {
           setFieldValue(`filters.${colId}.value`, value);
         };
 
+        console.log("value", values);
         return (
           <Form className="space-y-6 overflow-hidden">
             <CustomSearch
@@ -107,9 +110,10 @@ const FilterContent = ({ onClose }) => {
               <button
                 type="button"
                 onClick={() => {
-                  resetForm();
-                  setSearchTerm('');
-                  onClose();
+                  resetForm();              // reset form values
+                  setSearchTerm('');        // reset search input
+                  onApplyFilter([]);        // clear applied filters
+                  onClose();                // close the modal/drawer
                 }}
                 className="text-gray-500 text-sm"
               >

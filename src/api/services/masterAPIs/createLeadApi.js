@@ -34,4 +34,8 @@ export const getVertical = () => apiClient.get('api/Vertical');
  
 export const getDesiredProgram = () => apiClient.get('api/DesiredProgram')
 
-export const getLeadList = () => apiClient.get('api/LeadListView')
+// export const getLeadList = () => apiClient.get('api/LeadListView')
+
+export const getLeadList = (payload) => {
+    return apiClient.post('api/LeadListView', payload);
+  };
