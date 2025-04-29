@@ -32,10 +32,20 @@ const Header = () => {
 
   const fetchLeads = (customFilters = filters) => {
     console.log("customFilters", customFilters)
+
+    const output = customFilters.map(item => ({
+      field: item.field, // or manually set "firstname" if you want
+      operator: item.operator.name,
+      value: item.value.map(v => v.name)
+    }));
+    
+    console.log("output",output);
+    
     const payload = {
-      filters: customFilters,
+      filters: output,
       pageSize,
-      pageNumber
+      pageNumber,
+      filterApplied: true
     };
 
     // getLeadList(payload)
@@ -49,9 +59,9 @@ const Header = () => {
   };
 
   // Initial load
-  // useEffect(() => {
-  //   fetchLeads();
-  // }, []);
+  useEffect(() => {
+    fetchLeads();
+  }, []);
 
 
 
@@ -99,7 +109,7 @@ const Header = () => {
     newFiltersArray.forEach(({ field, operator, value }) => {
       filterMap[field] = { condition: operator, value: value[0] };
     });
-
+console.log("newFiltersArray", newFiltersArray)
     setSelectedFilters(filterMap); // for form prefill
     setFilters(newFiltersArray);   // for API usage
     fetchLeads(newFiltersArray);   // trigger API
@@ -109,54 +119,6 @@ const Header = () => {
   return (
     <>
       <header className="w-full shadow-card ">
-        {isLeadsPage && (
-          <div className="pt-2 px-6 flex flex-col gap-6">
-            <div className="flex items-center justify-between">
-              {/* <div className="flex items-center gap-4">
-                <img
-                  src={UserProf}
-                  alt="Profile"
-                  className="w-[61px] h-[61px] rounded-[12px]"
-
-                />
-                <div>
-                  <h2 className="text-sm font-normal text-[#757575]">Hello,</h2>
-                  <h1 className="text-base font-medium">Deego Chaithanyan!</h1>
-                </div>
-              </div> */}
-
-              {/* <div className="flex items-center gap-2">
-                <div className="relative flex-1">
-                  <CustomSearch />
-                </div>
-                <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={RefreshIcon} />
-              </div> */}
-
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                {/* <h2 className="text-lg font-medium">Kochi Leads</h2>
-              <span className="bg-primary text-white px-2 py-0.5 rounded-md text-xs font-medium">8,467</span> */}
-                {/* <CustomDropDown options={[
-                  { name: "Kochi Leads", count: 8467 },
-                  { name: "Mumbai Leads", count: 5321 },
-                  { name: "Delhi Leads", count: 6789 }
-                ]}
-                  // required={true}
-                  placeHolder="Select Branch"
-                /> */}
-              </div>
-
-              <div className="flex items-center gap-3 ">
-                <CustomButton text="Create Lead" endIcon={false} onClick={handleCreateLead} />
-                {/* <CustomButton text="Bulk Upload" variant="secondary" endIcon={false} /> */}
-                <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={FilterIcon} onClick={() => toggleFilter()} />
-                {/* <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={MenuIcon} /> */}
-              </div>
-            </div>
-          </div>
-        )}
 
         {isCreateLeadPage && (
           <div className="pt-6 px-6 flex items-center justify-between">
@@ -208,7 +170,7 @@ const Header = () => {
           </div>
         )}
       </header>
-      {isFilterOpen && (
+      {/* {isFilterOpen && (
         <CustomOffCanvasModal
           isOpen={isFilterOpen}
           onClose={toggleFilter}
@@ -223,7 +185,7 @@ const Header = () => {
           />
 
         </CustomOffCanvasModal>
-      )}
+      )} */}
 
     </>
   );

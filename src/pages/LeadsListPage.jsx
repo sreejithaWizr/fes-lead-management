@@ -1,82 +1,116 @@
-
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchLeads, setCurrentPage, setItemsPerPage } from '../store/leadsSlice';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
-import { CustomTable, CustomPagination } from "react-mui-tailwind";
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchLeads } from '../store/leadsSlice';
+import { CustomTable, CustomPagination, CustomButton, CustomOffCanvasModal } from 'react-mui-tailwind';
+import { getLeadList } from '../api/services/masterAPIs/createLeadApi';
+
 import PhoneIcon from "../assets/phone-icon.svg";
 import CalenderIcon from "../assets/calendar.svg";
 import MailIcon from "../assets/mail.svg";
-import LoactionIcon from "../assets/location.svg";
-import EditIcon from '../assets/edit-icon.svg'
-import { getLeadList } from '../api/services/masterAPIs/createLeadApi';
+import LocationIcon from "../assets/location.svg";
+import EditIcon from "../assets/edit-icon.svg";
+import FilterIcon from "../assets/filter.svg";
+
+import FilterContent from '../pages/FilterContent';
 
 const LeadsTable = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { status, itemsPerPage, totalLeads, columns } = useSelector((state) => state.leads);
+  const { columns } = useSelector((state) => state.leads);
+
+  const [leads, setLeads] = useState([]);
   const [selectedLeads, setSelectedLeads] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(15);
+  const [totalPages, setTotalPages] = useState(1);  // <-- NEW
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [filters, setFilters] = useState([]);
+  const [selectedFilters, setSelectedFilters] = useState({});
 
-  const [leads, setLeads] = useState([])
-
-// useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const [leadRes] = await Promise.allSettled([
-//           getLeadList(),
-//         ]
-//     );
-//         console.log("statusRes", leadRes?.value?.data?.data || [])
-//         setLeads(leadRes?.value?.data?.data || [])
-//       } catch (err) {
-//         console.error('Error loading filters:', err);
-//       }
-//     };
-
-//     fetchData();
-//   }, []); 
+  const toggleFilter = () => setIsFilterOpen(prev => !prev);
 
   useEffect(() => {
+    fetchLeadsData();
+  }, [currentPage]); // <--- add dependency
+
+  const fetchLeadsData = (customFilters = filters) => {
+    const output = customFilters.map(item => ({
+      field: item.field,
+      operator: item.operator.name,
+      value: item.value.map(v => v.name)
+    }));
+
     const payload = {
-      filters: [],
-      pageSize: 15,
-      pageNumber: 1
+      filters: output,
+      pageSize: 15,         // <- match your response pageSize
+      pageNumber: currentPage,
+      filterApplied: customFilters.length > 0
     };
-  
-    let leadRes;
-  
+
     getLeadList(payload)
       .then(response => {
-        leadRes = response;
-        console.log('leadRes', leadRes?.data?.data || []);
-        setLeads(leadRes?.data?.data || []);
+        const responseData = response?.data;
+
+        setLeads(responseData?.data || []);
+        setTotalPages(responseData?.totalPages || 1);  // <-- update total pages from API
+        console.log("Fetched Leads:", response);
       })
       .catch(error => {
         console.error('Error fetching leads:', error);
       });
-  }, []);
+  };
 
-  
   const handleView = () => {
     navigate('/leads/detailsview');
-  }
+  };
+
+  const handleEdit = () => {
+    navigate('/leads/edit');
+  };
+
+  const handleCreateLead = () => {
+    navigate('/leads/create');
+  };
+
+  const handleApplyFilter = (newFiltersArray) => {
+    const filterMap = {};
+    newFiltersArray.forEach(({ field, operator, value }) => {
+      filterMap[field] = { condition: operator, value: value[0] };
+    });
+
+    setSelectedFilters(filterMap);
+    setFilters(newFiltersArray);
+    setCurrentPage(1); // Reset to page 1 when filters applied
+    fetchLeadsData(newFiltersArray);
+  };
 
   const getRow = (columnId, value) => {
-    console.log("colu", columnId)
+    if (!columnId) {
+      return (
+        <div className="flex items-center gap-2">
+          <img
+            src={EditIcon}
+            alt="Edit"
+            className="w-4 h-4 cursor-pointer"
+            onClick={handleEdit}
+          />
+        </div>
+      );
+    }
+
     switch (columnId) {
       case "leadNumber":
         return (
           <div className="flex items-center gap-2">
-            <span className='font-bold cursor-pointer' onClick={handleView}>{value}</span>
+            <span className="font-bold cursor-pointer" onClick={handleView}>{value}</span>
           </div>
         );
       case "createdAt":
         return (
           <div className="flex items-center gap-2">
-            <img src={CalenderIcon} alt="Calender" className="w-4 h-4" />
-            <span>{value}</span>
+            <img src={CalenderIcon} alt="Calendar" className="w-4 h-4" />
+            <span>{new Date(value).toLocaleDateString()}</span> {/* optional: formatted date */}
           </div>
         );
       case "mobileNumber":
@@ -96,139 +130,49 @@ const LeadsTable = () => {
       case "location":
         return (
           <div className="flex items-center gap-2">
-            <img src={LoactionIcon} alt="Location" className="w-4 h-4" />
+            <img src={LocationIcon} alt="Location" className="w-4 h-4" />
             <span>{value}</span>
           </div>
         );
-  //     default:
-  //       return value;
-  //   }
-  // };
-
-        case "action":
-          return (
-            <div className="flex items-center gap-2">
-                <img src={EditIcon} alt="actions" className="w-4 h-4" onClick={hanldeEdit}/>
-            </div>
+      case "action":
+        return (
+          <div className="flex items-center gap-2">
+            <img
+              src={EditIcon}
+              alt="Edit"
+              className="w-4 h-4 cursor-pointer"
+              onClick={handleEdit}
+            />
+          </div>
         );
-        default:
-            return value;
-    }
-};
-
-const hanldeEdit = () => {
-  navigate('/leads/edit');
-};
-  
-  useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchLeads());
-    }
-  }, [status, dispatch]);
-
-  const handleSelectAll = (e) => {
-    if (e.target.checked) {
-      setSelectedLeads(leads.map(lead => lead.id));
-    } else {
-      setSelectedLeads([]);
-    }
-  };
-
-  const handleSelectLead = (e, leadId) => {
-    if (e.target.checked) {
-      setSelectedLeads([...selectedLeads, leadId]);
-    } else {
-      setSelectedLeads(selectedLeads.filter(id => id !== leadId));
-    }
-  };
-
-  const getStatusClass = (status) => {
-    switch (status) {
-      case 'Potential':
-        return 'status-potential';
-      case 'Inactive':
-        return 'status-inactive';
-      case 'Enrolled':
-        return 'status-enrolled';
-      case 'May be Prospective':
-        return 'status-prospective';
       default:
-        return 'bg-gray-100 text-gray-600';
+        return value;
     }
   };
 
-  const handleCreateLead = () => {
-    navigate('/leads/create');
+
+  const handleRowsPerPageChange = (newRowsPerPage) => {
+    setRowsPerPage(newRowsPerPage);
+    setCurrentPage(1); // reset to page 1
+    fetchLeadsData(filters); // re-fetch API with new pageSize
   };
 
-  const totalPages = Math.ceil(totalLeads / itemsPerPage);
-
-  // const renderPagination = () => {
-  //   const pages = [];
-  //   const maxDisplayedPages = 5;
-
-  //   let startPage = Math.max(1, currentPage - Math.floor(maxDisplayedPages / 2));
-  //   let endPage = Math.min(totalPages, startPage + maxDisplayedPages - 1);
-
-  //   if (endPage - startPage + 1 < maxDisplayedPages) {
-  //     startPage = Math.max(1, endPage - maxDisplayedPages + 1);
-  //   }
-
-  //   for (let i = startPage; i <= endPage; i++) {
-  //     pages.push(
-  //       <button
-  //         key={i}
-  //         className={`w-8 h-8 rounded-md flex items-center justify-center ${
-  //           currentPage === i ? 'bg-primary text-white' : 'bg-white text-[#1A1A1A]'
-  //         }`}
-  //         onClick={() => dispatch(setCurrentPage(i))}
-  //       >
-  //         {i}
-  //       </button>
-  //     );
-  //   }
-
-  //   return (
-  //     <div className="flex items-center gap-2">
-  //       <button
-  //         className="w-8 h-8 rounded-md flex items-center justify-center bg-white text-[#1A1A1A] disabled:opacity-50"
-  //         disabled={currentPage === 1}
-  //         onClick={() => dispatch(setCurrentPage(currentPage - 1))}
-  //       >
-  //         <ChevronLeft size={16} />
-  //       </button>
-
-  //       {pages}
-
-  //       {endPage < totalPages && (
-  //         <>
-  //           <span className="px-1">...</span>
-  //           <button
-  //             className="w-8 h-8 rounded-md flex items-center justify-center bg-white text-[#1A1A1A]"
-  //             onClick={() => dispatch(setCurrentPage(totalPages))}
-  //           >
-  //             {totalPages}
-  //           </button>
-  //         </>
-  //       )}
-
-  //       <button
-  //         className="w-8 h-8 rounded-md flex items-center justify-center bg-white text-[#1A1A1A] disabled:opacity-50"
-  //         disabled={currentPage === totalPages}
-  //         onClick={() => dispatch(setCurrentPage(currentPage + 1))}
-  //       >
-  //         <ChevronRight size={16} />
-  //       </button>
-  //     </div>
-  //   );
-  // };
-
-  if (status === 'loading') {
-    return <div className="flex justify-center p-8">Loading leads...</div>;
-  }
 
   return (
     <>
+      {/* Header */}
+      <div className="pt-2 px-6 flex flex-col gap-6">
+        <div className="flex items-center justify-between" />
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-4" />
+          <div className="flex items-center gap-3">
+            <CustomButton text="Create Lead" onClick={handleCreateLead} />
+            <CustomButton variant="icon" showText={false} startIcon={true} endIcon={false} iconImg={FilterIcon} onClick={toggleFilter} />
+          </div>
+        </div>
+      </div>
+
+      {/* Table */}
       <div className="bg-white shadow-card overflow-hidden">
         <div className="w-full overflow-x-auto">
           <div className="min-w-max">
@@ -242,30 +186,36 @@ const hanldeEdit = () => {
         </div>
       </div>
 
-      <div className="p-4 justify-end">
+      {/* Pagination */}
+      <div className="p-4 flex justify-end">
         <CustomPagination
-          totalPages={1}
+          totalPages={totalPages}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
+          rowsPerPage={rowsPerPage}
+          setRowsPerPage={handleRowsPerPageChange}
         />
+
       </div>
+
+      {/* Filter Panel */}
+      {isFilterOpen && (
+        <CustomOffCanvasModal
+          isOpen={isFilterOpen}
+          onClose={toggleFilter}
+          title="Filter"
+          position="right"
+          width="649px"
+        >
+          <FilterContent
+            onClose={toggleFilter}
+            onApplyFilter={handleApplyFilter}
+            initialFilters={selectedFilters}
+          />
+        </CustomOffCanvasModal>
+      )}
     </>
   );
-
 };
 
-const LeadsPage = () => {
-  const navigate = useNavigate();
-
-  const handleCreateLead = () => {
-    navigate('/leads/create');
-  };
-
-  return (
-    <div>
-      <LeadsTable />
-    </div>
-  );
-};
-
-export default LeadsPage;
+export default LeadsTable;
