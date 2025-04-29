@@ -18,7 +18,7 @@ export const passwordRule = Yup.string()
   .matches(/[A-Z]/, 'Must contain at least one uppercase letter')
   .matches(/[a-z]/, 'Must contain at least one lowercase letter')
   .matches(/\d/, 'Must contain at least one number')
-  .matches(/[@$!%*?&#^()[\]{}<>+=~|.,:;"'-]/, 'Must contain one special character');
+  .matches(/[-@$!%*?&#^()[\]{}<>+=~|.,:;"'_]/, 'Must contain one special character')
 
 export const confirmPasswordRule = (refField = 'password') =>
   Yup.string()
@@ -31,6 +31,10 @@ export const dropdownRule = Yup.string()
   .test('is-not-empty', 'Please select an option', (value) => {
     return value ? value.trim().length > 0 : true;
   });
+
+  export const otpRule = Yup.string()
+  .required('OTP is required')
+  .matches(/^\d{6}$/, 'OTP must be 6 digits');
 
 // =======================
 // Login Schema
@@ -63,4 +67,5 @@ export const ResetPasswordValidationSchema = Yup.object().shape({
   confirmPassword: confirmPasswordRule('newPassword'),
   securityQuestion: dropdownRule,
   securityAnswer: Yup.string().notRequired(),
+  verificationCode: otpRule,
 });
