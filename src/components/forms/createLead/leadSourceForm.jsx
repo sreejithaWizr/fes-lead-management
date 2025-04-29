@@ -438,7 +438,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                         disabled={!isEditable}
                         value={values?.invokeBlueprint}
                         onChange={(value) => {
-                            setFieldValue('invokeBlueprint', value.target.value);
+                            setFieldValue('invokeBlueprint', value?.target?.value);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'invokeBlueprint' } })}
                         hasError={touched.invokeBlueprint && Boolean(errors.invokeBlueprint)}

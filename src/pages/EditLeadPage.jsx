@@ -125,12 +125,13 @@ const EditLeadPage = () => {
             referrerEmployeeId: leadData?.reference_employee_id,
             vertical: leadData?.vertical,
             desiredProgram: leadData?.desired_program,
-            internshipOption: 'Yes',
             adName: leadData?.adName,
             adCampaign: leadData?.adCampaign,
             leadForm: leadData?.lead_form,
             ipAddress: leadData?.ip_address,
             internshipOption: leadData?.internship_option,
+            importLead: leadData?.importLead,
+            invokeBlueprint: leadData?.invokeBlueprint,
         };
 
         // Simulate delay and set data
