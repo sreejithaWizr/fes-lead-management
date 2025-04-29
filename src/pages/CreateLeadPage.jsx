@@ -18,7 +18,7 @@ const ErrorObserver = ({ setTabErrors }) => {
     useEffect(() => {
         // Group errors by tab sections
         const leadInfoFields = ['firstName', 'lastName', 'email', 'secondaryEmail', 'mobileNumber', 'alternativeNumber', 'whatsappNumber', 'leadOwner', 'leadStatusInfo', 'priority', 'teleCallerName', 'leadCreated', 'leadNumber', 'agreeToReceiveBoolean'];
-        const educationFields = ['highestQualification', 'graduationYear', 'fieldOfStudy', 'cgpaGrade', 'workExperience', 'preferredDestination', 'otherCountries', 'testName', 'testTrainingBoolean'];
+        const educationFields = ['highestQualification', 'graduationYear', 'fieldOfStudy', 'cgpaGrade', 'workExperience', 'preferredDestination', 'otherCountries', 'testName', 'testTrainingBoolean', 'intake_year'];
         const statusFields = ['leadStatus', 'category', 'subCategory', 'branch', 'counselor', 'notes'];
         const sourceFields = ['leadSource_1', 'leadSource_2', 'leadSource_3', 'location_1', 'location_2', 'referrerName', 'referrerEmployeeId', 'vertical', 'desiredProgram', 'internshipOption', 'adName', 'adCampaign', 'leadForm', 'ipAddress'];
 
@@ -132,47 +132,47 @@ const CreateLeadPage = () => {
             mobile_number: values?.mobileNumber || '',
             alternative_number: values?.alternativeNumber || '',
             whatsapp_number: values?.whatsappNumber || '',
-            tele_callerid: values?.teleCallerName?.id || null,
-            priority_id: values?.priority?.id || null,
+            tele_callerid: values?.teleCallerName || null,
+            priority_id: values?.priority || null,
             lead_number: values?.leadNumber || '',
             consent: values?.agreeToReceiveBoolean,
             created_at: values?.leadCreated || '',
             created_by: "Admin",
             education: {
-                highest_qualification_id: values?.highestQualification?.id || null,
+                highest_qualification_id: values?.highestQualification || null,
                 graduation_year: values?.graduationYear?.name || '',
-                fieldofstudy_id: values?.fieldOfStudy?.id || null,
+                fieldofstudy_id: values?.fieldOfStudy|| null,
                 cgpa_grade: values?.cgpaGrade || null,
                 work_experience: values?.workExperience?.name,
-                intake_year: values?.intake_year?.name,
+                intake_year: values?.intake_year?.name || '',
                 intake_month: values?.intake_month?.name || '',
                 other_countries: values?.otherCountries,
                 test_training_required: values?.testTrainingBoolean,
                 preferred_countries: Array.isArray(values?.preferredDestination)
-                    ? values.preferredDestination.map(item => item.id)
+                    ? values.preferredDestination
                     : [],
                 test_ids: Array.isArray(values?.testName)
-                    ? values.testName.map(item => item.id)
+                    ? values.testName
                     : []
             },
             status: {
-                status: values?.leadStatus?.id || null,
-                category: values?.category?.id || null,
-                subcategory_id: values?.subCategory?.id || null,
-                branch_id: values?.branch?.id || null,
+                status: values?.leadStatus || null,
+                category: values?.category || null,
+                subcategory_id: values?.subCategory || null,
+                branch_id: values?.branch || null,
             },
             source: {
-                source1_id: values?.leadSource_1?.id || null,
-                source2_id: values?.leadSource_2?.id || null,
-                source3_id: values?.leadSource_3?.id || null,
-                source4_id: values?.leadSource_4?.id || null,
-                region_id: values?.location_1?.id || null,
-                city_id: values?.location_2?.id || null,
+                source1_id: values?.leadSource_1 || null,
+                source2_id: values?.leadSource_2 || null,
+                source3_id: values?.leadSource_3 || null,
+                source4_id: values?.leadSource_4 || null,
+                region_id: values?.location_1 || null,
+                city_id: values?.location_2 || null,
                 reference_name: values?.referrerName || '',
                 reference_employee_id: values?.referrerEmployeeId || null,
-                vertical: values?.vertical?.id || null,
-                desired_program: values?.desiredProgram?.id || null,
-                internship_option: values?.internshipOption == "Yes" ? true : false  ,
+                vertical: values?.vertical || null,
+                desired_program: values?.desiredProgram || null,
+                internship_option: values?.internshipOption == "Yes" ? true : false,
                 adName: values?.adName || '',
                 adCampaign: values?.adCampaign || '',
                 lead_form: values?.leadForm || '',
@@ -185,7 +185,7 @@ const CreateLeadPage = () => {
                 keyIdentifier: values?.keyIdentifier || '',
                 campaignType: values?.campaignType || '',
                 referrerEmail: values?.referrerEmail || '',
-                referrerPhoneNumber: values?.referrerPhoneNumber || '', 
+                referrerPhoneNumber: values?.referrerPhoneNumber || '',
                 userAgent: values?.userAgent || '',
                 importLead: values?.importLead?.id || '',
                 invokeBlueprint: values?.invokeBlueprint?.id || '',
@@ -199,24 +199,24 @@ const CreateLeadPage = () => {
         try {
             const response = await createLead(payload);
             console.log('User created:', response.data);
-            if(response?.data?.succeeded === true) {
+            if (response?.data?.succeeded === true) {
                 navigate("/leads")
             }
             alert("Created")
             // Optional: reset form or show toast
-          } catch (err) {
+        } catch (err) {
             console.error('Error creating user:', err);
-          }
+        }
     };
 
     return (
         <div className="w-full">
             <Formik
                 initialValues={initialValues}
-                // validationSchema={validationSchema}
+                validationSchema={validationSchema}
                 onSubmit={handleSubmit}
                 innerRef={formRef}
-            // enableReinitialize={true}
+                // enableReinitialize={true}
             >
                 {({
                     values,

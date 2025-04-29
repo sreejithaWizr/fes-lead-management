@@ -16,7 +16,7 @@ const ErrorObserver = ({ setTabErrors }) => {
 
     useEffect(() => {
         const leadInfoFields = ['firstName', 'lastName', 'email', 'secondaryEmail', 'mobileNumber', 'alternativeNumber', 'whatsappNumber', 'leadOwner', 'leadStatusInfo', 'priority', 'teleCallerName', 'leadCreated', 'leadNumber', 'agreeToReceiveBoolean'];
-        const educationFields = ['highestQualification', 'graduationYear', 'fieldOfStudy', 'cgpaGrade', 'workExperience', 'preferredDestination', 'otherCountries', 'testName', 'testTrainingBoolean'];
+        const educationFields = ['highestQualification', 'graduationYear', 'fieldOfStudy', 'cgpaGrade', 'workExperience', 'preferredDestination', 'otherCountries', 'testName', 'testTrainingBoolean', 'intake_year'];
         const statusFields = ['leadStatus', 'category', 'subCategory', 'branch', 'counselor', 'notes'];
         const sourceFields = ['leadSource_1', 'leadSource_2', 'leadSource_3', 'location_1', 'location_2', 'referrerName', 'referrerEmployeeId', 'vertical', 'desiredProgram', 'internshipOption', 'adName', 'adCampaign', 'leadForm', 'ipAddress'];
 
@@ -160,8 +160,8 @@ const EditLeadPage = () => {
                 fieldofstudy_id: values?.fieldOfStudy || null,
                 cgpa_grade: values?.cgpaGrade,
                 work_experience: values?.workExperience?.name,
-                intake_year: values?.intake_year,
-                intake_month: values?.intakeMonth?.id || '',
+                intake_year: values?.intake_year?.name || '',
+                intake_month: values?.intakeMonth?.name || '',
                 other_countries: values?.otherCountries,
                 test_training_required: values?.testTrainingBoolean || false,
                 preferred_countries: Array.isArray(values?.preferredDestination)
@@ -317,6 +317,7 @@ const EditLeadPage = () => {
                                     mode="edit"
                                 />
                             )}
+                            <pre>{JSON?.stringify(errors)}</pre>
                         </form>
                     )}
                 </Formik>

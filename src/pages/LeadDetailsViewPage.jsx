@@ -249,7 +249,7 @@ const LeadDetailsViewPage = () => {
                 <LeadSourceForm {...{ values, errors, touched, handleChange, handleBlur, setFieldValue, mode: "view" }} />
               )}
               {activeTab === 'Opportunity' && (
-                <LeadOpportunity />
+                <LeadOpportunity leadID={id} />
               )}
             </form>
           )}

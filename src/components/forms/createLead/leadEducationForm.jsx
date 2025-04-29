@@ -200,13 +200,13 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                         showAsterisk={true}
                         disabled={!isEditable}
                         placeHolder="Select"
-                        value={values?.intakeYear}
+                        value={values?.intake_year}
                         onChange={(value) => {
-                            setFieldValue('intakeYear', value.target.value);
+                            setFieldValue('intake_year', value.target.value);
                         }}
-                        onBlur={() => handleBlur({ target: { name: 'intakeYear' } })}
-                        hasError={touched.intakeYear && Boolean(errors.intakeYear)}
-                        errorMessage={touched.intakeYear && errors.intakeYear}
+                        onBlur={() => handleBlur({ target: { name: 'intake_year' } })}
+                        hasError={touched.intake_year && Boolean(errors.intake_year)}
+                        errorMessage={touched.intake_year && errors.intake_year}
                     />
                 </div>
 
