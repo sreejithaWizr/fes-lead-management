@@ -8,7 +8,7 @@ import { validationSchema } from '../components/forms/createLead/schema';
 import { CustomButton } from 'react-mui-tailwind';
 import WarningIcon from '../assets/warning-icon.svg';
 import LeadDetailsHeader from '../components/LeadDetailsHeader';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getLeadById, updateLead } from '../api/services/leadAPI/leadAPIs';
 
 const ErrorObserver = ({ setTabErrors }) => {
@@ -41,6 +41,7 @@ export const formRef = React.createRef();
 
 const EditLeadPage = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [leadData, setLeadData] = useState(null);
 
     const [activeTab, setActiveTab] = useState('All Info');
@@ -210,11 +211,10 @@ const EditLeadPage = () => {
 
         try {
             const response = await updateLead(id, payload);
-            console.log('Lead updated:', response.data);
 
             if (response?.data?.succeeded === true) {
-                alert("Updated successfully");
-                navigate("/leads");
+                // alert("Updated successfully");
+                navigate('/leads');
             }
         } catch (error) {
             console.error('Failed to update lead:', error);
@@ -231,7 +231,7 @@ const EditLeadPage = () => {
             <div className="w-full h-full rounded-md">
                 <Formik
                     initialValues={initialValues}
-                    // validationSchema={validationSchema}
+                    validationSchema={validationSchema}
                     onSubmit={handleSubmit}
                     innerRef={formRef}
                     enableReinitialize={true}

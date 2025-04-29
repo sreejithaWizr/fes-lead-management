@@ -144,8 +144,6 @@ const LeadDetailsViewPage = () => {
     navigate(`/leads/edit/${id}`);
   };
 
-  console.log("leadData", leadData);
-
   return (
     <div className="w-full">
       {initialValues ? (
