@@ -24,7 +24,7 @@ const App = () => {
             <Route path="leads" element={<LeadsPage />} />
             <Route path="leads/create" element={<CreateLeadPage />} />
             <Route path="leads/detailsview/:id" element={<LeadDetailsViewPage />} />
-            <Route path="leads/edit" element={<EditLeadPage />} />
+            <Route path="leads/edit/:id" element={<EditLeadPage />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

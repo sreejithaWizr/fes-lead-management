@@ -9,6 +9,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
   const [userOptions, setUserOptions] = useState([]);
   const [priorityOptions, setPriorityOptions] = useState([]);
+  const [selectedPriorityOption, setSelectedPriorityOption] = useState("");
 
   useEffect(() => {
     const fetchDropdownData = async () => {
@@ -28,12 +29,18 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
     fetchDropdownData();
   }, []);
 
+  useEffect(() => {
+    if (values.priority && priorityOptions?.length > 0) {
+      const selected = priorityOptions.find(option => option.id === values.priority);
+      setSelectedPriorityOption(selected || "");
+    }
+  }, [values.priority, priorityOptions]);
+
   const handleAgreeToReceiveOnChange = (event) => {
     const { checked } = event.target;
+    console.log('checked', checked);
     setFieldValue('agreeToReceiveBoolean', checked);
   }
-
-  console.log('lead: ', values);
 
   return (
     <div className="form-section animate-fade-in ml-0 mb-6">
@@ -199,11 +206,13 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
             options={priorityOptions}
             required={true}
             placeHolder="Select"
-            value={priorityOptions?.find(option => option.id === values.priority) || ""}
+            // value={priorityOptions?.find(option => option.id === values.priority) || ""}
+            value={isEditable ? selectedPriorityOption : (priorityOptions?.find(option => option.id === values.priority) || "")}
             disabled={!isEditable}
             onChange={(value) => {
               // setFieldValue('priority', value.target.value);
-              setFieldValue('priority', value.id);
+              setSelectedPriorityOption(value?.target?.value);   // update local selected object
+              setFieldValue('priority', value?.target?.value?.id); // update formik value
             }}
             onBlur={() => handleBlur({ target: { name: 'priority' } })}
             hasError={touched.priority && Boolean(errors.priority)}
@@ -218,11 +227,10 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
             required={false}
             showAsterisk={false}
             placeHolder="Select"
-            // value={values.teleCallerName}
-            value={userOptions?.find(option => option.id === values.teleCallerName) || ""}
+            value={userOptions?.find(option => option.id === values?.teleCallerName) || ""}
             disabled={!isEditable}
             onChange={(value) => {
-              setFieldValue('teleCallerName', value.target.value);
+              setFieldValue('teleCallerName', value.target.value?.id);
             }}
             onBlur={() => handleBlur({ target: { name: 'teleCallerName' } })}
             hasError={touched.teleCallerName && Boolean(errors.teleCallerName)}
@@ -258,7 +266,8 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
       </div>
 
       <div className="mt-6 flex items-center gap-2">
-        <CustomCheckboxField name="agreeToReceiveBoolean" label="I agree to receive communications" disabled={!isEditable ? true : false} onChange={handleAgreeToReceiveOnChange} checked={values.agreeToReceiveBoolean} />
+        {/* <CustomCheckboxField name="agreeToReceiveBoolean" label="I agree to receive communications" disabled={!isEditable ? true : false} onChange={handleAgreeToReceiveOnChange} checked={values?.agreeToReceiveBoolean} /> */}
+        <CustomCheckboxField name="agreeToReceiveBoolean" label="I agree to receive communications"  onChange={handleAgreeToReceiveOnChange} disabled={!isEditable} checked={values?.agreeToReceiveBoolean ? true : false} />
         {/* <span className='text-red-600'>*</span> */}
       </div>
 

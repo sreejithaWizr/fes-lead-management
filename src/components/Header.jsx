@@ -15,7 +15,7 @@ const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isLeadsPage = location.pathname === '/leads';
-  const isCreateLeadPage = location.pathname === '/leads/create';
+  const isCreateLeadPage = location.pathname.startsWith('/leads/create');
   const isLeadDetailsViewPage = location.pathname.startsWith('/leads/detailsview');
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);

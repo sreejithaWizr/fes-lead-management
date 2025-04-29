@@ -28,7 +28,6 @@ const LeadsTable = () => {
           getLeadList(),
         ]
         );
-        console.log("statusRes", leadRes?.value?.data?.data || [])
         setLeads(leadRes?.value?.data?.data || [])
       } catch (err) {
         console.error('Error loading filters:', err);
@@ -45,7 +44,6 @@ const LeadsTable = () => {
   }
 
   const getRow = (columnId, value) => {
-    console.log("colu", columnId)
     switch (columnId) {
       case "leadNumber":
         return (
@@ -89,7 +87,7 @@ const LeadsTable = () => {
       case "action":
         return (
           <div className="flex items-center gap-2">
-            <img src={EditIcon} alt="actions" className="w-4 h-4" onClick={hanldeEdit} />
+            <img src={EditIcon} alt="actions" className="w-4 h-4" onClick={() => hanldeEdit(value)} />
           </div>
         );
       default:
@@ -97,8 +95,10 @@ const LeadsTable = () => {
     }
   };
 
-  const hanldeEdit = () => {
-    navigate('/leads/edit');
+  const hanldeEdit = (value) => {
+    const selectedLeadId = leads.find(lead => lead.leadNumber === value);
+    console.log("selectedLeadId", selectedLeadId);
+    navigate(`/leads/edit/${selectedLeadId?.id}`);
   };
 
   useEffect(() => {

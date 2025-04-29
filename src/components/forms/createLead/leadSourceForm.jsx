@@ -21,7 +21,6 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                 getDesiredProgram()
             ]
         );
-            // console.log("statusRes", sourceRes?.value?.data?.data || [])
             setSourceOptions(sourceRes?.value?.data?.data || []);
             setCityOptions(cityRes?.value?.data?.data || []);
             setRegionOptions(regionRes?.value?.data?.data || []);
@@ -48,9 +47,10 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                         disabled={!isEditable}
                         showAsterisk={false}
                         placeHolder="Select"
-                        value={values.leadSource_1}
+                        // value={values.leadSource_1}
+                        value={sourceOptions?.find(option => option?.id === values?.leadSource_1) || ""}
                         onChange={(value) => {
-                            setFieldValue('leadSource_1', value.target.value);
+                            setFieldValue('leadSource_1', value?.target?.value.id);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'leadSource_1' } })}
                         hasError={touched.leadSource_1 && Boolean(errors.leadSource_1)}
@@ -66,9 +66,10 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                         disabled={!isEditable}
                         showAsterisk={false}
                         placeHolder="Select"
-                        value={values.leadSource_2}
+                        // value={values.leadSource_2}
+                        value={sourceOptions?.find(option => option?.id === values?.leadSource_2) || ""}
                         onChange={(value) => {
-                            setFieldValue('leadSource_2', value.target.value);
+                            setFieldValue('leadSource_2', value?.target?.value.id);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'leadSource_2' } })}
                         hasError={touched.leadSource_2 && Boolean(errors.leadSource_2)}
@@ -84,9 +85,10 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"
-                        value={values.leadSource_3}
+                        // value={values.leadSource_3}
+                        value={sourceOptions?.find(option => option?.id === values?.leadSource_3) || ""}
                         onChange={(value) => {
-                            setFieldValue('leadSource_3', value.target.value);
+                            setFieldValue('leadSource_3', value?.target?.value.id);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'leadSource_3' } })}
                         hasError={touched.leadSource_3 && Boolean(errors.leadSource_3)}
@@ -102,9 +104,10 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"
-                        value={values.leadSource_4}
+                        // value={values.leadSource_4}
+                        value={sourceOptions?.find(option => option?.id === values?.leadSource_4) || ""}
                         onChange={(value) => {
-                            setFieldValue('leadSource_4', value.target.value);
+                            setFieldValue('leadSource_4', value?.target?.value.id);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'leadSource_4' } })}
                         hasError={touched.leadSource_4 && Boolean(errors.leadSource_4)}
@@ -120,9 +123,10 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
-                        value={values.location_1}
+                        // value={values.location_1}
+                        value={cityOptions?.find(option => option?.id === values?.location_1) || ""}
                         onChange={(value) => {
-                            setFieldValue('location_1', value.target.value);
+                            setFieldValue('location_1', value?.target?.value.id);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'location_1' } })}
                         hasError={touched.location_1 && Boolean(errors.location_1)}
@@ -138,9 +142,10 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"
-                        value={values.location_2}
+                        // value={values.location_2}
+                        value={regionOptions?.find(option => option?.id === values?.location_2) || ""}
                         onChange={(value) => {
-                            setFieldValue('location_2', value.target.value);
+                            setFieldValue('location_2', value?.target?.value.id);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'location_2' } })}
                         hasError={touched.location_2 && Boolean(errors.location_2)}
@@ -156,9 +161,10 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
-                        value={values.vertical}
+                        // value={values.vertical}
+                        value={verticalOptions?.find(option => option?.id === values?.vertical) || ""}
                         onChange={(value) => {
-                            setFieldValue('vertical', value.target.value);
+                            setFieldValue('vertical', value?.target?.value.id);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'vertical' } })}
                         hasError={touched.vertical && Boolean(errors.vertical)}
@@ -479,9 +485,10 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
-                        value={values.desiredProgram}
+                        // value={values.desiredProgram}
+                        value={desiredProgramOptions?.find(option => option?.id === values?.desiredProgram) || ""}
                         onChange={(value) => {
-                            setFieldValue('desiredProgram', value.target.value);
+                            setFieldValue('desiredProgram', value?.target?.value.id);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'desiredProgram' } })}
                         hasError={touched.desiredProgram && Boolean(errors.desiredProgram)}
@@ -497,7 +504,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"
-                        value={values.internshipOption}
+                        value={values?.internshipOption}
                         onChange={(value) => {
                             setFieldValue('internshipOption', value.target.value);
                         }}

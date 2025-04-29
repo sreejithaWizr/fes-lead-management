@@ -7,15 +7,16 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
 
     const yearOptions = [...Array.from({ length: 26 }, (_, i) => `${new Date().getFullYear() - i}`)];
     const numberOfYears = [...Array.from({ length: 26 }, (_, i) => i)];
-    const monthOptions = [{id: "Q1", name: "Q1"}, {id: "Q2", name: "Q2"}, {id: "Q3", name: "Q3"}, {id: "Q4", name: "Q4"}]
+    const monthOptions = [{ id: "Q1", name: "Q1" }, { id: "Q2", name: "Q2" }, { id: "Q3", name: "Q3" }, { id: "Q4", name: "Q4" }]
 
     const [areaOfStudyOptions, setAreaOfStudyOptions] = useState([]);
     const [qualificationOptions, setqualificationOptions] = useState([]);
     const [preferredCountryOptions, setPreferredCountryOptions] = useState([]);
     const [testNameOptions, setTestNameOptions] = useState([]);
+    const [defaultMultiValue, setDefaultMultiValue] = useState([]);
+    const [defaultMultiValueForTestName, setDefaultMultiValueForTestName] = useState([]);
 
     useEffect(() => {
-        console.log('values', values);
         const fetchDropdownData = async () => {
             try {
                 const [areaOfStudy, qualification, preferredCountry, testName] = await Promise.allSettled([
@@ -54,6 +55,49 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
         setFieldValue('testTrainingBoolean', checked);
     }
 
+    // useEffect(() => {
+    //     if (values?.preferredDestination) {
+    //         const selectedOptions = preferredCountryOptions?.filter(option => values?.preferredDestination?.includes(option?.id));
+    //         setDefaultMultiValue(selectedOptions);
+    //     }
+    // }, [values?.preferredDestination]);
+
+    // useEffect(() => {
+    //     if (!isEditable && values?.preferredDestination) {
+    //         const selectedOptions = preferredCountryOptions?.filter(option =>
+    //             values?.preferredDestination?.includes(option?.id)
+    //         );
+    //         setDefaultMultiValue(selectedOptions);
+    //     }
+    // }, [isEditable, values?.preferredDestination, preferredCountryOptions]);
+
+    useEffect(() => {
+        if (values?.preferredDestination?.length > 0) {
+            const selectedOptions = preferredCountryOptions?.filter(option =>
+                values?.preferredDestination.includes(option?.id)
+            );
+            setDefaultMultiValue(selectedOptions);
+        }
+    }, [values?.preferredDestination, preferredCountryOptions]);
+
+    useEffect(() => {
+        if (values?.testName?.length > 0) {
+            const selectedOptions = testNameOptions?.filter(option =>
+                values?.testName.includes(option?.id)
+            );
+            setDefaultMultiValueForTestName(selectedOptions);
+        }
+    }, [values?.testName, testNameOptions]);
+
+
+    // console.log(
+    //     "valu",
+    //     values.preferredDestination,
+    //     defaultMultiValue,
+    //     preferredCountryOptions?.filter(option => values?.preferredDestination?.includes(option?.id))
+    // );
+
+
     return (
         <div className="form-section animate-fade-in ml-0 mb-6">
             <h2 className="font-bold text-[19px] leading-[140%] tracking-[0%] text-[#17222B] font-[Proxima Nova] mb-4">
@@ -67,10 +111,10 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
-                        value={values.highestQualification}
+                        value={qualificationOptions?.find(option => option?.id === values?.highestQualification) || ""}
                         disabled={!isEditable}
                         onChange={(value) => {
-                            setFieldValue('highestQualification', value.target.value);
+                            setFieldValue('highestQualification', value.target.value?.id);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'highestQualification' } })}
                         hasError={touched.highestQualification && Boolean(errors.highestQualification)}
@@ -85,7 +129,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
-                        value={values.graduationYear}
+                        value={values?.graduationYear}
                         disabled={!isEditable}
                         onChange={(value) => {
                             setFieldValue('graduationYear', value.target.value);
@@ -103,10 +147,10 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
-                        value={values.fieldOfStudy}
+                        value={areaOfStudyOptions?.find(option => option?.id === values?.fieldOfStudy) || ""}
                         disabled={!isEditable}
                         onChange={(value) => {
-                            setFieldValue('fieldOfStudy', value.target.value);
+                            setFieldValue('fieldOfStudy', value.target.value?.id);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'fieldOfStudy' } })}
                         hasError={touched.fieldOfStudy && Boolean(errors.fieldOfStudy)}
@@ -137,7 +181,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"
-                        value={values.workExperience}
+                        value={values?.workExperience}
                         disabled={!isEditable}
                         onChange={(value) => {
                             setFieldValue('workExperience', value.target.value)
@@ -154,34 +198,37 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                         options={yearOptions}
                         // required={true}
                         showAsterisk={false}
+                        disabled={!isEditable}
                         placeHolder="Select"
-                        value={values.intake_year}
+                        value={values?.intakeYear}
                         onChange={(value) => {
-                            setFieldValue('intake_year', value.target.value);
+                            setFieldValue('intakeYear', value.target.value);
                         }}
-                        onBlur={() => handleBlur({ target: { name: 'intake_year' } })}
-                        hasError={touched.intake_year && Boolean(errors.intake_year)}
-                        errorMessage={touched.intake_year && errors.intake_year}
+                        onBlur={() => handleBlur({ target: { name: 'intakeYear' } })}
+                        hasError={touched.intakeYear && Boolean(errors.intakeYear)}
+                        errorMessage={touched.intakeYear && errors.intakeYear}
                     />
                 </div>
-   
+
                 <div className="form-field">
                     <CustomDropDown
                         label="Intake Month"
                         options={monthOptions}
                         // required={true}
                         showAsterisk={false}
+                        disabled={!isEditable}
                         placeHolder="Select"
-                        value={values?.intake_month}
+                        // value={values?.intakeMonth}
+                        value={monthOptions?.find(option => option?.id === values?.intakeMonth?.name)}
                         onChange={(value) => {
-                            setFieldValue('intake_month', value.target.value);
+                            setFieldValue('intakeMonth', value.target.value);
                         }}
-                        onBlur={() => handleBlur({ target: { name: 'intake_month' } })}
-                        hasError={touched.intake_month && Boolean(errors.intake_month)}
-                        errorMessage={touched.intake_month && errors.intake_month}
+                        onBlur={() => handleBlur({ target: { name: 'intakeMonth' } })}
+                        hasError={touched.intakeMonth && Boolean(errors.intakeMonth)}
+                        errorMessage={touched.intakeMonth && errors.intakeMonth}
                     />
                 </div>
-                
+
                 <div className="form-field">
                     <CustomDropDown
                         label="Preferred Study Destination"
@@ -189,10 +236,14 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                         required={true}
                         multiple={true}
                         placeHolder="Select"
-                        value={values.preferredDestination}
+                        // value={defaultMultiValue}
+                        // value={preferredCountryOptions?.find(option => option?.id === values?.preferredDestination) || ""}
+                        value={isEditable ? defaultMultiValue : preferredCountryOptions?.filter(option => values?.preferredDestination?.includes(option?.id)) || []}
                         disabled={!isEditable}
                         onChange={(value) => {
-                            setFieldValue('preferredDestination', value.target.value)
+                            setDefaultMultiValue(value.target.value); // Update dropdown visible values
+                            // setFieldValue('preferredDestination', value.target.value)
+                            setFieldValue('preferredDestination', value?.target?.value.map(v => v.id)); // Save only IDs to form
                         }}
                         onBlur={() => handleBlur({ target: { name: 'preferredDestination' } })}
                         hasError={touched.preferredDestination && Boolean(errors.preferredDestination)}
@@ -218,7 +269,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
             </div>
 
             <div className="mt-5 mb-5 flex items-center gap-2">
-                <CustomCheckboxField name="testTrainingBoolean" label="Test Training Required" disabled={!isEditable ? true : false} onChange={handleTestTrainingRequiredOnChange} checked={values?.testTrainingBoolean} />
+                <CustomCheckboxField name="testTrainingBoolean" label="Test Training Required" disabled={!isEditable} onChange={handleTestTrainingRequiredOnChange} checked={values?.testTrainingBoolean ? true : false} />
                 {/* <span className='text-red-600'>*</span> */}
             </div>
 
@@ -245,10 +296,26 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                     required={false}
                     multiple={true}
                     placeHolder="Select"
-                    value={values?.testName}
+                    // value={[
+                    //     {
+                    //         "id": 1,
+                    //         "name": "IELTS"
+                    //     },
+                    //     {
+                    //         "id": 2,
+                    //         "name": "OET"
+                    //     }
+                    // ]}
+                    // value={testNameOptions?.filter(option => values?.testName?.includes(option.id)) || []}
+                    value={isEditable ? defaultMultiValueForTestName : testNameOptions?.filter(option => values?.testName?.includes(option?.id)) || []}
                     disabled={!isEditable}
+                    // onChange={(value) => {
+                    //     setFieldValue('testName', value.target.value)
+                    // }}
                     onChange={(value) => {
-                        setFieldValue('testName', value.target.value)
+                        setDefaultMultiValueForTestName(value.target.value); // Update dropdown visible values
+                        // setFieldValue('preferredDestination', value.target.value)
+                        setFieldValue('testName', value?.target?.value.map(v => v.id)); // Save only IDs to form
                     }}
                     onBlur={() => handleBlur({ target: { name: 'testName' } })}
                     hasError={touched.testName && Boolean(errors.testName)}

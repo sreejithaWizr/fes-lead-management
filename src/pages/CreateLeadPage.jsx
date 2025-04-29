@@ -194,8 +194,6 @@ const CreateLeadPage = () => {
             }
         }
 
-        console.log("payload", payload)
-
         try {
             const response = await createLead(payload);
             console.log('User created:', response.data);
