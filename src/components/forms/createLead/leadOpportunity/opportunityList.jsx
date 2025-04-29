@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { CustomButton, CustomInputField, CustomDropDown } from "react-mui-tailwind";
 import EditIcon from '../../../../assets/edit.svg';
 import EditOpportunityRow from './opportunityEdit';
-import { getOpportunityList } from '../../../../api/services/opportunityAPI/opportunityAPI';
+import { getOpportunityList, opportunityUpdate } from '../../../../api/services/opportunityAPI/opportunityAPI';
 import { getCategory, getStatus, getSubCategory } from '../../../../api/services/masterAPIs/createLeadApi';
 
 const labelStyle = {
@@ -27,8 +27,6 @@ const LeadOpportunity = ({ values, errors, touched, handleChange, handleBlur, se
     opportunityCategoryList: [],
     opportunitySubCategoryList: [],
   });
-
-  const [subCategoryMap, setSubCategoryMap] = useState({}); // State to store subcategories for each category
 
   const [subCategoryData, setSubCategoryData] = useState({}); // Store subcategories by category ID
 
@@ -70,7 +68,7 @@ const LeadOpportunity = ({ values, errors, touched, handleChange, handleBlur, se
         )
         .catch((error) => console.log(error))
     }
-  }, [leadID])
+  }, [leadID, editingId])
 
   // Fetch subcategory data for a given category
   const fetchSubCategory = async (categoryId) => {
@@ -112,10 +110,35 @@ const LeadOpportunity = ({ values, errors, touched, handleChange, handleBlur, se
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleUpdate = (updatedData) => {
+  const handleUpdate = async (updatedData) => {
+
     console.log('Update payload:', formData, updatedData);
+
+    const payload = {
+      id: updatedData?.opportunityID || null,
+      preffered_intake: updatedData?.intake,
+      opportunity_owner: updatedData?.counsellor1,
+      product_manager_id: updatedData?.counsellor2,
+      preffered_study_destination: updatedData?.countryID,
+      opportunity_category: updatedData?.opportunityCategory,
+      opportunity_status: updatedData?.opportunityStatus,
+      opportunity_subcategory: updatedData?.opportunitySubCatergory,
+      note: updatedData?.notes,
+      lead_id: updatedData?.lead_id,
+    }
+
+    console?.log("payload", payload)
+    try {
+      const response = await opportunityUpdate(updatedData?.opportunityID, payload);
+      console.log('User created:', response?.data);
+      if (response?.data?.succeeded === true) {
+       setEditingId(null);
+      }
+      // Optional: reset form or show toast
+    } catch (err) {
+      console.error('Error creating user:', err);
+    }
     // call API here
-    setEditingId(null);
   };
 
   const handleCancel = () => {
@@ -152,15 +175,15 @@ const LeadOpportunity = ({ values, errors, touched, handleChange, handleBlur, se
             //   ? findNameById(subCategories, Number(data?.opportunity_subcategory))
             //   : "-";
 
-             // Fetch subcategory name when category changes
-             const categoryId = data?.opportunity_category;
-             console.log("categoryId", categoryId)
-             const subCategories = subCategoryData[categoryId] || [];
-             console.log("subCategories", subCategories)
-             const subCategoryName =
-               subCategories.length > 0
-                 ? findNameById(subCategories, Number(data?.opportunity_subcategory))
-                 : "-";
+            // Fetch subcategory name when category changes
+            const categoryId = data?.opportunity_category;
+            console.log("categoryId", categoryId)
+            const subCategories = subCategoryData[categoryId] || [];
+            console.log("subCategories", subCategories)
+            const subCategoryName =
+              subCategories.length > 0
+                ? findNameById(subCategories, Number(data?.opportunity_subcategory))
+                : "-";
 
             return (
               <div
@@ -191,7 +214,7 @@ const LeadOpportunity = ({ values, errors, touched, handleChange, handleBlur, se
 
                   <div>
                     <label style={labelStyle}>Opportunity ID</label>
-                    <div style={valueStyle}>{data?.id || "-"}</div>
+                    <div style={valueStyle}>{data?.opportunityId || "-"}</div>
                   </div>
 
                   <div>
@@ -227,7 +250,7 @@ const LeadOpportunity = ({ values, errors, touched, handleChange, handleBlur, se
                       {/* {findNameById(masterData?.opportunitySubCategoryList, Number(data?.opportunity_subcategory))|| "-"} */}
                       {/* {getSubCategoryName(data?.opportunity_category, data?.opportunity_subcategory)} */}
                       {subCategoryName}
-                      </div>
+                    </div>
                   </div>
                 </div>
 
