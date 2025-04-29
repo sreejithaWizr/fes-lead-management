@@ -35,5 +35,5 @@ export const getVertical = () => apiClient.get('api/Vertical');
 export const getDesiredProgram = () => apiClient.get('api/DesiredProgram')
 
 export const createLead = (payload) => {
-    return apiClient.post('api/leadProfile', payload);
-  };
+    return apiClient.post('api/LeadProfile', payload);
+};

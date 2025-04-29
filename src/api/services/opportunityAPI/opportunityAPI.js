@@ -5,7 +5,7 @@ import apiClient from "../../config/axios";
 
 export const getOpportunityList = async (id) => {
     try {
-      const response = await apiClient.get(`api/LeadOpportunity/by-lead-id/${id}`);
+      const response = await apiClient.get(`api/LeadOpportunity/ByLeadId/${id}`);
       console.log('opportuniity fetched:', response.data);
       return response.data;
     } catch (error) {

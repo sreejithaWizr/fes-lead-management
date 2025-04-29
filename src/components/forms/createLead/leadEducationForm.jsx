@@ -141,8 +141,8 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                     <CustomDropDown
                         label="Intake Year"
                         options={yearOptions}
-                        // required={true}
-                        showAsterisk={false}
+                        required={true}
+                        showAsterisk={true}
                         placeHolder="Select"
                         value={values.intake_year}
                         onChange={(value) => {

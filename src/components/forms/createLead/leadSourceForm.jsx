@@ -1,36 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import { CustomButton, CustomInputField, CustomDropDown, CustomDatePicker } from "react-mui-tailwind";
-import { getCity, getDesiredProgram, getRegion, getSource1, getVertical } from '../../../api/services/masterAPIs/createLeadApi';
+import { getCity, getDesiredProgram, getFESUser, getRegion, getSource1, getVertical } from '../../../api/services/masterAPIs/createLeadApi';
 
 const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => {
-const [sourceOptions, setSourceOptions] = useState([]);
-const [cityOptions, setCityOptions] = useState([]);
-const [regionOptions, setRegionOptions] = useState([]);
-const [verticalOptions, setVerticalOptions] = useState([]);
-const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
+    const [sourceOptions, setSourceOptions] = useState([]);
+    const [cityOptions, setCityOptions] = useState([]);
+    const [regionOptions, setRegionOptions] = useState([]);
+    const [verticalOptions, setVerticalOptions] = useState([]);
+    const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
+    const [userOptions, setUserOptions] = useState([]);
+
     useEffect(() => {
         const fetchData = async () => {
-          try {
-            const [sourceRes, regionRes, cityRes, verticalRes, desiredProgramRes] = await Promise.allSettled([
-                getSource1(),
-                getCity(),
-                getRegion(),
-                getVertical(),
-                getDesiredProgram()
-            ]
-        );
-            // console.log("statusRes", sourceRes?.value?.data?.data || [])
-            setSourceOptions(sourceRes?.value?.data?.data || []);
-            setCityOptions(cityRes?.value?.data?.data || []);
-            setRegionOptions(regionRes?.value?.data?.data || []);
-            setVerticalOptions(verticalRes?.value?.data?.data || []);
-            setDesiredProgramOptions(desiredProgramRes?.value?.data?.data || []);
-          } catch (err) {
-            console.error('Error loading filters:', err);
-          }
+            try {
+                const [sourceRes, regionRes, cityRes, verticalRes, desiredProgramRes, userRes] = await Promise.allSettled([
+                    getSource1(),
+                    getCity(),
+                    getRegion(),
+                    getVertical(),
+                    getDesiredProgram(),
+                    getFESUser(),
+                ]
+                );
+                // console.log("statusRes", sourceRes?.value?.data?.data || [])
+                setSourceOptions(sourceRes?.value?.data?.data || []);
+                setCityOptions(cityRes?.value?.data?.data || []);
+                setRegionOptions(regionRes?.value?.data?.data || []);
+                setVerticalOptions(verticalRes?.value?.data?.data || []);
+                setDesiredProgramOptions(desiredProgramRes?.value?.data?.data || []);
+                setUserOptions(userRes?.value?.data?.data || []);
+            } catch (err) {
+                console.error('Error loading filters:', err);
+            }
         };
         fetchData();
-      }, []);
+    }, []);
 
     return (
         <div className="form-section animate-fade-in ml-0 mb-6">
@@ -144,7 +148,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                     <CustomDropDown
                         label="Vertical"
                         options={verticalOptions}
-                        required={true}
+                        // required={true}
                         showAsterisk={false}
                         placeHolder="Select"
                         value={values.vertical}
@@ -400,7 +404,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                 <div className="form-field">
                     <CustomDropDown
                         label="Import Lead"
-                        options={[{id: "Yes", name: "Yes"}, {id: "No", name: "No"}]}
+                        options={[{ id: "Yes", name: "Yes" }, { id: "No", name: "No" }]}
                         // required={true}
                         placeHolder="Select"
                         value={values?.importLead}
@@ -416,7 +420,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                 <div className="form-field">
                     <CustomDropDown
                         label="Invoke Blueprint"
-                        options={[{id: "Yes", name: "Yes"}, {id: "No", name: "No"}]}
+                        options={[{ id: "Yes", name: "Yes" }, { id: "No", name: "No" }]}
                         // required={true}
                         placeHolder="Select"
                         value={values?.invokeBlueprint}
@@ -480,7 +484,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                 <div className="form-field">
                     <CustomDropDown
                         label="Internship Option"
-                        options={[{id: "Yes", name: "Yes"}, {id: "No", name: "No"}]}
+                        options={[{ id: "Yes", name: "Yes" }, { id: "No", name: "No" }]}
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"
@@ -513,7 +517,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                 <div className="form-field">
                     <CustomDropDown
                         label="Preferred Counsellor for FESTech1 Name "
-                        options={["Option 1", "Option 2", "Option 3"]}
+                        options={userOptions || []}
                         // required={true}
                         placeHolder="Select"
                         value={values?.counsellorFESTech1Name}

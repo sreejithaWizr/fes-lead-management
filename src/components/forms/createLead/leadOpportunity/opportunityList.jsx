@@ -3,6 +3,7 @@ import { CustomButton, CustomInputField, CustomDropDown } from "react-mui-tailwi
 import EditIcon from '../../../../assets/edit.svg';
 import EditOpportunityRow from './opportunityEdit';
 import { getOpportunityList } from '../../../../api/services/opportunityAPI/opportunityAPI';
+import { getCategory, getStatus, getSubCategory } from '../../../../api/services/masterAPIs/createLeadApi';
 
 const labelStyle = {
   fontSize: '11px',
@@ -16,51 +17,85 @@ const valueStyle = {
   color: '#17222B',
 };
 
-const LeadOpportunity = ({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => {
+const LeadOpportunity = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, leadID }) => {
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({});
-
-  const apiJson = [
-    {
-      countryName: "Canada",
-      opportunityID: "ID001",
-      owner: "Riyaz",
-      intake: "2025",
-      opportunityStatus: "Ready for Counsellor",
-      opportunityCategory: "Interested",
-      opportunitySubCatergory: "Contacted",
-    },
-    {
-      countryName: "England",
-      opportunityID: "ID002",
-      owner: "Revathy",
-      intake: "2025",
-      opportunityStatus: "Inprogress",
-      opportunityCategory: "Interested",
-      opportunitySubCatergory: "Contacted",
-    },
-    {
-      countryName: "Germany",
-      opportunityID: "ID003",
-      owner: "Adam John",
-      intake: "2025",
-      opportunityStatus: "Ready for Counsellor",
-      opportunityCategory: "Interested",
-      opportunitySubCatergory: "Contacted",
-    }
-  ];
-
   const [opportunityList, setOpportunityList] = useState();
 
+  const [masterData, setMasterData] = useState({
+    opportunityStatusList: [],
+    opportunityCategoryList: [],
+    opportunitySubCategoryList: [],
+  });
+
+  const [subCategoryMap, setSubCategoryMap] = useState({}); // State to store subcategories for each category
+
+  const [subCategoryData, setSubCategoryData] = useState({}); // Store subcategories by category ID
+
+
   useEffect(() => {
-    getOpportunityList(1)
-      .then((result) => {
-        console.log("result", result)
-        setOpportunityList(result?.data)
+    const fetchData = async () => {
+      try {
+        const [status, category] = await Promise.allSettled([
+          getStatus(),
+          getCategory(),
+        ]);
+
+        setMasterData((prev) => ({
+          ...prev,
+          opportunityStatusList: status?.status === "fulfilled" ? status.value?.data?.data || [] : [],
+          opportunityCategoryList: category?.status === "fulfilled" ? category.value?.data?.data || [] : [],
+        }));
+        console.log("status", status, "category", category);
+      } catch (error) {
+        console.error('Error fetching master data:', error);
       }
-      )
-      .catch((error) => console.log(error))
-  },[])
+    };
+
+    fetchData();
+  }, []);
+
+  const findNameById = (list, id) => {
+    const item = list.find((i) => i.id === id);
+    return item?.name || "-";
+  };
+
+  useEffect(() => {
+    if (leadID) {
+      getOpportunityList(leadID)
+        .then((result) => {
+          console.log("result", result)
+          setOpportunityList(result?.data)
+        }
+        )
+        .catch((error) => console.log(error))
+    }
+  }, [leadID])
+
+  // Fetch subcategory data for a given category
+  const fetchSubCategory = async (categoryId) => {
+    try {
+      const result = await getSubCategory(categoryId); // Replace with your API call
+      setSubCategoryData((prevData) => ({
+        ...prevData,
+        [categoryId]: result?.data?.data || [], // Store subcategories by category ID
+      }));
+    } catch (error) {
+      console.error("Error fetching subcategories:", error);
+    }
+  };
+
+  // Fetch subcategories for all categories in the opportunity list when component mounts
+  useEffect(() => {
+    if (opportunityList?.length > 0) {
+      const categoryIds = [...new Set(opportunityList.map((item) => item.opportunity_category))];
+      categoryIds.forEach((categoryId) => {
+        if (!subCategoryData[categoryId]) {
+          fetchSubCategory(categoryId); // Fetch subcategory only if not already fetched
+        }
+      });
+    }
+  }, [opportunityList]);
 
   const getStatusColor = (status) => {
     if (status === "Ready for Counsellor") return "#14AE5C";
@@ -69,7 +104,7 @@ const LeadOpportunity = ({ values, errors, touched, handleChange, handleBlur, se
   };
 
   const handleEditClick = (data) => {
-    setEditingId(data.opportunityID);
+    setEditingId(data.id);
     setFormData({ ...data });
   };
 
@@ -87,94 +122,138 @@ const LeadOpportunity = ({ values, errors, touched, handleChange, handleBlur, se
     setEditingId(null);
   };
 
-  console.log("formData", formData)
+  console.log("opportunityList", opportunityList)
 
   return (
     <div className="form-section animate-fade-in ml-0 mb-6">
       <h2 className="font-bold text-[19px] leading-[140%] tracking-[0%] text-[#17222B] font-[Proxima Nova] mb-4">
         Lead Opportunity
       </h2>
-      {apiJson?.length > 0 ? (
-         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-         {apiJson?.map((data) => {
-           const isEditing = editingId === data.opportunityID;
- 
-           if (isEditing) {
-             return (
-               <EditOpportunityRow
-                 key={data.opportunityID}
-                 data={data}
-                 onCancel={handleCancel}
-                 onUpdate={handleUpdate}
-               />
-             );
-           }
- 
-           return (
-             <div
-               key={data?.opportunityID}
-               style={{
-                 display: 'grid',
-                 gridTemplateColumns: '0.9fr 0.9fr 1.1fr 0.6fr 1.2fr 1.2fr 1.2fr 0.6fr',
-                 gap: '16px',
-                 alignItems: 'start',
-                 padding: '16px',
-                 border: '1px solid #CBDBE4',
-                 borderRadius: '12px',
-               }}
-             >
-               <div>
-                 <label style={labelStyle}>Country</label>
-                 <div style={valueStyle}>{data?.countryName}</div>
-               </div>
- 
-               <div>
-                 <label style={labelStyle}>Opportunity ID</label>
-                 <div style={valueStyle}>{data?.opportunityID}</div>
-               </div>
- 
-               <div>
-                 <label style={labelStyle}>Owner</label>
-                 <div style={valueStyle}>{data?.owner}</div>
-               </div>
- 
-               <div>
-                 <label style={labelStyle}>Intake</label>
-                 <div style={valueStyle}>{data?.intake}</div>
-               </div>
- 
-               <div>
-                 <label style={labelStyle}>Opportunity Status</label>
-                 <div style={{ ...valueStyle, color: getStatusColor(data?.opportunityStatus) }}>
-                   {data?.opportunityStatus}
-                 </div>
-               </div>
- 
-               <div>
-                 <label style={labelStyle}>Opportunity Category</label>
-                 <div style={{ ...valueStyle, color: '#14AE5C' }}>{data?.opportunityCategory}</div>
-               </div>
- 
-               <div>
-                 <label style={labelStyle}>Opportunity Sub Category</label>
-                 <div style={{ ...valueStyle, color: '#14AE5C' }}>{data?.opportunitySubCatergory}</div>
-               </div>
- 
-               <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'center', height: '100%' }}>
-                 <CustomButton
-                   variant="icon"
-                   iconImg={EditIcon}
-                   endIcon={false}
-                   showText={false}
-                   onClick={() => handleEditClick(data)}
-                 />
-               </div>
-             </div>
-           );
-         })}
-       </div>
+      {opportunityList?.length > 0 ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {opportunityList?.map((data) => {
+            const isEditing = editingId == data.id;
+
+            if (isEditing) {
+              return (
+                <EditOpportunityRow
+                  key={data.id}
+                  data={data}
+                  onCancel={handleCancel}
+                  onUpdate={handleUpdate}
+                />
+              );
+            }
+
+            // const categoryId = data?.opportunity_category;
+            // const subCategories = subCategoryData[categoryId] || [];
+
+            // const subCategoryName = subCategories.length > 0
+            //   ? findNameById(subCategories, Number(data?.opportunity_subcategory))
+            //   : "-";
+
+             // Fetch subcategory name when category changes
+             const categoryId = data?.opportunity_category;
+             console.log("categoryId", categoryId)
+             const subCategories = subCategoryData[categoryId] || [];
+             console.log("subCategories", subCategories)
+             const subCategoryName =
+               subCategories.length > 0
+                 ? findNameById(subCategories, Number(data?.opportunity_subcategory))
+                 : "-";
+
+            return (
+              <div
+                key={data?.id}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-start',
+                  padding: '16px',
+                  border: '1px solid #CBDBE4',
+                  borderRadius: '12px',
+                  wordBreak: "break-word",
+                }}
+              >
+                {/* Left side - Fields */}
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                    gap: '16px',
+                    flex: 1,
+                  }}
+                >
+                  <div>
+                    <label style={labelStyle}>Country</label>
+                    <div style={valueStyle}>{data?.country_name || "-"}</div>
+                  </div>
+
+                  <div>
+                    <label style={labelStyle}>Opportunity ID</label>
+                    <div style={valueStyle}>{data?.id || "-"}</div>
+                  </div>
+
+                  <div>
+                    <label style={labelStyle}>Counsellor 1</label>
+                    <div style={valueStyle}>{data?.owner_name || "-"}</div>
+                  </div>
+
+                  <div>
+                    <label style={labelStyle}>Counsellor 2</label>
+                    <div style={valueStyle}>{data?.owner_name2 || "-"}</div>
+                  </div>
+
+                  <div>
+                    <label style={labelStyle}>Intake</label>
+                    <div style={valueStyle}>{data?.preffered_intake || "-"}</div>
+                  </div>
+
+                  <div>
+                    <label style={labelStyle}>Opportunity Status</label>
+                    <div style={{ ...valueStyle, color: getStatusColor(data?.opportunity_status) }}>
+                      {findNameById(masterData?.opportunityStatusList, Number(data?.opportunity_status)) || "-"}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label style={labelStyle}>Opportunity Category</label>
+                    <div style={{ ...valueStyle, color: '#14AE5C' }}>{findNameById(masterData?.opportunityCategoryList, Number(data?.opportunity_category)) || "-"}</div>
+                  </div>
+
+                  <div>
+                    <label style={labelStyle}>Opportunity Sub Category</label>
+                    <div style={{ ...valueStyle, color: '#14AE5C' }}>
+                      {/* {findNameById(masterData?.opportunitySubCategoryList, Number(data?.opportunity_subcategory))|| "-"} */}
+                      {/* {getSubCategoryName(data?.opportunity_category, data?.opportunity_subcategory)} */}
+                      {subCategoryName}
+                      </div>
+                  </div>
+                </div>
+
+                {/* Right side - Edit button */}
+                <div
+                  style={{
+                    marginLeft: '16px',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                  }}
+                >
+                  <CustomButton
+                    variant="icon"
+                    iconImg={EditIcon}
+                    endIcon={false}
+                    showText={false}
+                    onClick={() => handleEditClick(data)}
+                  />
+                </div>
+              </div>
+
+            );
+          })}
+        </div>
       ) : (
-      <div> No Data</div>)}
+        <div> No Data</div>)}
     </div>
   );
 };

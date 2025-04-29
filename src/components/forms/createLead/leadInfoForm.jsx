@@ -6,6 +6,7 @@ import { data } from 'autoprefixer';
 const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => {
 
   const [userOptions, setUserOptions] = useState([]);
+
   const [priorityOptions, setPriorityOptions] = useState([]);
 
   useEffect(() => {
@@ -204,8 +205,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
           <CustomDropDown
             label="Tele Caller"
             options={userOptions}
-            required={false}
-            showAsterisk={false}
+            required={true}
             placeHolder="Select"
             value={values.teleCallerName}
             onChange={(value) => {

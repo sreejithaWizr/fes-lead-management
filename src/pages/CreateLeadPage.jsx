@@ -10,6 +10,7 @@ import WarningIcon from '../assets/warning-icon.svg'
 import LeadOpportunity from '../components/forms/createLead/leadOpportunity/opportunityList';
 import { getUser, getUsers } from '../api/services/api';
 import { createLead, getStatus } from '../api/services/masterAPIs/createLeadApi';
+import { useNavigate } from 'react-router-dom';
 
 const ErrorObserver = ({ setTabErrors }) => {
     const { errors, touched } = useFormikContext();
@@ -47,6 +48,7 @@ const CreateLeadPage = () => {
     const tabs = ['All Info', 'Lead Information', 'Education Qualification', 'Lead Status', 'Lead Source'];
     const [tabErrors, setTabErrors] = useState({});
 
+    const navigate = useNavigate();
     const initialValues = {
         // Lead Information
         firstName: '',
@@ -123,27 +125,27 @@ const CreateLeadPage = () => {
         // console.log('Form submitted with values:', values);
 
         const payload = {
-            first_name: values?.firstName,
-            last_name: values?.lastName,
-            email: values?.email,
-            secondary_email: values?.secondaryEmail,
-            mobile_number: values?.mobileNumber,
-            alternative_number: values?.alternativeNumber,
-            whatsapp_number: values?.whatsappNumber,
-            tele_callerid: values?.teleCallerName?.id,
-            priority_id: values?.priority?.id,
-            lead_number: values?.leadNumber,
-            consent: "Yes",
-            created_at: values?.leadCreated,
+            first_name: values?.firstName || '',
+            last_name: values?.lastName || '',
+            email: values?.email || '',
+            secondary_email: values?.secondaryEmail || '',
+            mobile_number: values?.mobileNumber || '',
+            alternative_number: values?.alternativeNumber || '',
+            whatsapp_number: values?.whatsappNumber || '',
+            tele_callerid: values?.teleCallerName?.id || null,
+            priority_id: values?.priority?.id || null,
+            lead_number: values?.leadNumber || '',
+            consent: values?.agreeToReceiveBoolean,
+            created_at: values?.leadCreated || '',
             created_by: "Admin",
             education: {
-                highest_qualification_id: values?.highestQualification?.id,
-                graduation_year: values?.graduationYear?.name,
-                fieldofstudy_id: values?.fieldOfStudy?.id,
-                cgpa_grade: 5,
+                highest_qualification_id: values?.highestQualification?.id || null,
+                graduation_year: values?.graduationYear?.name || '',
+                fieldofstudy_id: values?.fieldOfStudy?.id || null,
+                cgpa_grade: values?.cgpaGrade || null,
                 work_experience: values?.workExperience?.name,
                 intake_year: values?.intake_year?.name,
-                intake_month: values?.intake_month?.name,
+                intake_month: values?.intake_month?.name || '',
                 other_countries: values?.otherCountries,
                 test_training_required: values?.testTrainingBoolean,
                 preferred_countries: Array.isArray(values?.preferredDestination)
@@ -154,43 +156,43 @@ const CreateLeadPage = () => {
                     : []
             },
             status: {
-                status: values?.leadStatus?.id,
-                category: values?.category?.id,
-                subcategory_id: values?.subCategory?.id,
-                branch_id: values?.branch?.id,
+                status: values?.leadStatus?.id || null,
+                category: values?.category?.id || null,
+                subcategory_id: values?.subCategory?.id || null,
+                branch_id: values?.branch?.id || null,
             },
             source: {
-                source1_id: values?.leadSource_1?.id,
-                source2_id: values?.leadSource_2?.id,
-                source3_id: values?.leadSource_3?.id,
-                source4_id: values?.leadSource_4?.id,
-                region_id: values?.location_1?.id,
-                city_id: values?.location_2?.id,
-                reference_name: values?.referrerName,
-                reference_employee_id: values?.referrerEmployeeId?.id,
-                vertical: values?.vertical?.id,
-                desired_program: values?.desiredProgram?.id,
-                internship_option: values?.internshipOption?.id,
-                adName: values?.adName,
-                adCampaign: values?.adCampaign,
-                lead_form: values?.leadForm,
+                source1_id: values?.leadSource_1?.id || null,
+                source2_id: values?.leadSource_2?.id || null,
+                source3_id: values?.leadSource_3?.id || null,
+                source4_id: values?.leadSource_4?.id || null,
+                region_id: values?.location_1?.id || null,
+                city_id: values?.location_2?.id || null,
+                reference_name: values?.referrerName || '',
+                reference_employee_id: values?.referrerEmployeeId || null,
+                vertical: values?.vertical?.id || null,
+                desired_program: values?.desiredProgram?.id || null,
+                internship_option: values?.internshipOption == "Yes" ? true : false  ,
+                adName: values?.adName || '',
+                adCampaign: values?.adCampaign || '',
+                lead_form: values?.leadForm || '',
                 ip_address: "197.168.1.1",
 
-                preferredTimeSlot: values?.preferredTimeSlot,
-                gcl_id: values?.gclID,
-                zcGad: values?.zcGad,
-                ad_id: values?.adID,
-                keyIdentifier: values?.keyIdentifier,
-                campaignType: values?.campaignType,
-                referrerEmail: values?.referrerEmail,
-                referrerPhoneNumber: values?.referrerPhoneNumber,
-                userAgent: values?.userAgent,
-                importLead: values?.importLead?.id,
-                invokeBlueprint: values?.invokeBlueprint?.id,
-                verse_id: values?.verseID,
-                shortlisted_course_id: values?.shortlistedCourseID,
-                counsellorFESTech1Name: values?.counsellorFESTech1Name?.name,
-                counsellorFESTech1EmailID: values?.counsellorFESTech1EmailID
+                preferredTimeSlot: values?.preferredTimeSlot || '',
+                gcl_id: values?.gclID || '',
+                zcGad: values?.zcGad || '',
+                ad_id: values?.adID || '',
+                keyIdentifier: values?.keyIdentifier || '',
+                campaignType: values?.campaignType || '',
+                referrerEmail: values?.referrerEmail || '',
+                referrerPhoneNumber: values?.referrerPhoneNumber || '', 
+                userAgent: values?.userAgent || '',
+                importLead: values?.importLead?.id || '',
+                invokeBlueprint: values?.invokeBlueprint?.id || '',
+                verse_id: values?.verseID || '',
+                shortlisted_course_id: values?.shortlistedCourseID || '',
+                counsellorFESTech1Name: values?.teleCallcounsellorFESTech1NameerName?.id || null,
+                counsellorFESTech1EmailID: values?.counsellorFESTech1EmailID || ''
             }
         }
 
@@ -199,6 +201,10 @@ const CreateLeadPage = () => {
         try {
             const response = await createLead(payload);
             console.log('User created:', response.data);
+            if(response?.data?.succeeded === true) {
+                navigate("/leads")
+            }
+            alert("Created")
             // Optional: reset form or show toast
           } catch (err) {
             console.error('Error creating user:', err);
@@ -292,7 +298,7 @@ const CreateLeadPage = () => {
                             />
                         )}
                         {/* {( activeTab === "Opportunity" && (
-                            <LeadOpportunity/>
+                            <LeadOpportunity leadID={3}/>
                         )
                         )} */}
                     </form>
