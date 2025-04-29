@@ -87,7 +87,7 @@ const initialLeads = [
     { column: "email", label: "Email", id: "email", showSort: true, isDrag: true, isFilter: true },
     { column: "leadSource", label: "Lead Source", id: "source", showSort: true, isDrag: true, isFilter: true },
     { column: "location", label: "Location", id: "location", showSort: true, isDrag: true, isFilter: true },
-    { column: "action", label: "Actions", id: "", showSort: false, isDrag: true, isFilter: false },
+    { column: "action", label: "Actions", id: "action", showSort: false, isDrag: true, isFilter: false },
   ];
 
 // Simulate API call to fetch leads
