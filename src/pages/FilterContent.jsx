@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import { CustomSearch, CustomDropDown, CustomCheckboxField } from 'react-mui-tailwind';
 import CustomDropdownComponent from './CustomDropdown';
 import axios from 'axios'; // Assuming you're using axios for API calls
+import CustomAutocompleteDropdown from './CustomDropdown';
+import CustomDropdowns from './CustomDropdown';
 
 const dropdownOptions = ['is', 'is not', 'is empty', 'is not empty', 'contains'];
 const defaultValueOptions = [
@@ -77,8 +79,11 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {} }) => {
         };
 
         const handleMultiSelectChange = (colId, selectedValues) => {
-          setFieldValue(`filters.${colId}.value`, selectedValues);
+          const valuesArray = selectedValues?.target?.value ?? [];
+          console.log("✅ Real selected array:", valuesArray);
+          setFieldValue(`filters.${colId}.value`, valuesArray);
         };
+        
 
         console.log('Formik values:', values);
 
@@ -112,13 +117,24 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {} }) => {
                             value={values.filters[col.id]?.condition || ''}
                             onChange={(e) => handleConditionChange(col.id, e)}
                           />
-                          <CustomDropdownComponent
+                  {/* {console.log("Dropdown value for col", col.id, values.filters[col.id]?.value)} */}
+
+                          <CustomDropdowns
                             options={defaultValueOptions}
-                            value={values.filters[col.id]?.value || []}
+                            value={
+                            defaultValueOptions.filter((opt) =>
+                            (values.filters[col.id]?.value || []).some((v) =>
+                              typeof v === 'object' ? v.id === opt.id : v === opt.id
+                            )
+                            )
+                            }
                             onChange={(selected) => handleMultiSelectChange(col.id, selected)}
-                            placeholder="Select options..."
+                            placeHolder="Select options..."
+                            name={`filters.${col.id}.value`}
                             multiple={true}
-                          />
+                            width="200px"
+                            />
+
                         </div>
                       )}
                     </div>
