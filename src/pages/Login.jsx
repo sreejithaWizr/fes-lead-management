@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import FesLogo from '../assets/fes-logo-full.svg';
@@ -8,6 +8,7 @@ import DisplayDashboardImage from '../assets/login-display-image-static.svg';
 import { CustomButton, CustomCheckboxField, CustomInputField } from 'react-mui-tailwind';
 import { LoginValidationSchema } from '../utils/LoginValidationUtils';
 import { getLoginUser } from '../api/services/Login/loginEndpoints'; // update with correct path
+import { isAuthenticated } from "../utils/auth";
 
 const Login = () => {
   const navigate = useNavigate(); // <-- for redirecting
@@ -19,6 +20,15 @@ const Login = () => {
     rememberMe: false,
   };
 
+  useEffect(() => {
+    const checkAuth = async () => {
+      if (await isAuthenticated()) {
+        navigate("/leads", { replace: true });
+      }
+    };
+    checkAuth();
+  }, [navigate]);
+
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
       console.log('Form submitted with values:', values);
@@ -29,9 +39,10 @@ const Login = () => {
         setErrors({ form: data?.errors || 'Incorrect username or password' });
         return;
       }
-  
       // Save token
-      localStorage.setItem("token", data?.token?.refreshToken);
+      const token = data?.token?.refreshToken;
+      localStorage.setItem("token", token);
+      console.log("Token saved:", token);
   
       // Redirect
       setLoginSuccess(true);
