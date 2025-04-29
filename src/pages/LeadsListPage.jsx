@@ -25,9 +25,8 @@ const LeadsTable = () => {
   const [rowsPerPage, setRowsPerPage] = useState(15);
   const [totalPages, setTotalPages] = useState(1);  // <-- NEW
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [filters, setFilters] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState({});
-
+  const [filters, setFilters] = useState([]);
   const toggleFilter = () => setIsFilterOpen(prev => !prev);
 
   useEffect(() => {
@@ -76,13 +75,16 @@ const LeadsTable = () => {
   const handleApplyFilter = (newFiltersArray) => {
     const filterMap = {};
     newFiltersArray.forEach(({ field, operator, value }) => {
-      filterMap[field] = { condition: operator, value: value[0] };
+      filterMap[field] = {
+        condition: operator,
+        value: value.length > 1 ? value : value[0] || '', // Use array for multiple values, single value otherwise
+      };
     });
 
-    setSelectedFilters(filterMap);
-    setFilters(newFiltersArray);
+    setSelectedFilters(filterMap); // Update selected filters for reinitialization
+    setFilters(newFiltersArray); // Store transformed filters for API or UI
     setCurrentPage(1); // Reset to page 1 when filters applied
-    fetchLeadsData(newFiltersArray);
+    fetchLeadsData(newFiltersArray); // Fetch data with new filters
   };
 
   const getRow = (columnId, value) => {
