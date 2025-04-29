@@ -39,3 +39,10 @@ export const getDesiredProgram = () => apiClient.get('api/DesiredProgram')
 export const getLeadList = (payload) => {
     return apiClient.post('api/LeadListView', payload);
   };
+
+  export const fetchFieldDropdownValues = (searchTerm, fieldName) => {
+    return apiClient.get('api/LeadListView/field-values', {
+      params: { searchTerm, fieldName },
+    });
+  };
+  

@@ -1,21 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import { useSelector } from 'react-redux';
 import { CustomSearch, CustomDropDown, CustomCheckboxField } from 'react-mui-tailwind';
 import CustomDropdownComponent from './CustomDropdown';
 import axios from 'axios'; // Assuming you're using axios for API calls
+import { fetchFieldDropdownValues } from '../api/services/masterAPIs/createLeadApi';
 
 const dropdownOptions = ['is', 'is not', 'is empty', 'is not empty', 'contains'];
-const defaultValueOptions = [
-  { id: 1, name: 'Option 1' },
-  { id: 2, name: 'Option 2' },
-  { id: 3, name: 'Option 3' },
-  { id: 4, name: 'Option 4' },
-  { id: 5, name: 'Option 5' },
-  { id: 6, name: 'Option 6' },
-  { id: 7, name: 'Option 7' },
-  { id: 8, name: 'Option 8' },
-];
+// const defaultValueOptions = [
+//   { id: 1, name: 'Option 1' },
+//   { id: 2, name: 'Option 2' },
+//   { id: 3, name: 'Option 3' },
+//   { id: 4, name: 'Option 4' },
+//   { id: 5, name: 'Option 5' },
+//   { id: 6, name: 'Option 6' },
+//   { id: 7, name: 'Option 7' },
+//   { id: 8, name: 'Option 8' },
+// ];
+
 
 // Transform filters for API
 const transformFilters = (filters) => {
@@ -26,27 +28,32 @@ const transformFilters = (filters) => {
   }));
 };
 
-const FilterContent = ({ onClose, onApplyFilter, initialFilters = {} }) => {
+const FilterContent = ({ onClose, onApplyFilter, initialFilters = {}, isFilterOpen }) => {
   const { columns } = useSelector((state) => state.leads);
   const [searchTerm, setSearchTerm] = useState('');
+  const [dropdownOptionsMap, setDropdownOptionsMap] = useState({});
+  
+
+
+  const handleDropdownSearch = async (term, fieldName) => {
+    try {
+      const { data } = await fetchFieldDropdownValues(term, fieldName);
+      console.log("res", data?.data)
+      setDropdownOptionsMap((prev) => ({
+        ...prev,
+        [fieldName]: data?.data,
+      }));
+    } catch (error) {
+      console.error("Error fetching dropdown options", error);
+    }
+  };
+
 
   const filteredColumns = columns.filter(
     (col) =>
       col.isFilter &&
       col.label.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  // Function to make API call
-  const applyFiltersToAPI = async (transformedFilters) => {
-    try {
-      const response = await axios.post('/api/filters', { filters: transformedFilters });
-      console.log('API Response:', response.data);
-      // Optionally handle response data if needed
-    } catch (error) {
-      console.error('Error applying filters:', error);
-      // Optionally show error to user
-    }
-  };
 
   return (
     <Formik
@@ -68,7 +75,7 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {} }) => {
           } else {
             filters[colId] = { condition: '', value: [] }; // Initialize with empty array for multi-select
           }
-          setFieldValue('filters', filters);
+          setFieldValue('filters', filters, initialFilters);
         };
 
         const handleConditionChange = (colId, event) => {
@@ -80,7 +87,31 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {} }) => {
           setFieldValue(`filters.${colId}.value`, selectedValues);
         };
 
+        useEffect(() => {
+          if (isFilterOpen) {
+            const fetchInitialOptions = async () => {
+              const selectedFields = Object.keys(values.filters || {});
+              const fetches = selectedFields.map(async (field) => {
+                try {
+                  const { data } = await fetchFieldDropdownValues("", field); // pass empty searchTerm to get default options
+                  setDropdownOptionsMap((prev) => ({
+                    ...prev,
+                    [field]: data?.data,
+                  }));
+                } catch (error) {
+                  console.error(`Error prefetching dropdown for ${field}:`, error);
+                }
+              });
+              await Promise.all(fetches);
+            };
+        
+            fetchInitialOptions();
+          }
+        }, [isFilterOpen]); // or whatever your modal toggle state is called
+        
+
         console.log('Formik values:', values);
+
 
         return (
           <Form className="space-y-6 overflow-hidden">
@@ -113,12 +144,15 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {} }) => {
                             onChange={(e) => handleConditionChange(col.id, e)}
                           />
                           <CustomDropdownComponent
-                            options={defaultValueOptions}
+                            options={dropdownOptionsMap[col.id] || []}
                             value={values.filters[col.id]?.value || []}
                             onChange={(selected) => handleMultiSelectChange(col.id, selected)}
                             placeholder="Select options..."
                             multiple={true}
+                            onSearch={(term) => handleDropdownSearch(term, col.id)} // <-- use field ID as fieldName
                           />
+
+
                         </div>
                       )}
                     </div>
