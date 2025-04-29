@@ -53,7 +53,7 @@ const EditLeadPage = () => {
             try {
                 const response = await getLeadById(id);
                 setLeadData(response?.data);
-                // console.log("Lead data fetched:", response?.data);
+                console.log("Lead data fetched:", response?.data);
             } catch (err) {
                 console.error("Failed to fetch lead:", err);
             } finally {
@@ -147,20 +147,19 @@ const EditLeadPage = () => {
             mobile_number: values?.mobileNumber || '',
             alternative_number: values?.alternativeNumber || '',
             whatsapp_number: values?.whatsappNumber || '',
-            tele_callerid: values?.teleCallerName || '',
-            priority_id: values?.priority || '',
+            tele_callerid: values?.teleCallerName || null,
+            priority_id: values?.priority || null,
             lead_number: values?.leadNumber || '',
             consent: values?.agreeToReceiveBoolean,
-            created_at: values?.leadCreated || '',
-            created_by: "Admin",
+            modified_by: id,
             education: {
-                highest_qualification_id: values?.highestQualification || '',
-                graduation_year: values?.graduationYear?.name || '',
-                fieldofstudy_id: values?.fieldOfStudy || '',
+                highest_qualification_id: values?.highestQualification || null,
+                graduation_year: values?.graduationYear?.name || null,
+                fieldofstudy_id: values?.fieldOfStudy || null,
                 cgpa_grade: values?.cgpaGrade,
                 work_experience: values?.workExperience?.name,
                 intake_year: values?.intake_year,
-                intake_month: values?.intakeMonth?.id,
+                intake_month: values?.intakeMonth?.id || '',
                 other_countries: values?.otherCountries,
                 test_training_required: values?.testTrainingBoolean || false,
                 preferred_countries: Array.isArray(values?.preferredDestination)
@@ -169,23 +168,23 @@ const EditLeadPage = () => {
                     ? values.testName : []
             },
             status: {
-                status: values?.leadStatus || '',
-                category: values?.category || '',
-                subcategory_id: values?.subCategory || '',
-                branch_id: values?.branch || '',
+                status: values?.leadStatus || null,
+                category: values?.category || null,
+                subcategory_id: values?.subCategory || null,
+                branch_id: values?.branch || null,
             },
             source: {
-                source1_id: values?.leadSource_1 || '',
-                source2_id: values?.leadSource_2 || '',
-                source3_id: values?.leadSource_3 || '',
-                source4_id: values?.leadSource_4 || '',
-                region_id: values?.location_1 || '',
-                city_id: values?.location_2 || '',
+                source1_id: values?.leadSource_1 || null,
+                source2_id: values?.leadSource_2 || null,
+                source3_id: values?.leadSource_3 || null,
+                source4_id: values?.leadSource_4 || null,
+                region_id: values?.location_1 || null,
+                city_id: values?.location_2 || null,
                 reference_name: values?.referrerName || '',
-                reference_employee_id: values?.referrerEmployeeId || '',
+                reference_employee_id: values?.referrerEmployeeId || null,
                 vertical: values?.vertical || '',
-                desired_program: values?.desiredProgram || '',
-                internship_option: true || '',
+                desired_program: values?.desiredProgram || null,
+                internship_option: values?.internshipOption == "Yes" ? true : false,
                 adName: values?.adName || '',
                 adCampaign: values?.adCampaign || '',
                 lead_form: values?.leadForm || '',
@@ -207,7 +206,6 @@ const EditLeadPage = () => {
                 counsellorFESTech1Name: values?.counsellorFESTech1Name?.name || null,
                 counsellorFESTech1EmailID: values?.counsellorFESTech1EmailID || ''
             },
-            modified_by: id
         }
 
         try {
