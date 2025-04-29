@@ -8,6 +8,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
   const isEditable = mode === "edit";
 
   const [userOptions, setUserOptions] = useState([]);
+
   const [priorityOptions, setPriorityOptions] = useState([]);
   const [selectedPriorityOption, setSelectedPriorityOption] = useState("");
 
@@ -224,8 +225,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
           <CustomDropDown
             label="Tele Caller"
             options={userOptions}
-            required={false}
-            showAsterisk={false}
+            required={true}
             placeHolder="Select"
             value={userOptions?.find(option => option.id === values?.teleCallerName) || ""}
             disabled={!isEditable}

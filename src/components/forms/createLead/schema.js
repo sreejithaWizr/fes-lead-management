@@ -13,7 +13,7 @@ export const validationSchema = Yup.object({
   // leadOwner: requiredDropdown(),
   // leadStatusInfo: requiredDropdown(),
   priority: requiredDropdown(),
-  teleCallerName: optionalDropdown(),
+  teleCallerName: requiredDropdown(),
   agreeToReceiveBoolean: requiredBooleanTrue() ,
   // leadCreated: Yup.date()
   //   .required('Lead creation date is required')
@@ -27,6 +27,7 @@ export const validationSchema = Yup.object({
   fieldOfStudy: requiredDropdown(),
   cgpaGrade: Yup.string(),
   preferredDestination:requiredMultiSelect(),
+  intake_year: requiredDropdown(),
 
 
   // Lead Status validation
@@ -46,7 +47,7 @@ export const validationSchema = Yup.object({
   // referrerName: Yup.string().required('Required'),
   // referrerEmployeeId: Yup.string().required('Required'),
   // vertical: requiredDropdown(),
-  // desiredProgram: requiredDropdown(),
+  desiredProgram: requiredDropdown(),
   // internshipOption: Yup.string().required('Required'),
   // adName: Yup.string().required('Required'),
   // adCampaign: Yup.string().required('Required'),

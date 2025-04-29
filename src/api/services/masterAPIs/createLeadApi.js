@@ -46,3 +46,6 @@ export const getLeadList = (payload) => {
     });
   };
   
+export const createLead = (payload) => {
+    return apiClient.post('api/LeadProfile', payload);
+};
