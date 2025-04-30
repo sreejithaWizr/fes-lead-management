@@ -65,8 +65,6 @@ const CustomDropdownComponent = ({
           onSearch(searchTerm);
         }
       }, [searchTerm]);
-      
-
 
     return (
         <div className="relative w-full" ref={dropdownRef}> {/* Attach ref to container */}

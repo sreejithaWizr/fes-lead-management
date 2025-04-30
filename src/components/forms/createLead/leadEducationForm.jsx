@@ -97,6 +97,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
     //     preferredCountryOptions?.filter(option => values?.preferredDestination?.includes(option?.id))
     // );
 
+    console
 
     return (
         <div className="form-section animate-fade-in ml-0 mb-6">
