@@ -317,7 +317,6 @@ const EditLeadPage = () => {
                                     mode="edit"
                                 />
                             )}
-                            <pre>{JSON?.stringify(errors)}</pre>
                         </form>
                     )}
                 </Formik>
