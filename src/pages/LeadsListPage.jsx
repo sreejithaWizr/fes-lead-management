@@ -34,17 +34,19 @@ const LeadsTable = () => {
   }, [currentPage]); // <--- add dependency
 
 
-  const handleView = () => {
-    navigate('/leads/detailsview');
-  };
-
-  const handleEdit = () => {
-    navigate('/leads/edit');
-  };
+  // const handleView = () => {
+  //   navigate('/leads/detailsview');
+  // };
 
   const handleCreateLead = () => {
     navigate('/leads/create');
   };
+
+  const handleView = (value) => {
+    const selectedLeadId = leads.find(lead => lead.leadNumber === value);
+    console.log("selectedLeadId", selectedLeadId);
+    navigate(`/leads/detailsview/${selectedLeadId?.id}`);
+  }
 
   const handleApplyFilter = (newFiltersArray) => {
     const filterMap = {};
@@ -63,19 +65,21 @@ const LeadsTable = () => {
     fetchLeadsData(newFiltersArray); // Fetch data with new filters
   };
 
-  const getRow = (columnId, value) => {
+  const getRow = (columnId, value, row = {}) => {
     switch (columnId) {
       case "leadNumber":
         return (
           <div className="flex items-center gap-2">
-            <span className="font-bold cursor-pointer" onClick={handleView}>{value}</span>
+            <span className="font-bold cursor-pointer" onClick={() => handleView(value)}>
+              {value}
+            </span>
           </div>
         );
       case "createdAt":
         return (
           <div className="flex items-center gap-2">
             <img src={CalenderIcon} alt="Calendar" className="w-4 h-4" />
-            <span>{new Date(value).toLocaleDateString()}</span> {/* optional: formatted date */}
+            <span>{value ? new Date(value).toLocaleDateString() : '-'}</span>
           </div>
         );
       case "mobileNumber":
@@ -106,7 +110,7 @@ const LeadsTable = () => {
               src={EditIcon}
               alt="Edit"
               className="w-4 h-4 cursor-pointer"
-              onClick={handleEdit}
+              onClick={() => handleEdit(row)} // Pass the full row
             />
           </div>
         );
@@ -115,6 +119,58 @@ const LeadsTable = () => {
     }
   };
 
+  // const handleEdit = () => {
+  //   console.log("leads", leads);
+  //   const selectedLeadId = leads.find(lead => lead.leadNumber === value);
+  //   console.log("selectedLeadId", selectedLeadId);
+  //   navigate(`/leads/edit/${selectedLeadId?.id}`);
+
+  // const selectedLeadId = leads.find(lead => lead.leadNumber === value);
+  // console.log("selectedLeadId", selectedLeadId);
+  // navigate(`/leads/detailsview/${selectedLeadId?.id}`);
+  // };
+
+  const handleEdit = (row) => {
+    console.log("Row data:", row);
+    navigate(`/leads/edit/${row?.id}`);
+  };
+
+  useEffect(() => {
+    if (status === 'idle') {
+      dispatch(fetchLeads());
+    }
+  }, [status, dispatch]);
+
+  const handleSelectAll = (e) => {
+    if (e.target.checked) {
+      setSelectedLeads(leads.map(lead => lead.id));
+    } else {
+      setSelectedLeads([]);
+    }
+  };
+
+  const handleSelectLead = (e, leadId) => {
+    if (e.target.checked) {
+      setSelectedLeads([...selectedLeads, leadId]);
+    } else {
+      setSelectedLeads(selectedLeads.filter(id => id !== leadId));
+    }
+  };
+
+  const getStatusClass = (status) => {
+    switch (status) {
+      case 'Potential':
+        return 'status-potential';
+      case 'Inactive':
+        return 'status-inactive';
+      case 'Enrolled':
+        return 'status-enrolled';
+      case 'May be Prospective':
+        return 'status-prospective';
+      default:
+        return value;
+    }
+  };
 
   const handleRowsPerPageChange = (newRowsPerPage) => {
     setRowsPerPage(newRowsPerPage);
@@ -150,7 +206,6 @@ const LeadsTable = () => {
       });
   };
   
-
 
   return (
     <>

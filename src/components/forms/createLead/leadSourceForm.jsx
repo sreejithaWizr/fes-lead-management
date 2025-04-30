@@ -1,37 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import { CustomButton, CustomInputField, CustomDropDown, CustomDatePicker } from "react-mui-tailwind";
-import { getCity, getDesiredProgram, getRegion, getSource1, getVertical } from '../../../api/services/masterAPIs/createLeadApi';
+import { getCity, getDesiredProgram, getFESUser, getRegion, getSource1, getVertical } from '../../../api/services/masterAPIs/createLeadApi';
 
-const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => {
-const [sourceOptions, setSourceOptions] = useState([]);
-const [cityOptions, setCityOptions] = useState([]);
-const [regionOptions, setRegionOptions] = useState([]);
-const [verticalOptions, setVerticalOptions] = useState([]);
-const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
+const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode = "edit" }) => {
+    const isEditable = mode === "edit";
+
+    const [sourceOptions, setSourceOptions] = useState([]);
+    const [cityOptions, setCityOptions] = useState([]);
+    const [regionOptions, setRegionOptions] = useState([]);
+    const [verticalOptions, setVerticalOptions] = useState([]);
+    const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
+    const [userOptions, setUserOptions] = useState([]);
+
     useEffect(() => {
         const fetchData = async () => {
-          try {
-            const [sourceRes, regionRes, cityRes, verticalRes, desiredProgramRes] = await Promise.allSettled([
-                getSource1(),
-                getCity(),
-                getRegion(),
-                getVertical(),
-                getDesiredProgram()
-            ]
-        );
-            console.log("statusRes", sourceRes?.data?.data || [])
-            setSourceOptions(sourceRes?.data?.data || []);
-            setCityOptions(cityRes?.data?.data || []);
-            setRegionOptions(regionRes?.data?.data || []);
-            setVerticalOptions(verticalRes?.data?.data || []);
-            setDesiredProgramOptions(desiredProgramRes?.data?.data || []);
-          } catch (err) {
-            console.error('Error loading filters:', err);
-          }
+            try {
+                const [sourceRes, regionRes, cityRes, verticalRes, desiredProgramRes, userRes] = await Promise.allSettled([
+                    getSource1(),
+                    getCity(),
+                    getRegion(),
+                    getVertical(),
+                    getDesiredProgram(),
+                    getFESUser(),
+                ]
+                );
+                // console.log("statusRes", sourceRes?.value?.data?.data || [])
+                setSourceOptions(sourceRes?.value?.data?.data || []);
+                setCityOptions(cityRes?.value?.data?.data || []);
+                setRegionOptions(regionRes?.value?.data?.data || []);
+                setVerticalOptions(verticalRes?.value?.data?.data || []);
+                setDesiredProgramOptions(desiredProgramRes?.value?.data?.data || []);
+                setUserOptions(userRes?.value?.data?.data || []);
+            } catch (err) {
+                console.error('Error loading filters:', err);
+            }
         };
-    
         fetchData();
-      }, []);
+    }, []);
 
     return (
         <div className="form-section animate-fade-in ml-0 mb-6">
@@ -44,11 +49,13 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                         label="Source 1"
                         options={sourceOptions}
                         required={true}
+                        disabled={!isEditable}
                         showAsterisk={false}
                         placeHolder="Select"
-                        value={values.leadSource_1}
+                        // value={values.leadSource_1}
+                        value={sourceOptions?.find(option => option?.id === values?.leadSource_1) || ""}
                         onChange={(value) => {
-                            setFieldValue('leadSource_1', value.target.value);
+                            setFieldValue('leadSource_1', value?.target?.value.id);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'leadSource_1' } })}
                         hasError={touched.leadSource_1 && Boolean(errors.leadSource_1)}
@@ -61,11 +68,13 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                         label="Source 2"
                         options={sourceOptions}
                         required={false}
+                        disabled={!isEditable}
                         showAsterisk={false}
                         placeHolder="Select"
-                        value={values.leadSource_2}
+                        // value={values.leadSource_2}
+                        value={sourceOptions?.find(option => option?.id === values?.leadSource_2) || ""}
                         onChange={(value) => {
-                            setFieldValue('leadSource_2', value.target.value);
+                            setFieldValue('leadSource_2', value?.target?.value.id);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'leadSource_2' } })}
                         hasError={touched.leadSource_2 && Boolean(errors.leadSource_2)}
@@ -77,12 +86,14 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                     <CustomDropDown
                         label="Source 3"
                         options={sourceOptions}
+                        disabled={!isEditable}
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"
-                        value={values.leadSource_3}
+                        // value={values.leadSource_3}
+                        value={sourceOptions?.find(option => option?.id === values?.leadSource_3) || ""}
                         onChange={(value) => {
-                            setFieldValue('leadSource_3', value.target.value);
+                            setFieldValue('leadSource_3', value?.target?.value.id);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'leadSource_3' } })}
                         hasError={touched.leadSource_3 && Boolean(errors.leadSource_3)}
@@ -94,12 +105,14 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                     <CustomDropDown
                         label="Source 4"
                         options={sourceOptions}
+                        disabled={!isEditable}
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"
-                        value={values.leadSource_4}
+                        // value={values.leadSource_4}
+                        value={sourceOptions?.find(option => option?.id === values?.leadSource_4) || ""}
                         onChange={(value) => {
-                            setFieldValue('leadSource_4', value.target.value);
+                            setFieldValue('leadSource_4', value?.target?.value.id);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'leadSource_4' } })}
                         hasError={touched.leadSource_4 && Boolean(errors.leadSource_4)}
@@ -111,12 +124,14 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                     <CustomDropDown
                         label="Location 1"
                         options={cityOptions}
+                        disabled={!isEditable}
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
-                        value={values.location_1}
+                        // value={values.location_1}
+                        value={cityOptions?.find(option => option?.id === values?.location_1) || ""}
                         onChange={(value) => {
-                            setFieldValue('location_1', value.target.value);
+                            setFieldValue('location_1', value?.target?.value.id);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'location_1' } })}
                         hasError={touched.location_1 && Boolean(errors.location_1)}
@@ -128,12 +143,14 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                     <CustomDropDown
                         label="Location 2"
                         options={regionOptions}
+                        disabled={!isEditable}
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"
-                        value={values.location_2}
+                        // value={values.location_2}
+                        value={regionOptions?.find(option => option?.id === values?.location_2) || ""}
                         onChange={(value) => {
-                            setFieldValue('location_2', value.target.value);
+                            setFieldValue('location_2', value?.target?.value.id);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'location_2' } })}
                         hasError={touched.location_2 && Boolean(errors.location_2)}
@@ -145,12 +162,14 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                     <CustomDropDown
                         label="Vertical"
                         options={verticalOptions}
-                        required={true}
+                        disabled={!isEditable}
+                        //required={true}
                         showAsterisk={false}
                         placeHolder="Select"
-                        value={values.vertical}
+                        // value={values.vertical}
+                        value={verticalOptions?.find(option => option?.id === values?.vertical) || ""}
                         onChange={(value) => {
-                            setFieldValue('vertical', value.target.value);
+                            setFieldValue('vertical', value?.target?.value.id);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'vertical' } })}
                         hasError={touched.vertical && Boolean(errors.vertical)}
@@ -160,7 +179,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Preferred Time Slot"
                         value={values?.preferredTimeSlot}
                         showAsterisk={false}
@@ -176,7 +195,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="GCLID"
                         value={values?.gclID}
                         showAsterisk={false}
@@ -192,7 +211,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="ZC GAD"
                         value={values?.zcGad}
                         showAsterisk={false}
@@ -208,7 +227,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Ad ID"
                         value={values?.adID}
                         showAsterisk={false}
@@ -224,7 +243,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Ad Name"
                         value={values.adName}
                         showAsterisk={false}
@@ -240,7 +259,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Ad Campaign"
                         value={values.adCampaign}
                         showAsterisk={false}
@@ -256,7 +275,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Key Identifier"
                         value={values?.keyIdentifier}
                         showAsterisk={false}
@@ -272,7 +291,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Campaign Type"
                         value={values?.campaignType}
                         showAsterisk={false}
@@ -288,7 +307,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Referrer Name"
                         value={values.referrerName}
                         showAsterisk={false}
@@ -304,7 +323,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Referrer Email"
                         value={values?.referrerEmail}
                         showAsterisk={false}
@@ -320,7 +339,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Referrer Employee ID"
                         value={values.referrerEmployeeId}
                         showAsterisk={false}
@@ -336,7 +355,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Referrer Phone Number"
                         value={values?.referrerPhoneNumber}
                         showAsterisk={false}
@@ -352,7 +371,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Lead Form"
                         value={values.leadForm}
                         showAsterisk={false}
@@ -368,7 +387,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
 
                 <div className="form-field">
                     <CustomInputField
-                        state="non-editable"
+                        state={isEditable ? "default" : "non-editable"}
                         label="IP Address"
                         value={values.ipAddress}
                         showAsterisk={false}
@@ -384,7 +403,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="User Agent"
                         value={values?.userAgent}
                         showAsterisk={false}
@@ -401,9 +420,10 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                 <div className="form-field">
                     <CustomDropDown
                         label="Import Lead"
-                        options={[{id: "Yes", name: "Yes"}, {id: "No", name: "No"}]}
+                        options={[{ id: "Yes", name: "Yes" }, { id: "No", name: "No" }]}
                         // required={true}
                         placeHolder="Select"
+                        disabled={!isEditable}
                         value={values?.importLead}
                         onChange={(value) => {
                             setFieldValue('importLead', value.target.value);
@@ -417,12 +437,13 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                 <div className="form-field">
                     <CustomDropDown
                         label="Invoke Blueprint"
-                        options={[{id: "Yes", name: "Yes"}, {id: "No", name: "No"}]}
+                        options={[{ id: "Yes", name: "Yes" }, { id: "No", name: "No" }]}
                         // required={true}
                         placeHolder="Select"
+                        disabled={!isEditable}
                         value={values?.invokeBlueprint}
                         onChange={(value) => {
-                            setFieldValue('invokeBlueprint', value.target.value);
+                            setFieldValue('invokeBlueprint', value?.target?.value);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'invokeBlueprint' } })}
                         hasError={touched.invokeBlueprint && Boolean(errors.invokeBlueprint)}
@@ -447,7 +468,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                 </div> */}
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Verse ID"
                         value={values?.verseID}
                         showAsterisk={false}
@@ -465,12 +486,14 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                     <CustomDropDown
                         label="Desired Program"
                         options={desiredProgramOptions}
+                        disabled={!isEditable}
                         required={true}
                         showAsterisk={false}
                         placeHolder="Select"
-                        value={values.desiredProgram}
+                        // value={values.desiredProgram}
+                        value={desiredProgramOptions?.find(option => option?.id === values?.desiredProgram) || ""}
                         onChange={(value) => {
-                            setFieldValue('desiredProgram', value.target.value);
+                            setFieldValue('desiredProgram', value?.target?.value.id);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'desiredProgram' } })}
                         hasError={touched.desiredProgram && Boolean(errors.desiredProgram)}
@@ -481,11 +504,12 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                 <div className="form-field">
                     <CustomDropDown
                         label="Internship Option"
-                        options={[{id: "Yes", name: "Yes"}, {id: "No", name: "No"}]}
+                        disabled={!isEditable}
+                        options={[{ id: "Yes", name: "Yes" }, { id: "No", name: "No" }]}
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"
-                        value={values.internshipOption}
+                        value={values?.internshipOption}
                         onChange={(value) => {
                             setFieldValue('internshipOption', value.target.value);
                         }}
@@ -497,7 +521,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
 
                 <div className="form-field">
                     <CustomInputField
-                        state="default"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Shortlisted Course ID"
                         value={values?.shortlistedCourseID}
                         showAsterisk={false}
@@ -514,7 +538,8 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                 <div className="form-field">
                     <CustomDropDown
                         label="Preferred Counsellor for FESTech1 Name "
-                        options={["Option 1", "Option 2", "Option 3"]}
+                        options={userOptions || []}
+                        disabled={!isEditable}
                         // required={true}
                         placeHolder="Select"
                         value={values?.counsellorFESTech1Name}
@@ -544,7 +569,7 @@ const [desiredProgramOptions, setDesiredProgramOptions] = useState([]);
                 </div> */}
                 <div className="form-field">
                     <CustomInputField
-                        state="disabled"
+                        state={isEditable ? "default" : "non-editable"}
                         label="Preferred Counsellor for FESTech1 Email id"
                         value={values?.counsellorFESTech1EmailID}
                         showAsterisk={false}

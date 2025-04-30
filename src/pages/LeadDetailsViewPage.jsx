@@ -1,3 +1,4 @@
+import { useNavigate, useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { Formik, useFormikContext } from 'formik';
 import LeadInformationForm from '../components/forms/createLead/leadInfoForm';
@@ -12,6 +13,7 @@ import LeadNumberIcon from '../assets/personalcard.svg';
 import LeadMailIcon from '../assets/sms.svg';
 import LeadCallIcon from '../assets/phone-icon.svg';
 import EditIcon from '../assets/edit.svg';
+import { getLeadById } from '../api/services/leadAPI/leadAPIs';
 
 // Ref for external form submit
 export const formRef = React.createRef();
@@ -43,76 +45,104 @@ const ErrorObserver = ({ setTabErrors }) => {
 };
 
 const LeadDetailsViewPage = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
   const [activeTab, setActiveTab] = useState('All Info');
   const [initialValues, setInitialValues] = useState(null);
   const [tabErrors, setTabErrors] = useState({});
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({});
+  const [leadData, setLeadData] = useState(null);
 
   const tabs = ['Opportunity', 'All Info', 'Lead Information', 'Education Qualification', 'Lead Status', 'Lead Source'];
 
-  // Simulated data fetching
   useEffect(() => {
-    const mockLeadData = {
-      firstName: 'Nandhana',
-      lastName: 'Krishna',
-      email: 'test@gmail.com',
-      secondaryEmail: 'alt@gmail.com',
-      mobileNumber: '8848193264',
-      alternativeNumber: '9876543210',
-      whatsappNumber: '1234567890',
-      leadOwner: 'John Doe',
-      leadStatusInfo: 'Initial Contact',
-      priority: 'High',
-      teleCallerName: 'Agent 47',
-      leadCreated: '2025-04-20',
-      leadNumber: 'LEAD355451001',
-      agreeToReceiveBoolean: true,
-      highestQualification: 'Bachelor\'s',
-      graduationYear: '2022',
-      fieldOfStudy: 'Computer Science',
-      cgpaGrade: '8.5',
-      workExperience: '2 years',
-      preferredDestination: ['USA', 'Canada'],
-      otherCountries: 'USA, Australia',
-      testName: 'IELTS',
-      testTrainingBoolean: true,
-      leadStatus: 'Interested',
-      category: 'Student',
-      subCategory: 'UG',
-      branch: 'Main Branch',
-      counselor: 'Jane Smith',
-      notes: 'Interested in fast-track programs',
-      leadSource_1: 'Facebook',
-      leadSource_2: 'Referral',
-      leadSource_3: 'Webinar',
-      location_1: 'Chennai',
-      location_2: 'Bangalore',
-      referrerName: 'Alice',
-      referrerEmployeeId: 'EMP123',
-      vertical: 'Education',
-      desiredProgram: 'MS in CS',
-      internshipOption: 'Yes',
-      adName: 'CS Campaign',
-      adCampaign: 'April2025',
-      leadForm: 'Landing Page',
-      ipAddress: '192.168.1.100',
+    const fetchLead = async () => {
+      try {
+        const response = await getLeadById(id);
+        setLeadData(response?.data);
+        // console.log("Lead data fetched:", response?.data);
+      } catch (err) {
+        console.error("Failed to fetch lead:", err);
+      } finally {
+        // setLoading(false);
+      }
+    };
+
+    fetchLead();
+  }, [id]);
+
+  useEffect(() => {
+    const fetchedLeadData = {
+      // Lead Information
+      firstName: leadData?.first_name,
+      lastName: leadData?.last_name,
+      email: leadData?.email,
+      secondaryEmail: leadData?.secondary_email,
+      mobileNumber: leadData?.mobile_number,
+      alternativeNumber: leadData?.alternative_number,
+      whatsappNumber: leadData?.whatsapp_number,
+      // leadOwner: leadData?.lead_owner,
+      // leadStatusInfo: 'Initial Contact',
+      priority: leadData?.priority_id,
+      teleCallerName: leadData?.tele_callerid,
+      leadCreated: leadData?.created_at,
+      leadNumber: leadData?.lead_number,
+      agreeToReceiveBoolean: leadData?.consent,
+
+      // Education Qualification
+      highestQualification: leadData?.highest_qualification_id,
+      graduationYear: { name: leadData?.graduation_year },
+      fieldOfStudy: leadData?.fieldofstudy_id,
+      cgpaGrade: leadData?.cgpa_grade,
+      workExperience: { name: leadData?.work_experience },
+      intakeYear: { name: leadData?.intake_year },
+      intakeMonth: leadData?.intake_month,
+      preferredDestination: leadData?.preffered_destination || [], //['USA', 'Canada'],
+      otherCountries: leadData?.other_countries, //'USA, Australia',
+      testName: leadData?.test_ids || [], //['IELTS'],
+      testTrainingBoolean: leadData?.test_training_required,
+
+      // Lead Status
+      leadStatus: leadData?.status,
+      category: leadData?.category,
+      subCategory: leadData?.subcategory_id,
+      branch: leadData?.branch_id,
+      // counselor: 'Jane Smith',
+      notes: '',
+
+      // Lead Source
+      leadSource_1: leadData?.source1_id,
+      leadSource_2: leadData?.source2_id,
+      leadSource_3: leadData?.source3_id,
+      leadSource_4: leadData?.source4_id,
+      location_1: leadData?.region_id,
+      location_2: leadData?.city_id,
+      referrerName: leadData?.reference_name,
+      referrerEmployeeId: leadData?.reference_employee_id,
+      vertical: leadData?.vertical,
+      desiredProgram: leadData?.desired_program,
+      adName: leadData?.adName,
+      adCampaign: leadData?.adCampaign,
+      leadForm: leadData?.lead_form,
+      ipAddress: leadData?.ip_address,
+      internshipOption: leadData?.internship_option,
+      importLead: leadData?.importLead,
+      invokeBlueprint: leadData?.invokeBlueprint,
     };
 
     // Simulate delay and set data
     setTimeout(() => {
-      setInitialValues(mockLeadData);
+      setInitialValues(fetchedLeadData);
     }, 1000);
-  }, []);
+  }, [leadData]);
 
   const handleSubmit = (values, { setSubmitting }) => {
     console.log('Form submitted with values:', values);
   };
 
   const handleEditClick = (data) => {
-    alert('Edit button clicked!');
-    setEditingId(data.opportunityID);
-    setFormData({ ...data });
+    navigate(`/leads/edit/${id}`);
   };
 
   return (
@@ -143,11 +173,11 @@ const LeadDetailsViewPage = () => {
                 <div className="flex items-start justify-between flex-wrap">
                   <div className="flex items-center space-x-4">
                     <div className="w-14 h-14 bg-slate-700 text-white rounded-full flex items-center justify-center text-lg font-semibold">
-                      NK
+                      {leadData?.first_name?.charAt(0)} {leadData?.last_name?.charAt(0)}
                     </div>
                     <div className="space-y-1">
                       <div className="flex items-center space-x-2 mb-2">
-                        <h1 className="font-bold text-[19px] text-[#17222B]">Nandhana Krishna</h1>
+                        <h1 className="font-bold text-[19px] text-[#17222B]">{leadData?.first_name} {leadData?.last_name}</h1>
                         <span className="text-xs px-2 py-1 rounded-full bg-[#FFF3E6] text-[#FF8400] font-medium border border-[#FFB86B]">
                           May be Prospective
                         </span>
@@ -155,15 +185,15 @@ const LeadDetailsViewPage = () => {
                       <div className="text-sm text-gray-600 flex flex-wrap gap-x-4">
                         <div className="flex items-center space-x-2">
                           <img src={LeadNumberIcon} alt="Lead Icon" className="w-5 h-5" />
-                          <span className="text-[13px]">LEAD355451001</span>
+                          <span className="text-[13px]">{leadData?.lead_number}</span>
                         </div>
                         <div className="flex items-center space-x-2">
                           <img src={LeadMailIcon} alt="Mail Icon" className="w-5 h-5" />
-                          <span className="text-[13px]">test@gmail.com</span>
+                          <span className="text-[13px]">{leadData?.email}</span>
                         </div>
                         <div className="flex items-center space-x-2">
                           <img src={LeadCallIcon} alt="Call Icon" className="w-5 h-5" />
-                          <span className="text-[13px]">(884) 819-3264</span>
+                          <span className="text-[13px]">{leadData?.mobile_number}</span>
                         </div>
                       </div>
                     </div>
@@ -207,19 +237,19 @@ const LeadDetailsViewPage = () => {
 
               {/* Forms by Tab */}
               {(activeTab === 'All Info' || activeTab === 'Lead Information') && (
-                <LeadInformationForm {...{ values, errors, touched, handleChange, handleBlur, setFieldValue }} />
+                <LeadInformationForm {...{ values, errors, touched, handleChange, handleBlur, setFieldValue, mode: "view" }} />
               )}
               {(activeTab === 'All Info' || activeTab === 'Education Qualification') && (
-                <EducationQualificationForm {...{ values, errors, touched, handleChange, handleBlur, setFieldValue }} />
+                <EducationQualificationForm {...{ values, errors, touched, handleChange, handleBlur, setFieldValue, mode: "view" }} />
               )}
               {(activeTab === 'All Info' || activeTab === 'Lead Status') && (
-                <LeadStatusForm {...{ values, errors, touched, handleChange, handleBlur, setFieldValue }} />
+                <LeadStatusForm {...{ values, errors, touched, handleChange, handleBlur, setFieldValue, mode: "view" }} />
               )}
               {(activeTab === 'All Info' || activeTab === 'Lead Source') && (
-                <LeadSourceForm {...{ values, errors, touched, handleChange, handleBlur, setFieldValue }} />
+                <LeadSourceForm {...{ values, errors, touched, handleChange, handleBlur, setFieldValue, mode: "view" }} />
               )}
               {activeTab === 'Opportunity' && (
-                <LeadOpportunity />
+                <LeadOpportunity leadID={id} />
               )}
             </form>
           )}

@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { CustomInputField, CustomDropDown, CustomDatePicker } from "react-mui-tailwind";
+import { CustomInputField, CustomDropDown, CustomDatePicker, CustomCheckboxField } from "react-mui-tailwind";
 import { getFESUser, getPriority } from "../../../api/services/masterAPIs/createLeadApi"
 import { data } from 'autoprefixer';
+import EditableFieldWrapper from '../../../utils/EditableFieldWrapper';
 
-const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => {
+const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode = "edit" }) => {
+  const isEditable = mode === "edit";
 
   const [userOptions, setUserOptions] = useState([]);
+
   const [priorityOptions, setPriorityOptions] = useState([]);
+  const [selectedPriorityOption, setSelectedPriorityOption] = useState("");
 
   useEffect(() => {
     const fetchDropdownData = async () => {
@@ -15,16 +19,29 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
           getFESUser(),
           getPriority(),
         ]);
-  
+
         setUserOptions(userRes?.value?.data?.data || []);
         setPriorityOptions(priorityRes?.value?.data?.data || []);
       } catch (err) {
         console.error('Error loading dropdown data:', err);
       }
     };
-  
+
     fetchDropdownData();
   }, []);
+
+  useEffect(() => {
+    if (values.priority && priorityOptions?.length > 0) {
+      const selected = priorityOptions.find(option => option.id === values.priority);
+      setSelectedPriorityOption(selected || "");
+    }
+  }, [values.priority, priorityOptions]);
+
+  const handleAgreeToReceiveOnChange = (event) => {
+    const { checked } = event.target;
+    console.log('checked', checked);
+    setFieldValue('agreeToReceiveBoolean', checked);
+  }
 
   return (
     <div className="form-section animate-fade-in ml-0 mb-6">
@@ -41,7 +58,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
           >
             {(isEditing, val, setVal) => ( */}
           <CustomInputField
-            state="default"
+            state={isEditable ? "default" : "non-editable"}
             label="First Name"
             value={values.firstName}
             onChange={(value) => {
@@ -59,7 +76,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
         <div className="form-field">
           <CustomInputField
-            state="default"
+            state={isEditable ? "default" : "non-editable"}
             label="Last Name"
             value={values.lastName}
             onChange={(value) => {
@@ -74,7 +91,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
         <div className="form-field">
           <CustomInputField
-            state="default"
+            state={isEditable ? "default" : "non-editable"}
             label="Email"
             value={values.email}
             onChange={(value) => {
@@ -89,7 +106,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
         <div className="form-field">
           <CustomInputField
-            state="default"
+            state={isEditable ? "default" : "non-editable"}
             label="Secondary Email"
             value={values.secondaryEmail}
             showAsterisk={false}
@@ -105,7 +122,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
         <div className="form-field">
           <CustomInputField
-            state="default"
+            state={isEditable ? "default" : "non-editable"}
             label="Mobile Number"
             value={values.mobileNumber}
             onChange={(value) => {
@@ -120,7 +137,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
         <div className="form-field">
           <CustomInputField
-            state="default"
+            state={isEditable ? "default" : "non-editable"}
             label="Alternative Number"
             value={values.alternativeNumber}
             showAsterisk={false}
@@ -136,7 +153,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
         <div className="form-field">
           <CustomInputField
-            state="default"
+            state={isEditable ? "default" : "non-editable"}
             label="Whatsapp Number"
             value={values.whatsappNumber}
             showAsterisk={false}
@@ -190,9 +207,13 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
             options={priorityOptions}
             required={true}
             placeHolder="Select"
-            value={values.priority}
+            // value={priorityOptions?.find(option => option.id === values.priority) || ""}
+            value={isEditable ? selectedPriorityOption : (priorityOptions?.find(option => option.id === values.priority) || "")}
+            disabled={!isEditable}
             onChange={(value) => {
-              setFieldValue('priority', value.target.value);
+              // setFieldValue('priority', value.target.value);
+              setSelectedPriorityOption(value?.target?.value);   // update local selected object
+              setFieldValue('priority', value?.target?.value?.id); // update formik value
             }}
             onBlur={() => handleBlur({ target: { name: 'priority' } })}
             hasError={touched.priority && Boolean(errors.priority)}
@@ -203,13 +224,13 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
         <div className="form-field">
           <CustomDropDown
             label="Tele Caller"
-            options={["John", "Jane"]}
-            required={false}
-            showAsterisk={false}
+            options={userOptions}
+            required={true}
             placeHolder="Select"
-            value={values.teleCallerName}
+            value={userOptions?.find(option => option.id === values?.teleCallerName) || ""}
+            disabled={!isEditable}
             onChange={(value) => {
-              setFieldValue('teleCallerName', value.target.value);
+              setFieldValue('teleCallerName', value.target.value?.id);
             }}
             onBlur={() => handleBlur({ target: { name: 'teleCallerName' } })}
             hasError={touched.teleCallerName && Boolean(errors.teleCallerName)}
@@ -221,6 +242,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
           <CustomDatePicker
             label="Lead Created"
             value={values?.leadCreated}
+            disabled={!isEditable}
             onChange={(value) => {
               setFieldValue('leadCreated', value)
             }}
@@ -244,17 +266,9 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
       </div>
 
       <div className="mt-6 flex items-center gap-2">
-        <input
-          type="checkbox"
-          id="agreeToReceiveBoolean"
-          name="agreeToReceiveBoolean"
-          checked={values.agreeToReceiveBoolean}
-          onChange={handleChange}
-          className="w-4 h-4 gap-[10px] rounded border"
-        />
-        <label htmlFor="agreeToReceiveBoolean" className="text-base font-normal leading-[140%] text-[#17222B] font-[Proxima Nova]">
-          I agree to receive communications <span className='text-red-600'>*</span>
-        </label>
+        {/* <CustomCheckboxField name="agreeToReceiveBoolean" label="I agree to receive communications" disabled={!isEditable ? true : false} onChange={handleAgreeToReceiveOnChange} checked={values?.agreeToReceiveBoolean} /> */}
+        <CustomCheckboxField name="agreeToReceiveBoolean" label="I agree to receive communications"  onChange={handleAgreeToReceiveOnChange} disabled={!isEditable} checked={values?.agreeToReceiveBoolean ? true : false} />
+        {/* <span className='text-red-600'>*</span> */}
       </div>
 
     </div>

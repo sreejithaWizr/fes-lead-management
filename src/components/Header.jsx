@@ -15,8 +15,8 @@ import { getLeadList } from '../api/services/masterAPIs/createLeadApi';
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const isCreateLeadPage = location.pathname === '/leads/create';
-  const isLeadDetailsViewPage = location.pathname === '/leads/detailsview';
+  const isCreateLeadPage = location.pathname.startsWith('/leads/create');
+  const isLeadDetailsViewPage = location.pathname.startsWith('/leads/detailsview');
   const [filters, setFilters] = useState([]);
   const [pageSize, setPageSize] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);

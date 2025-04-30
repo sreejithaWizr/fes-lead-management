@@ -27,7 +27,7 @@ export const getSource1 = () => apiClient.get('api/Source1');
 
 export const getStatus = () => apiClient.get('api/Status');
 
-export const getSubCategory = (id) => apiClient.get(`api/SubCategory/${id}`);
+export const getSubCategory = (id) => apiClient.get(`api/SubCategory/GetSubCategoryByCategoryId/${id}`);
 export const getTestName = () => apiClient.get('api/TestName');
 
 export const getVertical = () => apiClient.get('api/Vertical');
@@ -46,3 +46,6 @@ export const getLeadList = (payload) => {
     });
   };
   
+export const createLead = (payload) => {
+    return apiClient.post('api/LeadProfile', payload);
+};

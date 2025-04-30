@@ -39,10 +39,9 @@ const LeadDetailsHeader = ({ lead }) => {
     };
     return (
         <header className="w-full shadow-card">
-            <div className="py-6 px-6 flex items-center justify-between">
+            <div className="flex items-center justify-between mb-4">
                 <div className="flex flex-col w-full">
-                    <div className="flex w-full justify-between">
-
+                    <div className="flex w-full justify-between mb-4">
                         <div className="flex items-center gap-4">
                             <img
                                 src={LeftArrowIcon}
