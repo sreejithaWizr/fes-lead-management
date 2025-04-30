@@ -33,32 +33,6 @@ const LeadsTable = () => {
     fetchLeadsData();
   }, [currentPage]); // <--- add dependency
 
-  const fetchLeadsData = (customFilters = filters) => {
-    const output = customFilters.map(item => ({
-      field: item.field,
-      operator: item.operator.name,
-      value: item.value.map(v => v.name)
-    }));
-
-    const payload = {
-      filters: output,
-      pageSize: 15,         // <- match your response pageSize
-      pageNumber: currentPage,
-      filterApplied: customFilters.length > 0
-    };
-
-    getLeadList(payload)
-      .then(response => {
-        const responseData = response?.data;
-
-        setLeads(responseData?.data || []);
-        setTotalPages(responseData?.totalPages || 1);  // <-- update total pages from API
-        console.log("Fetched Leads:", response);
-      })
-      .catch(error => {
-        console.error('Error fetching leads:', error);
-      });
-  };
 
   const handleView = () => {
     navigate('/leads/detailsview');
@@ -77,7 +51,9 @@ const LeadsTable = () => {
     newFiltersArray.forEach(({ field, operator, value }) => {
       filterMap[field] = {
         condition: operator,
-        value: value.length > 1 ? value : value[0] || '', // Use array for multiple values, single value otherwise
+        value: Array.isArray(value)
+  ? value.map(v => (typeof v === 'string' ? v : v.name))
+  : []
       };
     });
 
@@ -142,9 +118,38 @@ const LeadsTable = () => {
 
   const handleRowsPerPageChange = (newRowsPerPage) => {
     setRowsPerPage(newRowsPerPage);
-    setCurrentPage(1); // reset to page 1
-    fetchLeadsData(filters); // re-fetch API with new pageSize
+    setCurrentPage(1);
+    fetchLeadsData(filters, newRowsPerPage, 1); // Pass newRowsPerPage and reset page to 1
   };
+  
+
+  const fetchLeadsData = (customFilters = filters, customRowsPerPage = rowsPerPage, customPage = currentPage) => {
+    const output = customFilters.map(item => ({
+      field: item.field,
+      operator: typeof item.operator === 'string' ? item.operator : item.operator.name,
+      value: Array.isArray(item.value)
+        ? item.value.map(v => (typeof v === 'string' ? v : v.name))
+        : []
+    }));
+  
+    const payload = {
+      filters: output,
+      pageSize: customRowsPerPage,
+      pageNumber: customPage,
+      filterApplied: customFilters.length > 0
+    };
+  
+    getLeadList(payload)
+      .then(response => {
+        const responseData = response?.data;
+        setLeads(responseData?.data || []);
+        setTotalPages(responseData?.totalPages || 1);
+      })
+      .catch(error => {
+        console.error('Error fetching leads:', error);
+      });
+  };
+  
 
 
   return (
