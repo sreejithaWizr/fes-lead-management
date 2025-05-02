@@ -23,7 +23,6 @@ const LeadDetailsHeader = ({ lead }) => {
                     return acc;
                 }, {})
             );
-            console.log("formik", formRef.current.values)
 
             formRef.current.submitForm();
             // formRef.current.validateForm().then(errors => {

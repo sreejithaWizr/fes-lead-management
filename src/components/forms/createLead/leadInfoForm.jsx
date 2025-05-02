@@ -39,7 +39,6 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
   const handleAgreeToReceiveOnChange = (event) => {
     const { checked } = event.target;
-    console.log('checked', checked);
     setFieldValue('agreeToReceiveBoolean', checked);
   }
 
@@ -267,8 +266,8 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
       <div className="mt-6 flex items-center gap-2">
         {/* <CustomCheckboxField name="agreeToReceiveBoolean" label="I agree to receive communications" disabled={!isEditable ? true : false} onChange={handleAgreeToReceiveOnChange} checked={values?.agreeToReceiveBoolean} /> */}
-        <CustomCheckboxField name="agreeToReceiveBoolean" label="I agree to receive communications"  onChange={handleAgreeToReceiveOnChange} disabled={!isEditable} checked={values?.agreeToReceiveBoolean ? true : false} />
-        {/* <span className='text-red-600'>*</span> */}
+        <CustomCheckboxField name="agreeToReceiveBoolean" label="I agree to receive communications" onChange={handleAgreeToReceiveOnChange} disabled={!isEditable} checked={values?.agreeToReceiveBoolean ? true : false} />
+        <span className='text-red-600'>*</span>
       </div>
 
     </div>

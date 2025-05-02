@@ -39,8 +39,6 @@ const Header = () => {
       value: item.value.map(v => v.name)
     }));
     
-    console.log("output",output);
-    
     const payload = {
       filters: output,
       pageSize,
@@ -100,8 +98,6 @@ const Header = () => {
       // });
     }
   };
-
-  console.log("value", isFilterOpen)
 
   const handleApplyFilter = (newFiltersArray) => {
     // Convert array format to object for internal use

@@ -134,6 +134,8 @@ const EditLeadPage = () => {
             invokeBlueprint: leadData?.invokeBlueprint,
         };
 
+        console.log('intakeYear: ', intakeYear)
+
         // Simulate delay and set data
         setTimeout(() => {
             setInitialValues(fetchedLeadData);
@@ -141,6 +143,7 @@ const EditLeadPage = () => {
     }, [leadData]);
 
     const handleSubmit = async (values, { setSubmitting }) => {
+        console.log('update');
         const payload = {
             first_name: values?.firstName || '',
             last_name: values?.lastName || '',
@@ -317,6 +320,7 @@ const EditLeadPage = () => {
                                     mode="edit"
                                 />
                             )}
+                            <pre>{JSON.stringify(errors)}</pre>
                         </form>
                     )}
                 </Formik>
