@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { ChevronDown } from "lucide-react";
 import ArrowIconActive from "../assets/arrow-circle-down-active.svg";
 
 const CustomDropdownComponent = ({
@@ -10,88 +9,99 @@ const CustomDropdownComponent = ({
     multiple = true,
     onSearch
 }) => {
-    console.log(options,"op")
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
-    const dropdownRef = useRef(null); // Create a ref for the dropdown container
+    const dropdownRef = useRef(null);
 
-    const normalizedValue = Array.isArray(value) ? value : []; // Force value as array
+    const normalizedValue = Array.isArray(value) ? value : [];
 
-    const filteredOptions = options?.filter(
-        (option) =>
-            option?.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-            !normalizedValue.some((item) => item?.id === option?.id)
-    );
+    const filteredOptions = Array.isArray(options)
+        ? options.filter(
+              (option) =>
+                  option?.name?.toLowerCase().includes(searchTerm.toLowerCase()) &&
+                  !normalizedValue.some((item) => {
+                      const itemId = typeof item === "string" ? item : item?.id;
+                      return itemId === option?.id;
+                  })
+          )
+        : [];
 
     const handleSelect = (option) => {
         if (multiple) {
             onChange([...normalizedValue, option]);
         } else {
             onChange([option]);
-            setIsOpen(false); // Close dropdown for single-select
+            setIsOpen(false);
         }
         setSearchTerm("");
     };
 
-    const handleDelete = (option) => {
-        onChange(normalizedValue.filter((item) => item.id !== option.id));
+    const handleDelete = (optionToDelete) => {
+        onChange(
+            normalizedValue.filter((item) => {
+                const itemId = typeof item === "string" ? item : item?.id;
+                const deleteId = typeof optionToDelete === "string" ? optionToDelete : optionToDelete?.id;
+                return itemId !== deleteId;
+            })
+        );
     };
 
-    // Handle outside click to close dropdown
     useEffect(() => {
         const handleOutsideClick = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setIsOpen(false); // Close dropdown if click is outside
+                setIsOpen(false);
             }
         };
 
-        // Add event listener to document
         document.addEventListener("mousedown", handleOutsideClick);
-
-        // Clean up event listener on unmount
-        return () => {
-            document.removeEventListener("mousedown", handleOutsideClick);
-        };
-    }, []); // Empty dependency array to run only on mount/unmount
+        return () => document.removeEventListener("mousedown", handleOutsideClick);
+    }, []);
 
     const handleSearchChange = (e) => {
         const term = e.target.value;
         setSearchTerm(term);
-        if (onSearch) onSearch(term); // trigger search callback
+        if (onSearch) onSearch(term);
     };
 
     useEffect(() => {
         if (onSearch && searchTerm !== "") {
-          onSearch(searchTerm);
+            onSearch(searchTerm);
         }
-      }, [searchTerm]);
+    }, [searchTerm]);
 
     return (
-        <div className="relative w-full" ref={dropdownRef}> {/* Attach ref to container */}
+        <div className="relative w-full" ref={dropdownRef}>
             <div
                 className="flex flex-wrap items-center w-full border border-gray-300 rounded-lg px-3 py-2 min-h-10 gap-1 cursor-text"
                 onClick={() => setIsOpen(true)}
             >
                 {multiple ? (
-                    normalizedValue.map((item) => (
-                        <div
-                            key={item.id}
-                            className="flex items-center bg-blue-100 rounded-full px-3 py-1 text-sm m-1"
-                        >
-                            {item.name}
-                            <button
-                                type="button"
-                                onClick={() => handleDelete(item)}
-                                className="ml-1"
+                    normalizedValue.map((item, index) => {
+                        const name = typeof item === "string" ? item : item?.name;
+                        const id = typeof item === "string" ? item : item?.id;
+
+                        return (
+                            <div
+                                key={id || index}
+                                className="flex items-center bg-blue-100 rounded-full px-3 py-1 text-sm m-1"
                             >
-                                <span className="text-gray-500 hover:text-gray-700">×</span>
-                            </button>
-                        </div>
-                    ))
+                                {name}
+                                <button
+                                    type="button"
+                                    onClick={() => handleDelete(item)}
+                                    className="ml-1"
+                                >
+                                    <span className="text-gray-500 hover:text-gray-700">×</span>
+                                </button>
+                            </div>
+                        );
+                    })
                 ) : (
                     normalizedValue[0] && (
                         <div className="text-sm text-gray-800">
-                            {normalizedValue[0].name}
+                            {typeof normalizedValue[0] === "string"
+                                ? normalizedValue[0]
+                                : normalizedValue[0]?.name}
                         </div>
                     )
                 )}
@@ -129,9 +139,7 @@ const CustomDropdownComponent = ({
                             </div>
                         ))
                     ) : (
-                        <div className="px-3 py-2.5 text-sm text-gray-500">
-                            No options found
-                        </div>
+                        <div className="px-3 py-2.5 text-sm text-gray-500">No options found</div>
                     )}
                 </div>
             )}

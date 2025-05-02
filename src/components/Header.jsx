@@ -15,23 +15,15 @@ import { getLeadList } from '../api/services/masterAPIs/createLeadApi';
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const isLeadsPage = location.pathname === '/leads';
   const isCreateLeadPage = location.pathname.startsWith('/leads/create');
   const isLeadDetailsViewPage = location.pathname.startsWith('/leads/detailsview');
-
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const toggleFilter = () => setIsFilterOpen(prev => !prev);
-
-  const [leads, setLeads] = useState([]);
   const [filters, setFilters] = useState([]);
   const [pageSize, setPageSize] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
   const [selectedFilters, setSelectedFilters] = useState({});
 
 
-
   const fetchLeads = (customFilters = filters) => {
-    console.log("customFilters", customFilters)
 
     const output = customFilters.map(item => ({
       field: item.field, // or manually set "firstname" if you want
@@ -45,15 +37,6 @@ const Header = () => {
       pageNumber,
       filterApplied: true
     };
-
-    // getLeadList(payload)
-    //   .then((response) => {
-    //     console.log('Leads:', response.data?.data || []);
-    //     setLeads(response.data?.data || []);
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error fetching leads:', error);
-    //   });
   };
 
   // Initial load
@@ -71,11 +54,6 @@ const Header = () => {
     navigate('/leads');
   };
 
-  const handleSubmit = () => {
-    // Submit form logic would go here
-    // navigate('/leads');
-  };
-
   const handleFormSubmit = () => {
     if (formRef.current) {
       // Set all fields as touched to trigger validation
@@ -87,15 +65,7 @@ const Header = () => {
       );
 
       formRef.current.submitForm();
-      // formRef.current.validateForm().then(errors => {
-      //   if (Object.keys(errors).length === 0) {
-      //     // No errors, submit the form
-      //     formRef.current.submitForm();
-      //   } else {
-      //     console.log('Form has validation errors:', errors);
-      //     // Form has errors, don't submit
-      //   }
-      // });
+      
     }
   };
 
@@ -105,7 +75,6 @@ const Header = () => {
     newFiltersArray.forEach(({ field, operator, value }) => {
       filterMap[field] = { condition: operator, value: value[0] };
     });
-console.log("newFiltersArray", newFiltersArray)
     setSelectedFilters(filterMap); // for form prefill
     setFilters(newFiltersArray);   // for API usage
     fetchLeads(newFiltersArray);   // trigger API
@@ -166,22 +135,6 @@ console.log("newFiltersArray", newFiltersArray)
           </div>
         )}
       </header>
-      {/* {isFilterOpen && (
-        <CustomOffCanvasModal
-          isOpen={isFilterOpen}
-          onClose={toggleFilter}
-          title="Filter"
-          position="right" // ensure it's from left
-          width="649px"
-        >
-          <FilterContent
-            onClose={toggleFilter}
-            onApplyFilter={handleApplyFilter}
-            initialFilters={selectedFilters}
-          />
-
-        </CustomOffCanvasModal>
-      )} */}
 
     </>
   );
