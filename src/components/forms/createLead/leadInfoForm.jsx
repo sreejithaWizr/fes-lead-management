@@ -7,6 +7,8 @@ import EditableFieldWrapper from '../../../utils/EditableFieldWrapper';
 const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode = "edit" }) => {
   const isEditable = mode === "edit";
 
+  const isCreateMode = mode === "create";
+
   const [userOptions, setUserOptions] = useState([]);
 
   const [priorityOptions, setPriorityOptions] = useState([]);
@@ -57,7 +59,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
           >
             {(isEditing, val, setVal) => ( */}
           <CustomInputField
-            state={isEditable ? "default" : "non-editable"}
+            state={isEditable || isCreateMode ? "default" : "non-editable"}
             label="First Name"
             value={values.firstName}
             onChange={(value) => {
@@ -75,7 +77,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
         <div className="form-field">
           <CustomInputField
-            state={isEditable ? "default" : "non-editable"}
+            state={isEditable || isCreateMode ? "default" : "non-editable"}
             label="Last Name"
             value={values.lastName}
             onChange={(value) => {
@@ -90,7 +92,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
         <div className="form-field">
           <CustomInputField
-            state={isEditable ? "default" : "non-editable"}
+            state={isEditable || isCreateMode ? "default" : "non-editable"}
             label="Email"
             value={values.email}
             onChange={(value) => {
@@ -105,7 +107,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
         <div className="form-field">
           <CustomInputField
-            state={isEditable ? "default" : "non-editable"}
+            state={isEditable || isCreateMode ? "default" : "non-editable"}
             label="Secondary Email"
             value={values.secondaryEmail}
             showAsterisk={false}
@@ -121,7 +123,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
         <div className="form-field">
           <CustomInputField
-            state={isEditable ? "default" : "non-editable"}
+            state={isEditable || isCreateMode ? "default" : "non-editable"}
             label="Mobile Number"
             value={values.mobileNumber}
             onChange={(value) => {
@@ -136,7 +138,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
         <div className="form-field">
           <CustomInputField
-            state={isEditable ? "default" : "non-editable"}
+            state={isEditable || isCreateMode ? "default" : "non-editable"}
             label="Alternative Number"
             value={values.alternativeNumber}
             showAsterisk={false}
@@ -152,7 +154,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
         <div className="form-field">
           <CustomInputField
-            state={isEditable ? "default" : "non-editable"}
+            state={isEditable || isCreateMode ? "default" : "non-editable"}
             label="Whatsapp Number"
             value={values.whatsappNumber}
             showAsterisk={false}
@@ -208,7 +210,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
             placeHolder="Select"
             // value={priorityOptions?.find(option => option.id === values.priority) || ""}
             value={isEditable ? selectedPriorityOption : (priorityOptions?.find(option => option.id === values.priority) || "")}
-            disabled={!isEditable}
+            disabled={!isEditable && !isCreateMode}
             onChange={(value) => {
               // setFieldValue('priority', value.target.value);
               setSelectedPriorityOption(value?.target?.value);   // update local selected object
@@ -227,7 +229,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
             required={true}
             placeHolder="Select"
             value={userOptions?.find(option => option.id === values?.teleCallerName) || ""}
-            disabled={!isEditable}
+            disabled={!isEditable && !isCreateMode}
             onChange={(value) => {
               setFieldValue('teleCallerName', value.target.value?.id);
             }}
@@ -237,36 +239,47 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
           />
         </div>
 
-        <div className="form-field">
-          <CustomDatePicker
-            label="Lead Created"
-            value={values?.leadCreated}
-            disabled={!isEditable}
-            onChange={(value) => {
-              setFieldValue('leadCreated', value)
-            }}
-          />
-        </div>
+        {!isCreateMode && (
+          <div className="form-field">
+            <CustomDatePicker
+              label="Lead Created"
+              value={values?.leadCreated}
+              disabled={!isEditable && !isCreateMode}
+              onChange={(value) => {
+                setFieldValue('leadCreated', value)
+              }}
+            />
+          </div>
+        )}
       </div>
-      <div className="mt-6">
-        <div className="form-field">
-          <CustomInputField
-            state="non-editable"
-            label="Lead Number"
-            valueType="default"
-            value={values.leadNumber}
-            showAsterisk={false}
-            readOnly
-            onChange={handleChange}
-            placeholder="LEAD355451001"
-            className="bg-gray-50"
-          />
+
+      {!isCreateMode &&
+        <div className="mt-6">
+          <div className="form-field">
+            <CustomInputField
+              state="non-editable"
+              label="Lead Number"
+              valueType="default"
+              value={values.leadNumber}
+              showAsterisk={false}
+              readOnly
+              onChange={handleChange}
+              placeholder="LEAD355451001"
+              className="bg-gray-50"
+            />
+          </div>
         </div>
-      </div>
+      }
 
       <div className="mt-6 flex items-center gap-2">
         {/* <CustomCheckboxField name="agreeToReceiveBoolean" label="I agree to receive communications" disabled={!isEditable ? true : false} onChange={handleAgreeToReceiveOnChange} checked={values?.agreeToReceiveBoolean} /> */}
-        <CustomCheckboxField name="agreeToReceiveBoolean" label="I agree to receive communications" onChange={handleAgreeToReceiveOnChange} disabled={!isEditable} checked={values?.agreeToReceiveBoolean ? true : false} />
+        <CustomCheckboxField
+          name="agreeToReceiveBoolean"
+          label="I agree to receive communications"
+          onChange={handleAgreeToReceiveOnChange} 
+          disabled={!isEditable && !isCreateMode} 
+          checked={values?.agreeToReceiveBoolean ? true : false} 
+          />
         <span className='text-red-600'>*</span>
       </div>
 

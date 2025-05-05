@@ -260,6 +260,7 @@ const CreateLeadPage = () => {
                                 handleChange={handleChange}
                                 handleBlur={handleBlur}
                                 setFieldValue={setFieldValue}
+                                mode='create'
                             />
                         )}
 
