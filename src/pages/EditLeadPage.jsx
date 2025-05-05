@@ -134,8 +134,6 @@ const EditLeadPage = () => {
             invokeBlueprint: leadData?.invokeBlueprint,
         };
 
-        console.log('intakeYear: ', intakeYear)
-
         // Simulate delay and set data
         setTimeout(() => {
             setInitialValues(fetchedLeadData);
