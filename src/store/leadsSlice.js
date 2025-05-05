@@ -77,8 +77,8 @@ const initialLeads = [
 
 // Sample data for the custom table
 const columns = [
-  { column: "leadNo", label: "Lead no", id: "leadNumber", showSort: true, isDrag: true, isFilter: true },
-  { column: "firstName", label: "Title", id: "firstName", showSort: true, isDrag: true, isFilter: true },
+  { column: "leadNo", label: "Lead No", id: "leadNumber", showSort: true, isDrag: true, isFilter: true },
+  { column: "firstName", label: "First Name", id: "firstName", showSort: true, isDrag: true, isFilter: true },
   { column: "lastName", label: "Last Name", id: "lastName", showSort: true, isDrag: true, isFilter: true },
   { column: "status", label: "Status", id: "status", showSort: true, isDrag: true, isFilter: true },
   { column: "branch", label: "Branch", id: "branchName", showSort: true, isDrag: true, isFilter: true },
