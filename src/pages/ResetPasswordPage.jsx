@@ -114,11 +114,11 @@ const ResetPasswordPage = () => {
           <img src={FesLogo} alt="Logo" className="w-[132px] h-[32px]" />
 
           <h1 className="flex flex-col justify-center items-center font-proxima font-bold text-[28px] text-black">
-            Reset your Password
+            Forgot Password
             <span>
-              <p className="font-proxima font-normal text-[16px] sm:text-[14px] text-neutral-500 text-center">
-                Please enter your email to receive a reset link
-              </p>
+              {/* <p className="font-proxima font-normal text-[16px] sm:text-[14px] text-neutral-500 text-center">
+                Please enter your email to receive a the OTP
+              </p> */}
             </span>
           </h1>
 
@@ -242,7 +242,7 @@ const ResetPasswordPage = () => {
                 </div> */}
 
                 <CustomButton
-                  text="Reset Password"
+                  text="Change Password"
                   startIcon={false}
                   endIcon={false}
                   width="100%"
@@ -267,10 +267,11 @@ const ResetPasswordPage = () => {
           </Formik>
 
           <div className="flex items-start w-full max-w-[356px] h-[70px] rounded-[12px] gap-2 p-2 border border-[#CBDBE4]">
-            <InfoIcon className="w-4 h-4 text-[#17222B] scale-y-[-1] mt-0.5" fontSize="small" />
+            <InfoIcon className="w-4 h-4 text-[#17222B] scale-y-[-1] mt-0.9" fontSize="small" />
             <p className="font-proxima font-normal text-[13px] text-gray-400">
-              The reset link will expire in 15 minutes. If you don’t receive the email, please check your spam folder or
-              contact support
+              If you don't recieve the OTP, please regenerate the OTP.
+              {/* The reset link will expire in 15 minutes. If you don’t receive the email, please check your spam folder or
+              contact support */}
             </p>
           </div>
         </div>

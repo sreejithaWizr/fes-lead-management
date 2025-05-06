@@ -99,7 +99,7 @@ const EditLeadPage = () => {
             fieldOfStudy: leadData?.fieldofstudy_id,
             cgpaGrade: leadData?.cgpa_grade,
             workExperience: { name: leadData?.work_experience },
-            intakeYear: { name: leadData?.intake_year },
+            intake_year: { name: leadData?.intake_year },
             intakeMonth: { name: leadData?.intake_month },
             preferredDestination: leadData?.preffered_destination || [], //['USA', 'Canada'],
             otherCountries: leadData?.other_countries, //'USA, Australia',
@@ -141,6 +141,7 @@ const EditLeadPage = () => {
     }, [leadData]);
 
     const handleSubmit = async (values, { setSubmitting }) => {
+        console.log('update');
         const payload = {
             first_name: values?.firstName || '',
             last_name: values?.lastName || '',
@@ -184,7 +185,7 @@ const EditLeadPage = () => {
                 city_id: values?.location_2 || null,
                 reference_name: values?.referrerName || '',
                 reference_employee_id: values?.referrerEmployeeId || null,
-                vertical: values?.vertical || '',
+                vertical: values?.vertical || null,
                 desired_program: values?.desiredProgram || null,
                 internship_option: values?.internshipOption == "Yes" ? true : false,
                 adName: values?.adName || '',

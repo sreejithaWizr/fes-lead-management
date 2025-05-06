@@ -69,7 +69,6 @@ const Header = () => {
     }
   };
 
-
   const handleApplyFilter = (newFiltersArray) => {
     // Convert array format to object for internal use
     const filterMap = {};
