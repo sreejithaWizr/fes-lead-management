@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Search, RefreshCw, Filter } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import UserProf from "../assets/user-image.svg";
-import FilterIcon from "../assets/filter.svg";
-import MenuIcon from "../assets/menu.svg";
-import RefreshIcon from "../assets/refresh.svg";
+// import UserProf from "../assets/user-image.svg";
+// import FilterIcon from "../assets/filter.svg";
+// import MenuIcon from "../assets/menu.svg";
+// import RefreshIcon from "../assets/refresh.svg";
 import { CustomButton, CustomSearch, CustomDropDown, CustomOffCanvasModal } from "react-mui-tailwind";
-import FilterContent from '../pages/FilterContent';
+// import FilterContent from '../pages/FilterContent';
 import LeftArrowIcon from "../assets/arrow-left.svg";
 import RightArrowIcon from "../assets/arrow-right.svg";
 import { formRef } from '../pages/CreateLeadPage';
@@ -16,38 +15,38 @@ const Header = () => {
   const navigate = useNavigate();
   const isCreateLeadPage = location.pathname.startsWith('/leads/create');
   const isLeadDetailsViewPage = location.pathname.startsWith('/leads/detailsview');
-  const [filters, setFilters] = useState([]);
-  const [pageSize, setPageSize] = useState(10);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [selectedFilters, setSelectedFilters] = useState({});
+  // const [filters, setFilters] = useState([]);
+  // const [pageSize, setPageSize] = useState(10);
+  // const [pageNumber, setPageNumber] = useState(1);
+  // const [selectedFilters, setSelectedFilters] = useState({});
 
 
-  const fetchLeads = (customFilters = filters) => {
+  // const fetchLeads = (customFilters = filters) => {
 
-    const output = customFilters.map(item => ({
-      field: item.field, // or manually set "firstname" if you want
-      operator: item.operator.name,
-      value: item.value.map(v => v.name)
-    }));
+  //   const output = customFilters.map(item => ({
+  //     field: item.field, // or manually set "firstname" if you want
+  //     operator: item.operator.name,
+  //     value: item.value.map(v => v.name)
+  //   }));
     
-    const payload = {
-      filters: output,
-      pageSize,
-      pageNumber,
-      filterApplied: true
-    };
-  };
+  //   const payload = {
+  //     filters: output,
+  //     pageSize,
+  //     pageNumber,
+  //     filterApplied: true
+  //   };
+  // };
 
-  // Initial load
-  useEffect(() => {
-    fetchLeads();
-  }, []);
+  // // Initial load
+  // useEffect(() => {
+  //   fetchLeads();
+  // }, []);
 
 
 
-  const handleCreateLead = () => {
-    navigate('/leads/create');
-  };
+  // const handleCreateLead = () => {
+  //   navigate('/leads/create');
+  // };
 
   const handleCancel = () => {
     navigate('/leads');
@@ -68,16 +67,16 @@ const Header = () => {
     }
   };
 
-  const handleApplyFilter = (newFiltersArray) => {
-    // Convert array format to object for internal use
-    const filterMap = {};
-    newFiltersArray.forEach(({ field, operator, value }) => {
-      filterMap[field] = { condition: operator, value: value[0] };
-    });
-    setSelectedFilters(filterMap); // for form prefill
-    setFilters(newFiltersArray);   // for API usage
-    fetchLeads(newFiltersArray);   // trigger API
-  };
+  // const handleApplyFilter = (newFiltersArray) => {
+  //   // Convert array format to object for internal use
+  //   const filterMap = {};
+  //   newFiltersArray.forEach(({ field, operator, value }) => {
+  //     filterMap[field] = { condition: operator, value: value[0] };
+  //   });
+  //   setSelectedFilters(filterMap); // for form prefill
+  //   setFilters(newFiltersArray);   // for API usage
+  //   fetchLeads(newFiltersArray);   // trigger API
+  // };
 
 
   return (

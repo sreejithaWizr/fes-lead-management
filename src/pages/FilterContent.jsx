@@ -40,6 +40,7 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {}, isFilterOp
       col.isFilter &&
       col.label.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  
 
   return (
     <Formik
@@ -76,7 +77,7 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {}, isFilterOp
           if (isFilterOpen) {
             const fetchInitialOptions = async () => {
               const selectedFields = Object.keys(values.filters || {});
-        
+
               const fetches = selectedFields.map((field) =>
                 fetchFieldDropdownValues("", field)
                   .then((res) => ({ field, options: res.data?.data || [] }))
@@ -85,9 +86,9 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {}, isFilterOp
                     return { field, options: [] };
                   })
               );
-        
+
               const results = await Promise.allSettled(fetches);
-        
+
               // Build a new map from all successful results
               const newOptionsMap = {};
               results.forEach((result) => {
@@ -96,14 +97,14 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {}, isFilterOp
                   newOptionsMap[field] = options;
                 }
               });
-        
+
               setDropdownOptionsMap(newOptionsMap);
             };
-        
+
             fetchInitialOptions();
           }
         }, [isFilterOpen]);
-        
+
 
 
         console.log('Formik values:', values, dropdownOptionsMap, initialFilters);
@@ -115,8 +116,14 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {}, isFilterOp
               placeHolder="Search Filter"
               width="549px"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => setSearchTerm(e.target.value)} // Update local search term
+              onSearch={(term) => {
+                // Optional: You could debounce/filter API call or local list here
+                setSearchTerm(term); // This also ensures state is in sync
+              }}
+              loading={false} // Or true if you're waiting for an API
             />
+
 
             <div>
               <h3 className="text-sm font-semibold mb-2">Filters</h3>

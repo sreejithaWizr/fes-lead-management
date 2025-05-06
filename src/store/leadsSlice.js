@@ -77,17 +77,17 @@ const initialLeads = [
 
 // Sample data for the custom table
 const columns = [
-  { column: "leadNo", label: "Lead No", id: "leadNumber", showSort: true, isDrag: true, isFilter: true },
-  { column: "firstName", label: "First Name", id: "firstName", showSort: true, isDrag: true, isFilter: true },
-  { column: "lastName", label: "Last Name", id: "lastName", showSort: true, isDrag: true, isFilter: true },
-  { column: "status", label: "Status", id: "status", showSort: true, isDrag: true, isFilter: true },
-  { column: "branch", label: "Branch", id: "branchName", showSort: true, isDrag: true, isFilter: true },
-  { column: "createdDate", label: "Created Date", id: "createdAt", showSort: true, isDrag: true, isFilter: false },
-  { column: "phone", label: "Phone", id: "mobileNumber", showSort: true, isDrag: true, isFilter: true },
-  { column: "email", label: "Email", id: "email", showSort: true, isDrag: true, isFilter: true },
-  { column: "leadSource", label: "Lead Source", id: "source", showSort: true, isDrag: true, isFilter: true },
-  { column: "location", label: "Location", id: "location", showSort: true, isDrag: true, isFilter: true },
-  { column: "action", label: "Actions", id: "action", showSort: false, isDrag: true, isFilter: false },
+  { column: "leadNo", label: "Lead No", id: "leadNumber", showSort: true, isDrag: false, isFilter: true },
+  { column: "firstName", label: "First Name", id: "firstName", showSort: true, isDrag: false, isFilter: true },
+  { column: "lastName", label: "Last Name", id: "lastName", showSort: true, isDrag: false, isFilter: true },
+  { column: "status", label: "Status", id: "status", showSort: true, isDrag: false, isFilter: true },
+  { column: "branch", label: "Branch", id: "branchName", showSort: true, isDrag: false, isFilter: true },
+  { column: "createdDate", label: "Created Date", id: "createdAt", showSort: true, isDrag: false, isFilter: false },
+  { column: "phone", label: "Phone", id: "mobileNumber", showSort: true, isDrag: false, isFilter: true },
+  { column: "email", label: "Email", id: "email", showSort: true, isDrag: false, isFilter: true },
+  { column: "leadSource", label: "Lead Source", id: "source", showSort: true, isDrag: false, isFilter: true },
+  { column: "location", label: "Location", id: "location", showSort: true, isDrag: false, isFilter: true },
+  { column: "action", label: "Actions", id: "action", showSort: false, isDrag: false, isFilter: false },
 ];
 
 // Simulate API call to fetch leads

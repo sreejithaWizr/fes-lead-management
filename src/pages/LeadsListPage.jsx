@@ -136,11 +136,11 @@ const LeadsTable = () => {
     navigate(`/leads/edit/${row?.id}`);
   };
 
-  useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchLeads());
-    }
-  }, [status, dispatch]);
+  // useEffect(() => {
+  //   if (status === 'idle') {
+  //     dispatch(fetchLeads());
+  //   }
+  // }, [status, dispatch]);
 
   const handleSelectAll = (e) => {
     if (e.target.checked) {
@@ -229,7 +229,7 @@ const LeadsTable = () => {
             <CustomTable
               columns={columns}
               data={leads}
-              showCheckboxes={true}
+              showCheckboxes={false}
               getRow={getRow}
             />
           </div>
