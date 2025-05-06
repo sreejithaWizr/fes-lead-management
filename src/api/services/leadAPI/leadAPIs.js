@@ -21,3 +21,7 @@ export const updateLead = (id, payload) => {
         throw error;
     }
 };
+
+export const getLeadList = (payload) => {
+    return apiClient.post('api/LeadListView', payload);
+  };

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchLeads } from '../store/leadsSlice';
 import { CustomTable, CustomPagination, CustomButton, CustomOffCanvasModal } from 'react-mui-tailwind';
-import { getLeadList } from '../api/services/masterAPIs/createLeadApi';
+
 
 import PhoneIcon from "../assets/phone-icon.svg";
 import CalenderIcon from "../assets/calendar.svg";
@@ -13,6 +13,7 @@ import EditIcon from "../assets/edit-icon.svg";
 import FilterIcon from "../assets/filter.svg";
 
 import FilterContent from '../pages/FilterContent';
+import { getLeadList } from '../api/services/leadAPI/leadAPIs';
 
 const LeadsTable = () => {
   const dispatch = useDispatch();
