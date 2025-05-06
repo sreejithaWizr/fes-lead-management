@@ -11,6 +11,8 @@ import LeadDetailsViewPage from "./pages/LeadDetailsViewPage";
 import NotFound from "./pages/NotFound";
 import EditLeadPage from "./pages/EditLeadPage";
 import Login from "./pages/Login";
+import ProtectedRoute from "./utils/ProtectedRoute";
+import SettingsPage from "./components/SettingsPage";
 
 const App = () => {
   return (
@@ -19,13 +21,16 @@ const App = () => {
         <Routes>
           <Route path="login" element={<Login />} />
            <Route path="reset-password" element={<ResetPasswordPage />} />
+           <Route element={<ProtectedRoute />}>
            <Route path="/" element={<Layout />}>
             <Route index element={<Navigate to="/leads" replace />} />
             <Route path="leads" element={<LeadsPage />} />
             <Route path="leads/create" element={<CreateLeadPage />} />
-            <Route path="leads/detailsview" element={<LeadDetailsViewPage />} />
-            <Route path="leads/edit" element={<EditLeadPage />} />
+            <Route path="leads/detailsview/:id" element={<LeadDetailsViewPage />} />
+            <Route path="leads/edit/:id" element={<EditLeadPage />} />
+            <Route path="settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />
+            </Route>
           </Route>
         </Routes>
       </Router>

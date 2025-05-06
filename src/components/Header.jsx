@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Search, RefreshCw, Filter } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import UserProf from "../assets/user-image.svg";
@@ -14,12 +14,35 @@ import { formRef } from '../pages/CreateLeadPage';
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const isLeadsPage = location.pathname === '/leads';
-  const isCreateLeadPage = location.pathname === '/leads/create';
-  const isLeadDetailsViewPage = location.pathname === '/leads/detailsview';
+  const isCreateLeadPage = location.pathname.startsWith('/leads/create');
+  const isLeadDetailsViewPage = location.pathname.startsWith('/leads/detailsview');
+  const [filters, setFilters] = useState([]);
+  const [pageSize, setPageSize] = useState(10);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [selectedFilters, setSelectedFilters] = useState({});
 
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const toggleFilter = () => setIsFilterOpen(prev => !prev);
+
+  const fetchLeads = (customFilters = filters) => {
+
+    const output = customFilters.map(item => ({
+      field: item.field, // or manually set "firstname" if you want
+      operator: item.operator.name,
+      value: item.value.map(v => v.name)
+    }));
+    
+    const payload = {
+      filters: output,
+      pageSize,
+      pageNumber,
+      filterApplied: true
+    };
+  };
+
+  // Initial load
+  useEffect(() => {
+    fetchLeads();
+  }, []);
+
 
 
   const handleCreateLead = () => {
@@ -28,11 +51,6 @@ const Header = () => {
 
   const handleCancel = () => {
     navigate('/leads');
-  };
-
-  const handleSubmit = () => {
-    // Submit form logic would go here
-    // navigate('/leads');
   };
 
   const handleFormSubmit = () => {
@@ -46,70 +64,25 @@ const Header = () => {
       );
 
       formRef.current.submitForm();
-      // formRef.current.validateForm().then(errors => {
-      //   if (Object.keys(errors).length === 0) {
-      //     // No errors, submit the form
-      //     formRef.current.submitForm();
-      //   } else {
-      //     console.log('Form has validation errors:', errors);
-      //     // Form has errors, don't submit
-      //   }
-      // });
+      
     }
   };
 
-  console.log("value", isFilterOpen)
+  const handleApplyFilter = (newFiltersArray) => {
+    // Convert array format to object for internal use
+    const filterMap = {};
+    newFiltersArray.forEach(({ field, operator, value }) => {
+      filterMap[field] = { condition: operator, value: value[0] };
+    });
+    setSelectedFilters(filterMap); // for form prefill
+    setFilters(newFiltersArray);   // for API usage
+    fetchLeads(newFiltersArray);   // trigger API
+  };
+
+
   return (
     <>
       <header className="w-full shadow-card ">
-        {isLeadsPage && (
-          <div className="pt-2 px-6 flex flex-col gap-6">
-            <div className="flex items-center justify-between">
-              {/* <div className="flex items-center gap-4">
-                <img
-                  src={UserProf}
-                  alt="Profile"
-                  className="w-[61px] h-[61px] rounded-[12px]"
-
-                />
-                <div>
-                  <h2 className="text-sm font-normal text-[#757575]">Hello,</h2>
-                  <h1 className="text-base font-medium">Deego Chaithanyan!</h1>
-                </div>
-              </div> */}
-
-              {/* <div className="flex items-center gap-2">
-                <div className="relative flex-1">
-                  <CustomSearch />
-                </div>
-                <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={RefreshIcon} />
-              </div> */}
-
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                {/* <h2 className="text-lg font-medium">Kochi Leads</h2>
-              <span className="bg-primary text-white px-2 py-0.5 rounded-md text-xs font-medium">8,467</span> */}
-                {/* <CustomDropDown options={[
-                  { name: "Kochi Leads", count: 8467 },
-                  { name: "Mumbai Leads", count: 5321 },
-                  { name: "Delhi Leads", count: 6789 }
-                ]}
-                  // required={true}
-                  placeHolder="Select Branch"
-                /> */}
-              </div>
-
-              <div className="flex items-center gap-3 w-[405px]">
-                <CustomButton text="Create Lead" endIcon={false} onClick={handleCreateLead} />
-                <CustomButton text="Bulk Upload" variant="secondary" endIcon={false} />
-                <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={FilterIcon} onClick={() => toggleFilter()} />
-                <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={MenuIcon} />
-              </div>
-            </div>
-          </div>
-        )}
 
         {isCreateLeadPage && (
           <div className="pt-6 px-6 flex items-center justify-between">
@@ -161,17 +134,6 @@ const Header = () => {
           </div>
         )}
       </header>
-      {isFilterOpen && (
-        <CustomOffCanvasModal
-          isOpen={isFilterOpen}
-          onClose={toggleFilter}
-          title="Filter"
-          position="right" // ensure it's from left
-          width="649px"
-        >
-          <FilterContent onClose={toggleFilter} />
-        </CustomOffCanvasModal>
-      )}
 
     </>
   );

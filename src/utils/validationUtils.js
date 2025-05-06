@@ -77,9 +77,9 @@ export const requiredBooleanTrue = () =>
   Yup.boolean().oneOf([true], "Required");
 
 export const requiredDropdown = () =>
-  Yup.string().required(`Required`).nullable();
+  Yup.mixed().required(`Required`).nullable();
 
-export const optionalDropdown = () => Yup.string().nullable();
+export const optionalDropdown = () => Yup.mixed().nullable();
 
 export const requiredMultiSelect = () =>
   Yup.array()

@@ -76,19 +76,19 @@ const initialLeads = [
 ];
 
 // Sample data for the custom table
-  const columns = [
-    { id: "leadNo", label: "Lead no", showSort: true, isDrag: true, isFilter: true },
-    { id: "firstName", label: "Title", showSort: true, isDrag: true, isFilter: true },
-    { id: "lastName", label: "Last Name", showSort: true, isDrag: true, isFilter: true },
-    { id: "status", label: "Status", showSort: true, isDrag: true, isFilter: true },
-    { id: "branch", label: "Branch", showSort: true, isDrag: true, isFilter: true },
-    { id: "createdDate", label: "Created Date", showSort: true, isDrag: true, isFilter: true },
-    { id: "phone", label: "Phone", showSort: true, isDrag: true, isFilter: true },
-    { id: "email", label: "Email", showSort: true, isDrag: true, isFilter: true },
-    { id: "leadSource", label: "Lead Source", showSort: true, isDrag: true, isFilter: true },
-    { id: "location", label: "Location", showSort: true, isDrag: true, isFilter: true },
-    { id: "action", label: "Actions", showSort: false, isDrag: true, isFilter: false },
-  ];
+const columns = [
+  { column: "leadNo", label: "Lead No", id: "leadNumber", showSort: true, isDrag: true, isFilter: true },
+  { column: "firstName", label: "First Name", id: "firstName", showSort: true, isDrag: true, isFilter: true },
+  { column: "lastName", label: "Last Name", id: "lastName", showSort: true, isDrag: true, isFilter: true },
+  { column: "status", label: "Status", id: "status", showSort: true, isDrag: true, isFilter: true },
+  { column: "branch", label: "Branch", id: "branchName", showSort: true, isDrag: true, isFilter: true },
+  { column: "createdDate", label: "Created Date", id: "createdAt", showSort: true, isDrag: true, isFilter: false },
+  { column: "phone", label: "Phone", id: "mobileNumber", showSort: true, isDrag: true, isFilter: true },
+  { column: "email", label: "Email", id: "email", showSort: true, isDrag: true, isFilter: true },
+  { column: "leadSource", label: "Lead Source", id: "source", showSort: true, isDrag: true, isFilter: true },
+  { column: "location", label: "Location", id: "location", showSort: true, isDrag: true, isFilter: true },
+  { column: "action", label: "Actions", id: "action", showSort: false, isDrag: true, isFilter: false },
+];
 
 // Simulate API call to fetch leads
 export const fetchLeads = createAsyncThunk(
@@ -96,7 +96,7 @@ export const fetchLeads = createAsyncThunk(
   async (_, { getState }) => {
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 500));
-    
+
     // Use mock data
     return initialLeads;
   }
@@ -108,7 +108,7 @@ export const createLead = createAsyncThunk(
   async (leadData, { getState }) => {
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 500));
-    
+
     // Create a new lead with the form data
     const newLead = {
       leadNo: leadData.leadNumber,
@@ -118,16 +118,16 @@ export const createLead = createAsyncThunk(
       phone: leadData.mobileNumber,
       status: leadData.leadStatus,
       branch: 'Kochi',
-      createdDate: new Date().toLocaleDateString('en-US', { 
-        day: '2-digit', 
-        month: 'short', 
-        year: 'numeric' 
+      createdDate: new Date().toLocaleDateString('en-US', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
       }),
       leadSource: leadData.leadSource,
       location: 'Kochi, India',
       // Additional fields can be added as needed
     };
-    
+
     return newLead;
   }
 );

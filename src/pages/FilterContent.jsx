@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import { useSelector } from 'react-redux';
-import { CustomSearch, CustomDropDown, CustomCheckboxField } from "react-mui-tailwind";
+import { CustomSearch, CustomDropDown, CustomCheckboxField } from 'react-mui-tailwind';
+import CustomDropdownComponent from './CustomDropdown';
+import { fetchFieldDropdownValues } from '../api/services/masterAPIs/createLeadApi';
 
-const dropdownOptions = ["is", "is not", "is empty", "is not empty", "contains"];
-const defaultValueOptions = ["Option 1", "Option 2", "Option 3"];
-
-// 🔄 Use selected condition directly as operator
+const dropdownOptions = ['is', 'is not', 'is empty', 'is not empty', 'contains'];
+// Transform filters for API
 const transformFilters = (filters) => {
   return Object.entries(filters).map(([field, { condition, value }]) => ({
     field,
@@ -15,9 +15,25 @@ const transformFilters = (filters) => {
   }));
 };
 
-const FilterContent = ({ onClose }) => {
+const FilterContent = ({ onClose, onApplyFilter, initialFilters = {}, isFilterOpen }) => {
   const { columns } = useSelector((state) => state.leads);
-  const [searchTerm, setSearchTerm] = React.useState('');
+  const [dropdownOptionsMap, setDropdownOptionsMap] = useState({});
+  const [searchTermMap, setSearchTermMap] = useState({});
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleDropdownSearch = async (term, fieldName) => {
+    setSearchTermMap((prev) => ({ ...prev, [fieldName]: term }));
+
+    try {
+      const { data } = await fetchFieldDropdownValues(term, fieldName);
+      setDropdownOptionsMap((prev) => ({
+        ...prev,
+        [fieldName]: data?.data,
+      }));
+    } catch (error) {
+      console.error("Error fetching dropdown options", error);
+    }
+  };
 
   const filteredColumns = columns.filter(
     (col) =>
@@ -27,11 +43,13 @@ const FilterContent = ({ onClose }) => {
 
   return (
     <Formik
-      initialValues={{ filters: {} }}
-      onSubmit={(values) => {
+      initialValues={{ filters: initialFilters }}
+      enableReinitialize={true}
+      onSubmit={async (values) => {
         const transformed = transformFilters(values.filters);
-        console.log("🚀 Transformed Filters:", transformed);
-        onClose();
+        // await applyFiltersToAPI(transformed); // Make API call
+        onApplyFilter(transformed); // Pass to parent
+        onClose(); // Close modal or drawer
       }}
     >
       {({ values, setFieldValue, resetForm }) => {
@@ -40,9 +58,9 @@ const FilterContent = ({ onClose }) => {
           if (filters[colId]) {
             delete filters[colId];
           } else {
-            filters[colId] = { condition: '', value: '' };
+            filters[colId] = { condition: '', value: [] }; // Initialize with empty array for multi-select
           }
-          setFieldValue("filters", filters);
+          setFieldValue('filters', filters, initialFilters);
         };
 
         const handleConditionChange = (colId, event) => {
@@ -50,10 +68,46 @@ const FilterContent = ({ onClose }) => {
           setFieldValue(`filters.${colId}.condition`, condition);
         };
 
-        const handleValueChange = (colId, event) => {
-          const value = event.target.value;
-          setFieldValue(`filters.${colId}.value`, value);
+        const handleMultiSelectChange = (colId, selectedValues) => {
+          setFieldValue(`filters.${colId}.value`, selectedValues);
         };
+
+        useEffect(() => {
+          if (isFilterOpen) {
+            const fetchInitialOptions = async () => {
+              const selectedFields = Object.keys(values.filters || {});
+        
+              const fetches = selectedFields.map((field) =>
+                fetchFieldDropdownValues("", field)
+                  .then((res) => ({ field, options: res.data?.data || [] }))
+                  .catch((error) => {
+                    console.error(`Error prefetching dropdown for ${field}:`, error);
+                    return { field, options: [] };
+                  })
+              );
+        
+              const results = await Promise.allSettled(fetches);
+        
+              // Build a new map from all successful results
+              const newOptionsMap = {};
+              results.forEach((result) => {
+                if (result.status === "fulfilled") {
+                  const { field, options } = result.value;
+                  newOptionsMap[field] = options;
+                }
+              });
+        
+              setDropdownOptionsMap(newOptionsMap);
+            };
+        
+            fetchInitialOptions();
+          }
+        }, [isFilterOpen]);
+        
+
+
+        console.log('Formik values:', values, dropdownOptionsMap, initialFilters);
+
 
         return (
           <Form className="space-y-6 overflow-hidden">
@@ -85,12 +139,18 @@ const FilterContent = ({ onClose }) => {
                             value={values.filters[col.id]?.condition || ''}
                             onChange={(e) => handleConditionChange(col.id, e)}
                           />
-                          <CustomDropDown
-                            options={defaultValueOptions}
-                            placeHolder="Select value"
-                            value={values.filters[col.id]?.value || ''}
-                            onChange={(e) => handleValueChange(col.id, e)}
+                          <CustomDropdownComponent
+                            options={dropdownOptionsMap[col.id] || []}
+                            value={values.filters[col.id]?.value || []}
+                            onChange={(selected) => handleMultiSelectChange(col.id, selected)}
+                            placeholder="Select options..."
+                            multiple={true}
+                            onSearch={(term) => handleDropdownSearch(term, col.id)}
                           />
+
+
+
+
                         </div>
                       )}
                     </div>
@@ -107,9 +167,10 @@ const FilterContent = ({ onClose }) => {
               <button
                 type="button"
                 onClick={() => {
-                  resetForm();
-                  setSearchTerm('');
-                  onClose();
+                  resetForm(); // Reset form values
+                  setSearchTerm(''); // Reset search input
+                  onApplyFilter([]); // Clear applied filters in parent
+                  onClose(); // Close the modal/drawer
                 }}
                 className="text-gray-500 text-sm"
               >

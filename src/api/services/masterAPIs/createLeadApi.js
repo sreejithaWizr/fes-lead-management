@@ -27,9 +27,21 @@ export const getSource1 = () => apiClient.get('api/Source1');
 
 export const getStatus = () => apiClient.get('api/Status');
 
-export const getSubCategory = (id) => apiClient.get(`api/SubCategory/${id}`);
+export const getSubCategory = (id) => apiClient.get(`api/SubCategory/GetSubCategoryByCategoryId/${id}`);
 export const getTestName = () => apiClient.get('api/TestName');
 
 export const getVertical = () => apiClient.get('api/Vertical');
  
 export const getDesiredProgram = () => apiClient.get('api/DesiredProgram')
+
+// export const getLeadList = () => apiClient.get('api/LeadListView')
+
+  export const fetchFieldDropdownValues = (searchTerm, fieldName) => {
+    return apiClient.get('api/LeadListView/field-values', {
+      params: { searchTerm, fieldName },
+    });
+  };
+  
+export const createLead = (payload) => {
+    return apiClient.post('api/LeadProfile', payload);
+};
