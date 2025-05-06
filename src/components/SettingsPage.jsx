@@ -33,7 +33,7 @@ const SettingsPage = () => {
       <div
         className="flex items-center border-b"
         style={{
-          width: '594px',
+          width: '100%',
           height: '61px',
           borderBottom: '1px solid var(--Secondary-S75, #CBDBE4)',
           gap: '24px',
