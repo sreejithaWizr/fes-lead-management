@@ -10,7 +10,6 @@ import FilterContent from '../pages/FilterContent';
 import LeftArrowIcon from "../assets/arrow-left.svg";
 import RightArrowIcon from "../assets/arrow-right.svg";
 import { formRef } from '../pages/CreateLeadPage';
-import { getLeadList } from '../api/services/masterAPIs/createLeadApi';
 
 const Header = () => {
   const location = useLocation();

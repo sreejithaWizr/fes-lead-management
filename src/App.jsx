@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound";
 import EditLeadPage from "./pages/EditLeadPage";
 import Login from "./pages/Login";
 import ProtectedRoute from "./utils/ProtectedRoute";
+import SettingsPage from "./components/SettingsPage";
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
             <Route path="leads/create" element={<CreateLeadPage />} />
             <Route path="leads/detailsview/:id" element={<LeadDetailsViewPage />} />
             <Route path="leads/edit/:id" element={<EditLeadPage />} />
+            <Route path="settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />
             </Route>
           </Route>
