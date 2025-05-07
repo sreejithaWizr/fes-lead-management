@@ -1,34 +1,16 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import {
   Stepper,
   Step,
   StepLabel,
   StepContent,
-  Button,
   Typography,
-  StepConnector,
-  styled,
-  Box
+  Box,
 } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import BulkUploaderIcon from "../assets/bulk-uploader-icon.svg";
 import Dragicon from "../assets/Dragicon.svg";
-
 import { CustomButton, CustomCheckboxField } from "react-mui-tailwind";
-
-// const DashedConnector = styled(StepConnector)(() => ({
-//   "&.MuiStepConnector-root": {
-//     marginLeft: 11,
-//   },
-//   "& .MuiStepConnector-line": {
-//     borderLeft: "2px dashed #009CDC", // Blue dashed line
-//     minHeight: 32,
-
-//   },
-// }));
-
-
 
 // Custom step icon with secondary color for inactive and primary for active
 const CustomStepIcon = ({ active, completed, icon }) => {
@@ -62,7 +44,7 @@ const CustomStepIcon = ({ active, completed, icon }) => {
         justifyContent: "center",
         fontSize: 19,
         fontWeight: 900,
-        marginLeft: "-7px"
+        marginLeft: "-7px",
       }}
     >
       {icon}
@@ -70,129 +52,43 @@ const CustomStepIcon = ({ active, completed, icon }) => {
   );
 };
 
-
-const VerticalStepper = ({ steps, activeStep, setActiveStep, onFinish }) => {
-
-  const initialCheckboxes = [
-    { id: 1, label: "Created On", name: "Created On", value: true },
-    { id: 2, label: "Preferred Study Destination", name: "Preferred Study Destination", value: true, disabled: true },
-    { id: 3, label: "First Name", name: "First Name", value: true, disabled: true },
-    { id: 4, label: "Source 1", name: "Source 1", value: true, disabled: true },
-    { id: 5, label: "Last Name", name: "Last Name", value: true, disabled: true },
-    { id: 6, label: "Source 2", name: "Source 2", value: true },
-    { id: 7, label: "Email", name: "Email", value: true, disabled: true },
-    { id: 8, label: "Source 3", name: "Source 3", value: true },
-    { id: 9, label: "Mobile Number", name: "Mobile Number", value: true, disabled: true },
-    { id: 10, label: "Source 4", name: "Source 4", value: true },
-    { id: 11, label: "Highest Qualification", name: "Highest Qualification", value: true },
-    { id: 12, label: "Branch", name: "Branch", value: true },
-    { id: 13, label: "Graduation year", name: "Graduation year", value: true },
-    { id: 14, label: "Telecaller", name: "Telecaller", value: true },
-    { id: 15, label: "Field of Study", name: "Field of Study", value: true },
-    { id: 16, label: "Counsellor", name: "Counsellor", value: true },
-    { id: 17, label: "Intake Year", name: "Intake Year", value: true },
-    { id: 18, label: "Import leads Yes", name: "Import leads Yes", value: true },
-    { id: 19, label: "Intake Month", name: "Intake Month", value: true },
-    { id: 20, label: "Lead Owner", name: "Lead Owner", value: true },
-  ];
-
-
-  const [checkboxData, setCheckboxData] = useState(initialCheckboxes);
-  const [isCheckboxEditable, setIsCheckboxEditable] = useState(true);
-
-
-  const [dragOver, setDragOver] = useState(false);
-  const [uploadStatus, setUploadStatus] = useState(null);
-  const navigate = useNavigate();
-
-  const handleNext = () => {
-    if (activeStep < steps.length - 1) {
-      setActiveStep((prev) => prev + 1);
-    } else {
-      onFinish?.();
-    }
-  };
-
-  const handleCheckboxChange = (index) => (event) => {
-    const updated = [...checkboxData];
-    updated[index].value = event.target.checked;
-    setCheckboxData(updated);
-    console.log("Updated checkbox data:", updated);
-  };
-  console.log('checkboxData', checkboxData)
-
-  const handleBack = () => {
-    setActiveStep((prev) => prev - 1);
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    setDragOver(true);
-  };
-
-  const handleDragLeave = () => {
-    setDragOver(false);
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    setDragOver(false);
-    const files = e.dataTransfer.files;
-    if (files.length > 0) {
-      handleFileUpload(files[0]);
-    }
-  };
-
-  const handleFileSelect = (e) => {
-    const files = e.target.files;
-    if (files.length > 0) {
-      handleFileUpload(files[0]);
-    }
-  };
-
-  const handleFileUpload = (file) => {
-    const isXlsx = file.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-    const isValidSize = file.size <= 5 * 1024 * 1024; // 5 MB
-  
-    if (!isXlsx) {
-      setUploadStatus("Error: Only .xlsx files are allowed.");
-      return;
-    }
-  
-    if (!isValidSize) {
-      setUploadStatus("Error: File size must be 5MB or less.");
-      return;
-    }
-  
-    setUploadStatus("Uploading...");
-    setTimeout(() => {
-      setUploadStatus("Success");
-      handleNext();
-    }, 1000);
-  };
-  
-
+const VerticalStepper = ({
+  steps,
+  activeStep,
+  checkboxData,
+  isCheckboxEditable,
+  handleCheckboxChange,
+  toggleCheckboxEditable,
+  dragOver,
+  handleDragOver,
+  handleDragLeave,
+  handleDrop,
+  handleFileSelect,
+  uploadStatus,
+  handleFinish,
+}) => {
   return (
-    <Stepper
-      activeStep={activeStep}
-      orientation="vertical"
-    >
+    <Stepper activeStep={activeStep} orientation="vertical">
       {steps.map((step, index) => (
         <Step key={index}>
-          <StepLabel StepIconComponent={CustomStepIcon}
+          <StepLabel
+            StepIconComponent={CustomStepIcon}
             sx={{
               "& .MuiStepLabel-label": {
                 fontSize: "19px",
                 fontWeight: 700,
                 lineHeight: "140%",
-                fontFamily: 'Proxima Nova, sans-serif',
-                color: "#B0BEC5", // default color // Active: dark, Inactive: light
+                fontFamily: "Proxima Nova, sans-serif",
+                color: "#B0BEC5",
               },
               "& .MuiStepLabel-label.Mui-active": {
-                color: "#17222B", // override active color
+                color: "#17222B",
                 fontWeight: 700,
               },
-            }}>{step.label}</StepLabel>
+            }}
+          >
+            {step.label}
+          </StepLabel>
           <StepContent>
             {index === 0 ? (
               <div>
@@ -203,9 +99,7 @@ const VerticalStepper = ({ steps, activeStep, setActiveStep, onFinish }) => {
                   style={{
                     width: "825px",
                     height: "275px",
-                    border: dragOver
-                      ? "2px  #B6CDD9"
-                      : "2px dashed #B6CDD9",
+                    border: dragOver ? "2px #B6CDD9" : "2px dashed #B6CDD9",
                     padding: "20px",
                     textAlign: "center",
                     borderRadius: "4px",
@@ -215,11 +109,15 @@ const VerticalStepper = ({ steps, activeStep, setActiveStep, onFinish }) => {
                     alignItems: "center",
                     justifyContent: "center",
                     gap: "16px",
-                    marginLeft: "25px" // 
+                    marginLeft: "25px",
                   }}
                 >
                   <div className="flex items-center gap-2">
-                    <img src={BulkUploaderIcon} alt="BulkUploaderIcon" className="w-18 h-18" />
+                    <img
+                      src={BulkUploaderIcon}
+                      alt="BulkUploaderIcon"
+                      className="w-18 h-18"
+                    />
                   </div>
                   <Typography
                     sx={{
@@ -229,8 +127,7 @@ const VerticalStepper = ({ steps, activeStep, setActiveStep, onFinish }) => {
                       lineHeight: "16px",
                       letterSpacing: "0px",
                       textAlign: "center",
-                      color: '#333333',
-
+                      color: "#333333",
                     }}
                   >
                     Drag and Drop <br /> or
@@ -250,33 +147,34 @@ const VerticalStepper = ({ steps, activeStep, setActiveStep, onFinish }) => {
                     accept=".xlsx"
                     style={{ display: "none" }}
                     onChange={handleFileSelect}
-                    />
-
-                      {uploadStatus && (
-                      <Typography
+                  />
+                  {uploadStatus && (
+                    <Typography
                       sx={{
-                      color:
-                      uploadStatus.includes("Error") ? "#D32F2F" : uploadStatus === "Success" ? "#14AE5C" : "#1976D2",
-                      fontWeight: 500,
-                      fontSize: "14px",
+                        color: uploadStatus.includes("Error")
+                          ? "#D32F2F"
+                          : uploadStatus === "Success"
+                          ? "#14AE5C"
+                          : "#1976D2",
+                        fontWeight: 500,
+                        fontSize: "14px",
                       }}
-                      >
+                    >
                       {uploadStatus}
-                      </Typography>
-                      )}
-
+                    </Typography>
+                  )}
                   <div className="flex items-center mt-2">
                     <InfoIcon
                       className="w-4 h-4 scale-y-[-1]"
                       fontSize="small"
                       sx={{
-                        color: "#17222B",
                         color: "var(--Primary-P300, #009CDC)",
-                        marginTop: "3.6px" // Adjusted for mt-0.9 (approx 3.6px)
+                        marginTop: "3.6px",
                       }}
                     />
                     <p className="font-proxima font-normal text-[13px] text-gray-400 ml-2">
-                      Make sure you mapped all data exactly same as the template provided
+                      Make sure you mapped all data exactly same as the template
+                      provided
                     </p>
                   </div>
                 </div>
@@ -287,10 +185,7 @@ const VerticalStepper = ({ steps, activeStep, setActiveStep, onFinish }) => {
               step.content
             )}
             {index === 1 && (
-              <Box
-                sx={{
-                  ml: 3,
-                }}>
+              <Box sx={{ ml: 3 }}>
                 <Box
                   sx={{
                     width: "503px",
@@ -321,10 +216,7 @@ const VerticalStepper = ({ steps, activeStep, setActiveStep, onFinish }) => {
                     <CustomButton
                       text="Continue"
                       variant="primary"
-                      onClick={() => {
-                        setIsCheckboxEditable(false); // Lock checkboxes
-                        setActiveStep(2); // Move to Step 3
-                      }}
+                      onClick={() => toggleCheckboxEditable(false, 2)}
                       endIcon={false}
                       startIcon={false}
                     />
@@ -332,10 +224,7 @@ const VerticalStepper = ({ steps, activeStep, setActiveStep, onFinish }) => {
                     <CustomButton
                       text="Edit"
                       variant="secondary"
-                      onClick={() => {
-                        setIsCheckboxEditable(true); // Make editable again
-                        setActiveStep(1); // Move back to Step 2 (optional visual cue)
-                      }}
+                      onClick={() => toggleCheckboxEditable(true, 1)}
                       endIcon={false}
                       startIcon={false}
                     />
@@ -344,10 +233,7 @@ const VerticalStepper = ({ steps, activeStep, setActiveStep, onFinish }) => {
               </Box>
             )}
             {index === 2 && (
-              <Box
-                sx={{
-                  ml: 2,
-                }}>
+              <Box sx={{ ml: 2 }}>
                 <Box
                   sx={{
                     width: "826px",
@@ -363,40 +249,30 @@ const VerticalStepper = ({ steps, activeStep, setActiveStep, onFinish }) => {
                     mb: 2,
                   }}
                 >
-              <div className="flex flex-col gap-2">
-              <p
-              className="font-bold text-base leading-[140%] tracking-[0] text-[#14AE5C]"
-              style={{ fontFamily: 'Proxima Nova, sans-serif' }}
-              >
-              No errors or duplicates found
-              </p>
-              <p
-              className="font-bold text-[19px] leading-[140%] tracking-[0] text-[#17222B]"
-              style={{ fontFamily: 'Proxima Nova, sans-serif' }}
-              >
-              305 leads in queue
-              </p>
-              </div>
-
-
-
+                  <div className="flex flex-col gap-2">
+                    <p
+                      className="font-bold text-base leading-[140%] tracking-[0] text-[#14AE5C]"
+                      style={{ fontFamily: "Proxima Nova, sans-serif" }}
+                    >
+                      No errors or duplicates found
+                    </p>
+                    <p
+                      className="font-bold text-[19px] leading-[140%] tracking-[0] text-[#17222B]"
+                      style={{ fontFamily: "Proxima Nova, sans-serif" }}
+                    >
+                      305 leads in queue
+                    </p>
+                  </div>
                 </Box>
                 <CustomButton
                   text="Finish Uploading"
                   variant="primary"
-                  onClick={() => {
-                    // Replace with actual navigate hook
-                    navigate("/leads");
-                  }}
+                  onClick={handleFinish}
                   endIcon={false}
                   startIcon={false}
                 />
               </Box>
             )}
-
-
-
-
           </StepContent>
         </Step>
       ))}
