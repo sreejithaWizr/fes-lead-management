@@ -82,7 +82,7 @@ const columns = [
   { column: "lastName", label: "Last Name", id: "lastName", showSort: true, isDrag: false, isFilter: true },
   { column: "status", label: "Status", id: "status", showSort: true, isDrag: false, isFilter: true },
   { column: "branch", label: "Branch", id: "branchName", showSort: true, isDrag: false, isFilter: true },
-  { column: "createdDate", label: "Created Date", id: "createdAt", showSort: true, isDrag: false, isFilter: false },
+  { column: "createdDate", label: "Created Date", id: "createdAt", showSort: true, isDrag: false, isFilter: true },
   { column: "phone", label: "Phone", id: "mobileNumber", showSort: true, isDrag: false, isFilter: true },
   { column: "email", label: "Email", id: "email", showSort: true, isDrag: false, isFilter: true },
   { column: "leadSource", label: "Lead Source", id: "source", showSort: true, isDrag: false, isFilter: true },
