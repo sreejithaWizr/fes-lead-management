@@ -1,0 +1,173 @@
+[
+    {
+        "id": 1,
+        "fieldName": "CreatedOn",
+        "displayName": "Created on",
+        "isRequired": true,
+        "isDisabled": false,
+        "fieldOrder": 1,
+        "createdOn": "15-05-2025"
+    },
+    {
+        "id": 2,
+        "fieldName": "FirstName",
+        "displayName": "First Name",
+        "isRequired": true,
+        "isDisabled": true,
+        "fieldOrder": 2,
+        "createdOn": "15-05-2025"
+    },
+    {
+        "id": 3,
+        "fieldName": "LastName",
+        "displayName": "Last Name",
+        "isRequired": true,
+        "isDisabled": true,
+        "fieldOrder": 3,
+        "createdOn": "15-05-2025"
+    },
+    {
+        "id": 4,
+        "fieldName": "Email",
+        "displayName": "Email",
+        "isRequired": true,
+        "isDisabled": true,
+        "fieldOrder": 4,
+        "createdOn": "15-05-2025"
+    },
+    {
+        "id": 5,
+        "fieldName": "MobileNumber",
+        "displayName": "Mobile Number",
+        "isRequired": true,
+        "isDisabled": true,
+        "fieldOrder": 5,
+        "createdOn": "15-05-2025"
+    },
+    {
+        "id": 6,
+        "fieldName": "HighestQualification",
+        "displayName": "Highest Qualification",
+        "isRequired": true,
+        "isDisabled": false,
+        "fieldOrder": 6,
+        "createdOn": "15-05-2025"
+    },
+    {
+        "id": 7,
+        "fieldName": "GraduationYear",
+        "displayName": "Graduation Year",
+        "isRequired": true,
+        "isDisabled": false,
+        "fieldOrder": 7,
+        "createdOn": "15-05-2025"
+    },
+    {
+        "id": 8,
+        "fieldName": "FieldOfStudy",
+        "displayName": "Field of Study",
+        "isRequired": true,
+        "isDisabled": false,
+        "fieldOrder": 8,
+        "createdOn": "15-05-2025"
+    },
+    {
+        "id": 9,
+        "fieldName": "PreferredDestinations",
+        "displayName": "Preferred Study Destinations",
+        "isRequired": true,
+        "isDisabled": true,
+        "fieldOrder": 9,
+        "createdOn": "15-05-2025"
+    },
+    {
+        "id": 10,
+        "fieldName": "Source1",
+        "displayName": "Source 1",
+        "isRequired": true,
+        "isDisabled": true,
+        "fieldOrder": 10,
+        "createdOn": "15-05-2025"
+    },
+    {
+        "id": 11,
+        "fieldName": "Source2",
+        "displayName": "Source 2",
+        "isRequired": true,
+        "isDisabled": false,
+        "fieldOrder": 11,
+        "createdOn": "15-05-2025"
+    },
+    {
+        "id": 12,
+        "fieldName": "Source3",
+        "displayName": "Source 3",
+        "isRequired": true,
+        "isDisabled": false,
+        "fieldOrder": 12,
+        "createdOn": "15-05-2025"
+    },
+    {
+        "id": 13,
+        "fieldName": "Source4",
+        "displayName": "Source 4",
+        "isRequired": true,
+        "isDisabled": false,
+        "fieldOrder": 13,
+        "createdOn": "15-05-2025"
+    },
+    {
+        "id": 14,
+        "fieldName": "Branch",
+        "displayName": "Branch",
+        "isRequired": true,
+        "isDisabled": false,
+        "fieldOrder": 14,
+        "createdOn": "15-05-2025"
+    },
+    {
+        "id": 15,
+        "fieldName": "Telecaller",
+        "displayName": "Telecaller",
+        "isRequired": true,
+        "isDisabled": false,
+        "fieldOrder": 15,
+        "createdOn": "15-05-2025"
+    },
+    {
+        "id": 16,
+        "fieldName": "IntakeYear",
+        "displayName": "Intake Year",
+        "isRequired": true,
+        "isDisabled": false,
+        "fieldOrder": 16,
+        "createdOn": "15-05-2025"
+    },
+    {
+        "id": 17,
+        "fieldName": "IntakeMonth",
+        "displayName": "Intake Month",
+        "isRequired": true,
+        "isDisabled": false,
+        "fieldOrder": 17,
+        "createdOn": "15-05-2025"
+    },
+    {
+        "id": 18,
+        "fieldName": "Counsellor",
+        "displayName": "Counsellor",
+        "isRequired": true,
+        "isDisabled": false,
+        "fieldOrder": 18,
+        "createdOn": "15-05-2025"
+    },
+    {
+        "id": 19,
+        "fieldName": "IsImported",
+        "displayName": "Import Leads",
+        "isRequired": true,
+        "isDisabled": false,
+        "fieldOrder": 19,
+        "createdOn": "15-05-2025"
+    }
+]

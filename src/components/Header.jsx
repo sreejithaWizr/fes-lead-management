@@ -17,6 +17,7 @@ const Header = () => {
   const navigate = useNavigate();
   const isCreateLeadPage = location.pathname.startsWith('/leads/create');
   const isLeadDetailsViewPage = location.pathname.startsWith('/leads/detailsview');
+  const isBulkUploadPage = location.pathname.startsWith('/bulk');
   const [filters, setFilters] = useState([]);
   const [pageSize, setPageSize] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
@@ -132,6 +133,24 @@ const Header = () => {
               </div>
               <CustomButton variant="icon" showText={false} startIcon={false} endIcon={true} iconImg={RefreshIcon} />
             </div> */}
+          </div>
+        )}
+         {isBulkUploadPage && (
+          <div className="pt-6 px-6 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <img
+                src={LeftArrowIcon}
+                alt="FES Logo"
+                className="size-[24px] rounded-md cursor-pointer"
+                onClick={handleCancel}
+              />
+              <div className="flex items-center gap-2">
+                <h1
+                  className="font-proxima font-bold text-[28px] leading-[140%] align-middle text-[#17222B]">
+                   Bulk Import
+                </h1>
+              </div>
+            </div>
           </div>
         )}
       </header>
