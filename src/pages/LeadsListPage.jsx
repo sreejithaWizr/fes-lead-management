@@ -11,6 +11,7 @@ import MailIcon from "../assets/mail.svg";
 import LocationIcon from "../assets/location.svg";
 import EditIcon from "../assets/edit-icon.svg";
 import FilterIcon from "../assets/filter.svg";
+import BulkUploadIcon from "../assets/bulk-upload-icon.svg";
 
 import FilterContent from '../pages/FilterContent';
 
@@ -216,6 +217,10 @@ const LeadsTable = () => {
           <div className="flex items-center gap-4" />
           <div className="flex items-center gap-3">
             <CustomButton text="Create Lead" onClick={handleCreateLead} endIcon={false}  />
+            <CustomButton text="Bulk Upload" variant="secondary" endIcon={false} iconImg={BulkUploadIcon}
+               onClick={() => {
+                    navigate('/bulk');
+                  }} />
             <CustomButton variant="icon" showText={false} startIcon={true} endIcon={false} iconImg={FilterIcon} onClick={toggleFilter} />
           </div>
         </div>
