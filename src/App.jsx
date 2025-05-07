@@ -13,6 +13,7 @@ import EditLeadPage from "./pages/EditLeadPage";
 import Login from "./pages/Login";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import SettingsPage from "./components/SettingsPage";
+import CreateRole from "./pages/roleManagement/CreateRolePage";
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
             <Route path="leads/detailsview/:id" element={<LeadDetailsViewPage />} />
             <Route path="leads/edit/:id" element={<EditLeadPage />} />
             <Route path="settings" element={<SettingsPage />} />
+            <Route path="role-create" element={<CreateRole />} />
             <Route path="*" element={<NotFound />} />
             </Route>
           </Route>
