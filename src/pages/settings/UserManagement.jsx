@@ -6,6 +6,7 @@ import { CustomTable, CustomPagination, CustomButton, CustomSearch } from 'react
 import PhoneIcon from "../../assets/phone-icon.svg";
 import MailIcon from "../../assets/mail.svg";
 import EditIcon from "../../assets/edit-icon.svg";
+import userAvatar from "../../assets/user-avatar.png";
 
 import { getLeadList } from '../../api/services/leadAPI/leadAPIs';
 import { use } from 'react';
@@ -105,7 +106,6 @@ const UserManagement = () => {
     }
   ];
 
-
   // useEffect(() => {
   //   fetchUsersData();
   // }, [currentPage]);
@@ -156,9 +156,19 @@ const UserManagement = () => {
     switch (columnId) {
       case "userName":
         return (
-          <span className="font-bold cursor-pointer" onClick={() => handleView(value)}>
-            {value}
-          </span>
+          // <span className="font-bold cursor-pointer" onClick={() => handleView(value)}>
+          //   {value}
+          // </span>
+          <div className="flex items-center gap-3">
+            <img
+              src={userAvatar}
+              alt={value}
+              className="w-8 h-8 rounded-full object-cover"
+            />
+            <span className="font-bold cursor-pointer" onClick={() => handleView(value)}>
+              {value}
+            </span>
+          </div>
         );
       case "email":
         return (
