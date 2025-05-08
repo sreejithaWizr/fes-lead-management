@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { CustomButton } from "react-mui-tailwind";
 import BulkTemplateIcon from "../assets/bulk-template-icon.svg";
-import VerticalStepper from "../utils/VerticalStepper";
+import BulkStepper from "./BulkStepper";
 
 function BulkUpload() {
   const [activeStep, setActiveStep] = useState(0);
@@ -191,9 +191,9 @@ function BulkUpload() {
   };
 
   return (
-    <div className="flex flex-row justify-around mt-[75px]">
+    <div className="flex flex-row justify-around mt-[25px]">
       <div>
-        <VerticalStepper
+        <BulkStepper
           steps={steps}
           activeStep={activeStep}
           checkboxData={checkboxData}

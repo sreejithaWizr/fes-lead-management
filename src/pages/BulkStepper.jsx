@@ -17,7 +17,7 @@ import BulkRefreshIcon from "../assets/bulk-refresh-icon.svg";
 import BulkTrashIcon from "../assets/bulk-trash-icon.svg";
 import BulkEditIcon from "../assets/edit-icon.svg";
 import { CustomButton, CustomCheckboxField } from "react-mui-tailwind";
-import { formatBytes } from "./commonFunction"
+import { formatBytes } from "../utils/commonFunction"
 
 // Custom step icon with secondary color for inactive and primary for active
 const CustomStepIcon = ({ active, completed, icon }) => {
@@ -65,7 +65,7 @@ const NonCollapsingTransition = ({ children, ...props }) => {
   return <div {...props}>{children}</div>;
 };
 
-const VerticalStepper = ({
+const BulkStepper = ({
   steps,
   activeStep,
   checkboxData,
@@ -277,7 +277,7 @@ const VerticalStepper = ({
                         endIcon={false}
                         startIcon={true}
                         onClick={handleDelete}
-                      />
+                        sx={{ border: '1px solid red', borderRadius: '12px' }}                      />
                     </div>
                   </Box>
                 )}
@@ -384,4 +384,4 @@ const VerticalStepper = ({
   );
 };
 
-export default VerticalStepper;
+export default BulkStepper;
