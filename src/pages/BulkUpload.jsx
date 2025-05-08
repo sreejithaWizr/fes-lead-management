@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { CustomButton } from "react-mui-tailwind";
 import BulkTemplateIcon from "../assets/bulk-template-icon.svg";
@@ -9,7 +9,10 @@ function BulkUpload() {
   const [dragOver, setDragOver] = useState(false);
   const [uploadStatus, setUploadStatus] = useState(null);
   const [isCheckboxEditable, setIsCheckboxEditable] = useState(true);
+  const [file, setFile] = useState(null); // State for file data
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
+  
 
   const initialCheckboxes = [
     { id: 1, label: "Created On", name: "Created On", value: true },
@@ -136,11 +139,12 @@ function BulkUpload() {
 
   const handleFileSelect = (e) => {
     const files = e.target.files;
-    console.log('files', files);
+    // console.log('files', files);
     if (files.length > 0) {
       handleFileUpload(files[0]);
     }
   };
+
 
   const handleFileUpload = (file) => {
     const isXlsx =
@@ -158,6 +162,7 @@ function BulkUpload() {
       return;
     }
 
+     setFile(file); // store the full file object
     setUploadStatus("Uploading...");
     setTimeout(() => {
       setUploadStatus("Success");
@@ -168,6 +173,21 @@ function BulkUpload() {
   const handleFinish = () => {
     console.log("Import process complete");
     navigate("/leads");
+  };
+  const handlePreview = () => {
+    console.log("Preview file:", file.name);
+    // Optional: parse file and show data preview (via a modal, table, etc.)
+  };
+  
+  const handleReupload = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null; // reset to allow reselecting the same file
+      fileInputRef.current.click();
+    }
+  };
+  const handleDelete = () => {
+    setFile(null);
+    setUploadStatus(null);
   };
 
   return (
@@ -187,6 +207,11 @@ function BulkUpload() {
           handleFileSelect={handleFileSelect}
           uploadStatus={uploadStatus}
           handleFinish={handleFinish}
+          handlePreview={handlePreview}
+          handleReupload={handleReupload}
+          handleDelete={handleDelete}
+          file={file} // Pass File Object
+          fileInputRef={fileInputRef}
         />
       </div>
       <div>

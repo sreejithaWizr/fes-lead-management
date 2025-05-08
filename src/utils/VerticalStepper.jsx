@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   Stepper,
   Step,
@@ -6,11 +6,18 @@ import {
   StepContent,
   Typography,
   Box,
+  Collapse,
 } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import BulkUploaderIcon from "../assets/bulk-uploader-icon.svg";
 import Dragicon from "../assets/Dragicon.svg";
+import BulkSaveIcon from "../assets/BulkSaveIcon.svg";
+import BulkPreviewIcon from "../assets/bulk-preview-icon.svg";
+import BulkRefreshIcon from "../assets/bulk-refresh-icon.svg";
+import BulkTrashIcon from "../assets/bulk-trash-icon.svg";
+import BulkEditIcon from "../assets/edit-icon.svg";
 import { CustomButton, CustomCheckboxField } from "react-mui-tailwind";
+import { formatBytes } from "./commonFunction"
 
 // Custom step icon with secondary color for inactive and primary for active
 const CustomStepIcon = ({ active, completed, icon }) => {
@@ -52,6 +59,12 @@ const CustomStepIcon = ({ active, completed, icon }) => {
   );
 };
 
+
+// Custom TransitionComponent to prevent collapsing for Step 0 and Step 1
+const NonCollapsingTransition = ({ children, ...props }) => {
+  return <div {...props}>{children}</div>;
+};
+
 const VerticalStepper = ({
   steps,
   activeStep,
@@ -66,7 +79,18 @@ const VerticalStepper = ({
   handleFileSelect,
   uploadStatus,
   handleFinish,
+  file,
+  handlePreview,
+  handleReupload,
+  handleDelete,
+  fileInputRef
 }) => {
+  
+  const uploadedFile =
+  uploadStatus === "Success" && file
+    ? { name: file.name, size: formatBytes(file.size) }
+    : null;
+
   return (
     <Stepper activeStep={activeStep} orientation="vertical">
       {steps.map((step, index) => (
@@ -84,100 +108,179 @@ const VerticalStepper = ({
               "& .MuiStepLabel-label.Mui-active": {
                 color: "#17222B",
                 fontWeight: 700,
+                fontFamily: "Proxima Nova, sans-serif",
               },
             }}
           >
             {step.label}
           </StepLabel>
-          <StepContent>
+          <StepContent
+            TransitionComponent={
+              index === 0
+                ? NonCollapsingTransition
+                : index === 1 && uploadStatus === "Success"
+                ? NonCollapsingTransition
+                : Collapse
+            }
+          >
             {index === 0 ? (
               <div>
-                <div
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
-                  style={{
-                    width: "825px",
-                    height: "275px",
-                    border: dragOver ? "2px #B6CDD9" : "2px dashed #B6CDD9",
-                    padding: "20px",
-                    textAlign: "center",
-                    borderRadius: "4px",
-                    backgroundColor: dragOver ? "#B6CDD9" : "#fafafa",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "16px",
-                    marginLeft: "25px",
-                  }}
-                >
-                  <div className="flex items-center gap-2">
-                    <img
-                      src={BulkUploaderIcon}
-                      alt="BulkUploaderIcon"
-                      className="w-18 h-18"
-                    />
-                  </div>
-                  <Typography
-                    sx={{
-                      fontFamily: "DM Sans",
-                      fontWeight: 500,
-                      fontSize: "16px",
-                      lineHeight: "16px",
-                      letterSpacing: "0px",
+                  <input
+                  id="fileInput"
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".xlsx"
+                  style={{ display: "none" }}
+                  onChange={handleFileSelect}
+                  />
+                {uploadStatus !== "Success" && (
+                  <div
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    style={{
+                      width: "825px",
+                      height: "275px",
+                      border: dragOver ? "2px #B6CDD9" : "2px dashed #B6CDD9",
+                      padding: "20px",
                       textAlign: "center",
-                      color: "#333333",
+                      borderRadius: "4px",
+                      backgroundColor: dragOver ? "#B6CDD9" : "#fafafa",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "16px",
+                      marginLeft: "25px",
                     }}
                   >
-                    Drag and Drop <br /> or
-                  </Typography>
-                  <CustomButton
-                    text="Browse"
-                    variant="primary"
-                    iconImg={Dragicon}
-                    endIcon={false}
-                    onClick={() =>
-                      document.getElementById("fileInput").click()
-                    }
-                  />
-                  <input
-                    id="fileInput"
-                    type="file"
-                    accept=".xlsx"
-                    style={{ display: "none" }}
-                    onChange={handleFileSelect}
-                  />
-                  {uploadStatus && (
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={BulkUploaderIcon}
+                        alt="BulkUploaderIcon"
+                        className="w-18 h-18"
+                      />
+                    </div>
                     <Typography
                       sx={{
-                        color: uploadStatus.includes("Error")
-                          ? "#D32F2F"
-                          : uploadStatus === "Success"
-                          ? "#14AE5C"
-                          : "#1976D2",
+                        fontFamily: "DM Sans",
                         fontWeight: 500,
-                        fontSize: "14px",
+                        fontSize: "16px",
+                        lineHeight: "16px",
+                        letterSpacing: "0px",
+                        textAlign: "center",
+                        color: "#333333",
                       }}
                     >
-                      {uploadStatus}
+                      Drag and Drop <br /> or
                     </Typography>
-                  )}
-                  <div className="flex items-center mt-2">
-                    <InfoIcon
-                      className="w-4 h-4 scale-y-[-1]"
-                      fontSize="small"
-                      sx={{
-                        color: "var(--Primary-P300, #009CDC)",
-                        marginTop: "3.6px",
-                      }}
+                    <CustomButton
+                      text="Browse"
+                      variant="primary"
+                      iconImg={Dragicon}
+                      endIcon={false}
+                      onClick={() => fileInputRef.current?.click()}
                     />
-                    <p className="font-proxima font-normal text-[13px] text-gray-400 ml-2">
-                      Make sure you mapped all data exactly same as the template
-                      provided
-                    </p>
+         
+
+                    {uploadStatus && (
+                      <Typography
+                        sx={{
+                          color: uploadStatus.includes("Error")
+                            ? "#D32F2F"
+                            : uploadStatus === "Success"
+                            ? "#14AE5C"
+                            : "#1976D2",
+                          fontWeight: 500,
+                          fontSize: "14px",
+                        }}
+                      >
+                        {uploadStatus}
+                      </Typography>
+                    )}
+                    <div className="flex items-center mt-2">
+                      <InfoIcon
+                        className="w-4 h-4 scale-y-[-1]"
+                        fontSize="small"
+                        sx={{
+                          color: "var(--Primary-P300, #009CDC)",
+                          marginTop: "3.6px",
+                        }}
+                      />
+                      <p className="font-proxima font-normal text-[13px] text-gray-400 ml-2">
+                        Make sure you mapped all data exactly same as the template
+                        provided
+                      </p>
+                    </div>
                   </div>
-                </div>
+                )}
+                {uploadedFile && (
+                  <Box
+                    key={uploadedFile.name}
+                    sx={{
+                      width: 826,
+                      height: 76,
+                      border: "1px solid #E0E0E0",
+                      borderRadius: "12px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "16px",
+                      marginLeft: "25px",
+                      marginTop: "16px",
+                      position: "relative",
+                      zIndex: 9999,
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={BulkSaveIcon}
+                        alt="BulkSaveIcon"
+                        className="w-10 h-10"
+                      />
+                      <div>
+                        <p
+                          className="font-bold text-base leading-[140%] tracking-[0] text-[#17222B]"
+                          style={{ fontFamily: "Proxima Nova, sans-serif" }}
+                        >
+                          {uploadedFile.name}
+                        </p>
+                        <p
+                          className="font-normal text-sm leading-[140%] tracking-[0] text-[#B0BEC5]"
+                          style={{ fontFamily: "Proxima Nova, sans-serif" }}
+                        >
+                          {uploadedFile.size}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <CustomButton
+                        text="Preview"
+                        variant="secondary"
+                        iconImg={BulkPreviewIcon}
+                        endIcon={false}
+                        startIcon={true}
+                        onClick={handlePreview}
+                      />
+                     <CustomButton
+                        showText={false}
+                        variant="icon"
+                        iconImg={BulkRefreshIcon}
+                        endIcon={false}
+                        startIcon={true}
+                        onClick={handleReupload}
+                        />
+                      <CustomButton
+                        showText={false}
+                        variant="icon"
+                        iconImg={BulkTrashIcon}
+                        endIcon={false}
+                        startIcon={true}
+                        onClick={handleDelete}
+                      />
+                    </div>
+                  </Box>
+                )}
               </div>
             ) : typeof step.content === "string" ? (
               <Typography>{step.content}</Typography>
@@ -226,7 +329,8 @@ const VerticalStepper = ({
                       variant="secondary"
                       onClick={() => toggleCheckboxEditable(true, 1)}
                       endIcon={false}
-                      startIcon={false}
+                      startIcon={true}
+                      iconImg={BulkEditIcon}
                     />
                   )}
                 </Box>
