@@ -2,17 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { CustomTable, CustomPagination, CustomButton, CustomSearch } from 'react-mui-tailwind';
-
-import PhoneIcon from "../../assets/phone-icon.svg";
-import MailIcon from "../../assets/mail.svg";
 import EditIcon from "../../assets/edit-icon.svg";
-import userAvatar from "../../assets/user-avatar.png";
+import DeleteIcon from "../../assets/delete-icon.svg";
+import DeletePopup from '../../utils/DeletePopup';
 
 import { getLeadList } from '../../api/services/leadAPI/leadAPIs';
-import { use } from 'react';
+// import userAvatar from "../../assets/user-avatar.png";
 // import { getUserList } from '../../api/services/userAPI/userAPIs';
 
 const UserManagement = () => {
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { columns } = useSelector((state) => state.users);
@@ -128,6 +129,21 @@ const UserManagement = () => {
     navigate(`/users/edit/${row?.id}`);
   };
 
+  const handleDelete = (row) => {
+    setSelectedRow(row);
+    setIsDeleteOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (selectedRow) {
+      console.log("Deleting user:", selectedRow.userName);
+
+      // Example: remove from local list
+      setUsers((prev) => prev.filter(user => user.id !== selectedRow.id));
+    }
+    setIsDeleteOpen(false);
+  };
+
   const handleRowsPerPageChange = (newRowsPerPage) => {
     setRowsPerPage(newRowsPerPage);
     setCurrentPage(1);
@@ -160,38 +176,46 @@ const UserManagement = () => {
           //   {value}
           // </span>
           <div className="flex items-center gap-3">
-            <img
+            {/* <img
               src={userAvatar}
               alt={value}
               className="w-8 h-8 rounded-full object-cover"
-            />
+            /> */}
             <span className="font-bold cursor-pointer" onClick={() => handleView(value)}>
               {value}
             </span>
           </div>
         );
-      case "email":
-        return (
-          <div className="flex items-center gap-2">
-            <img src={MailIcon} alt="Mail" className="w-4 h-4" />
-            <span>{value}</span>
-          </div>
-        );
-      case "phone":
-        return (
-          <div className="flex items-center gap-2">
-            <img src={PhoneIcon} alt="Phone" className="w-4 h-4" />
-            <span>{value}</span>
-          </div>
-        );
+      // case "email":
+      //   return (
+      //     <div className="flex items-center gap-2">
+      //       <img src={MailIcon} alt="Mail" className="w-4 h-4" />
+      //       <span>{value}</span>
+      //     </div>
+      //   );
+      // case "phone":
+      //   return (
+      //     <div className="flex items-center gap-2">
+      //       <img src={PhoneIcon} alt="Phone" className="w-4 h-4" />
+      //       <span>{value}</span>
+      //     </div>
+      //   );
       case "action":
         return (
-          <img
-            src={EditIcon}
-            alt="Edit"
-            className="w-4 h-4 cursor-pointer"
-            onClick={() => handleEdit(row)}
-          />
+          <div className='flex items-center gap-4'>
+            <img
+              src={EditIcon}
+              alt="Edit"
+              className="w-4 h-4 cursor-pointer"
+              onClick={() => handleEdit(row)}
+            />
+            <img
+              src={DeleteIcon}
+              alt="Delete"
+              className="w-4 h-4 cursor-pointer"
+              onClick={() => handleDelete(row)}
+            />
+          </div>
         );
       default:
         return value;
@@ -240,6 +264,15 @@ const UserManagement = () => {
           setRowsPerPage={handleRowsPerPageChange}
         />
       </div>
+
+      {isDeleteOpen && (
+        <DeletePopup
+          onClose={() => setIsDeleteOpen(false)}
+          onConfirm={confirmDelete}
+          title={`Are you sure you want to delete ${selectedRow?.userName}?`}
+        />
+      )}
+
     </div>
   );
 };
