@@ -186,20 +186,6 @@ const UserManagement = () => {
             </span>
           </div>
         );
-      // case "email":
-      //   return (
-      //     <div className="flex items-center gap-2">
-      //       <img src={MailIcon} alt="Mail" className="w-4 h-4" />
-      //       <span>{value}</span>
-      //     </div>
-      //   );
-      // case "phone":
-      //   return (
-      //     <div className="flex items-center gap-2">
-      //       <img src={PhoneIcon} alt="Phone" className="w-4 h-4" />
-      //       <span>{value}</span>
-      //     </div>
-      //   );
       case "action":
         return (
           <div className='flex items-center gap-4'>
