@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { CustomButton } from "react-mui-tailwind";
 import BulkTemplateIcon from "../assets/bulk-template-icon.svg";
-import BulkStepper from "./BulkStepper";
+import BulkStepper from "./BulkStepper/BulkStepper";
 
 function BulkUpload() {
   const [activeStep, setActiveStep] = useState(0);
@@ -214,17 +214,17 @@ function BulkUpload() {
           fileInputRef={fileInputRef}
         />
       </div>
-      <div>
-        <a href="/Bulk_Upload_Template.xlsx" download>
-          <CustomButton
-            text="Download template file"
-            variant="secondary"
-            endIcon={false}
-            iconImg={BulkTemplateIcon}
-            width="225px"
-          />
-        </a>
-      </div>
+         <div className="flex flex-row flex-end">
+          <a href="/Bulk_Upload_Template.xlsx" download>
+            <CustomButton
+              text="Download template file"
+              variant="secondary"
+              endIcon={false}
+              iconImg={BulkTemplateIcon}
+              width="225px"
+            />
+          </a>
+          </div>
     </div>
   );
 }
