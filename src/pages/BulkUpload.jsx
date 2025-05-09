@@ -10,7 +10,7 @@ function BulkUpload() {
   const [uploadStatus, setUploadStatus] = useState(null);
   const [isCheckboxEditable, setIsCheckboxEditable] = useState(true);
   const [file, setFile] = useState(null);
-  const [errorType, setErrorType] = useState(null); // State for popup error type
+  const [popupType, setPopupType] = useState(null); // State for popup error type
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
 
@@ -151,18 +151,18 @@ function BulkUpload() {
     const isValidSize = file.size <= 5 * 1024 * 1024; // 5 MB
 
     if (!isXlsx) {
-      setErrorType("notExcel");
+      setPopupType("notExcel");
       return;
     }
 
     if (!isValidSize) {
-      setErrorType("notExcel"); // Assuming size error is treated as notExcel for now
+      setPopupType("notExcel"); // Assuming size error is treated as notExcel for now
       return;
     }
 
     // Placeholder for template mismatch logic
     // Example: if (/* template check fails */) {
-    //   setErrorType("differentTemplate");
+    //   setPopupType("differentTemplate");
     //   return;
     // }
 
@@ -176,7 +176,8 @@ function BulkUpload() {
 
   const handleFinish = () => {
     console.log("Import process complete");
-    navigate("/leads");
+    setPopupType("onFinish");
+    // navigate("/leads");
   };
 
   const handlePreview = () => {
@@ -196,17 +197,20 @@ function BulkUpload() {
   };
 
   const handleClosePopup = () => {
-    setErrorType(null);
+    if (popupType === "onFinish") {
+      navigate("/leads"); // Navigate to /leads after closing the onFinish popup
+    }
+    setPopupType(null);
   };
 
   const handleDownloadTemplate = () => {
     // Trigger template download
     window.location.href = "/Bulk_Upload_Template.xlsx";
-    setErrorType(null);
+    setPopupType(null);
   };
 
   return (
-    <div className="flex flex-row justify-around mt-[25px]">
+    <div className="flex flex-row justify-evenly px-[150px] mt-[25px]">
       <div>
         <BulkStepper
           steps={steps}
@@ -227,21 +231,27 @@ function BulkUpload() {
           handleDelete={handleDelete}
           file={file} // Pass File Object
           fileInputRef={fileInputRef}
-          errorType={errorType}
+          popupType={popupType}
           handleClosePopup={handleClosePopup}
           handleDownloadTemplate={handleDownloadTemplate}
         />
       </div>
-          <div className="flex flex-row flex-end">
+      {!file&&
+          <div className="flex flex-row h-auto">
           <CustomButton
           text="Download template file"
           variant="secondary"
           endIcon={false}
           iconImg={BulkTemplateIcon}
-          width="225px"
+          // width="225px"
+          sx ={{
+            width:"225px",
+            height: "40px"
+          }}
           onClick= {handleDownloadTemplate}
           />     
            </div>
+}
           </div>
   );
 }

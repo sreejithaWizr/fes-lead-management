@@ -23,7 +23,7 @@ const BulkStepperOne = ({
   handleReupload,
   handleDelete,
   fileInputRef,
-  errorType,
+  popupType,
   handleClosePopup,
   handleDownloadTemplate,
 }) => {
@@ -179,9 +179,9 @@ const BulkStepperOne = ({
           </div>
         </Box>
       )}
-      {errorType && (
+      {popupType && (
         <BulkPopup
-          errorType={errorType}
+          popupType={popupType}
           onClose={handleClosePopup}
           onDownloadTemplate={handleDownloadTemplate}
         />

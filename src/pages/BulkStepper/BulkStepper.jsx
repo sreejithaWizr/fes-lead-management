@@ -91,7 +91,7 @@ const BulkStepper = ({
   handleReupload,
   handleDelete,
   fileInputRef,
-  errorType,
+  popupType,
   handleClosePopup,
   handleDownloadTemplate,
 }) => {
@@ -161,7 +161,7 @@ const BulkStepper = ({
                 handleReupload={handleReupload}
                 handleDelete={handleDelete}
                 fileInputRef={fileInputRef}
-                errorType={errorType}
+                popupType={popupType}
                 handleClosePopup={handleClosePopup}
                 handleDownloadTemplate={handleDownloadTemplate}
               />

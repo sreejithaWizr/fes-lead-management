@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 import { CustomButton } from "react-mui-tailwind";
 import BulkTemplateIcon from "../../assets/bulk-template-icon.svg";
 
-const BulkPopup = ({ errorType, onClose, onDownloadTemplate }) => {
+const BulkPopup = ({ popupType, onClose, onDownloadTemplate }) => {
   const popupContent = {
     notExcel: {
       title: "Unsupported File Format",
@@ -27,21 +27,34 @@ const BulkPopup = ({ errorType, onClose, onDownloadTemplate }) => {
           variant: "primary",
           onClick: onDownloadTemplate,
           iconImg: BulkTemplateIcon,
-          startIcon: true,
-          endIcon: true,
+          startIcon: false,
+          endIcon: false,
         },
         {
           text: "Close",
           variant: "secondary",
           onClick: onClose,
-          startIcon: true,
-          endIcon: true,
+          startIcon: false,
+          endIcon: false,
+        },
+      ],
+    },
+     onFinish: {
+      title: "Upload Processing",
+      message: "Your upload is processing in the background. We’ll notify you once completed.",
+      buttons: [
+        {
+          text: "Continue",
+          variant: "primary",
+          onClick: onClose,
+          startIcon: false,
+          endIcon: false,
         },
       ],
     },
   };
 
-  const { title, message, buttons } = popupContent[errorType] || {};
+  const { title, message, buttons } = popupContent[popupType] || {};
 
   return (
     <Box
