@@ -11,6 +11,7 @@ import {
   getBranch
 } from '../../../api/services/masterAPIs/createLeadApi';
 import { FieldArray, getIn } from 'formik';
+import TrashIcon  from '../../../assets/bulk-trash-icon.svg';
 import { X } from 'lucide-react';
 
 const OrganisationAccountInfoForm = ({
@@ -34,56 +35,70 @@ const OrganisationAccountInfoForm = ({
 
       <FieldArray name="add_account_info">
         {({ push, remove }) => (
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col">
             {values.add_account_info.map((entry, index) => (
               <div
-                key={index}
-                className="relative bg-[#F5F5F5] border p-4 rounded-lg form-grid"
-              >
-                <button
-                  type="button"
-                  onClick={() => remove(index)}
-                  className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
-                >
-                  <X size={18} />
-                </button>
-
-                <div className="form-field">
-                  <CustomInputField
-                    state={isEditable ? "default" : "non-editable"}
-                    label="Account Name"
-                    value={entry.name}
-                    onChange={(value) =>
-                      setFieldValue(`add_account_info[${index}].name`, value?.target?.value)
-                    }
-                    placeholder="Enter Name"
-                    onBlur={() =>
-                      handleBlur({ target: { name: `add_account_info[${index}].name` } })
-                    }
-                    hasError={Boolean(getIn(touched, `add_account_info[${index}].name`) && getIn(errors, `add_account_info[${index}].name`))}
-                    error={getIn(errors, `add_account_info[${index}].name`)}
-
-                  />
-                </div>
-
-                <div className="form-field">
-                  <CustomInputField
-                    state={isEditable ? "default" : "non-editable"}
-                    label="Ad Account ID"
-                    value={entry.account_id}
-                    onChange={(value) =>
-                      setFieldValue(`add_account_info[${index}].account_id`, value?.target?.value)
-                    }
-                    placeholder="Enter ID"
-                    onBlur={() =>
-                      handleBlur({ target: { name: `add_account_info[${index}].account_id` } })
-                    }
-                    hasError={Boolean(getIn(touched, `add_account_info[${index}].account_id`) && getIn(errors, `add_account_info[${index}].account_id`))}
-                    error={getIn(errors, `add_account_info[${index}].account_id`)}
-
-                  />
-                </div>
+              key={index}
+              className="flex flex-row item-center justify-flex-start bg-[#F5F5F5] border p-4 rounded-lg"
+            >
+              <div style={{width:"fit-content", marginRight:"30px"}}>
+                <CustomInputField
+                  state={isEditable ? "default" : "non-editable"}
+                  showAsterisk={false}
+                  label="Account Name"
+                  value={entry.name}
+                  onChange={(value) =>
+                    setFieldValue(`add_account_info[${index}].name`, value?.target?.value)
+                  }
+                  placeholder="Enter Name"
+                  onBlur={() =>
+                    handleBlur({ target: { name: `add_account_info[${index}].name` } })
+                  }
+                  hasError={Boolean(getIn(touched, `add_account_info[${index}].name`) && getIn(errors, `add_account_info[${index}].name`))}
+                  error={getIn(errors, `add_account_info[${index}].name`)}
+                />
               </div>
+            
+              <div style={{width:"fit-content", marginRight:"30px"}}>
+                <CustomInputField
+                  state={isEditable ? "default" : "non-editable"}
+                  showAsterisk={false}
+                  label="Ad Account ID"
+                  value={entry.account_id}
+                  onChange={(value) =>
+                    setFieldValue(`add_account_info[${index}].account_id`, value?.target?.value)
+                  }
+                  placeholder="Enter ID"
+                  onBlur={() =>
+                    handleBlur({ target: { name: `add_account_info[${index}].account_id` } })
+                  }
+                  hasError={Boolean(getIn(touched, `add_account_info[${index}].account_id`) && getIn(errors, `add_account_info[${index}].account_id`))}
+                  error={getIn(errors, `add_account_info[${index}].account_id`)}
+                />
+              </div>
+            
+              <div style={{display:"flex", alignItems:"end"}}>
+                <CustomButton
+                  showText={false}
+                  variant="icon"
+                  iconImg={TrashIcon}
+                  endIcon={false}
+                  startIcon={true}
+                  onClick={() => remove(index)}
+                  sx={{
+                    border: '1px solid red',
+                    borderRadius: '12px',
+                    boxShadow: 'none',
+                    backgroundColor: 'transparent',
+                    "&:hover": {
+                      backgroundColor: "#FDE9E9",
+                      border: "1px solid #F7A4A3",
+                      color: "#F7A4A3",
+                    },
+                  }}
+                />
+              </div>
+            </div>            
             ))}
             <div className="mt-4">
               <CustomButton
