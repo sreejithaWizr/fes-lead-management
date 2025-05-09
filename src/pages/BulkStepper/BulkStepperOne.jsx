@@ -9,6 +9,7 @@ import BulkRefreshIcon from "../../assets/bulk-refresh-icon.svg";
 import BulkTrashIcon from "../../assets/bulk-trash-icon.svg";
 import { CustomButton } from "react-mui-tailwind";
 import { formatBytes } from "../../utils/commonFunction";
+import BulkPopup from "./BulkPopup";
 
 const BulkStepperOne = ({
   dragOver,
@@ -22,6 +23,9 @@ const BulkStepperOne = ({
   handleReupload,
   handleDelete,
   fileInputRef,
+  errorType,
+  handleClosePopup,
+  handleDownloadTemplate,
 }) => {
   const uploadedFile =
     uploadStatus === "Success" && file
@@ -86,21 +90,6 @@ const BulkStepperOne = ({
             endIcon={false}
             onClick={() => fileInputRef.current?.click()}
           />
-          {uploadStatus && (
-            <Typography
-              sx={{
-                color: uploadStatus.includes("Error")
-                  ? "#D32F2F"
-                  : uploadStatus === "Success"
-                  ? "#14AE5C"
-                  : "#1976D2",
-                fontWeight: 500,
-                fontSize: "14px",
-              }}
-            >
-              {uploadStatus}
-            </Typography>
-          )}
           <div className="flex items-center mt-2">
             <InfoIcon
               className="w-4 h-4 scale-y-[-1]"
@@ -129,7 +118,6 @@ const BulkStepperOne = ({
             justifyContent: "space-between",
             padding: "16px",
             marginLeft: "24px",
-            // marginTop: "16px",
             position: "relative",
             zIndex: 9999,
           }}
@@ -179,10 +167,24 @@ const BulkStepperOne = ({
               endIcon={false}
               startIcon={true}
               onClick={handleDelete}
-              sx={{ border: "1px solid red", borderRadius: "12px" }}
+                sx={{
+                    border: "1px solid red",
+                    borderRadius: "12px",
+                     backgroundColor: "transparent",
+                    "&:hover": {
+                    border: "1px solid red",
+                    },
+                    }}
             />
           </div>
         </Box>
+      )}
+      {errorType && (
+        <BulkPopup
+          errorType={errorType}
+          onClose={handleClosePopup}
+          onDownloadTemplate={handleDownloadTemplate}
+        />
       )}
     </div>
   );
