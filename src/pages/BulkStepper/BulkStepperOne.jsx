@@ -128,8 +128,8 @@ const BulkStepperOne = ({
             alignItems: "center",
             justifyContent: "space-between",
             padding: "16px",
-            marginLeft: "25px",
-            marginTop: "16px",
+            marginLeft: "24px",
+            // marginTop: "16px",
             position: "relative",
             zIndex: 9999,
           }}

@@ -5,10 +5,16 @@ import {
   StepLabel,
   StepContent,
   Collapse,
+  StepConnector,
+  styled
+
 } from "@mui/material";
 import BulkStepperOne from "./BulkStepperOne";
 import BulkStepperTwo from "./BulkStepperTwo";
 import BulkStepperThree from "./BulkStepperThree";
+
+
+
 
 // Custom step icon with secondary color for inactive and primary for active
 const CustomStepIcon = ({ active, completed, icon }) => {
@@ -50,6 +56,17 @@ const CustomStepIcon = ({ active, completed, icon }) => {
   );
 };
 
+const DashedStepConnector = styled(StepConnector)(({ theme }) => ({
+  [`&.MuiStepConnector-vertical`]: {
+    // marginLeft: 22, // align with custom icon center
+  },
+  [`& .MuiStepConnector-lineVertical`]: {
+    borderLeft: "2px dashed #B6CDD9",
+    minHeight: 40,
+  },
+}));
+
+
 // Custom TransitionComponent to prevent collapsing for Step 0 and Step 1
 const NonCollapsingTransition = ({ children, ...props }) => {
   return <div {...props}>{children}</div>;
@@ -73,11 +90,12 @@ const BulkStepper = ({
   handlePreview,
   handleReupload,
   handleDelete,
+  fileInputRef,
 }) => {
-  const fileInputRef = useRef(null);
 
   return (
-    <Stepper activeStep={activeStep} orientation="vertical">
+    <Stepper activeStep={activeStep} orientation="vertical"
+    connector={<DashedStepConnector />}>
       {steps.map((step, index) => (
         <Step key={index}>
           <StepLabel
@@ -88,12 +106,15 @@ const BulkStepper = ({
                 fontWeight: 700,
                 lineHeight: "140%",
                 fontFamily: "Proxima Nova, sans-serif",
-                color: "#B0BEC5",
+                color: "#B0BEC5"
               },
               "& .MuiStepLabel-label.Mui-active": {
                 color: "#17222B",
                 fontWeight: 700,
-                fontFamily: "Proxima Nova, sans-serif",
+              },
+              "& .MuiStepLabel-label.Mui-completed": {
+                color: "#17222B",
+                fontWeight: 700,
               },
             }}
           >
@@ -107,7 +128,23 @@ const BulkStepper = ({
                 ? NonCollapsingTransition
                 : Collapse
             }
-          >
+            sx={{
+              ml: "12px",
+              pl: "20px",
+              pr: "8px",
+              borderLeft: "none", // remove default
+              position: "relative",
+              "::before": {
+                content: index !== steps.length - 1 ? '""' : "none",
+                position: "absolute",
+                top: "0", // extend upward
+                bottom: 0,
+                left: 0,
+                borderLeft: "2px dashed #B6CDD9",
+                zIndex: 0,
+              },
+              }}
+                    >
             {index === 0 && (
               <BulkStepperOne
                 dragOver={dragOver}
