@@ -225,7 +225,6 @@ const CreateLeadPage = () => {
                     handleChange,
                     handleBlur,
                     handleSubmit,
-                    isSubmitting,
                     setFieldValue,
                 }) => (
                     <form onSubmit={handleSubmit}>

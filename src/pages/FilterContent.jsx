@@ -20,7 +20,9 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {}, isFilterOp
   const [dropdownOptionsMap, setDropdownOptionsMap] = useState({});
   const [searchTermMap, setSearchTermMap] = useState({});
   const [searchTerm, setSearchTerm] = useState('');
-  const [defaultDate, setDefaultDate] = useState('');
+  const [defaultStartDate, setDefaultStartDate] = useState('');
+  const [defaultEndDate, setDefaultEndDate] = useState('');
+  const [isDisable, setIsDisable] = useState(true);
 
   const handleDropdownSearch = async (term, fieldName) => {
     setSearchTermMap((prev) => ({ ...prev, [fieldName]: term }));
@@ -55,6 +57,12 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {}, isFilterOp
       }}
     >
       {({ values, setFieldValue, resetForm }) => {
+
+        useEffect(() => {
+          const startDate = values.filters['createdAt']?.value?.[0];
+          setIsDisable(!startDate); // Disable if no startDate
+        }, [values.filters['createdAt']?.value?.[0]]);
+
         const handleCheckboxToggle = (colId) => {
           const filters = { ...values.filters };
           if (filters[colId]) {
@@ -141,48 +149,50 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {}, isFilterOp
 
                       {isChecked && (
                         <div className="flex mt-2 flex-col gap-2">
-                        {/* Condition Dropdown (on top) */}
-                        <CustomDropDown
-                          options={dropdownOptions}
-                          placeHolder="Select condition"
-                          value={values.filters[col.id]?.condition || ''}
-                          onChange={(e) => handleConditionChange(col.id, e)}
-                        />
-                      
-                        {/* Date pickers side by side, below the condition */}
-                        {col.id === 'createdAt' ? (
-                          <div className="flex gap-4 mt-2">
-                            <CustomDatePicker
-                              label="Start Date"
-                              value={values.filters[col.id]?.value?.[0] || ''}
-                              onChange={(date) => {
-                                const end = values.filters[col.id]?.value?.[1] || '';
-                                setFieldValue(`filters.${col.id}.value`, [date, end]);
-                              }}
-                            />
-                            <CustomDatePicker
-                              label="End Date"
-                              value={values.filters[col.id]?.value?.[1] || ''}
-                              onChange={(date) => {
-                                const start = values.filters[col.id]?.value?.[0] || '';
-                                setFieldValue(`filters.${col.id}.value`, [start, date]);
-                              }}
-                            />
-                          </div>
-                        ) : (
-                          <div className="mt-2">
-                            <CustomDropdownComponent
-                              options={dropdownOptionsMap[col.id] || []}
-                              value={values.filters[col.id]?.value || []}
-                              onChange={(selected) => handleMultiSelectChange(col.id, selected)}
-                              placeholder="Select options"
-                              multiple={true}
-                              onSearch={(term) => handleDropdownSearch(term, col.id)}
-                            />
-                          </div>
-                        )}
-                      </div>
-                      
+                          {/* Condition Dropdown (on top) */}
+                          <CustomDropDown
+                            options={dropdownOptions}
+                            placeHolder="Select condition"
+                            value={values.filters[col.id]?.condition || ''}
+                            onChange={(e) => handleConditionChange(col.id, e)}
+                          />
+
+                          {/* Date pickers side by side, below the condition */}
+                          {col.id === 'createdAt' ? (
+                            <div className="flex gap-4 mt-2">
+                              <CustomDatePicker
+                                label="Start Date"
+                                value={values.filters[col.id]?.value?.[0] || ''}
+                                onChange={(date) => {
+                                  const end = values.filters[col.id]?.value?.[1] || '';
+                                  setFieldValue(`filters.${col.id}.value`, [date, end]);
+                                }}
+                              />
+
+                              <CustomDatePicker
+                                label="End Date"
+                                disabled={isDisable}
+                                value={values.filters[col.id]?.value?.[1] || ''}
+                                onChange={(date) => {
+                                  const start = values.filters[col.id]?.value?.[0] || '';
+                                  setFieldValue(`filters.${col.id}.value`, [start, date]);
+                                }}
+                              />
+                            </div>
+                          ) : (
+                            <div className="mt-2">
+                              <CustomDropdownComponent
+                                options={dropdownOptionsMap[col.id] || []}
+                                value={values.filters[col.id]?.value || []}
+                                onChange={(selected) => handleMultiSelectChange(col.id, selected)}
+                                placeholder="Select options"
+                                multiple={true}
+                                onSearch={(term) => handleDropdownSearch(term, col.id)}
+                              />
+                            </div>
+                          )}
+                        </div>
+
                       )}
                     </div>
                   );
