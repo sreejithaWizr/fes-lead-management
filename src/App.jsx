@@ -14,6 +14,7 @@ import Login from "./pages/Login";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import SettingsPage from "./components/SettingsPage";
 import CreateOrganisationPage from "./pages/settings/CreateOrganisationPage";
+import BulkUpload from "./pages/BulkUpload";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
            <Route path="/" element={<Layout />}>
             <Route index element={<Navigate to="/leads" replace />} />
             <Route path="leads" element={<LeadsPage />} />
+            <Route path="bulk" element={<BulkUpload/> } />
             <Route path="leads/create" element={<CreateLeadPage />} />
             <Route path="leads/detailsview/:id" element={<LeadDetailsViewPage />} />
             <Route path="leads/edit/:id" element={<EditLeadPage />} />
