@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchLeads } from '../../store/leadsSlice';
-import { CustomTable, CustomPagination, CustomButton, CustomOffCanvasModal } from 'react-mui-tailwind';
+import { CustomTable, CustomPagination, CustomButton, CustomOffCanvasModal, CustomSearch } from 'react-mui-tailwind';
 import PhoneIcon from "../../assets/phone-icon.svg";
 import CalenderIcon from "../../assets/calendar.svg";
 import MailIcon from "../../assets/mail.svg";
@@ -11,6 +11,7 @@ import EditIcon from "../../assets/edit-icon.svg";
 import FilterIcon from "../../assets/filter.svg";
 import FilterContent from '../../pages/FilterContent';
 import { getLeadList } from '../../api/services/leadAPI/leadAPIs';
+import { getRoleList } from '../../api/services/settingsAPI/roleAPIs';
 
 const RoleManagement = () => {
   const dispatch = useDispatch();
@@ -26,6 +27,28 @@ const RoleManagement = () => {
   const [selectedFilters, setSelectedFilters] = useState({});
   const [filters, setFilters] = useState([]);
   const toggleFilter = () => setIsFilterOpen(prev => !prev);
+
+  const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    let payload={
+        filters:[],
+        pageSize:1,
+        pageNumber:1,
+        filterApplied:false
+        
+    }
+    getRoleList(payload)
+      .then(response => {
+        const responseData = response?.data;
+        console.log("responseData", responseData)
+        setLeads(responseData?.data || []);
+        setTotalPages(responseData?.totalPages || 1);
+      })
+      .catch(error => {
+        console.error('Error fetching leads:', error);
+      });
+  }, [])
 
   useEffect(() => {
     fetchLeadsData();
@@ -52,8 +75,8 @@ const RoleManagement = () => {
       filterMap[field] = {
         condition: operator,
         value: Array.isArray(value)
-  ? value.map(v => (typeof v === 'string' ? v : v.name))
-  : []
+          ? value.map(v => (typeof v === 'string' ? v : v.name))
+          : []
       };
     });
 
@@ -177,7 +200,7 @@ const RoleManagement = () => {
     setCurrentPage(1);
     fetchLeadsData(filters, newRowsPerPage, 1); // Pass newRowsPerPage and reset page to 1
   };
-  
+
 
   const fetchLeadsData = (customFilters = filters, customRowsPerPage = rowsPerPage, customPage = currentPage) => {
     const output = customFilters.map(item => ({
@@ -187,14 +210,14 @@ const RoleManagement = () => {
         ? item.value.map(v => (typeof v === 'string' ? v : v.name))
         : []
     }));
-  
+
     const payload = {
       filters: output,
       pageSize: customRowsPerPage,
       pageNumber: customPage,
       filterApplied: customFilters.length > 0
     };
-  
+
     getLeadList(payload)
       .then(response => {
         const responseData = response?.data;
@@ -205,7 +228,7 @@ const RoleManagement = () => {
         console.error('Error fetching leads:', error);
       });
   };
-  
+
 
   return (
     <>
@@ -213,9 +236,22 @@ const RoleManagement = () => {
       <div className="pt-4 pb-8 flex flex-col">
         <div className="flex items-center justify-between" />
         <div className="flex items-center justify-between">
+          <CustomSearch
+            placeHolder="Search"
+            width="264px"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onSearch={(term) => {
+              if (term.length >= 3 || term.length === 0) {
+                setCurrentPage(1);
+                fetchLeadsData(filters, rowsPerPage, 1, term);
+              }
+            }}
+          />
+
           <div className="flex items-center gap-4" />
           <div className="flex items-center gap-3">
-            <CustomButton text="Create Role" onClick={handleCreateRole} endIcon={false}  />
+            <CustomButton text="Create Role" onClick={handleCreateRole} endIcon={false} />
             <CustomButton variant="icon" showText={false} startIcon={true} endIcon={false} iconImg={FilterIcon} onClick={toggleFilter} />
           </div>
         </div>
