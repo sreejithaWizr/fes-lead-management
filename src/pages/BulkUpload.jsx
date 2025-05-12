@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { CustomButton } from "react-mui-tailwind";
-import BulkTemplateIcon from "../assets/bulk-template-icon.svg";
+
 import BulkStepper from "./BulkStepper/BulkStepper";
 
 function BulkUpload() {
@@ -210,7 +209,7 @@ function BulkUpload() {
   };
 
   return (
-    <div className="flex flex-row justify-evenly px-[150px] mt-[25px]">
+    <div className="flex flex-row w-[100%] justify-center items-center mt-[25px]">
       <div>
         <BulkStepper
           steps={steps}
@@ -236,22 +235,6 @@ function BulkUpload() {
           handleDownloadTemplate={handleDownloadTemplate}
         />
       </div>
-      {!file&&
-          <div className="flex flex-row h-auto">
-          <CustomButton
-          text="Download template file"
-          variant="secondary"
-          endIcon={false}
-          iconImg={BulkTemplateIcon}
-          // width="225px"
-          sx ={{
-            width:"225px",
-            height: "40px"
-          }}
-          onClick= {handleDownloadTemplate}
-          />     
-           </div>
-}
           </div>
   );
 }

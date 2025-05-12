@@ -9,6 +9,8 @@ import {
   styled
 
 } from "@mui/material";
+import { CustomButton } from "react-mui-tailwind";
+import BulkTemplateIcon from "../../assets/bulk-template-icon.svg";
 import BulkStepperOne from "./BulkStepperOne";
 import BulkStepperTwo from "./BulkStepperTwo";
 import BulkStepperThree from "./BulkStepperThree";
@@ -121,8 +123,23 @@ const BulkStepper = ({
               },
             }}
           >
-            {step.label}
-          </StepLabel>
+              <div className="flex justify-between items-center w-full">
+              <span>{step.label}</span>
+              {index === 0 && !file && (
+              <CustomButton
+              text="Download template file"
+              variant="secondary"
+              endIcon={false}
+              iconImg={BulkTemplateIcon}
+              sx={{
+              width: "225px",
+              height: "40px",
+              }}
+              onClick={handleDownloadTemplate}
+              />
+              )}
+              </div>
+</StepLabel>
           <StepContent
             TransitionComponent={
               index === 0
