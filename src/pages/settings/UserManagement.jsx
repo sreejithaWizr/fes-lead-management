@@ -6,9 +6,8 @@ import EditIcon from "../../assets/edit-icon.svg";
 import DeleteIcon from "../../assets/delete-icon.svg";
 import DeletePopup from '../../utils/DeletePopup';
 
-import { getLeadList } from '../../api/services/leadAPI/leadAPIs';
 // import userAvatar from "../../assets/user-avatar.png";
-// import { getUserList } from '../../api/services/userAPI/userAPIs';
+ import { getUserList } from '../../api/services/settingsAPI/userAPI';
 
 const UserManagement = () => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -107,9 +106,9 @@ const UserManagement = () => {
     }
   ];
 
-  // useEffect(() => {
-  //   fetchUsersData();
-  // }, [currentPage]);
+  useEffect(() => {
+    fetchUsersData();
+  }, [currentPage]);
 
   useEffect(() => {
     setUsers(dummyUsers);
@@ -151,15 +150,26 @@ const UserManagement = () => {
   };
 
   const fetchUsersData = (customRowsPerPage = rowsPerPage, customPage = currentPage, customSearchTerm = searchTerm) => {
+    const output = customFilters.map(item => ({
+      field: item.field,
+      operator: typeof item.operator === 'string' ? item.operator : item.operator.name,
+      value: Array.isArray(item.value)
+        ? item.value.map(v => (typeof v === 'string' ? v : v.name))
+        : []
+    }));
+
     const payload = {
+      filters: output,
       pageSize: customRowsPerPage,
       pageNumber: customPage,
       search: customSearchTerm,
+      filterApplied: customFilters.length > 0
     };
 
-    getLeadList(payload)
+    getUserList(payload)
       .then(response => {
         const responseData = response?.data;
+        console.log("User List Response:", responseData);
         setUsers(responseData?.data || []);
         setTotalPages(responseData?.totalPages || 1);
       })
