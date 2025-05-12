@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import RoleManagement from '../pages/settings/RoleManagement';
-import UserManagement from '../pages/settings/UserManagement';
+import UserManagement from '../pages/settings/UserManagement'
 import OrganisationManagement from '../pages/settings/OrganisationManagement';
 
 const tabs = [
