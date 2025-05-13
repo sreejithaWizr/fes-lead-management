@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import { useSelector } from 'react-redux';
-import { CustomSearch, CustomDropDown, CustomCheckboxField } from 'react-mui-tailwind';
+import { CustomSearch, CustomDropDown, CustomCheckboxField, CustomDatePicker } from 'react-mui-tailwind';
 import CustomDropdownComponent from './CustomDropdown';
 import { fetchFieldDropdownValues } from '../api/services/masterAPIs/createLeadApi';
 
@@ -20,6 +20,9 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {}, isFilterOp
   const [dropdownOptionsMap, setDropdownOptionsMap] = useState({});
   const [searchTermMap, setSearchTermMap] = useState({});
   const [searchTerm, setSearchTerm] = useState('');
+  const [defaultStartDate, setDefaultStartDate] = useState('');
+  const [defaultEndDate, setDefaultEndDate] = useState('');
+  const [isDisable, setIsDisable] = useState(true);
 
   const handleDropdownSearch = async (term, fieldName) => {
     setSearchTermMap((prev) => ({ ...prev, [fieldName]: term }));
@@ -41,6 +44,7 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {}, isFilterOp
       col.label.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+
   return (
     <Formik
       initialValues={{ filters: initialFilters }}
@@ -53,6 +57,12 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {}, isFilterOp
       }}
     >
       {({ values, setFieldValue, resetForm }) => {
+
+        useEffect(() => {
+          const startDate = values.filters['createdAt']?.value?.[0];
+          setIsDisable(!startDate); // Disable if no startDate
+        }, [values.filters['createdAt']?.value?.[0]]);
+
         const handleCheckboxToggle = (colId) => {
           const filters = { ...values.filters };
           if (filters[colId]) {
@@ -76,7 +86,7 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {}, isFilterOp
           if (isFilterOpen) {
             const fetchInitialOptions = async () => {
               const selectedFields = Object.keys(values.filters || {});
-        
+
               const fetches = selectedFields.map((field) =>
                 fetchFieldDropdownValues("", field)
                   .then((res) => ({ field, options: res.data?.data || [] }))
@@ -85,9 +95,9 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {}, isFilterOp
                     return { field, options: [] };
                   })
               );
-        
+
               const results = await Promise.allSettled(fetches);
-        
+
               // Build a new map from all successful results
               const newOptionsMap = {};
               results.forEach((result) => {
@@ -96,14 +106,14 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {}, isFilterOp
                   newOptionsMap[field] = options;
                 }
               });
-        
+
               setDropdownOptionsMap(newOptionsMap);
             };
-        
+
             fetchInitialOptions();
           }
         }, [isFilterOpen]);
-        
+
 
 
         console.log('Formik values:', values, dropdownOptionsMap, initialFilters);
@@ -115,8 +125,14 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {}, isFilterOp
               placeHolder="Search Filter"
               width="549px"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => setSearchTerm(e.target.value)} // Update local search term
+              onSearch={(term) => {
+                // Optional: You could debounce/filter API call or local list here
+                setSearchTerm(term); // This also ensures state is in sync
+              }}
+              loading={false} // Or true if you're waiting for an API
             />
+
 
             <div>
               <h3 className="text-sm font-semibold mb-2">Filters</h3>
@@ -132,26 +148,51 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {}, isFilterOp
                       />
 
                       {isChecked && (
-                        <div className="flex gap-4 mt-2">
+                        <div className="flex mt-2 flex-col gap-2">
+                          {/* Condition Dropdown (on top) */}
                           <CustomDropDown
                             options={dropdownOptions}
                             placeHolder="Select condition"
                             value={values.filters[col.id]?.condition || ''}
                             onChange={(e) => handleConditionChange(col.id, e)}
                           />
-                          <CustomDropdownComponent
-                            options={dropdownOptionsMap[col.id] || []}
-                            value={values.filters[col.id]?.value || []}
-                            onChange={(selected) => handleMultiSelectChange(col.id, selected)}
-                            placeholder="Select options..."
-                            multiple={true}
-                            onSearch={(term) => handleDropdownSearch(term, col.id)}
-                          />
 
+                          {/* Date pickers side by side, below the condition */}
+                          {col.id === 'createdAt' ? (
+                            <div className="flex gap-4 mt-2">
+                              <CustomDatePicker
+                                label="Start Date"
+                                value={values.filters[col.id]?.value?.[0] || ''}
+                                onChange={(date) => {
+                                  const end = values.filters[col.id]?.value?.[1] || '';
+                                  setFieldValue(`filters.${col.id}.value`, [date, end]);
+                                }}
+                              />
 
-
-
+                              <CustomDatePicker
+                                label="End Date"
+                                disabled={isDisable}
+                                value={values.filters[col.id]?.value?.[1] || ''}
+                                onChange={(date) => {
+                                  const start = values.filters[col.id]?.value?.[0] || '';
+                                  setFieldValue(`filters.${col.id}.value`, [start, date]);
+                                }}
+                              />
+                            </div>
+                          ) : (
+                            <div className="mt-2">
+                              <CustomDropdownComponent
+                                options={dropdownOptionsMap[col.id] || []}
+                                value={values.filters[col.id]?.value || []}
+                                onChange={(selected) => handleMultiSelectChange(col.id, selected)}
+                                placeholder="Select options"
+                                multiple={true}
+                                onSearch={(term) => handleDropdownSearch(term, col.id)}
+                              />
+                            </div>
+                          )}
                         </div>
+
                       )}
                     </div>
                   );
