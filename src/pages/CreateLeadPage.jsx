@@ -63,7 +63,6 @@ const CreateLeadPage = () => {
         priority: '',
         teleCallerName: '',
         leadCreated: '',
-        leadNumber: `LEAD${Math.floor(Math.random() * 900000) + 100000}`,
         agreeToReceiveBoolean: false,
 
         // Education Qualification
@@ -134,7 +133,6 @@ const CreateLeadPage = () => {
             whatsapp_number: values?.whatsappNumber || '',
             tele_callerid: values?.teleCallerName || null,
             priority_id: values?.priority || null,
-            lead_number: values?.leadNumber || '',
             consent: values?.agreeToReceiveBoolean,
             created_at: values?.leadCreated || '',
             created_by: "Admin",
