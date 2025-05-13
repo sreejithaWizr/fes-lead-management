@@ -17,11 +17,11 @@ export const validationSchema = Yup.object({
   poc_mail: requiredEmailField(),
 
   // Account Information
-  add_account_info: Yup.array().of(
-    Yup.object({
-      name: requiredStringField(),
-      account_id: requiredStringField(),
-    })
-  ),  
+  // add_account_info: Yup.array().of(
+  //   Yup.object({
+  //     name: requiredStringField(),
+  //     account_id: requiredStringField(),
+  //   })
+  // ),  
 
 });

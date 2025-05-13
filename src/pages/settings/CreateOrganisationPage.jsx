@@ -96,10 +96,10 @@ const CreateOrganisationPage = () => {
             primary_poc: values?.primary_poc,
             poc_mobileNumber: values?.poc_mobileNumber,
 
-            add_account_info: values?.add_account_info?.map(info => ({
-                name: info.name || null,
-                account_id: info.account_id || null,
-            })),
+            // add_account_info: values?.add_account_info?.map(info => ({
+            //     name: info.name || null,
+            //     account_id: info.account_id || null,
+            // })),
         }
 
         try {
