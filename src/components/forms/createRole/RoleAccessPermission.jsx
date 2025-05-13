@@ -198,7 +198,7 @@ const RoleAccessPermission = () => {
 
 
   return (
-    <div className="form-section p-[16px]">
+    <div className="form-section p-[16px] animate-fade-in">
       <h2 className="font-bold text-[19px] mb-6">Role Access</h2>
 
       {Object.entries(accessStructure).map(([mainSection, subSections]) => (
@@ -218,7 +218,7 @@ const RoleAccessPermission = () => {
 
           {Object.entries(subSections).map(([subSection, groups]) => (
             <div key={subSection} className="pl-4 pr-4 pt-4 pb-4 mt-5" style={{ backgroundColor: "#F2F6F8", borderRadius: "12px", display: "flex", flexDirection: "column" }}>
-              <div className="flex items-center gap-[10px] pb-[10px] border-b">
+              <div className="flex items-center gap-[10px] pb-[10px] border-b" style={{ borderColor: "#CBDBE4" }}>
                 <input
                   type="checkbox"
                   style={{ accentColor: 'black', height: "14px", width: "14px" }}
@@ -235,7 +235,7 @@ const RoleAccessPermission = () => {
                 />
                 <h4 className="text-[16px] font-bold">{subSection}</h4>
               </div>
-              <div style={{ display: "flex", flexDirection: "row", marginTop: "10px", gap: "10px", overflowX:"auto" }}>
+              <div style={{ display: "flex", flexDirection: "row", marginTop: "10px", gap: "10px", overflowX: "auto" }}>
                 {Object.entries(groups).map(([groupName, fields]) => (
                   <div key={groupName} style={{ marginLeft: 4, marginTop: 3, padding: "10px", display: "flex", flexDirection: "column", }}>
                     <div className="flex items-center gap-[10px]">
@@ -297,142 +297,3 @@ const RoleAccessPermission = () => {
 };
 
 export default RoleAccessPermission;
-
-// import React from 'react';
-// import { FieldArray, useFormikContext } from 'formik';
-
-// const RoleAccessPermission = () => {
-//   const { values, setFieldValue } = useFormikContext();
-
-//   const access = values.access || {};
-
-//   const updateNestedFields = (path, isChecked) => {
-//     const update = (obj, path) => {
-//       if (path.length === 0) {
-//         return typeof obj === 'object'
-//           ? Object.fromEntries(Object.keys(obj).map(key => [key, update(obj[key], [])]))
-//           : isChecked;
-//       }
-//       const [head, ...rest] = path;
-//       return {
-//         ...obj,
-//         [head]: update(obj[head], rest),
-//       };
-//     };
-
-//     const updatedAccess = update(access, path);
-//     setFieldValue('access', updatedAccess);
-//   };
-
-//   const areAllChecked = (obj) => {
-//     return Object.values(obj).every(value =>
-//       typeof value === 'object' ? areAllChecked(value) : value === true
-//     );
-//   };
-
-//   const areSomeChecked = (obj) => {
-//     return Object.values(obj).some(value =>
-//       typeof value === 'object' ? areSomeChecked(value) : value === true
-//     );
-//   };
-
-//   const renderCheckbox = (label, checked, onChange, indeterminate = false) => (
-//     <label className="flex items-center space-x-2">
-//       <input
-//         type="checkbox"
-//         checked={checked}
-//         ref={el => {
-//           if (el) el.indeterminate = indeterminate;
-//         }}
-//         onChange={onChange}
-//       />
-//       <span>{label}</span>
-//     </label>
-//   );
-
-//   return (
-//     <div className="form-section p-[16px]">
-//       <h2 className="font-bold text-[19px] mb-4">Role Access</h2>
-
-//       {/* Main Section - Lead Management */}
-//       {renderCheckbox(
-//         'Lead Management',
-//         areAllChecked(access.leadManagement),
-//         () => updateNestedFields(['leadManagement'], !areAllChecked(access.leadManagement))
-//       )}
-
-//       <div className="ml-6 mt-2 space-y-2">
-//         {/* Lead Form View Permission */}
-//         {renderCheckbox(
-//           'Lead Form View Permission',
-//           areAllChecked(access.leadManagement?.leadFormView),
-//           () =>
-//             updateNestedFields(
-//               ['leadManagement', 'leadFormView'],
-//               !areAllChecked(access.leadManagement?.leadFormView)
-//             ),
-//           !areAllChecked(access.leadManagement?.leadFormView) &&
-//             areSomeChecked(access.leadManagement?.leadFormView)
-//         )}
-
-//         <div className="ml-6 space-y-2">
-//           {/* Lead Info */}
-//           {renderCheckbox(
-//             'Lead Info',
-//             areAllChecked(access.leadManagement?.leadFormView?.leadInfo),
-//             () =>
-//               updateNestedFields(
-//                 ['leadManagement', 'leadFormView', 'leadInfo'],
-//                 !areAllChecked(access.leadManagement?.leadFormView?.leadInfo)
-//               )
-//           )}
-//           <div className="ml-6">
-//             {['firstName', 'lastName', 'status'].map(field => (
-//               <div key={field}>
-//                 {renderCheckbox(
-//                   field,
-//                   access.leadManagement?.leadFormView?.leadInfo?.[field] || false,
-//                   () =>
-//                     setFieldValue(
-//                       `access.leadManagement.leadFormView.leadInfo.${field}`,
-//                       !access.leadManagement?.leadFormView?.leadInfo?.[field]
-//                     )
-//                 )}
-//               </div>
-//             ))}
-//           </div>
-
-//           {/* Lead Education */}
-//           {renderCheckbox(
-//             'Lead Education',
-//             areAllChecked(access.leadManagement?.leadFormView?.leadEducation),
-//             () =>
-//               updateNestedFields(
-//                 ['leadManagement', 'leadFormView', 'leadEducation'],
-//                 !areAllChecked(access.leadManagement?.leadFormView?.leadEducation)
-//               )
-//           )}
-//           <div className="ml-6">
-//             {['highestEducation', 'grade', 'year'].map(field => (
-//               <div key={field}>
-//                 {renderCheckbox(
-//                   field,
-//                   access.leadManagement?.leadFormView?.leadEducation?.[field] || false,
-//                   () =>
-//                     setFieldValue(
-//                       `access.leadManagement.leadFormView.leadEducation.${field}`,
-//                       !access.leadManagement?.leadFormView?.leadEducation?.[field]
-//                     )
-//                 )}
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default RoleAccessPermission;
-
-

@@ -3,6 +3,7 @@ import { CustomInputField, CustomDropDown, CustomDatePicker, CustomCheckboxField
 import { getFESUser, getPriority } from "../../../api/services/masterAPIs/createLeadApi"
 
 const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode = "edit" }) => {
+  
     const isEditable = mode === "edit";
 
     const isCreateMode = mode === "create";
@@ -48,14 +49,15 @@ const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur
                     <CustomInputField
                         state={isEditable || isCreateMode ? "default" : "non-editable"}
                         label="Role Name"
-                        value={values.firstName}
+                        showAsterisk={true}
+                        value={values.roleName}
                         onChange={(value) => {
                             setFieldValue('roleName', value.target.value)
                         }}
                         onBlur={handleBlur}
                         placeholder="Enter role name"
-                        hasError={touched.firstName && Boolean(errors.firstName)}
-                        error={touched.firstName && errors.firstName}
+                        hasError={touched.roleName && Boolean(errors.roleName)}
+                        error={touched.roleName && errors.roleName}
                         className="w-full max-w-[calc(100%-40px)]"
                     />
                 </div>
@@ -98,7 +100,7 @@ const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur
                     <CustomDropDown
                         label="Copy Role Template"
                         options={userOptions}
-                        required={true}
+                        required={false}
                         placeHolder="Select"
                         value={userOptions?.find(option => option.id === values?.copyRoleTemplate) || ""}
                         disabled={!isEditable && !isCreateMode}
@@ -167,6 +169,7 @@ const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         state={isEditable || isCreateMode ? "default" : "non-editable"}
                         label="Description"
                         value={values.firstName}
+                        showAsterisk={false}
                         onChange={(value) => {
                             setFieldValue('description', value.target.value)
                         }}

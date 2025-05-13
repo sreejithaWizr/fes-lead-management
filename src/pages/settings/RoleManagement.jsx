@@ -31,12 +31,11 @@ const RoleManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    let payload={
-        filters:[],
-        pageSize:1,
-        pageNumber:1,
-        filterApplied:false
-        
+    let payload = {
+      filters: [],
+      pageSize: rowsPerPage,
+      pageNumber: 1,
+      filterApplied: false,
     }
     getRoleList(payload)
       .then(response => {
@@ -64,9 +63,9 @@ const RoleManagement = () => {
   };
 
   const handleView = (value) => {
-    const selectedLeadId = leads.find(lead => lead.leadNumber === value);
-    console.log("selectedLeadId", selectedLeadId);
-    navigate(`/leads/detailsview/${selectedLeadId?.id}`);
+    // const selectedLeadId = leads.find(lead => lead.leadNumber === value);
+    // console.log("selectedLeadId", selectedLeadId);
+    // navigate(`/leads/detailsview/${selectedLeadId?.id}`);
   }
 
   const handleApplyFilter = (newFiltersArray) => {
@@ -155,45 +154,45 @@ const RoleManagement = () => {
 
   const handleEdit = (row) => {
     console.log("Row data:", row);
-    navigate(`/leads/edit/${row?.id}`);
+    // navigate(`/leads/edit/${row?.id}`);
   };
 
-  useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchLeads());
-    }
-  }, [status, dispatch]);
+  // useEffect(() => {
+  //   if (status === 'idle') {
+  //     dispatch(fetchLeads());
+  //   }
+  // }, [status, dispatch]);
 
-  const handleSelectAll = (e) => {
-    if (e.target.checked) {
-      setSelectedLeads(leads.map(lead => lead.id));
-    } else {
-      setSelectedLeads([]);
-    }
-  };
+  // const handleSelectAll = (e) => {
+  //   if (e.target.checked) {
+  //     setSelectedLeads(leads.map(lead => lead.id));
+  //   } else {
+  //     setSelectedLeads([]);
+  //   }
+  // };
 
-  const handleSelectLead = (e, leadId) => {
-    if (e.target.checked) {
-      setSelectedLeads([...selectedLeads, leadId]);
-    } else {
-      setSelectedLeads(selectedLeads.filter(id => id !== leadId));
-    }
-  };
+  // const handleSelectLead = (e, leadId) => {
+  //   if (e.target.checked) {
+  //     setSelectedLeads([...selectedLeads, leadId]);
+  //   } else {
+  //     setSelectedLeads(selectedLeads.filter(id => id !== leadId));
+  //   }
+  // };
 
-  const getStatusClass = (status) => {
-    switch (status) {
-      case 'Potential':
-        return 'status-potential';
-      case 'Inactive':
-        return 'status-inactive';
-      case 'Enrolled':
-        return 'status-enrolled';
-      case 'May be Prospective':
-        return 'status-prospective';
-      default:
-        return value;
-    }
-  };
+  // const getStatusClass = (status) => {
+  //   switch (status) {
+  //     case 'Potential':
+  //       return 'status-potential';
+  //     case 'Inactive':
+  //       return 'status-inactive';
+  //     case 'Enrolled':
+  //       return 'status-enrolled';
+  //     case 'May be Prospective':
+  //       return 'status-prospective';
+  //     default:
+  //       return value;
+  //   }
+  // };
 
   const handleRowsPerPageChange = (newRowsPerPage) => {
     setRowsPerPage(newRowsPerPage);
@@ -202,7 +201,12 @@ const RoleManagement = () => {
   };
 
 
-  const fetchLeadsData = (customFilters = filters, customRowsPerPage = rowsPerPage, customPage = currentPage) => {
+  const fetchLeadsData = (
+    customFilters = filters, 
+    customRowsPerPage = rowsPerPage, 
+    customPage = currentPage,
+    customSearchTerm = searchTerm
+  ) => {
     const output = customFilters.map(item => ({
       field: item.field,
       operator: typeof item.operator === 'string' ? item.operator : item.operator.name,
@@ -215,10 +219,11 @@ const RoleManagement = () => {
       filters: output,
       pageSize: customRowsPerPage,
       pageNumber: customPage,
-      filterApplied: customFilters.length > 0
+      filterApplied: customFilters.length > 0,
+      search : customSearchTerm
     };
 
-    getLeadList(payload)
+    getRoleList(payload)
       .then(response => {
         const responseData = response?.data;
         setLeads(responseData?.data || []);

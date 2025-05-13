@@ -41,8 +41,8 @@ const Sidebar = () => {
       <div className="flex flex-col flex-start gap-4">
         {sidebarItems.map((item) => {
           const isActive =
-            location.pathname === item.path ||
-            (item.path === "/leads" && location.pathname.includes("/lead"));
+          location.pathname === item.path ||
+          location.pathname.startsWith(item.path + "/");        
 
           return (
             <Link
