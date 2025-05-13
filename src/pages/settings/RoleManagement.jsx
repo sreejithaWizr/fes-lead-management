@@ -33,10 +33,9 @@ const RoleManagement = () => {
   useEffect(() => {
     let payload={
         filters:[],
-        pageSize:1,
+        pageSize:15,
         pageNumber:1,
-        filterApplied:false
-        
+        filterApplied:false,
     }
     getRoleList(payload)
       .then(response => {
@@ -64,9 +63,9 @@ const RoleManagement = () => {
   };
 
   const handleView = (value) => {
-    const selectedLeadId = leads.find(lead => lead.leadNumber === value);
-    console.log("selectedLeadId", selectedLeadId);
-    navigate(`/leads/detailsview/${selectedLeadId?.id}`);
+    // const selectedLeadId = leads.find(lead => lead.leadNumber === value);
+    // console.log("selectedLeadId", selectedLeadId);
+    // navigate(`/leads/detailsview/${selectedLeadId?.id}`);
   }
 
   const handleApplyFilter = (newFiltersArray) => {
@@ -158,11 +157,11 @@ const RoleManagement = () => {
     navigate(`/leads/edit/${row?.id}`);
   };
 
-  useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchLeads());
-    }
-  }, [status, dispatch]);
+  // useEffect(() => {
+  //   if (status === 'idle') {
+  //     dispatch(fetchLeads());
+  //   }
+  // }, [status, dispatch]);
 
   const handleSelectAll = (e) => {
     if (e.target.checked) {
@@ -218,7 +217,7 @@ const RoleManagement = () => {
       filterApplied: customFilters.length > 0
     };
 
-    getLeadList(payload)
+    getRoleList(payload)
       .then(response => {
         const responseData = response?.data;
         setLeads(responseData?.data || []);

@@ -13,7 +13,7 @@ import EditLeadPage from "./pages/EditLeadPage";
 import Login from "./pages/Login";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import SettingsPage from "./components/SettingsPage";
-import RoleFormPage from "./components/forms/tesxt2/RoleFormPage";
+import RoleFormPage from "./components/forms/createRole/RoleFormPage";
 
 const App = () => {
   return (
