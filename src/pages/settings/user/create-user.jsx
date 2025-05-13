@@ -1,0 +1,220 @@
+// import React, { useEffect, useState } from 'react';
+// import { Formik, useFormikContext } from 'formik';
+// import LeadInformationForm from '../components/forms/createLead/leadInfoForm';
+// import EducationQualificationForm from '../components/forms/createLead/leadEducationForm';
+// import LeadStatusForm from '../components/forms/createLead/leadStatusForm';
+// import LeadSourceForm from '../components/forms/createLead/leadSourceForm';
+// import { validationSchema } from '../components/forms/createLead/schema';
+// import { CustomButton } from 'react-mui-tailwind'
+// import WarningIcon from '../assets/warning-icon.svg'
+// import LeadOpportunity from '../components/forms/createLead/leadOpportunity/opportunityList';
+// import { getUser, getUsers } from '../api/services/api';
+// import { createLead, getStatus } from '../api/services/masterAPIs/createLeadApi';
+// import { useNavigate } from 'react-router-dom';
+
+// export const formRef = React.createRef();
+
+// const CreateLeadPage = () => {
+
+//     const navigate = useNavigate();
+//     const initialValues = {
+//         // Lead Information
+//         firstName: '',
+//         lastName: '',
+//         email: '',
+//         phoneNumber: '',
+//         loginMethod: '',
+//         status: '',
+//         orgName: '',
+//         roles: '',
+//         branch: '',
+//         managerReportingTo: '',
+//         countrySpecialisation: '',
+//         contactCenterID: '',
+//     };
+
+//     // const handleSubmit = async (values, { setSubmitting }) => {
+//     //     // console.log('Form submitted with values:', values);
+
+//     //     const payload = {
+//     //         first_name: values?.firstName || '',
+//     //         last_name: values?.lastName || '',
+//     //         email: values?.email || '',
+//     //         secondary_email: values?.secondaryEmail || '',
+//     //         mobile_number: values?.mobileNumber || '',
+//     //         alternative_number: values?.alternativeNumber || '',
+//     //         whatsapp_number: values?.whatsappNumber || '',
+//     //         tele_callerid: values?.teleCallerName || null,
+//     //         priority_id: values?.priority || null,
+//     //         consent: values?.agreeToReceiveBoolean,
+//     //         created_at: values?.leadCreated || '',
+//     //         created_by: "Admin",
+//     //         education: {
+//     //             highest_qualification_id: values?.highestQualification || null,
+//     //             graduation_year: values?.graduationYear?.name || '',
+//     //             fieldofstudy_id: values?.fieldOfStudy || null,
+//     //             cgpa_grade: values?.cgpaGrade || null,
+//     //             work_experience: values?.workExperience?.name,
+//     //             intake_year: values?.intake_year?.name || '',
+//     //             intake_month: values?.intake_month?.name || '',
+//     //             other_countries: values?.otherCountries,
+//     //             test_training_required: values?.testTrainingBoolean,
+//     //             preferred_countries: Array.isArray(values?.preferredDestination)
+//     //                 ? values.preferredDestination
+//     //                 : [],
+//     //             test_ids: Array.isArray(values?.testName)
+//     //                 ? values.testName
+//     //                 : []
+//     //         },
+//     //         status: {
+//     //             status: values?.leadStatus || null,
+//     //             category: values?.category || null,
+//     //             subcategory_id: values?.subCategory || null,
+//     //             branch_id: values?.branch || null,
+//     //         },
+//     //         source: {
+//     //             source1_id: values?.leadSource_1 || null,
+//     //             source2_id: values?.leadSource_2 || null,
+//     //             source3_id: values?.leadSource_3 || null,
+//     //             source4_id: values?.leadSource_4 || null,
+//     //             region_id: values?.location_1 || null,
+//     //             city_id: values?.location_2 || null,
+//     //             reference_name: values?.referrerName || '',
+//     //             reference_employee_id: values?.referrerEmployeeId || null,
+//     //             vertical: values?.vertical || null,
+//     //             desired_program: values?.desiredProgram || null,
+//     //             internship_option: values?.internshipOption == "Yes" ? true : false,
+//     //             adName: values?.adName || '',
+//     //             adCampaign: values?.adCampaign || '',
+//     //             lead_form: values?.leadForm || '',
+//     //             ip_address: "197.168.1.1",
+
+//     //             preferredTimeSlot: values?.preferredTimeSlot || '',
+//     //             gcl_id: values?.gclID || '',
+//     //             zcGad: values?.zcGad || '',
+//     //             ad_id: values?.adID || '',
+//     //             keyIdentifier: values?.keyIdentifier || '',
+//     //             campaignType: values?.campaignType || '',
+//     //             referrerEmail: values?.referrerEmail || '',
+//     //             referrerPhoneNumber: values?.referrerPhoneNumber || '',
+//     //             userAgent: values?.userAgent || '',
+//     //             importLead: values?.importLead?.id || '',
+//     //             invokeBlueprint: values?.invokeBlueprint?.id || '',
+//     //             verse_id: values?.verseID || '',
+//     //             shortlisted_course_id: values?.shortlistedCourseID || '',
+//     //             counsellorFESTech1Name: values?.teleCallcounsellorFESTech1NameerName?.id || null,
+//     //             counsellorFESTech1EmailID: values?.counsellorFESTech1EmailID || ''
+//     //         }
+//     //     }
+
+//     //     try {
+//     //         const response = await createLead(payload);
+//     //         console.log('User created:', response.data);
+//     //         if (response?.data?.succeeded === true) {
+//     //             navigate("/leads")
+//     //         }
+//     //         alert("Created")
+//     //         // Optional: reset form or show toast
+//     //     } catch (err) {
+//     //         console.error('Error creating user:', err);
+//     //     }
+//     // };
+
+//     return (
+//         <div className="w-full">
+//             <Formik
+//                 initialValues={initialValues}
+//                 validationSchema={validationSchema}
+//                 onSubmit={handleSubmit}
+//                 innerRef={formRef}
+//             // enableReinitialize={true}
+//             >
+//                 {({
+//                     values,
+//                     errors,
+//                     touched,
+//                     handleChange,
+//                     handleBlur,
+//                     handleSubmit,
+//                     setFieldValue,
+//                 }) => (
+//                     <form onSubmit={handleSubmit}>
+//                         <ErrorObserver setTabErrors={setTabErrors} />
+//                         <div className="pb-2">
+//                             <div className="mb-4">
+//                                 <div className="flex space-x-2">
+//                                     {tabs.map((tab) => (
+//                                         <div key={tab}>
+//                                             <CustomButton
+//                                                 key={tab}
+//                                                 text={tab}
+//                                                 variant="chips"
+//                                                 rounded="full"
+//                                                 startIcon={false}
+//                                                 endIcon={tabErrors[tab] || false}
+//                                                 iconImg={tabErrors[tab] ? WarningIcon : undefined}
+//                                                 onClick={() => setActiveTab(tab)}
+//                                                 selected={activeTab === tab}
+//                                             />
+//                                         </div>
+//                                     ))}
+//                                 </div>
+//                             </div>
+//                         </div>
+
+//                         {(activeTab === 'All Info' || activeTab === 'Lead Information') && (
+//                             <LeadInformationForm
+//                                 values={values}
+//                                 errors={errors}
+//                                 touched={touched}
+//                                 handleChange={handleChange}
+//                                 handleBlur={handleBlur}
+//                                 setFieldValue={setFieldValue}
+//                                 mode='create'
+//                             />
+//                         )}
+
+//                         {(activeTab === 'All Info' || activeTab === 'Education Qualification') && (
+//                             <EducationQualificationForm
+//                                 values={values}
+//                                 errors={errors}
+//                                 touched={touched}
+//                                 handleChange={handleChange}
+//                                 handleBlur={handleBlur}
+//                                 setFieldValue={setFieldValue}
+//                             />
+//                         )}
+
+//                         {(activeTab === 'All Info' || activeTab === 'Lead Status') && (
+//                             <LeadStatusForm
+//                                 values={values}
+//                                 errors={errors}
+//                                 touched={touched}
+//                                 handleChange={handleChange}
+//                                 handleBlur={handleBlur}
+//                                 setFieldValue={setFieldValue}
+//                             />
+//                         )}
+
+//                         {(activeTab === 'All Info' || activeTab === 'Lead Source') && (
+//                             <LeadSourceForm
+//                                 values={values}
+//                                 errors={errors}
+//                                 touched={touched}
+//                                 handleChange={handleChange}
+//                                 handleBlur={handleBlur}
+//                                 setFieldValue={setFieldValue}
+//                             />
+//                         )}
+//                         {/* {( activeTab === "Opportunity" && (
+//                             <LeadOpportunity leadID={3}/>
+//                         )
+//                         )} */}
+//                     </form>
+//                 )}
+//             </Formik>
+//         </div>
+//     );
+// };
+
+// export default CreateLeadPage;

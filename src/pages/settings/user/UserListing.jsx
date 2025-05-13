@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CustomTable, CustomPagination, CustomButton, CustomSearch } from 'react-mui-tailwind';
 import EditIcon from "../../assets/edit-icon.svg";
 import DeleteIcon from "../../assets/delete-icon.svg";
-import DeletePopup from '../../utils/DeletePopup';
+import DeletePopup from '../../../utils/DeletePopup';
 
 // import userAvatar from "../../assets/user-avatar.png";
-import { getUserList } from '../../api/services/settingsAPI/userAPI';
+import { getUserList } from '../../../api/services/settingsAPI/userAPI';
 
 const UserManagement = () => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -110,11 +110,6 @@ const UserManagement = () => {
   useEffect(() => {
     fetchUsersData();
   }, [currentPage]);
-
-  // useEffect(() => {
-  //   setUsers(dummyUsers);
-  //   setTotalPages(1);
-  // }, []);
 
   const handleCreateUser = () => {
     navigate('/users/create');
