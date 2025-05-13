@@ -11,6 +11,7 @@ import MailIcon from "../assets/mail.svg";
 import LocationIcon from "../assets/location.svg";
 import EditIcon from "../assets/edit-icon.svg";
 import FilterIcon from "../assets/filter.svg";
+import BulkUploadIcon from "../assets/bulk-upload-icon.svg";
 
 import FilterContent from '../pages/FilterContent';
 import { getLeadList } from '../api/services/leadAPI/leadAPIs';
@@ -136,11 +137,11 @@ const LeadsTable = () => {
     navigate(`/leads/edit/${row?.id}`);
   };
 
-  useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchLeads());
-    }
-  }, [status, dispatch]);
+  // useEffect(() => {
+  //   if (status === 'idle') {
+  //     dispatch(fetchLeads());
+  //   }
+  // }, [status, dispatch]);
 
   const handleSelectAll = (e) => {
     if (e.target.checked) {
@@ -217,6 +218,10 @@ const LeadsTable = () => {
           <div className="flex items-center gap-4" />
           <div className="flex items-center gap-3">
             <CustomButton text="Create Lead" onClick={handleCreateLead} endIcon={false}  />
+            <CustomButton text="Bulk Upload" variant="secondary" endIcon={false} iconImg={BulkUploadIcon}
+               onClick={() => {
+                    navigate('/bulk');
+                  }} />
             <CustomButton variant="icon" showText={false} startIcon={true} endIcon={false} iconImg={FilterIcon} onClick={toggleFilter} />
           </div>
         </div>
@@ -229,7 +234,7 @@ const LeadsTable = () => {
             <CustomTable
               columns={columns}
               data={leads}
-              showCheckboxes={true}
+              showCheckboxes={false}
               getRow={getRow}
             />
           </div>
