@@ -7,7 +7,7 @@ import DeleteIcon from "../../assets/delete-icon.svg";
 import DeletePopup from '../../utils/DeletePopup';
 
 // import userAvatar from "../../assets/user-avatar.png";
- import { getUserList } from '../../api/services/settingsAPI/userAPI';
+import { getUserList } from '../../api/services/settingsAPI/userAPI';
 
 const UserManagement = () => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -22,6 +22,7 @@ const UserManagement = () => {
   const [rowsPerPage, setRowsPerPage] = useState(15);
   const [totalPages, setTotalPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
+  const [filters, setFilters] = useState([]);
 
   const dummyUsers = [
     {
@@ -110,10 +111,10 @@ const UserManagement = () => {
     fetchUsersData();
   }, [currentPage]);
 
-  useEffect(() => {
-    setUsers(dummyUsers);
-    setTotalPages(1);
-  }, []);
+  // useEffect(() => {
+  //   setUsers(dummyUsers);
+  //   setTotalPages(1);
+  // }, []);
 
   const handleCreateUser = () => {
     navigate('/users/create');
@@ -149,7 +150,12 @@ const UserManagement = () => {
     fetchUsersData(newRowsPerPage, 1);
   };
 
-  const fetchUsersData = (customRowsPerPage = rowsPerPage, customPage = currentPage, customSearchTerm = searchTerm) => {
+  const fetchUsersData = (
+    customRowsPerPage = rowsPerPage,
+    customPage = currentPage,
+    customSearchTerm = searchTerm,
+    customFilters = filters
+  ) => {
     const output = customFilters.map(item => ({
       field: item.field,
       operator: typeof item.operator === 'string' ? item.operator : item.operator.name,
@@ -169,7 +175,6 @@ const UserManagement = () => {
     getUserList(payload)
       .then(response => {
         const responseData = response?.data;
-        console.log("User List Response:", responseData);
         setUsers(responseData?.data || []);
         setTotalPages(responseData?.totalPages || 1);
       })
@@ -196,6 +201,23 @@ const UserManagement = () => {
             </span>
           </div>
         );
+      case "userRole":
+      case "orgName":
+      case "orgType":
+      case "userStatus":
+        const statusColor =
+          value === "Active" ? "#14AE5C" : value === "Inactive" ? "#FF8400" : undefined;
+
+        return (
+          <span
+            className="font-semibold"
+            style={{ color: statusColor }}
+          >
+            {value}
+          </span>
+        );
+      case "userBranch":
+        return <span>{value}</span>;
       case "action":
         return (
           <div className='flex items-center gap-4'>
