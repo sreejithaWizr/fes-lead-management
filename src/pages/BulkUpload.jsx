@@ -1,18 +1,17 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { CustomButton } from "react-mui-tailwind";
-import BulkTemplateIcon from "../assets/bulk-template-icon.svg";
-import BulkStepper from "./BulkStepper";
+
+import BulkStepper from "./BulkStepper/BulkStepper";
 
 function BulkUpload() {
   const [activeStep, setActiveStep] = useState(0);
   const [dragOver, setDragOver] = useState(false);
   const [uploadStatus, setUploadStatus] = useState(null);
   const [isCheckboxEditable, setIsCheckboxEditable] = useState(true);
-  const [file, setFile] = useState(null); // State for file data
+  const [file, setFile] = useState(null);
+  const [popupType, setPopupType] = useState(null); // State for popup error type
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
-  
 
   const initialCheckboxes = [
     { id: 1, label: "Created On", name: "Created On", value: true },
@@ -139,12 +138,10 @@ function BulkUpload() {
 
   const handleFileSelect = (e) => {
     const files = e.target.files;
-    // console.log('files', files);
     if (files.length > 0) {
       handleFileUpload(files[0]);
     }
   };
-
 
   const handleFileUpload = (file) => {
     const isXlsx =
@@ -153,16 +150,22 @@ function BulkUpload() {
     const isValidSize = file.size <= 5 * 1024 * 1024; // 5 MB
 
     if (!isXlsx) {
-      setUploadStatus("Error: Only .xlsx files are allowed.");
+      setPopupType("notExcel");
       return;
     }
 
     if (!isValidSize) {
-      setUploadStatus("Error: File size must be 5MB or less.");
+      setPopupType("notExcel"); // Assuming size error is treated as notExcel for now
       return;
     }
 
-     setFile(file); // store the full file object
+    // Placeholder for template mismatch logic
+    // Example: if (/* template check fails */) {
+    //   setPopupType("differentTemplate");
+    //   return;
+    // }
+
+    setFile(file);// store the full file object
     setUploadStatus("Uploading...");
     setTimeout(() => {
       setUploadStatus("Success");
@@ -172,26 +175,41 @@ function BulkUpload() {
 
   const handleFinish = () => {
     console.log("Import process complete");
-    navigate("/leads");
+    setPopupType("onFinish");
+    // navigate("/leads");
   };
+
   const handlePreview = () => {
     console.log("Preview file:", file.name);
-    // Optional: parse file and show data preview (via a modal, table, etc.)
   };
-  
+
   const handleReupload = () => {
     if (fileInputRef.current) {
-      fileInputRef.current.value = null; // reset to allow reselecting the same file
+      fileInputRef.current.value = null;
       fileInputRef.current.click();
     }
   };
+
   const handleDelete = () => {
     setFile(null);
     setUploadStatus(null);
   };
 
+  const handleClosePopup = () => {
+    if (popupType === "onFinish") {
+      navigate("/leads"); // Navigate to /leads after closing the onFinish popup
+    }
+    setPopupType(null);
+  };
+
+  const handleDownloadTemplate = () => {
+    // Trigger template download
+    window.location.href = "/Bulk_Upload_Template.xlsx";
+    setPopupType(null);
+  };
+
   return (
-    <div className="flex flex-row justify-around mt-[25px]">
+    <div className="flex flex-row w-[100%] justify-center items-center mt-[25px]">
       <div>
         <BulkStepper
           steps={steps}
@@ -212,20 +230,12 @@ function BulkUpload() {
           handleDelete={handleDelete}
           file={file} // Pass File Object
           fileInputRef={fileInputRef}
+          popupType={popupType}
+          handleClosePopup={handleClosePopup}
+          handleDownloadTemplate={handleDownloadTemplate}
         />
       </div>
-      <div>
-        <a href="/Bulk_Upload_Template.xlsx" download>
-          <CustomButton
-            text="Download template file"
-            variant="secondary"
-            endIcon={false}
-            iconImg={BulkTemplateIcon}
-            width="225px"
-          />
-        </a>
-      </div>
-    </div>
+          </div>
   );
 }
 
