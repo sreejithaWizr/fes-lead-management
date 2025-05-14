@@ -3,9 +3,10 @@ import { createSlice } from '@reduxjs/toolkit';
 const columns = [
     { column: "userName", label: "Name", id: "userName", showSort: true, isDrag: false, isFilter: true },
     { column: "userRole", label: "Role", id: "userRole", showSort: true, isDrag: false, isFilter: true },
+    { column: "orgName", label: "Org Name", id: "orgName", showSort: true, isDrag: false, isFilter: true },
+    { column: "orgType", label: "Org Type", id: "orgType", showSort: true, isDrag: false, isFilter: true },
     { column: "userStatus", label: "Status", id: "userStatus", showSort: true, isDrag: false, isFilter: true },
     { column: "userBranch", label: "Branch", id: "userBranch", showSort: true, isDrag: false, isFilter: true },
-    { column: "leadSource", label: "Lead Source", id: "leadSource", showSort: true, isDrag: false, isFilter: true },
     { column: "action", label: "Actions", id: "action", showSort: false, isDrag: false, isFilter: false },
 ];
 

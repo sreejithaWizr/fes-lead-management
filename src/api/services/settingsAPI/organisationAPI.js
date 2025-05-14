@@ -25,3 +25,8 @@ export const updateOrganisation = (id, payload) => {
 export const getOrganisationList = (payload) => {
     return apiClient.post('api/LeadListView', payload);
   };
+
+export const createOrganisation = (payload) => {
+    return apiClient.post('api/Organization', payload);
+};
+

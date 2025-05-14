@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { CustomInputField, CustomDropDown, CustomDatePicker, CustomCheckboxField, CustomToggle } from "react-mui-tailwind";
-import { getFESUser, getPriority } from "../../../api/services/masterAPIs/createLeadApi"
+import { getCountry, getFESUser, getOrganization, getParentOrganisation, getPriority, getState } from "../../../api/services/masterAPIs/createLeadApi"
 import { data } from 'autoprefixer';
 import EditableFieldWrapper from '../../../utils/EditableFieldWrapper';
+import { CloudCog } from 'lucide-react';
 
 const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode = "edit" }) => {
   const isEditable = mode === "edit";
@@ -12,24 +13,27 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
   const [userOptions, setUserOptions] = useState([]);
 
   const [typeOptions, setTypeOptions] = useState([]);
-  const [regionOptions, setRegionOptions] = useState([]);
+  // const [countryOptions, setcountryOptions] = useState([]);
   const [oganisationOptions, setOrganaisationOptions] = useState([]);
   const [serviceOptions, setServiceOptions] = useState([]);
   const [stateOptions, setStateOptions] = useState([]);
   const [countryOptions, setCountryOptions] = useState([]);
-  const [selectedPriorityOption, setSelectedPriorityOption] = useState("");
-  const [areaOfStudyOptions, setAreaOfStudyOptions] = useState([]);
 
   useEffect(() => {
     const fetchDropdownData = async () => {
       try {
-        const [userRes, priorityRes] = await Promise.allSettled([
-          getFESUser(),
-          getPriority(),
+        const [countryRes, orgRes, stateRes] = await Promise.allSettled([
+          getCountry(),
+          getOrganization(),
+          getState(),
+          getParentOrganisation()
         ]);
 
-        setUserOptions(userRes?.value?.data?.data || []);
-        setTypeOptions(priorityRes?.value?.data?.data || []);
+        console.log("state", stateRes)
+        setCountryOptions(countryRes?.value?.data?.data || []);
+        setTypeOptions(orgRes?.value?.data?.data || []);
+        setStateOptions(stateRes?.value?.data?.data || []);
+        setOrganaisationOptions(orgRes?.value?.data?.data || []);
       } catch (err) {
         console.error('Error loading dropdown data:', err);
       }
@@ -91,14 +95,14 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
           />
         </div>
 
-        <div className="form-field">
+        {/* <div className="form-field">
           <CustomDropDown
             label="Country/Region"
-            options={regionOptions}
+            options={countryOptions}
             required={true}
             placeHolder="Select"
-            value={regionOptions?.find(option => option.id === values.region) || ""}
-            // value={isEditable ? selectedPriorityOption : (regionOptions?.find(option => option.id === values.region) || "")}
+            value={countryOptions?.find(option => option.id === values.region) || ""}
+            // value={isEditable ? selectedPriorityOption : (countryOptions?.find(option => option.id === values.region) || "")}
             disabled={!isEditable && !isCreateMode}
             onChange={(value) => {
               setFieldValue('region', value?.target?.value?.id); // update formik value
@@ -107,7 +111,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
             hasError={touched.region && Boolean(errors.region)}
             errorMessage={touched.region && errors.region}
           />
-        </div>
+        </div> */}
 
         <div className="form-field">
           <CustomInputField
@@ -210,13 +214,13 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
           <CustomDropDown
             label="Servise Enabled"
             options={serviceOptions}
-            required={true}
+            required={false}
             multiple={true}
             placeHolder="Select"
             // value={defaultMultiValue}
             // value={serviceOptions?.find(option => option?.id === values?.preferredDestination) || ""}
             value={isEditable ? defaultMultiValue : serviceOptions?.filter(option => values?.service_enabled?.includes(option?.id)) || []}
-            disabled={!isEditable}
+            // disabled={!isEditable}
             onChange={(value) => {
               setDefaultMultiValue(value.target.value); // Update dropdown visible values
               // setFieldValue('service_enabled', value.target.value)
@@ -302,7 +306,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
             showAsterisk={false}
             placeHolder="Select"
             value={stateOptions?.find(option => option.id === values.state) || ""}
-            disabled={!isEditable}
+            // disabled={!isEditable}
             onChange={(value) => {
               setFieldValue('state', value.target.value);
             }}
@@ -335,7 +339,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
             showAsterisk={false}
             placeHolder="Select"
             value={countryOptions?.find(option => option?.id === values?.country) || ""}
-            disabled={!isEditable}
+            // disabled={!isEditable}
             onChange={(value) => {
               setFieldValue('country', value.target.value?.id);
             }}
@@ -347,7 +351,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
 
         <div className="form-field">
           <CustomInputField
-            state={isEditable ? "default" : "non-editable"}
+            state={isEditable || isCreateMode ? "default" : "non-editable"}
             label="GST No"
             value={values.gst_no}
             placeholder="Enter GST number"

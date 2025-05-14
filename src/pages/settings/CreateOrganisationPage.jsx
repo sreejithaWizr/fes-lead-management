@@ -8,6 +8,7 @@ import RightArrowIcon from "../../assets/arrow-right.svg";
 import OrganisationBasicInfoForm from '../../components/forms/createOrganisation/orgBasicInfoForm';
 import OrganisationAccountInfoForm from '../../components/forms/createOrganisation/orgAccountInfoForm';
 import { validationSchema } from '../../components/forms/createOrganisation/schema';
+import { createOrganisation } from '../../api/services/settingsAPI/organisationAPI';
 export const formRef = React.createRef();
 
 const CreateOrganisationPage = () => {
@@ -40,7 +41,7 @@ const CreateOrganisationPage = () => {
         // Basic Information
         orgName: '',
         type: '',
-        region: '',
+        // region: '',
         business_mail: '',
         mobileNumber: '',
         primary_admin_user_name: '',
@@ -77,7 +78,7 @@ const CreateOrganisationPage = () => {
         const payload = {
             orgName: values?.orgName,
             type: values?.type?.name,
-            region: values?.region?.name,
+            // region: values?.region?.name,
             business_mail: values?.business_mail,
             mobileNumber: values?.mobileNumber,
             primary_admin_user_name: values?.primary_admin_user_name,
@@ -103,7 +104,7 @@ const CreateOrganisationPage = () => {
         }
 
         try {
-            const response = await createLead(payload);
+            const response = await createOrganisation(payload);
             console.log('User created:', response.data);
             if (response?.data?.succeeded === true) {
                 navigate("/settings")
@@ -146,6 +147,7 @@ const CreateOrganisationPage = () => {
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
                 innerRef={formRef}
+                
             // enableReinitialize={true}
             >
                 {({
