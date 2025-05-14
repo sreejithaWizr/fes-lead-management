@@ -13,9 +13,6 @@ const CreateRole = () => {
 
     const navigate = useNavigate()
 
-
-    
-
     const initialValues = {
         //Role Info
         roleName: '',
@@ -58,10 +55,6 @@ const CreateRole = () => {
         leadDelete: false,
 
     };
-
-    useEffect(() => {
-        
-    })
 
     const handleSubmit = async (values, { setSubmitting }) => {
 

@@ -4,6 +4,10 @@ import { Formik, Form } from 'formik';
 import RoleInformationForm from '../createRole/RoleInformationForm';
 import RoleAccessPermission from '../createRole/RoleAccessPermission';
 import * as Yup from 'yup';
+import {CustomButton} from 'react-mui-tailwind'
+import { useNavigate } from 'react-router-dom';
+import LeftArrowIcon from "../../../assets/arrow-left.svg";
+import RightArrowIcon from "../../../assets/arrow-right.svg";
 
 const initialAccess = {
     "Lead Management Module": {
@@ -156,6 +160,8 @@ const initialAccess = {
 
 const RoleFormPage = () => {
 
+    const navigate = useNavigate();
+
     const roleSchema = Yup.object().shape({
         roleName: Yup.string().required('Required'),
         roleType: Yup.string().required('Required'),
@@ -167,38 +173,57 @@ const RoleFormPage = () => {
         description: Yup.string()
     });
 
+    const handleSubmit = (values) => {
+        console.log(values);
+        // alert(values)
+    }
+
+    const handleBack = () => {
+        navigate("/settings?tab=Role+Management")
+    }
+
 
     return (
         <Formik
             initialValues={{
                 roleName: '',
                 roleType: '',
-                parentRole:'',
-                copyRoleTemplte:'',
-                insertionMode:'',
-                organisation:'',
-                hierarchyLevel:'',
+                parentRole: '',
+                copyRoleTemplte: '',
+                insertionMode: '',
+                organisation: '',
+                hierarchyLevel: '',
                 description: '',
                 access: initialAccess
             }}
             validationSchema={roleSchema}
-            onSubmit={(values) => {
-                console.log("Submitted Payload:", values);
-                alert(JSON.stringify(values, null, 2));
-            }}
+            onSubmit={(values) =>handleSubmit(values)}
         >
             {formik => (
                 <Form>
+                    <div className="flex w-full justify-between mb-4">
+                        <div className="flex items-center gap-4">
+                            <img
+                                src={LeftArrowIcon}
+                                alt="FES Logo"
+                                className="size-[24px] rounded-md cursor-pointer"
+                                onClick={handleBack}
+                            />
+                            <div className="flex items-center gap-2">
+                                <h1
+                                    className="font-proxima font-bold text-[28px] leading-[140%] align-middle text-[#17222B]">
+                                    Add new role
+                                </h1>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <CustomButton text="Cancel" variant="secondary" startIcon={false} endIcon={false} onClick={handleBack} />
+                            <CustomButton type="Submit" text="Submit" startIcon={false} endIcon={true} iconImg={RightArrowIcon} />
+                        </div>
+                    </div>
                     <RoleInformationForm {...formik} />
                     <RoleAccessPermission />
-                    <div className="p-4">
-                        <button
-                            type="submit"
-                            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                        >
-                            Submit
-                        </button>
-                    </div>
+
                 </Form>
             )}
         </Formik>

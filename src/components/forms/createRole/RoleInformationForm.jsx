@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CustomInputField, CustomDropDown, CustomDatePicker, CustomCheckboxField } from "react-mui-tailwind";
-import { getFESUser, getPriority } from "../../../api/services/masterAPIs/createLeadApi"
+import { getFESUser, getPriority } from "../../../api/services/masterAPIs/createLeadApi";
+import InfoIcon from '../../../assets/info-icon.svg';
 
 const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode = "edit" }) => {
   
@@ -38,6 +39,9 @@ const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur
         }
     }, [values.priority, priorityOptions]);
 
+    const handlePopUpClick = () => {
+        
+    }
 
     return (
         <div className="form-section animate-fade-in ml-0 mb-6 p-[16px]">
@@ -147,7 +151,7 @@ const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur
                     />
                 </div>
 
-                <div className="form-field">
+                <div className="form-field" style={{flexDirection:"row"}}>
                     <CustomDropDown
                         label="Hierarchy Level"
                         options={userOptions}
@@ -162,6 +166,7 @@ const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         hasError={touched.hierarchyLevel && Boolean(errors.hierarchyLevel)}
                         errorMessage={touched.hierarchyLevel && errors.hierarchyLevel}
                     />
+                    <div style={{marginLeft:"-110px", marginTop:""}}><img onClick={handlePopUpClick} src={InfoIcon}/></div>
                 </div>
 
                 <div className="form-field">

@@ -257,7 +257,7 @@ const RoleManagement = () => {
           <div className="flex items-center gap-4" />
           <div className="flex items-center gap-3">
             <CustomButton text="Create Role" onClick={handleCreateRole} endIcon={false} />
-            <CustomButton variant="icon" showText={false} startIcon={true} endIcon={false} iconImg={FilterIcon} onClick={toggleFilter} />
+            {/* <CustomButton variant="icon" showText={false} startIcon={true} endIcon={false} iconImg={FilterIcon} onClick={toggleFilter} /> */}
           </div>
         </div>
       </div>
