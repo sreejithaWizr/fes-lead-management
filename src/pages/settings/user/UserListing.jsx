@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { CustomTable, CustomPagination, CustomButton, CustomSearch } from 'react-mui-tailwind';
-import EditIcon from "../../assets/edit-icon.svg";
-import DeleteIcon from "../../assets/delete-icon.svg";
-import DeletePopup from '../../utils/DeletePopup';
+import EditIcon from "../../../assets/edit-icon.svg";
+import DeleteIcon from "../../../assets/delete-icon.svg";
+import DeletePopup from '../../../utils/DeletePopup';
+import debounce from "lodash.debounce";
 
 // import userAvatar from "../../assets/user-avatar.png";
-import { getUserList } from '../../api/services/settingsAPI/userAPI';
+import { getUserList } from '../../../api/services/settingsAPI/userAPI';
 
 const UserManagement = () => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -111,11 +112,6 @@ const UserManagement = () => {
     fetchUsersData();
   }, [currentPage]);
 
-  // useEffect(() => {
-  //   setUsers(dummyUsers);
-  //   setTotalPages(1);
-  // }, []);
-
   const handleCreateUser = () => {
     navigate('/users/create');
   };
@@ -132,6 +128,26 @@ const UserManagement = () => {
   const handleDelete = (row) => {
     setSelectedRow(row);
     setIsDeleteOpen(true);
+  };
+
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((value) => {
+        console.log("se", searchTerm, value)
+        fetchLeadsData(filters, rowsPerPage, 1, value);
+      }, 500),
+    [filters, rowsPerPage]
+  );
+
+  const handleChange = (e) => {
+    console.log("search term", e.target.value)
+    const value = e.target.value;
+    setSearchTerm(value);
+
+    if (value.length >= 3 || value.length === 0) {
+      debouncedSearch(value);
+    }
+
   };
 
   const confirmDelete = () => {
@@ -247,14 +263,32 @@ const UserManagement = () => {
             placeHolder="Search"
             width="264px"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onSearch={(term) => {
-              if (term.length >= 3 || term?.length < 2) {
-                setCurrentPage(1);
-                fetchUsersData(rowsPerPage, 1, term);
-              }
+            onChange={(e) => {
+              console.log("inside")
+              setCurrentPage(1);
+              handleChange(e);
             }}
           />
+          {/* <CustomSearch
+            placeHolder="Search"
+            width="264px"
+            value={searchTerm}
+
+            onChange={(e) => {
+              const term = e.target.value;
+              console.log("Search term:", e.target.value);
+              setSearchTerm(term);
+              
+              // Reset only if input is cleared completely
+              if (term.length <= 2) {
+                console.log("term length: ", term.length);
+                setCurrentPage(1);
+                fetchUsersData(rowsPerPage, 1, ""); // load full list again
+              }
+            }} */}
+
+
+          {/* /> */}
 
           <CustomButton text="Add User" onClick={handleCreateUser} endIcon={false} />
         </div>
