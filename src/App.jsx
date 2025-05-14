@@ -16,6 +16,7 @@ import SettingsPage from "./components/SettingsPage";
 import RoleFormPage from "./components/forms/createRole/RoleFormPage";
 import CreateOrganisationPage from "./pages/settings/CreateOrganisationPage";
 import BulkUpload from "./pages/BulkUpload";
+import CreateUserPage from "./pages/settings/user/CreateUser";
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
             <Route path="settings" element={<SettingsPage />} />
             <Route path="settings/organisation/create" element={<CreateOrganisationPage />} />
             <Route path="role-create" element={<RoleFormPage />} />
+            <Route path="users/create" element={<CreateUserPage />} />
             <Route path="*" element={<NotFound />} />
             </Route>
           </Route>

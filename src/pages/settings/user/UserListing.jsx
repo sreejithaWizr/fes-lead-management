@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { CustomTable, CustomPagination, CustomButton, CustomSearch } from 'react-mui-tailwind';
-import EditIcon from "../../assets/edit-icon.svg";
-import DeleteIcon from "../../assets/delete-icon.svg";
+import EditIcon from "../../../assets/edit-icon.svg";
+import DeleteIcon from "../../../assets/delete-icon.svg";
 import DeletePopup from '../../../utils/DeletePopup';
 
 // import userAvatar from "../../assets/user-avatar.png";
