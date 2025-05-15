@@ -116,7 +116,7 @@ const UserManagement = () => {
     customRowsPerPage = rowsPerPage,
     customPage = currentPage,
     customSearchTerm = searchTerm,
-    customFilters = flters
+    customFilters = filters
   ) => {
     const output = customFilters.map(item => ({
       field: item.field,
@@ -165,6 +165,8 @@ const UserManagement = () => {
 
   const confirmDelete = () => {
     if (selectedRow) {
+      console.log("Deleting user:", selectedRow.userName);
+
       // Example: remove from local list
       setUsers((prev) => prev.filter(user => user.id !== selectedRow.id));
     }

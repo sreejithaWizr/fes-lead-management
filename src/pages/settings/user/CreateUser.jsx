@@ -13,19 +13,18 @@ const CreateUserPage = () => {
 
     const navigate = useNavigate();
     const initialValues = {
-        // Lead Information
-        firstName: '',
-        lastName: '',
-        email: '',
-        phoneNumber: '',
-        loginMethod: '',
-        status: '',
-        orgName: '',
-        roles: '',
-        branch: '',
-        managerReportingTo: '',
-        countrySpecialisation: '',
-        contactCenterID: '',
+        userFirstName: '',
+        userLastName: '',
+        userEmail: '',
+        userPhoneNumber: '',
+        userLoginMethod: '',
+        userStatus: '',
+        userOrganisationName: '',
+        userRoles: '',
+        userBranch: '',
+        userManagerReportTo: '',
+        userCountrySpecialisation: '',
+        userContactCenterId: '',
     };
 
     const handleCancel = () => {
@@ -50,32 +49,32 @@ const CreateUserPage = () => {
     const handleSubmit = async (values, { setSubmitting }) => {
         alert("User Created.");
 
-        // const payload = {
-        //     first_name: values?.firstName || '',
-        //     last_name: values?.lastName || '',
-        //     email: values?.email || '',
-        //     secondary_email: values?.secondaryEmail || '',
-        //     mobile_number: values?.mobileNumber || '',
-        //     alternative_number: values?.alternativeNumber || '',
-        //     whatsapp_number: values?.whatsappNumber || '',
-        //     tele_callerid: values?.teleCallerName || null,
-        //     priority_id: values?.priority || null,
-        //     consent: values?.agreeToReceiveBoolean,
-        //     created_at: values?.leadCreated || '',
-        //     created_by: "Admin",
-        // }
+        const payload = {
+            first_name: values?.userFirstName || '',
+            last_name: values?.userLastName || '',
+            email: values?.userEmail || '',
+            phone: values?.userPhoneNumber || '',
+            login_id: values?.userLoginMethod || '',
+            status_id: values?.userStatus || '',
+            org_id: values?.userOrganisationName || '',
+            role_id: values?.userRoles || null,
+            branch_id: values?.userBranch || null,
+            manager_id: values?.userManagerReportTo,
+            country_specialisation: values?.userCountrySpecialisation || '',
+            contact_center_id: values?.userContactCenterId || '',
+        }
 
-        // try {
-        //     const response = await createLead(payload);
-        //     console.log('User created:', response.data);
-        //     if (response?.data?.succeeded === true) {
-        //         navigate("/leads")
-        //     }
-        //     alert("Created")
-        //     // Optional: reset form or show toast
-        // } catch (err) {
-        //     console.error('Error creating user:', err);
-        // }
+        try {
+            const response = await createLead(payload);
+            console.log('User created:', response.data);
+            if (response?.data?.succeeded === true) {
+                navigate("/leads")
+            }
+            alert("Created")
+            // Optional: reset form or show toast
+        } catch (err) {
+            console.error('Error creating user:', err);
+        }
     };
 
     return (
