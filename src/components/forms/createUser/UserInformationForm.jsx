@@ -116,34 +116,42 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                 </div>
 
                 <div className="form-field">
-                    <CustomInputField
-                        state={isEditable || isCreateMode ? "default" : "non-editable"}
+                    <CustomDropDown
                         label="Login Method"
-                        value={values.userLoginMethod}
-                        showAsterisk={false}
+                        options={organisationOptions}
+                        required={false}
+                        placeHolder="Select"
+                        // value={organisationOptions?.find(option => option.id === values.priority) || ""}
+                        value={isEditable ? selectedPriorityOption : (organisationOptions?.find(option => option.id === values.priority) || "")}
+                        disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
-                            setFieldValue('userLoginMethod', value.target.value)
+                            // setFieldValue('priority', value.target.value);
+                            setSelectedPriorityOption(value?.target?.value);   // update local selected object
+                            setFieldValue('userLoginMethod', value?.target?.value?.id); // update formik value
                         }}
-                        placeholder="Enter login method"
-                        onBlur={handleBlur}
+                        onBlur={() => handleBlur({ target: { name: 'userLoginMethod' } })}
                         hasError={touched.userLoginMethod && Boolean(errors.userLoginMethod)}
-                        error={touched.userLoginMethod && errors.userLoginMethod}
+                        errorMessage={touched.userLoginMethod && errors.userLoginMethod}
                     />
                 </div>
 
                 <div className="form-field">
-                    <CustomInputField
-                        state={isEditable || isCreateMode ? "default" : "non-editable"}
+                    <CustomDropDown
                         label="Status"
-                        value={values.userStatus}
-                        showAsterisk={true}
+                        options={organisationOptions}
+                        required={true}
+                        placeHolder="Select"
+                        // value={organisationOptions?.find(option => option.id === values.priority) || ""}
+                        value={isEditable ? selectedPriorityOption : (organisationOptions?.find(option => option.id === values.priority) || "")}
+                        disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
-                            setFieldValue('userStatus', value.target.value)
+                            // setFieldValue('priority', value.target.value);
+                            setSelectedPriorityOption(value?.target?.value);   // update local selected object
+                            setFieldValue('userStatus', value?.target?.value?.id); // update formik value
                         }}
-                        placeholder="Enter status"
-                        onBlur={handleBlur}
+                        onBlur={() => handleBlur({ target: { name: 'userStatus' } })}
                         hasError={touched.userStatus && Boolean(errors.userStatus)}
-                        error={touched.userStatus && errors.userStatus}
+                        errorMessage={touched.userStatus && errors.userStatus}
                     />
                 </div>
 
