@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { CustomTable, CustomPagination, CustomButton, CustomSearch } from 'react-mui-tailwind';
 import EditIcon from "../../../assets/edit-icon.svg";
 import DeleteIcon from "../../../assets/delete-icon.svg";
 import DeletePopup from '../../../utils/DeletePopup';
+import debounce from "lodash.debounce";
 
 // import userAvatar from "../../assets/user-avatar.png";
 import { getUserList } from '../../../api/services/settingsAPI/userAPI';
@@ -24,92 +25,125 @@ const UserManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState([]);
 
-  const dummyUsers = [
-    {
-      id: 1,
-      userName: "Alice Thomas",
-      userRole: "Admin",
-      userStatus: "Active",
-      userBranch: "Kochi",
-      leadSource: "Website",
-    },
-    {
-      id: 2,
-      userName: "Bob Mathew",
-      userRole: "User",
-      userStatus: "Inactive",
-      userBranch: "Bangalore",
-      leadSource: "Referral",
-    },
-    {
-      id: 3,
-      userName: "Catherine Joseph",
-      userRole: "Manager",
-      userStatus: "Pending",
-      userBranch: "Chennai",
-      leadSource: "Event",
-    },
-    {
-      id: 4,
-      userName: "David Raj",
-      userRole: "Admin",
-      userStatus: "Active",
-      userBranch: "Mumbai",
-      leadSource: "Social Media",
-    },
-    {
-      id: 5,
-      userName: "Eva Kurian",
-      userRole: "User",
-      userStatus: "Active",
-      userBranch: "Delhi",
-      leadSource: "Website",
-    },
-    {
-      id: 6,
-      userName: "Faisal Khan",
-      userRole: "User",
-      userStatus: "Inactive",
-      userBranch: "Hyderabad",
-      leadSource: "Direct Visit",
-    },
-    {
-      id: 7,
-      userName: "George Antony",
-      userRole: "Manager",
-      userStatus: "Active",
-      userBranch: "Kolkata",
-      leadSource: "Email Campaign",
-    },
-    {
-      id: 8,
-      userName: "Helen Jacob",
-      userRole: "User",
-      userStatus: "Pending",
-      userBranch: "Pune",
-      leadSource: "Referral",
-    },
-    {
-      id: 9,
-      userName: "Ibrahim Nasar",
-      userRole: "Admin",
-      userStatus: "Active",
-      userBranch: "Trivandrum",
-      leadSource: "Website",
-    },
-    {
-      id: 10,
-      userName: "Jasmine Paul",
-      userRole: "User",
-      userStatus: "Active",
-      userBranch: "Kochi",
-      leadSource: "LinkedIn",
-    }
-  ];
+  // const dummyUsers = [
+  //   {
+  //     id: 1,
+  //     userName: "Alice Thomas",
+  //     userRole: "Admin",
+  //     userStatus: "Active",
+  //     userBranch: "Kochi",
+  //     leadSource: "Website",
+  //   },
+  //   {
+  //     id: 2,
+  //     userName: "Bob Mathew",
+  //     userRole: "User",
+  //     userStatus: "Inactive",
+  //     userBranch: "Bangalore",
+  //     leadSource: "Referral",
+  //   },
+  //   {
+  //     id: 3,
+  //     userName: "Catherine Joseph",
+  //     userRole: "Manager",
+  //     userStatus: "Pending",
+  //     userBranch: "Chennai",
+  //     leadSource: "Event",
+  //   },
+  //   {
+  //     id: 4,
+  //     userName: "David Raj",
+  //     userRole: "Admin",
+  //     userStatus: "Active",
+  //     userBranch: "Mumbai",
+  //     leadSource: "Social Media",
+  //   },
+  //   {
+  //     id: 5,
+  //     userName: "Eva Kurian",
+  //     userRole: "User",
+  //     userStatus: "Active",
+  //     userBranch: "Delhi",
+  //     leadSource: "Website",
+  //   },
+  //   {
+  //     id: 6,
+  //     userName: "Faisal Khan",
+  //     userRole: "User",
+  //     userStatus: "Inactive",
+  //     userBranch: "Hyderabad",
+  //     leadSource: "Direct Visit",
+  //   },
+  //   {
+  //     id: 7,
+  //     userName: "George Antony",
+  //     userRole: "Manager",
+  //     userStatus: "Active",
+  //     userBranch: "Kolkata",
+  //     leadSource: "Email Campaign",
+  //   },
+  //   {
+  //     id: 8,
+  //     userName: "Helen Jacob",
+  //     userRole: "User",
+  //     userStatus: "Pending",
+  //     userBranch: "Pune",
+  //     leadSource: "Referral",
+  //   },
+  //   {
+  //     id: 9,
+  //     userName: "Ibrahim Nasar",
+  //     userRole: "Admin",
+  //     userStatus: "Active",
+  //     userBranch: "Trivandrum",
+  //     leadSource: "Website",
+  //   },
+  //   {
+  //     id: 10,
+  //     userName: "Jasmine Paul",
+  //     userRole: "User",
+  //     userStatus: "Active",
+  //     userBranch: "Kochi",
+  //     leadSource: "LinkedIn",
+  //   }
+  // ];
 
   useEffect(() => {
     fetchUsersData();
   }, [currentPage]);
+
+  const fetchUsersData = (
+    customRowsPerPage = rowsPerPage,
+    customPage = currentPage,
+    customSearchTerm = searchTerm,
+    customFilters = filters
+  ) => {
+    const output = customFilters.map(item => ({
+      field: item.field,
+      operator: typeof item.operator === 'string' ? item.operator : item.operator.name,
+      value: Array.isArray(item.value)
+        ? item.value.map(v => (typeof v === 'string' ? v : v.name))
+        : []
+    }));
+
+    const payload = {
+      filters: output,
+      pageSize: customRowsPerPage,
+      pageNumber: customPage,
+      search: customSearchTerm,
+      filterApplied: customFilters.length > 0
+    };
+
+    getUserList(payload)
+      .then(response => {
+        const responseData = response?.data;
+        setUsers(responseData?.data || []);
+        setTotalPages(responseData?.totalPages || 1);
+      })
+      .catch(error => {
+        console.error('Error fetching users:', error);
+      });
+  };
 
   const handleCreateUser = () => {
     navigate('/users/create');
@@ -145,37 +179,29 @@ const UserManagement = () => {
     fetchUsersData(newRowsPerPage, 1);
   };
 
-  const fetchUsersData = (
-    customRowsPerPage = rowsPerPage,
-    customPage = currentPage,
-    customSearchTerm = searchTerm,
-    customFilters = filters
-  ) => {
-    const output = customFilters.map(item => ({
-      field: item.field,
-      operator: typeof item.operator === 'string' ? item.operator : item.operator.name,
-      value: Array.isArray(item.value)
-        ? item.value.map(v => (typeof v === 'string' ? v : v.name))
-        : []
-    }));
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((value) => {
+        fetchLeadsData(filters, rowsPerPage, 1, value);
+      }, 500),
+    [filters, rowsPerPage] // Do NOT include searchTerm here
+  );
 
-    const payload = {
-      filters: output,
-      pageSize: customRowsPerPage,
-      pageNumber: customPage,
-      search: customSearchTerm,
-      filterApplied: customFilters.length > 0
-    };
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    console.log("value length: ", value.length);
 
-    getUserList(payload)
-      .then(response => {
-        const responseData = response?.data;
-        setUsers(responseData?.data || []);
-        setTotalPages(responseData?.totalPages || 1);
-      })
-      .catch(error => {
-        console.error('Error fetching users:', error);
-      });
+    // Call the debounced function only if the length is 3 or more
+    if (value.length >= 3) {
+      console.log("inside if", value.length)
+      debouncedSearch(value);
+    }
+
+    else if (value.length < 3) {
+      console.log("inside else-if", value.length)
+      fetchUsersData(rowsPerPage, 1, value);
+    }
   };
 
   const getRow = (columnId, value, row = {}) => {
@@ -242,6 +268,15 @@ const UserManagement = () => {
             placeHolder="Search"
             width="264px"
             value={searchTerm}
+            onChange={(e) => {
+              setCurrentPage(1);
+              handleChange(e);
+            }}
+          />
+          {/* <CustomSearch
+            placeHolder="Search"
+            width="264px"
+            value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onSearch={(term) => {
               if (term.length >= 3 || term.length === 0) {
@@ -249,7 +284,7 @@ const UserManagement = () => {
                 fetchUsersData(rowsPerPage, 1, term);
               }
             }}
-          />
+          /> */}
 
           <CustomButton text="Add User" onClick={handleCreateUser} endIcon={false} />
         </div>
