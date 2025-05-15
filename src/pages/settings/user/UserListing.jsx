@@ -116,7 +116,7 @@ const UserManagement = () => {
     customRowsPerPage = rowsPerPage,
     customPage = currentPage,
     customSearchTerm = searchTerm,
-    customFilters = filters
+    customFilters = flters
   ) => {
     const output = customFilters.map(item => ({
       field: item.field,
@@ -165,8 +165,6 @@ const UserManagement = () => {
 
   const confirmDelete = () => {
     if (selectedRow) {
-      console.log("Deleting user:", selectedRow.userName);
-
       // Example: remove from local list
       setUsers((prev) => prev.filter(user => user.id !== selectedRow.id));
     }
@@ -182,7 +180,7 @@ const UserManagement = () => {
   const debouncedSearch = useMemo(
     () =>
       debounce((value) => {
-        fetchLeadsData(filters, rowsPerPage, 1, value);
+        fetchUsersData(filters, rowsPerPage, 1, value);
       }, 500),
     [filters, rowsPerPage] // Do NOT include searchTerm here
   );
@@ -199,7 +197,7 @@ const UserManagement = () => {
     }
 
     else if (value.length < 3) {
-      console.log("inside else-if", value.length)
+      console.log("inside else-if", value.length) 
       fetchUsersData(rowsPerPage, 1, value);
     }
   };
