@@ -18,6 +18,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
   const [serviceOptions, setServiceOptions] = useState([]);
   const [stateOptions, setStateOptions] = useState([]);
   const [countryOptions, setCountryOptions] = useState([]);
+  const [defaultMultiValue, setDefaultMultiValue] = useState([]);
 
   useEffect(() => {
     const fetchDropdownData = async () => {
@@ -54,6 +55,15 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
     setFieldValue('agreeToReceiveBoolean', checked);
   }
 
+  useEffect(() => {
+        if (values?.service_enabled?.length > 0) {
+            const selectedOptions = typeOptions?.filter(option =>
+                values?.service_enabled.includes(option?.id)
+            );
+            setDefaultMultiValue(selectedOptions);
+        }
+    }, [values?.service_enabled, typeOptions]);
+
   return (
     <div className="form-section animate-fade-in ml-0 mb-6">
       <h2 className="font-bold text-[19px] leading-[140%] tracking-[0%] text-[#17222B] font-[Proxima Nova] mb-4">
@@ -83,7 +93,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
             options={typeOptions}
             required={true}
             placeHolder="Select"
-            value={typeOptions?.find(option => option.id === values.priority) || ""}
+            value={typeOptions?.find(option => option.id === values.type) || ""}
             // value={isEditable ? selectedPriorityOption : (typeOptions?.find(option => option.id === values.type) || "")}
             disabled={!isEditable && !isCreateMode}
             onChange={(value) => {
@@ -213,13 +223,13 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
         <div className="form-field">
           <CustomDropDown
             label="Servise Enabled"
-            options={serviceOptions}
+            options={typeOptions}
             required={false}
             multiple={true}
             placeHolder="Select"
             // value={defaultMultiValue}
-            // value={serviceOptions?.find(option => option?.id === values?.preferredDestination) || ""}
-            value={isEditable ? defaultMultiValue : serviceOptions?.filter(option => values?.service_enabled?.includes(option?.id)) || []}
+            // value={typeOptions?.find(option => option?.id === values?.service_enabled) || ""}
+            value={isEditable ? defaultMultiValue : typeOptions?.filter(option => values?.service_enabled?.includes(option?.id)) || []}
             // disabled={!isEditable}
             onChange={(value) => {
               setDefaultMultiValue(value.target.value); // Update dropdown visible values
@@ -308,7 +318,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
             value={stateOptions?.find(option => option.id === values.state) || ""}
             // disabled={!isEditable}
             onChange={(value) => {
-              setFieldValue('state', value.target.value);
+              setFieldValue('state', value.target.value.id);
             }}
             onBlur={() => handleBlur({ target: { name: 'state' } })}
             hasError={touched.state && Boolean(errors.state)}

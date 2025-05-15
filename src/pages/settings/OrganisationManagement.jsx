@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { CustomTable, CustomPagination, CustomButton, CustomOffCanvasModal, CustomSearch } from 'react-mui-tailwind';
@@ -10,10 +10,11 @@ import EditIcon from "../../assets/edit-icon.svg";
 import FilterIcon from "../../assets/filter.svg";
 import FilterContent from '../../pages/FilterContent';
 import { getLeadList } from '../../api/services/leadAPI/leadAPIs';
+import debounce from "lodash.debounce";
 
 
 const OrganisationManagement = () => {
-    
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { columns } = useSelector((state) => state.organisations);
@@ -32,7 +33,7 @@ const OrganisationManagement = () => {
 
     useEffect(() => {
         fetchLeadsData();
-    }, [currentPage]);    
+    }, [currentPage]);
 
 
     // const handleView = () => {
@@ -171,7 +172,7 @@ const OrganisationManagement = () => {
         customPage = currentPage,
         customSearchTerm = searchTerm
     ) => {
-    
+
         const output = customFilters.map(item => ({
             field: item.field,
             operator: typeof item.operator === 'string' ? item.operator : item.operator.name,
@@ -187,7 +188,7 @@ const OrganisationManagement = () => {
             filterApplied: customFilters.length > 0,
             search: customSearchTerm
         };
-        
+
 
         getLeadList(payload)
             .then(response => {
@@ -200,10 +201,30 @@ const OrganisationManagement = () => {
             });
     };
 
+    const debouncedSearch = useMemo(
+        () =>
+            debounce((value) => {
+                console.log("inside", value)
+                fetchLeadsData(filters, rowsPerPage, 1, value);
+            }, 500),
+        [filters, rowsPerPage] // Do NOT include `searchTerm` here
+    );
+
+
+    const handleChange = (e) => {
+        const value = e.target.value;
+        setSearchTerm(value);
+
+        if (value.length >= 3 || value.length === 0) {
+            debouncedSearch(value);
+        }
+
+    };
+
     return (
         <>
             {/* Header */}
-            
+
             <div className="pt-3 flex flex-col">
                 <div className="flex items-center justify-between" />
                 <div className="flex items-center justify-between mb-6">
@@ -211,12 +232,9 @@ const OrganisationManagement = () => {
                         placeHolder="Search"
                         width="264px"
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        onSearch={(term) => {
-                            if (term.length >= 3 || term.length === 0) {
-                                setCurrentPage(1);
-                                fetchLeadsData(filters, rowsPerPage, 1, term);
-                            }
+                        onChange={(e) => {
+                            setCurrentPage(1);
+                            handleChange(e);
                         }}
                     />
 

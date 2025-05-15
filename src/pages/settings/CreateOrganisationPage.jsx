@@ -108,8 +108,12 @@ const CreateOrganisationPage = () => {
             console.log('User created:', response.data);
             if (response?.data?.succeeded === true) {
                 navigate("/settings")
+                alert("Created")
             }
-            alert("Created")
+            else {
+                alert("Creation Failed")
+            }
+            // alert("Created")
             // Optional: reset form or show toast
         } catch (err) {
             console.error('Error creating user:', err);
