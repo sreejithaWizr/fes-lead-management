@@ -73,17 +73,17 @@ const CreateOrganisationPage = () => {
     };
 
     const handleSubmit = async (values) => {
-        // console.log('Form submitted with values:', values);
+        console.log('Form submitted with values:', values);
 
         const payload = {
             orgName: values?.orgName,
-            type: values?.type?.name,
+            type: values?.type,
             // region: values?.region?.name,
             business_mail: values?.business_mail,
             mobileNumber: values?.mobileNumber,
             primary_admin_user_name: values?.primary_admin_user_name,
             admin_mail: values?.admin_mail,
-            parent_org: values?.parent_org?.name,
+            parent_org: values?.parent_org,
             service_enabled: Array.isArray(values?.service_enabled)
                 ? values.service_enabled
                 : [],
@@ -91,8 +91,8 @@ const CreateOrganisationPage = () => {
             notes: values?.notes,
             street: values?.street,
             city: values?.city,
-            state: values?.state?.name,
-            country: values?.country?.name,
+            state: values?.state,
+            country: values?.country,
             gst_no: values?.gst_no,
             primary_poc: values?.primary_poc,
             poc_mobileNumber: values?.poc_mobileNumber,

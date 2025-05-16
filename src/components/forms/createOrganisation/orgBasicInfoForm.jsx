@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { CustomInputField, CustomDropDown, CustomDatePicker, CustomCheckboxField, CustomToggle } from "react-mui-tailwind";
-import { getCountry, getFESUser, getOrganization, getParentOrganisation, getPriority, getState } from "../../../api/services/masterAPIs/createLeadApi"
+import { getCountry, getFESUser, getOrganization, getParentOrganisation, getPriority, getServiceEnabled, getState } from "../../../api/services/masterAPIs/createLeadApi"
 import { data } from 'autoprefixer';
 import EditableFieldWrapper from '../../../utils/EditableFieldWrapper';
 import { CloudCog } from 'lucide-react';
@@ -23,11 +23,12 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
   useEffect(() => {
     const fetchDropdownData = async () => {
       try {
-        const [countryRes, orgRes, stateRes] = await Promise.allSettled([
+        const [countryRes, orgRes, stateRes, serviceRes] = await Promise.allSettled([
           getCountry(),
           getOrganization(),
           getState(),
-          getParentOrganisation()
+          getParentOrganisation(),
+          getServiceEnabled()
         ]);
 
         console.log("state", stateRes)
@@ -35,6 +36,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
         setTypeOptions(orgRes?.value?.data?.data || []);
         setStateOptions(stateRes?.value?.data?.data || []);
         setOrganaisationOptions(orgRes?.value?.data?.data || []);
+        setServiceOptions(serviceRes?.value?.data?.data || []);
       } catch (err) {
         console.error('Error loading dropdown data:', err);
       }
@@ -43,13 +45,6 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
     fetchDropdownData();
   }, []);
 
-  useEffect(() => {
-    if (values.priority && typeOptions?.length > 0) {
-      const selected = typeOptions.find(option => option.id === values.priority);
-      setSelectedPriorityOption(selected || "");
-    }
-  }, [values.priority, typeOptions]);
-
   const handleAgreeToReceiveOnChange = (event) => {
     const { checked } = event.target;
     setFieldValue('agreeToReceiveBoolean', checked);
@@ -57,12 +52,12 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
 
   useEffect(() => {
         if (values?.service_enabled?.length > 0) {
-            const selectedOptions = typeOptions?.filter(option =>
+            const selectedOptions = serviceOptions?.filter(option =>
                 values?.service_enabled.includes(option?.id)
             );
             setDefaultMultiValue(selectedOptions);
         }
-    }, [values?.service_enabled, typeOptions]);
+    }, [values?.service_enabled, serviceOptions]);
 
   return (
     <div className="form-section animate-fade-in ml-0 mb-6">
@@ -223,13 +218,13 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
         <div className="form-field">
           <CustomDropDown
             label="Servise Enabled"
-            options={typeOptions}
+            options={serviceOptions}
             required={false}
             multiple={true}
             placeHolder="Select"
             // value={defaultMultiValue}
-            // value={typeOptions?.find(option => option?.id === values?.service_enabled) || ""}
-            value={isEditable ? defaultMultiValue : typeOptions?.filter(option => values?.service_enabled?.includes(option?.id)) || []}
+            // value={serviceOptions?.find(option => option?.id === values?.service_enabled) || ""}
+            value={isEditable ? defaultMultiValue : serviceOptions?.filter(option => values?.service_enabled?.includes(option?.id)) || []}
             // disabled={!isEditable}
             onChange={(value) => {
               setDefaultMultiValue(value.target.value); // Update dropdown visible values
