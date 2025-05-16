@@ -5,7 +5,7 @@ import UserInformationForm from '../../../components/forms/createUser/UserInform
 import { useNavigate } from 'react-router-dom';
 import { CustomButton } from 'react-mui-tailwind';
 import LeftArrowIcon from "../../../assets/arrow-left.svg";
-import RightArrowIcon from "../../../assets/arrow-right.svg";
+import TickIcon from "../../../assets/tick.svg";
 
 export const formRef = React.createRef();
 
@@ -96,8 +96,8 @@ const EditUserPage = () => {
 
                 <div className="flex items-center gap-3">
                     <CustomButton text="Cancel" variant="secondary" startIcon={false} endIcon={false} onClick={handleCancel} />
-                    <CustomButton text="Submit" startIcon={false} endIcon={true} iconImg={RightArrowIcon} onClick={handleFormSubmit} />
-                </div>
+                    <CustomButton text="Update" startIcon={true} endIcon={false} iconImg={TickIcon} onClick={handleFormSubmit} />
+                </div> 
             </div>
 
             <Formik
