@@ -10,10 +10,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
 
   const isCreateMode = mode === "create";
 
-  const [userOptions, setUserOptions] = useState([]);
-
   const [typeOptions, setTypeOptions] = useState([]);
-  // const [countryOptions, setcountryOptions] = useState([]);
   const [oganisationOptions, setOrganaisationOptions] = useState([]);
   const [serviceOptions, setServiceOptions] = useState([]);
   const [stateOptions, setStateOptions] = useState([]);
@@ -45,10 +42,6 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
     fetchDropdownData();
   }, []);
 
-  const handleAgreeToReceiveOnChange = (event) => {
-    const { checked } = event.target;
-    setFieldValue('agreeToReceiveBoolean', checked);
-  }
 
   useEffect(() => {
         if (values?.service_enabled?.length > 0) {
@@ -59,6 +52,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
         }
     }, [values?.service_enabled, serviceOptions]);
 
+    
   return (
     <div className="form-section animate-fade-in ml-0 mb-6">
       <h2 className="font-bold text-[19px] leading-[140%] tracking-[0%] text-[#17222B] font-[Proxima Nova] mb-4">
