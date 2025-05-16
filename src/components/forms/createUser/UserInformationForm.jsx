@@ -3,28 +3,47 @@ import { CustomInputField, CustomDropDown } from "react-mui-tailwind";
 // import { getFESUser, getPriority } from "../../../api/services/masterAPIs/createLeadApi"
 // import { data } from 'autoprefixer';
 // import EditableFieldWrapper from '../../../utils/EditableFieldWrapper';
-import { getOrganisation } from '../../../api/services/masterAPIs/createUserApi';
+import { getFESManager, getLoginMethod, getOrganisation, getUserRole, getBranch, getStatus, getCountry } from '../../../api/services/masterAPIs/createUserApi';
 
 const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode = "edit" }) => {
     const isEditable = mode === "edit";
 
     const isCreateMode = mode === "create";
 
+    const [loginMethodOptions, setLoginMethodOptions] = useState([]);
+    const [statusOptions, setStatusOptions] = useState([]);
     const [organisationOptions, setOrganisationOptions] = useState([]);
+    const [userRoleOptions, setUserRoleOptions] = useState([]);
+    const [branchOptions, setBranchOptions] = useState([]);
+    const [managerOptions, setManagerOptions] = useState([]);
+    const [countryOptions, setCountryOptions] = useState([]);
 
     const [priorityOptions, setPriorityOptions] = useState([]);
     const [selectedPriorityOption, setSelectedPriorityOption] = useState("");
+    
 
     useEffect(() => {
         const fetchDropdownData = async () => {
             try {
-                const [orgResult] = await Promise.allSettled([
+                const [loginResult, statusResult, orgResult, userRoleResult, branchResult, managerResult, countryResult] = await Promise.allSettled([
                     // getFESUser(),
                     // getPriority(),
+                    getLoginMethod(),
+                    getStatus(),
                     getOrganisation(),
+                    getUserRole(),
+                    getBranch(),
+                    getFESManager(),
+                    getCountry(),
                 ]);
 
+                setLoginMethodOptions(loginResult?.value?.data?.data || []);
+                setStatusOptions(statusResult?.value?.data?.data || []);
                 setOrganisationOptions(orgResult?.value?.data?.data || []);
+                setUserRoleOptions(userRoleResult?.value?.data?.data || []);
+                setBranchOptions(branchResult?.value?.data?.data || []);
+                setManagerOptions(managerResult?.value?.data?.data || []);
+                setCountryOptions(countryResult?.value?.data?.data || []);
             } catch (err) {
                 console.error('Error loading dropdown data:', err);
             }
@@ -40,10 +59,10 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
         }
     }, [values.priority, priorityOptions]);
 
-    const handleAgreeToReceiveOnChange = (event) => {
-        const { checked } = event.target;
-        setFieldValue('agreeToReceiveBoolean', checked);
-    }
+    // const handleAgreeToReceiveOnChange = (event) => {
+    //     const { checked } = event.target;
+    //     setFieldValue('agreeToReceiveBoolean', checked);
+    // }
 
     return (
         <div className="form-section animate-fade-in ml-0 mb-6">
@@ -118,11 +137,11 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                 <div className="form-field">
                     <CustomDropDown
                         label="Login Method"
-                        options={organisationOptions}
+                        options={loginMethodOptions}
                         required={false}
                         placeHolder="Select"
                         // value={organisationOptions?.find(option => option.id === values.priority) || ""}
-                        value={isEditable ? selectedPriorityOption : (organisationOptions?.find(option => option.id === values.priority) || "")}
+                        value={isEditable ? selectedPriorityOption : (loginMethodOptions?.find(option => option.id === values.priority) || "")}
                         disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
                             // setFieldValue('priority', value.target.value);
@@ -138,11 +157,11 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                 <div className="form-field">
                     <CustomDropDown
                         label="Status"
-                        options={organisationOptions}
+                        options={statusOptions}
                         required={true}
                         placeHolder="Select"
                         // value={organisationOptions?.find(option => option.id === values.priority) || ""}
-                        value={isEditable ? selectedPriorityOption : (organisationOptions?.find(option => option.id === values.priority) || "")}
+                        value={isEditable ? selectedPriorityOption : (statusOptions?.find(option => option.id === values.priority) || "")}
                         disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
                             // setFieldValue('priority', value.target.value);
@@ -178,11 +197,11 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                 <div className="form-field">
                     <CustomDropDown
                         label="Roles"
-                        options={priorityOptions}
+                        options={userRoleOptions}
                         required={true}
                         placeHolder="Select"
                         // value={priorityOptions?.find(option => option.id === values.priority) || ""}
-                        value={isEditable ? selectedPriorityOption : (priorityOptions?.find(option => option.id === values.priority) || "")}
+                        value={isEditable ? selectedPriorityOption : (userRoleOptions?.find(option => option.id === values.priority) || "")}
                         disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
                             // setFieldValue('priority', value.target.value);
@@ -198,10 +217,10 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                 <div className="form-field">
                     <CustomDropDown
                         label="Branch"
-                        options={organisationOptions}
+                        options={branchOptions}
                         required={true}
                         placeHolder="Select"
-                        value={organisationOptions?.find(option => option.id === values?.teleCallerName) || ""}
+                        value={branchOptions?.find(option => option.id === values?.teleCallerName) || ""}
                         disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
                             setFieldValue('userBranch', value.target.value?.id);
@@ -215,10 +234,10 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                 <div className="form-field">
                     <CustomDropDown
                         label="Manager Reporting To"
-                        options={organisationOptions}
+                        options={managerOptions}
                         required={true}
                         placeHolder="Select"
-                        value={organisationOptions?.find(option => option.id === values?.teleCallerName) || ""}
+                        value={managerOptions?.find(option => option.id === values?.teleCallerName) || ""}
                         disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
                             setFieldValue('userManagerReportTo', value.target.value?.id);
@@ -232,10 +251,10 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                 <div className="form-field">
                     <CustomDropDown
                         label="Country Specialization"
-                        options={organisationOptions}
+                        options={countryOptions}
                         required={true}
                         placeHolder="Select"
-                        value={organisationOptions?.find(option => option.id === values?.teleCallerName) || ""}
+                        value={countryOptions?.find(option => option.id === values?.teleCallerName) || ""}
                         disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
                             setFieldValue('userCountrySpecialisation', value.target.value?.id);
