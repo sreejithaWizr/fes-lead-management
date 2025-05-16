@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import { useSelector } from 'react-redux';
-import { CustomSearch, CustomDropDown, CustomCheckboxField, CustomDatePicker } from 'react-mui-tailwind';
+import { CustomSearch, CustomDropDown, CustomCheckboxField, CustomDatePicker, CustomButton } from 'react-mui-tailwind';
 import CustomDropdownComponent from './CustomDropdown';
 import { fetchFieldDropdownValues } from '../api/services/masterAPIs/createLeadApi';
+import ClearAllIcon from "../assets/clear-all.svg";
+import TickIcon from "../assets/tick-circle.svg";
 
 const dropdownOptions = ['is', 'is not', 'is empty', 'is not empty', 'contains'];
 // Transform filters for API
@@ -204,8 +206,8 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {}, isFilterOp
               </div>
             </div>
 
-            <div className="flex justify-between pt-4 border-t">
-              <button
+            <div className="flex justify-end gap-2 pt-4 border-t">
+              {/* <button
                 type="button"
                 onClick={() => {
                   resetForm(); // Reset form values
@@ -216,13 +218,22 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {}, isFilterOp
                 className="text-gray-500 text-sm"
               >
                 Clear all
-              </button>
-              <button
+              </button> */}
+              <CustomButton text="Clear all" variant="secondary" onClick={() => {
+                  resetForm(); // Reset form values
+                  setSearchTerm(''); // Reset search input
+                  onApplyFilter([]); // Clear applied filters in parent
+                  onClose(); // Close the modal/drawer
+                }} 
+                iconImg={ClearAllIcon}
+                endIcon={false}  />
+              {/* <button
                 type="submit"
                 className="bg-primary text-white px-4 py-2 rounded text-sm"
               >
                 Apply Filter
-              </button>
+              </button> */}
+              <CustomButton text="Apply Filter" type="submit" iconImg={TickIcon} endIcon={false}  />
             </div>
           </Form>
         );

@@ -23,7 +23,7 @@ export const updateOrganisation = (id, payload) => {
 };
 
 export const getOrganisationList = (payload) => {
-    return apiClient.post('api/LeadListView', payload);
+    return apiClient.post('api/OrganizationListView', payload);
   };
 
 export const createOrganisation = (payload) => {

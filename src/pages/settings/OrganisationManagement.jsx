@@ -11,6 +11,7 @@ import FilterIcon from "../../assets/filter.svg";
 import FilterContent from '../../pages/FilterContent';
 import { getLeadList } from '../../api/services/leadAPI/leadAPIs';
 import debounce from "lodash.debounce";
+import { getOrganisationList } from '../../api/services/settingsAPI/organisationAPI';
 
 
 const OrganisationManagement = () => {
@@ -70,7 +71,7 @@ const OrganisationManagement = () => {
     const getRow = (columnId, value, row = {}) => {
         console.log("bb", row)
         switch (columnId) {
-            case "leadNumber":
+            case "organizationName":
                 return (
                     <div className="flex items-center gap-2">
                         <span className="font-bold cursor-pointer" onClick={() => handleView(value)}>
@@ -78,34 +79,26 @@ const OrganisationManagement = () => {
                         </span>
                     </div>
                 );
-            case "createdAt":
-                return (
-                    <div className="flex items-center gap-2">
-                        <img src={CalenderIcon} alt="Calendar" className="w-4 h-4" />
-                        <span>{value ? new Date(value).toLocaleDateString() : '-'}</span>
-                    </div>
-                );
-            case "mobileNumber":
-                return (
-                    <div className="flex items-center gap-2">
-                        <img src={PhoneIcon} alt="Phone" className="w-4 h-4" />
-                        <span>{value}</span>
-                    </div>
-                );
-            case "email":
-                return (
-                    <div className="flex items-center gap-2">
-                        <img src={MailIcon} alt="Mail" className="w-4 h-4" />
-                        <span>{value}</span>
-                    </div>
-                );
-            case "location":
-                return (
-                    <div className="flex items-center gap-2">
-                        <img src={LocationIcon} alt="Location" className="w-4 h-4" />
-                        <span>{value}</span>
-                    </div>
-                );
+            case "status":
+  return (
+    <span
+      className={`inline-flex items-center justify-center font-bold ${getStatusClass(value)}`}
+      style={{
+        fontSize: "11px",
+        lineHeight: "15.4px", // 140% of 11px
+        fontFamily: "Proxima Nova, sans-serif",
+        width: value ? '56px' : '64px',
+        height: '23px',
+        padding: '4px 12px',
+        borderRadius: '4px', // Assuming Corner/Small = 4px
+      }}
+    >
+      {value ? "Active" : "Inactive"}
+    </span>
+  );
+
+
+
             case "action":
                 return (
                     <div className="flex items-center gap-2">
@@ -121,6 +114,18 @@ const OrganisationManagement = () => {
                 return value;
         }
     };
+
+    const getStatusClass = (status) => {
+  switch (status) {
+    case true:
+      return 'text-[#14AE5C] bg-[#EBF5ED]';
+    case false:
+      return 'text-[#EC221F] bg-[#FDE9E9]';
+    default:
+      return 'text-gray-700 bg-gray-100';
+  }
+};
+
 
     const handleEdit = (row) => {
         console.log("Row data:", row);
@@ -144,20 +149,6 @@ const OrganisationManagement = () => {
     //     }
     // };
 
-    // const getStatusClass = (status) => {
-    //     switch (status) {
-    //         case 'Potential':
-    //             return 'status-potential';
-    //         case 'Inactive':
-    //             return 'status-inactive';
-    //         case 'Enrolled':
-    //             return 'status-enrolled';
-    //         case 'May be Prospective':
-    //             return 'status-prospective';
-    //         default:
-    //             return value;
-    //     }
-    // };
 
     const handleRowsPerPageChange = (newRowsPerPage) => {
         setRowsPerPage(newRowsPerPage);
@@ -190,7 +181,7 @@ const OrganisationManagement = () => {
         };
 
 
-        getLeadList(payload)
+        getOrganisationList(payload)
             .then(response => {
                 const responseData = response?.data;
                 setLeads(responseData?.data || []);

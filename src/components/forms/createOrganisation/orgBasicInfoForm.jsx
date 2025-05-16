@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { CustomInputField, CustomDropDown, CustomDatePicker, CustomCheckboxField, CustomToggle } from "react-mui-tailwind";
-import { getCountry, getFESUser, getOrganization, getParentOrganisation, getPriority, getServiceEnabled, getState } from "../../../api/services/masterAPIs/createLeadApi"
-import { data } from 'autoprefixer';
-import EditableFieldWrapper from '../../../utils/EditableFieldWrapper';
-import { CloudCog } from 'lucide-react';
+import { CustomInputField, CustomDropDown, CustomToggle } from "react-mui-tailwind";
+import { getCountry, getOrganization, getParentOrganisation, getServiceEnabled, getState } from "../../../api/services/masterAPIs/createLeadApi"
 
 const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode = "edit" }) => {
   const isEditable = mode === "edit";
 
   const isCreateMode = mode === "create";
 
-  const [userOptions, setUserOptions] = useState([]);
-
   const [typeOptions, setTypeOptions] = useState([]);
-  // const [countryOptions, setcountryOptions] = useState([]);
   const [oganisationOptions, setOrganaisationOptions] = useState([]);
   const [serviceOptions, setServiceOptions] = useState([]);
   const [stateOptions, setStateOptions] = useState([]);
@@ -23,7 +17,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
   useEffect(() => {
     const fetchDropdownData = async () => {
       try {
-        const [countryRes, orgRes, stateRes, serviceRes] = await Promise.allSettled([
+        const [countryRes, orgRes, stateRes, parentOrgRes, serviceRes] = await Promise.allSettled([
           getCountry(),
           getOrganization(),
           getState(),
@@ -31,11 +25,10 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
           getServiceEnabled()
         ]);
 
-        console.log("state", stateRes)
         setCountryOptions(countryRes?.value?.data?.data || []);
         setTypeOptions(orgRes?.value?.data?.data || []);
         setStateOptions(stateRes?.value?.data?.data || []);
-        setOrganaisationOptions(orgRes?.value?.data?.data || []);
+        setOrganaisationOptions(parentOrgRes?.value?.data?.data || []);
         setServiceOptions(serviceRes?.value?.data?.data || []);
       } catch (err) {
         console.error('Error loading dropdown data:', err);
@@ -44,11 +37,6 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
 
     fetchDropdownData();
   }, []);
-
-  const handleAgreeToReceiveOnChange = (event) => {
-    const { checked } = event.target;
-    setFieldValue('agreeToReceiveBoolean', checked);
-  }
 
   useEffect(() => {
         if (values?.service_enabled?.length > 0) {
@@ -247,7 +235,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
             label="Status"
             position="right"
             checked={values?.status}
-            onChange={(e) => setFieldValue("notes", e)}
+            onChange={(e) => setFieldValue("status", e)}
           />
         </div>
 
