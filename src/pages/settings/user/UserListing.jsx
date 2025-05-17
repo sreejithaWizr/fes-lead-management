@@ -25,91 +25,45 @@ const UserManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState([]);
 
-  // const dummyUsers = [
-  //   {
-  //     id: 1,
-  //     userName: "Alice Thomas",
-  //     userRole: "Admin",
-  //     userStatus: "Active",
-  //     userBranch: "Kochi",
-  //     leadSource: "Website",
-  //   },
-  //   {
-  //     id: 2,
-  //     userName: "Bob Mathew",
-  //     userRole: "User",
-  //     userStatus: "Inactive",
-  //     userBranch: "Bangalore",
-  //     leadSource: "Referral",
-  //   },
-  //   {
-  //     id: 3,
-  //     userName: "Catherine Joseph",
-  //     userRole: "Manager",
-  //     userStatus: "Pending",
-  //     userBranch: "Chennai",
-  //     leadSource: "Event",
-  //   },
-  //   {
-  //     id: 4,
-  //     userName: "David Raj",
-  //     userRole: "Admin",
-  //     userStatus: "Active",
-  //     userBranch: "Mumbai",
-  //     leadSource: "Social Media",
-  //   },
-  //   {
-  //     id: 5,
-  //     userName: "Eva Kurian",
-  //     userRole: "User",
-  //     userStatus: "Active",
-  //     userBranch: "Delhi",
-  //     leadSource: "Website",
-  //   },
-  //   {
-  //     id: 6,
-  //     userName: "Faisal Khan",
-  //     userRole: "User",
-  //     userStatus: "Inactive",
-  //     userBranch: "Hyderabad",
-  //     leadSource: "Direct Visit",
-  //   },
-  //   {
-  //     id: 7,
-  //     userName: "George Antony",
-  //     userRole: "Manager",
-  //     userStatus: "Active",
-  //     userBranch: "Kolkata",
-  //     leadSource: "Email Campaign",
-  //   },
-  //   {
-  //     id: 8,
-  //     userName: "Helen Jacob",
-  //     userRole: "User",
-  //     userStatus: "Pending",
-  //     userBranch: "Pune",
-  //     leadSource: "Referral",
-  //   },
-  //   {
-  //     id: 9,
-  //     userName: "Ibrahim Nasar",
-  //     userRole: "Admin",
-  //     userStatus: "Active",
-  //     userBranch: "Trivandrum",
-  //     leadSource: "Website",
-  //   },
-  //   {
-  //     id: 10,
-  //     userName: "Jasmine Paul",
-  //     userRole: "User",
-  //     userStatus: "Active",
-  //     userBranch: "Kochi",
-  //     leadSource: "LinkedIn",
-  //   }
-  // ];
+  // Dummy data for testing
+  const dummyUsers = [
+    {
+      id: 1,
+      userName: "Alice Thomas",
+      userRole: "Admin",
+      orgName:"123",
+      orgType: "Private",
+      userStatus: "Active",
+      userBranch: "Kochi",
+      leadSource: "Website",
+    },
+    {
+      id: 2,
+      userName: "Bob Mathew",
+      userRole: "User",
+      orgName:"123",
+      orgType: "Public",
+      userStatus: "Inactive",
+      userBranch: "Bangalore",
+      leadSource: "Referral",
+    },
+    {
+      id: 3,
+      userName: "Catherine Joseph",
+      userRole: "Manager",
+      orgName:"123",
+      orgType: "Private",
+      userStatus: "Pending",
+      userBranch: "Chennai",
+      leadSource: "Event",
+    }
+  ];
 
   useEffect(() => {
-    fetchUsersData();
+    // fetchUsersData();
+
+    // mock data
+    setUsers(dummyUsers);
   }, [currentPage]);
 
   const fetchUsersData = (
@@ -199,7 +153,7 @@ const UserManagement = () => {
     }
 
     else if (value.length < 3) {
-      console.log("inside else-if", value.length) 
+      console.log("inside else-if", value.length)
       fetchUsersData(rowsPerPage, 1, value);
     }
   };

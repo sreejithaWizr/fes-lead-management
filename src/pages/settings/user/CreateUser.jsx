@@ -6,12 +6,14 @@ import { useNavigate } from 'react-router-dom';
 import { CustomButton } from 'react-mui-tailwind';
 import LeftArrowIcon from "../../../assets/arrow-left.svg";
 import RightArrowIcon from "../../../assets/arrow-right.svg";
+import { createUser } from '../../../api/services/masterAPIs/createUserApi';
 
 export const formRef = React.createRef();
 
 const CreateUserPage = () => {
 
     const navigate = useNavigate();
+
     const initialValues = {
         userFirstName: '',
         userLastName: '',
@@ -46,8 +48,8 @@ const CreateUserPage = () => {
         }
     };
 
-    const handleSubmit = async (values, { setSubmitting }) => {
-        alert("User Created.");
+    const handleSubmit = async (values) => {
+        console.log('Form submitted with values:', values);
 
         const payload = {
             first_name: values?.userFirstName || '',
@@ -65,10 +67,10 @@ const CreateUserPage = () => {
         }
 
         try {
-            const response = await createLead(payload);
+            const response = await createUser(payload);
             console.log('User created:', response.data);
             if (response?.data?.succeeded === true) {
-                navigate("/leads")
+                navigate("/settings?tab=User+Management")
             }
             alert("Created")
             // Optional: reset form or show toast
@@ -118,30 +120,6 @@ const CreateUserPage = () => {
                     setFieldValue,
                 }) => (
                     <form onSubmit={handleSubmit}>
-                        {/* <ErrorObserver setTabErrors={setTabErrors} /> */}
-                        {/* <div className="pb-2">
-                            <div className="mb-4">
-                                <div className="flex space-x-2">
-                                    {tabs.map((tab) => (
-                                        <div key={tab}>
-                                            <CustomButton
-                                                key={tab}
-                                                text={tab}
-                                                variant="chips"
-                                                rounded="full"
-                                                startIcon={false}
-                                                endIcon={tabErrors[tab] || false}
-                                                iconImg={tabErrors[tab] ? WarningIcon : undefined}
-                                                onClick={() => setActiveTab(tab)}
-                                                selected={activeTab === tab}
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div> */}
-
-                        {/* {(activeTab === 'All Info' || activeTab === 'Lead Information') && ( */}
                         <UserInformationForm
                             values={values}
                             errors={errors}
@@ -151,44 +129,6 @@ const CreateUserPage = () => {
                             setFieldValue={setFieldValue}
                             mode='create'
                         />
-                        {/* )} */}
-
-                        {/* {(activeTab === 'All Info' || activeTab === 'Education Qualification') && (
-                            <EducationQualificationForm
-                                values={values}
-                                errors={errors}
-                                touched={touched}
-                                handleChange={handleChange}
-                                handleBlur={handleBlur}
-                                setFieldValue={setFieldValue}
-                            />
-                        )} */}
-
-                        {/* {(activeTab === 'All Info' || activeTab === 'Lead Status') && (
-                            <LeadStatusForm
-                                values={values}
-                                errors={errors}
-                                touched={touched}
-                                handleChange={handleChange}
-                                handleBlur={handleBlur}
-                                setFieldValue={setFieldValue}
-                            />
-                        )}
-
-                        {(activeTab === 'All Info' || activeTab === 'Lead Source') && (
-                            <LeadSourceForm
-                                values={values}
-                                errors={errors}
-                                touched={touched}
-                                handleChange={handleChange}
-                                handleBlur={handleBlur}
-                                setFieldValue={setFieldValue}
-                            />
-                        )} */}
-                        {/* {( activeTab === "Opportunity" && (
-                            <LeadOpportunity leadID={3}/>
-                        )
-                        )} */}
                     </form>
                 )}
             </Formik>

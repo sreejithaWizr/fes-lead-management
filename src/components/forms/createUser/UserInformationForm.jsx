@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { CustomInputField, CustomDropDown } from "react-mui-tailwind";
-// import { getFESUser, getPriority } from "../../../api/services/masterAPIs/createLeadApi"
 // import { data } from 'autoprefixer';
 // import EditableFieldWrapper from '../../../utils/EditableFieldWrapper';
 import { getFESManager, getLoginMethod, getOrganisation, getUserRole, getBranch, getStatus, getCountry } from '../../../api/services/masterAPIs/createUserApi';
@@ -20,14 +19,12 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
     const [priorityOptions, setPriorityOptions] = useState([]);
     const [selectedPriorityOption, setSelectedPriorityOption] = useState("");
-    
+
 
     useEffect(() => {
         const fetchDropdownData = async () => {
             try {
                 const [loginResult, statusResult, orgResult, userRoleResult, branchResult, managerResult, countryResult] = await Promise.allSettled([
-                    // getFESUser(),
-                    // getPriority(),
                     getLoginMethod(),
                     getStatus(),
                     getOrganisation(),
@@ -58,11 +55,6 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
             setSelectedPriorityOption(selected || "");
         }
     }, [values.priority, priorityOptions]);
-
-    // const handleAgreeToReceiveOnChange = (event) => {
-    //     const { checked } = event.target;
-    //     setFieldValue('agreeToReceiveBoolean', checked);
-    // }
 
     return (
         <div className="form-section animate-fade-in ml-0 mb-6">
