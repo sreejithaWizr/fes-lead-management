@@ -31,7 +31,7 @@ const UserManagement = () => {
       id: 1,
       userName: "Alice Thomas",
       userRole: "Admin",
-      orgName:"123",
+      orgName: "123",
       orgType: "Private",
       userStatus: "Active",
       userBranch: "Kochi",
@@ -41,7 +41,7 @@ const UserManagement = () => {
       id: 2,
       userName: "Bob Mathew",
       userRole: "User",
-      orgName:"123",
+      orgName: "123",
       orgType: "Public",
       userStatus: "Inactive",
       userBranch: "Bangalore",
@@ -51,7 +51,7 @@ const UserManagement = () => {
       id: 3,
       userName: "Catherine Joseph",
       userRole: "Manager",
-      orgName:"123",
+      orgName: "123",
       orgType: "Private",
       userStatus: "Pending",
       userBranch: "Chennai",
@@ -105,7 +105,7 @@ const UserManagement = () => {
 
   const handleView = (value) => {
     const selectedUser = users.find(user => user.userName === value);
-    navigate(`/users/detailsview/${selectedUser?.id}`);
+    navigate(`/users/view/${selectedUser?.id}`);
   };
 
   const handleEdit = (row) => {
@@ -162,9 +162,6 @@ const UserManagement = () => {
     switch (columnId) {
       case "userName":
         return (
-          // <span className="font-bold cursor-pointer" onClick={() => handleView(value)}>
-          //   {value}
-          // </span>
           <div className="flex items-center gap-3">
             {/* <img
               src={userAvatar}

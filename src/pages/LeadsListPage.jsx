@@ -46,7 +46,6 @@ const LeadsTable = () => {
 
   const handleView = (value) => {
     const selectedLeadId = leads.find(lead => lead.leadNumber === value);
-    console.log("selectedLeadId", selectedLeadId);
     navigate(`/leads/detailsview/${selectedLeadId?.id}`);
   }
 

@@ -18,6 +18,7 @@ import CreateOrganisationPage from "./pages/settings/CreateOrganisationPage";
 import BulkUpload from "./pages/BulkUpload";
 import CreateUserPage from "./pages/settings/user/CreateUser";
 import EditUserPage from "./pages/settings/user/EditUser";
+import ViewUserPage from "./pages/settings/user/ViewUser";
 
 const App = () => {
   return (
@@ -39,6 +40,7 @@ const App = () => {
               <Route path="role-create" element={<RoleFormPage />} />
               <Route path="users/create" element={<CreateUserPage />} />
               <Route path="users/edit/:id" element={<EditUserPage />} />
+              <Route path="users/view/:id" element={<ViewUserPage />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Route>
