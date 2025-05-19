@@ -1,4 +1,3 @@
-// pages/RoleFormPage.tsx
 import React from 'react';
 import { Formik, Form } from 'formik';
 import RoleInformationForm from '../createRole/RoleInformationForm';
@@ -8,155 +7,7 @@ import {CustomButton} from 'react-mui-tailwind'
 import { useNavigate } from 'react-router-dom';
 import LeftArrowIcon from "../../../assets/arrow-left.svg";
 import RightArrowIcon from "../../../assets/arrow-right.svg";
-
-const initialAccess = {
-    "Lead Management Module": {
-        "Lead Form View Permission": {
-            "Lead Information": {
-                "First Name": false,
-                "Last Name": false,
-                "Status": false,
-                "Email": false,
-                "Secondary Email": false,
-                "Mobile Number": false,
-                "Alternative Number": false,
-                "Whatsapp Number": false,
-                "Priority": false,
-                "Tele Caller": false,
-            },
-            "Education Qualification": {
-                "Highest Qualification": false,
-                "Graduation Year": false,
-                "Field of Study ": false,
-                "CGPA/Grade": false,
-                "Work Experience": false,
-                "Intake Year": false,
-                "Intake Month": false,
-                "Preferred Study Destination": false,
-                "Other Countries": false,
-                "Test Training": false,
-                "Test Names": false
-            },
-            "Lead Status": {
-                "Status": false,
-                "Category": false,
-                "Subcategory": false,
-                "Branch": false,
-                "Notes": false,
-            },
-            "Lead Source": {
-                "Source 1": false,
-                "Source 2": false,
-                "Source 3": false,
-                "Source 4": false,
-                "Location 1": false,
-                "Location 2": false,
-                "Vertical": false,
-                "Preferred Study Destination": false,
-                "GCL ID": false,
-                "ZC GAD": false,
-                "Ad ID": false,
-                "Ad Name": false,
-                "Ad Campaign": false,
-                "Key Identifier": false,
-                "Campaign Type": false,
-                "Referrer Name": false,
-                "Referrer Email": false,
-                "Referrer Employee ID": false,
-                "Referrer Phone Number": false,
-                "Lead Form": false,
-                "User Agent": false,
-                "Import Lead": false,
-                "Invoke Blueprint": false,
-                "Verse ID": false,
-                "Desired Program ": false,
-                "Internship Option": false,
-                "Shortlisted Course ID": false,
-                "Preferred Counsellor for FESTech1 Name": false,
-                "Preferred Counsellor for FESTech1 Email Id": false
-            },
-            "Opportunity": {
-                "Country": false,
-                "Opportunity ID": false,
-                "Counsellor": false,
-                "Opportunity Status": false,
-                "Preferred Intake": false,
-            }
-        },
-        "Lead Form Edit Permission": {
-            "Lead Information": {
-                "First Name": false,
-                "Last Name": false,
-                "Status": false,
-                "Email": false,
-                "Secondary Email": false,
-                "Mobile Number": false,
-                "Alternative Number": false,
-                "Whatsapp Number": false,
-                "Priority": false,
-                "Tele Caller": false,
-            },
-            "Education Qualification": {
-                "Highest Qualification": false,
-                "Graduation Year": false,
-                "Field of Study ": false,
-                "CGPA/Grade": false,
-                "Work Experience": false,
-                "Intake Year": false,
-                "Intake Month": false,
-                "Preferred Study Destination": false,
-                "Other Countries": false,
-                "Test Training": false,
-                "Test Names": false
-            },
-            "Lead Status": {
-                "Status": false,
-                "Category": false,
-                "Subcategory": false,
-                "Branch": false,
-                "Notes": false,
-            },
-            "Lead Source": {
-                "Source 1": false,
-                "Source 2": false,
-                "Source 3": false,
-                "Source 4": false,
-                "Location 1": false,
-                "Location 2": false,
-                "Vertical": false,
-                "Preferred Study Destination": false,
-                "GCL ID": false,
-                "ZC GAD": false,
-                "Ad ID": false,
-                "Ad Name": false,
-                "Ad Campaign": false,
-                "Key Identifier": false,
-                "Campaign Type": false,
-                "Referrer Name": false,
-                "Referrer Email": false,
-                "Referrer Employee ID": false,
-                "Referrer Phone Number": false,
-                "Lead Form": false,
-                "User Agent": false,
-                "Import Lead": false,
-                "Invoke Blueprint": false,
-                "Verse ID": false,
-                "Desired Program ": false,
-                "Internship Option": false,
-                "Shortlisted Course ID": false,
-                "Preferred Counsellor for FESTech1 Name": false,
-                "Preferred Counsellor for FESTech1 Email Id": false
-            },
-            "Opportunity": {
-                "Country": false,
-                "Opportunity ID": false,
-                "Counsellor": false,
-                "Opportunity Status": false,
-                "Preferred Intake": false,
-            }
-        }
-    }
-};
+import RoleAccessForm from './RoleAccessForm';
 
 const RoleFormPage = () => {
 
@@ -176,12 +27,176 @@ const RoleFormPage = () => {
     const handleSubmit = (values) => {
         console.log(values);
         // alert(values)
+        console.log("Final Payload to Submit:", JSON.stringify(values, null, 2));
+  // You can post `values` to the API directly
     }
 
     const handleBack = () => {
         navigate("/settings?tab=Role+Management")
     }
 
+    // const roleAPI = {
+    //     roleModules: [
+    //       {
+    //         moduleID: 1,
+    //         moduleName: "Lead Management Module",
+    //         privilege: [
+    //           {
+    //             privilegeID: 1,
+    //             fieldLevel: true,
+    //             privilegeName: "Lead Information",
+    //             fields: [
+    //               {
+    //                 fieldID: 1,
+    //                 fieldName: "First Name",
+    //                 view: true,
+    //                 edit: true,
+    //                 mask: true,
+    //               },
+    //               {
+    //                 fieldID: 2,
+    //                 fieldName: "Second Name",
+    //                 view: true,
+    //                 edit: true,
+    //                 mask: true,
+    //               },
+    //             ],
+    //           },
+    //           {
+    //             privilegeID: 6,
+    //             fieldLevel: false,
+    //             privilegeName: "Others",
+    //             fields: [
+    //               { fieldID: 12, fieldName: "Create Lead", view: true },
+    //               { fieldID: 13, fieldName: "Bulk Transfer Option", view: true },
+    //               { fieldID: 14, fieldName: "Bulk Upload Option", view: true },
+    //             ],
+    //           },
+    //         ],
+    //       },
+    //       {
+    //         moduleID: 2,
+    //         moduleName: "Tech One students",
+    //         privilege: [
+    //           {
+    //             privilegeID: 20,
+    //             fieldLevel: false,
+    //             privilegeName: "Tech Info Access",
+    //             fields: [
+    //               {
+    //                 fieldID: 17,
+    //                 fieldName: "Lead Dashboard",
+    //                 view: true,
+    //               },
+    //             ],
+    //           },
+    //         ],
+    //       },
+    //     ],
+    //   };
+
+    const roleAPI = {
+        roleModules: [
+            {
+                moduleID: 1,
+                moduleName: "Lead Management Module",
+                privilege: [
+                    {
+                        privilegeID: 1,
+                        fieldLevel: true,
+                        privilegeName: "Lead Information",
+                        fields: [
+                            {
+                                fieldID: 1,
+                                fieldName: "First Name",
+                                view: true,
+                                edit: true,
+                                mask: false,
+                            },
+                            {
+                                fieldID: 2,
+                                fieldName: "Last Name",
+                                view: true,
+                                edit: true,
+                                mask: true,
+                            },
+                        ],
+                    },
+                    {
+                        privilegeID: 2,
+                        fieldLevel: true,
+                        privilegeName: "Education Qualification",
+                        fields: [
+                          {
+                            fieldID: 3,
+                            fieldName: "Education Qualification",
+                            view: true,
+                            edit: true,
+                            mask: true,
+                          },
+                          {
+                            fieldID: 4,
+                            fieldName: "Graduation Year",
+                            view: true,
+                            edit: true,
+                            mask: true,
+                          },
+                          {
+                            fieldID: 5,
+                            fieldName: "Field of Study",
+                            view: true,
+                            edit: true,
+                            mask: true,
+                          },
+                          {
+                            fieldID: 6,
+                            fieldName: "CGPA/Grade",
+                            view: true,
+                            edit: true,
+                            mask: true,
+                          },
+                          {
+                            fieldID: 7,
+                            fieldName: "Work Experience",
+                            view: true,
+                            edit: true,
+                            mask: true,
+                          }
+                        ]
+                      },
+                    {
+                        privilegeID: 6,
+                        fieldLevel: false,
+                        privilegeName: "Others",
+                        fields: [
+                            { fieldID: 12, fieldName: "Create Lead", view: true },
+                            { fieldID: 13, fieldName: "Bulk Transfer Option", view: false },
+                            { fieldID: 14, fieldName: "Bulk Upload Option", view: true },
+                        ],
+                    },
+                ],
+            },
+            {
+                moduleID: 2,
+                moduleName: "Tech One students",
+                privilege: [
+                    {
+                        privilegeID: 20,
+                        fieldLevel: false,
+                        privilegeName: "Tech Info Access",
+                        fields: [
+                            {
+                                fieldID: 17,
+                                fieldName: "Lead Dashboard",
+                                view: true,
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
+    };
+    
 
     return (
         <Formik
@@ -194,9 +209,10 @@ const RoleFormPage = () => {
                 organisation: '',
                 hierarchyLevel: '',
                 description: '',
-                access: initialAccess
+                roleModules: roleAPI?.roleModules || [] 
+                // access: initialAccess
             }}
-            validationSchema={roleSchema}
+            // validationSchema={roleSchema}
             onSubmit={(values) =>handleSubmit(values)}
         >
             {formik => (
@@ -222,7 +238,8 @@ const RoleFormPage = () => {
                         </div>
                     </div>
                     <RoleInformationForm {...formik} />
-                    <RoleAccessPermission />
+                    {/* <RoleAccessPermission /> */}
+                    <RoleAccessForm values={formik.values} setFieldValue={formik.setFieldValue}/>
 
                 </Form>
             )}

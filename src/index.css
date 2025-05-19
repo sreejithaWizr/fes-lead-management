@@ -115,7 +115,7 @@
 
 /* inside your styles.css or global.css */
 .custom-scroll::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 .custom-scroll::-webkit-scrollbar-track {
   background: transparent;

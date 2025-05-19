@@ -2,45 +2,50 @@ import React, { useEffect, useState } from 'react';
 import { CustomInputField, CustomDropDown, CustomDatePicker, CustomCheckboxField } from "react-mui-tailwind";
 import { getFESUser, getPriority } from "../../../api/services/masterAPIs/createLeadApi";
 import InfoIcon from '../../../assets/info-icon.svg';
+import { getUserRoleType } from '../../../api/services/masterAPIs/createRoleAPI';
 
 const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode = "edit" }) => {
-  
+
     const isEditable = mode === "edit";
 
     const isCreateMode = mode === "create";
 
+    const [roleTypeOptions, setRoleTypeOptions] = useState([]);
     const [userOptions, setUserOptions] = useState([]);
-
-    const [priorityOptions, setPriorityOptions] = useState([]);
-    const [selectedPriorityOption, setSelectedPriorityOption] = useState("");
+    const [parentRoleOptions, setParentRoleOptions] = useState([]);
+    const [copyRoleTemplateOptions, setCopyRoleTemplateOptions] = useState([]);
+    const [insertionModeOptions, setInsertionModeOptions] = useState([]);
+    const [organisationOptions, setOrganisationOptions] = useState([]);
+    const [hierarchyLevelOptions, setHierarchyLevelOptions] = useState([]);
 
     useEffect(() => {
-        const fetchDropdownData = async () => {
-            try {
-                const [userRes, priorityRes] = await Promise.allSettled([
-                    getFESUser(),
-                    getPriority(),
-                ]);
+      const fetchDropdownData = async () => {
+        try {
+          const [
+            roleTypeRes,
+            parentRoleRes,
+            templateRes,
+            insertionModeRes,
+            organisationRes,
+            hierarchyRes
+          ] = await Promise.allSettled([getUserRoleType(), getPriority()]);
 
-                setUserOptions(userRes?.value?.data?.data || []);
-                setPriorityOptions(priorityRes?.value?.data?.data || []);
-            } catch (err) {
-                console.error('Error loading dropdown data:', err);
-            }
-        };
+          setRoleTypeOptions(roleTypeRes?.value?.data?.data || []);
+          setParentRoleOptions(parentRoleRes?.value?.data?.data || []);
+          setCopyRoleTemplateOptions(templateRes?.value?.data?.data || []);
+          setInsertionModeOptions(insertionModeRes?.value?.data?.data || []);
+          setOrganisationOptions(organisationRes?.value?.data?.data || []);
+          setHierarchyLevelOptions(hierarchyRes?.value?.data?.data || []);
+        } catch (err) {
+          console.error("Error loading dropdown data:", err);
+        }
+      };
 
-        fetchDropdownData();
+      fetchDropdownData();
     }, []);
 
-    useEffect(() => {
-        if (values.priority && priorityOptions?.length > 0) {
-            const selected = priorityOptions.find(option => option.id === values.priority);
-            setSelectedPriorityOption(selected || "");
-        }
-    }, [values.priority, priorityOptions]);
-
     const handlePopUpClick = () => {
-        
+        alert("Clicked")
     }
 
     return (
@@ -69,10 +74,10 @@ const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur
                 <div className="form-field">
                     <CustomDropDown
                         label="Role Type"
-                        options={userOptions}
+                        options={roleTypeOptions}
                         required={true}
                         placeHolder="Select"
-                        value={userOptions?.find(option => option.id === values?.roleType) || ""}
+                        value={roleTypeOptions?.find(option => option.id === values?.roleType) || ""}
                         disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
                             setFieldValue('roleType', value.target.value?.id);
@@ -86,10 +91,10 @@ const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur
                 <div className="form-field">
                     <CustomDropDown
                         label="Parent Role"
-                        options={userOptions}
+                        options={parentRoleOptions}
                         required={true}
                         placeHolder="Select"
-                        value={userOptions?.find(option => option.id === values?.parentRole) || ""}
+                        value={parentRoleOptions?.find(option => option.id === values?.parentRole) || ""}
                         disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
                             setFieldValue('parentRole', value.target.value?.id);
@@ -103,10 +108,10 @@ const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur
                 <div className="form-field">
                     <CustomDropDown
                         label="Copy Role Template"
-                        options={userOptions}
+                        options={copyRoleTemplateOptions}
                         required={false}
                         placeHolder="Select"
-                        value={userOptions?.find(option => option.id === values?.copyRoleTemplate) || ""}
+                        value={copyRoleTemplateOptions?.find(option => option.id === values?.copyRoleTemplate) || ""}
                         disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
                             setFieldValue('copyRoleTemplate', value.target.value?.id);
@@ -120,10 +125,10 @@ const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur
                 <div className="form-field">
                     <CustomDropDown
                         label="Insertion Mode"
-                        options={userOptions}
+                        options={insertionModeOptions}
                         required={true}
                         placeHolder="Select"
-                        value={userOptions?.find(option => option.id === values?.insertionMode) || ""}
+                        value={insertionModeOptions?.find(option => option.id === values?.insertionMode) || ""}
                         disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
                             setFieldValue('insertionMode', value.target.value?.id);
@@ -137,12 +142,12 @@ const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur
                 <div className="form-field">
                     <CustomDropDown
                         label="Organisation"
-                        options={userOptions}
+                        options={organisationOptions}
                         required={true}
                         placeHolder="Select"
-                        value={userOptions?.find(option => option.id === values?.organisation) || ""}
+                        value={organisationOptions?.find(option => option.id === values?.organisation) || ""}
                         disabled={!isEditable && !isCreateMode}
-                        onChange={(value) => { 
+                        onChange={(value) => {
                             setFieldValue('organisation', value.target.value?.id);
                         }}
                         onBlur={() => handleBlur({ target: { name: 'organisation' } })}
@@ -151,13 +156,13 @@ const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur
                     />
                 </div>
 
-                <div className="form-field" style={{flexDirection:"row"}}>
+                <div className="form-field" style={{ flexDirection: "row" }}>
                     <CustomDropDown
                         label="Hierarchy Level"
-                        options={userOptions}
+                        options={hierarchyLevelOptions}
                         required={true}
                         placeHolder="Select"
-                        value={userOptions?.find(option => option.id === values?.hierarchyLevel) || ""}
+                        value={hierarchyLevelOptions?.find(option => option.id === values?.hierarchyLevel) || ""}
                         disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
                             setFieldValue('hierarchyLevel', value.target.value?.id);
@@ -166,11 +171,11 @@ const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         hasError={touched.hierarchyLevel && Boolean(errors.hierarchyLevel)}
                         errorMessage={touched.hierarchyLevel && errors.hierarchyLevel}
                     />
-                    <div style={{marginLeft:"-110px", marginTop:""}}><img onClick={handlePopUpClick} src={InfoIcon}/></div>
+                    <div style={{ marginLeft: "-110px", marginTop: "" }}><img onClick={handlePopUpClick} src={InfoIcon} /></div>
                 </div>
 
                 <div className="form-field">
-                <CustomInputField
+                    <CustomInputField
                         state={isEditable || isCreateMode ? "default" : "non-editable"}
                         label="Description"
                         value={values.firstName}

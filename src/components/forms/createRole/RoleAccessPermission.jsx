@@ -14,6 +14,7 @@ const accessStructure = {
         "Whatsapp Number",
         "Priority",
         "Tele Caller",
+        "Receive Communication"
       ],
       "Education Qualification": [
         "Highest Qualification",
