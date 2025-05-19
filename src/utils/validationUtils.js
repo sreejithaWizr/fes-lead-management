@@ -6,7 +6,7 @@ export const isEmpty = (value) => {
 };
 
 export const isEmailValid = (email) => {
-  const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,10}$/;
   return regex.test(email);
 };
 
@@ -58,7 +58,12 @@ import * as Yup from "yup";
 export const requiredStringField = () => Yup.string().required(`Required`);
 
 export const requiredEmailField = () =>
-  Yup.string().email("Invalid email format").required(`Required`);
+  Yup.string()
+    .required(`Required`)
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,10}$/,
+      "Invalid email format"
+    );
 
 export const optionalEmailField = () =>
   Yup.string().email("Invalid email format").nullable();
