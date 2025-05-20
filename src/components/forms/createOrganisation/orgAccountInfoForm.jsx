@@ -36,7 +36,7 @@ const OrganisationAccountInfoForm = ({
       <FieldArray name="add_account_info">
         {({ push, remove }) => (
           <div className="flex flex-col">
-            {values.add_account_info.map((entry, index) => (
+            {values?.add_account_info?.map((entry, index) => (
               <div
               key={index}
               className="flex flex-row item-center justify-flex-start bg-[#F5F5F5] border p-4 rounded-lg"

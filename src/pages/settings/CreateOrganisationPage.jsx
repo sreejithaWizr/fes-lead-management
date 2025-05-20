@@ -8,6 +8,7 @@ import RightArrowIcon from "../../assets/arrow-right.svg";
 import OrganisationBasicInfoForm from '../../components/forms/createOrganisation/orgBasicInfoForm';
 import OrganisationAccountInfoForm from '../../components/forms/createOrganisation/orgAccountInfoForm';
 import { validationSchema } from '../../components/forms/createOrganisation/schema';
+import { createOrganisation } from '../../api/services/settingsAPI/organisationAPI';
 export const formRef = React.createRef();
 
 const CreateOrganisationPage = () => {
@@ -16,7 +17,6 @@ const CreateOrganisationPage = () => {
     const navigate = useNavigate();
 
     const handleCancel = () => {
-        console.log("here")
         navigate('/settings');
     };
 
@@ -40,7 +40,7 @@ const CreateOrganisationPage = () => {
         // Basic Information
         orgName: '',
         type: '',
-        region: '',
+        // region: '',
         business_mail: '',
         mobileNumber: '',
         primary_admin_user_name: '',
@@ -72,17 +72,17 @@ const CreateOrganisationPage = () => {
     };
 
     const handleSubmit = async (values) => {
-        // console.log('Form submitted with values:', values);
+        console.log('Form submitted with values:', values);
 
         const payload = {
             orgName: values?.orgName,
-            type: values?.type?.name,
-            region: values?.region?.name,
+            type: values?.type,
+            // region: values?.region?.name,
             business_mail: values?.business_mail,
             mobileNumber: values?.mobileNumber,
             primary_admin_user_name: values?.primary_admin_user_name,
             admin_mail: values?.admin_mail,
-            parent_org: values?.parent_org?.name,
+            parent_org: values?.parent_org,
             service_enabled: Array.isArray(values?.service_enabled)
                 ? values.service_enabled
                 : [],
@@ -90,10 +90,11 @@ const CreateOrganisationPage = () => {
             notes: values?.notes,
             street: values?.street,
             city: values?.city,
-            state: values?.state?.name,
-            country: values?.country?.name,
+            state: values?.state,
+            country: values?.country,
             gst_no: values?.gst_no,
             primary_poc: values?.primary_poc,
+            poc_mail: values?.poc_mail,
             poc_mobileNumber: values?.poc_mobileNumber,
 
             // add_account_info: values?.add_account_info?.map(info => ({
@@ -103,19 +104,22 @@ const CreateOrganisationPage = () => {
         }
 
         try {
-            const response = await createLead(payload);
+            const response = await createOrganisation(payload);
             console.log('User created:', response.data);
             if (response?.data?.succeeded === true) {
                 navigate("/settings")
+                // alert("Created")
             }
-            alert("Created")
+            else {
+                // alert("Creation Failed")
+            }
+            // alert("Created")
             // Optional: reset form or show toast
         } catch (err) {
             console.error('Error creating user:', err);
         }
     };
 
-    console.log(isCreateOrganisationPage, "isCreateOrganisationPage")
     return (
         <div className="w-full">
             {isCreateOrganisationPage && (
@@ -146,7 +150,6 @@ const CreateOrganisationPage = () => {
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
                 innerRef={formRef}
-            // enableReinitialize={true}
             >
                 {({
                     values,
@@ -155,7 +158,6 @@ const CreateOrganisationPage = () => {
                     handleChange,
                     handleBlur,
                     handleSubmit,
-                    isSubmitting,
                     setFieldValue,
                 }) => (
                     <form onSubmit={handleSubmit}>
@@ -176,6 +178,7 @@ const CreateOrganisationPage = () => {
                             handleChange={handleChange}
                             handleBlur={handleBlur}
                             setFieldValue={setFieldValue}
+                            mode='create'
                         />
 
                     </form>

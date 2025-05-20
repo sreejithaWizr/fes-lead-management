@@ -8,8 +8,8 @@ import rolesReducer from './roleSlice'
 export const store = configureStore({
   reducer: {
     leads: leadsReducer,
-    organisations: organisationsReducer,
     users: userReducer,
     roles: rolesReducer,
+    organisations: organisationsReducer
   },
 });
