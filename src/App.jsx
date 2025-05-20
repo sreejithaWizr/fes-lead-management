@@ -13,9 +13,9 @@ import EditLeadPage from "./pages/EditLeadPage";
 import Login from "./pages/Login";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import SettingsPage from "./components/SettingsPage";
+import RoleFormPage from "./components/forms/createRole/RoleFormPage";
 import CreateOrganisationPage from "./pages/settings/CreateOrganisationPage";
 import BulkUpload from "./pages/BulkUpload";
-import RoleFormPage from "./components/forms/tesxt2/RoleFormPage";
 import EditOrganisationPage from "./pages/settings/EditOrganisationPage";
 import OrganisationPageDetailView from "./pages/settings/OrganisationPageDetailView";
 

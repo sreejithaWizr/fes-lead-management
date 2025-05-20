@@ -1,122 +1,46 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { CustomTable, CustomPagination, CustomButton, CustomSearch } from 'react-mui-tailwind';
+import { useSelector } from 'react-redux';
+import { CustomTable, CustomPagination, CustomButton, CustomOffCanvasModal, CustomSearch } from 'react-mui-tailwind';
 import EditIcon from "../../assets/edit-icon.svg";
+import FilterIcon from "../../assets/filter.svg";
+import FilterContent from '../../pages/FilterContent';
+import { getLeadList } from '../../api/services/leadAPI/leadAPIs';
+import debounce from "lodash.debounce";
+import { getOrganisationList } from '../../api/services/settingsAPI/organisationAPI';
 import DeleteIcon from "../../assets/delete-icon.svg";
 import DeletePopup from '../../utils/DeletePopup';
-
-// import userAvatar from "../../assets/user-avatar.png";
 import { getUserList } from '../../api/services/settingsAPI/userAPI';
 
+
+
+
 const UserManagement = () => {
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+
+    const navigate = useNavigate();
+    const { columns } = useSelector((state) => state.users);
+    const [user, setUser] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(15);
+    const [totalPages, setTotalPages] = useState(1);  // <-- NEW
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [selectedFilters, setSelectedFilters] = useState({});
+    const [filters, setFilters] = useState([]);
+    const toggleFilter = () => setIsFilterOpen(prev => !prev);
+
+    const [searchTerm, setSearchTerm] = useState('');
+const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { columns } = useSelector((state) => state.users);
-
   const [users, setUsers] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(15);
-  const [totalPages, setTotalPages] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filters, setFilters] = useState([]);
 
-  const dummyUsers = [
-    {
-      id: 1,
-      userName: "Alice Thomas",
-      userRole: "Admin",
-      userStatus: "Active",
-      userBranch: "Kochi",
-      leadSource: "Website",
-    },
-    {
-      id: 2,
-      userName: "Bob Mathew",
-      userRole: "User",
-      userStatus: "Inactive",
-      userBranch: "Bangalore",
-      leadSource: "Referral",
-    },
-    {
-      id: 3,
-      userName: "Catherine Joseph",
-      userRole: "Manager",
-      userStatus: "Pending",
-      userBranch: "Chennai",
-      leadSource: "Event",
-    },
-    {
-      id: 4,
-      userName: "David Raj",
-      userRole: "Admin",
-      userStatus: "Active",
-      userBranch: "Mumbai",
-      leadSource: "Social Media",
-    },
-    {
-      id: 5,
-      userName: "Eva Kurian",
-      userRole: "User",
-      userStatus: "Active",
-      userBranch: "Delhi",
-      leadSource: "Website",
-    },
-    {
-      id: 6,
-      userName: "Faisal Khan",
-      userRole: "User",
-      userStatus: "Inactive",
-      userBranch: "Hyderabad",
-      leadSource: "Direct Visit",
-    },
-    {
-      id: 7,
-      userName: "George Antony",
-      userRole: "Manager",
-      userStatus: "Active",
-      userBranch: "Kolkata",
-      leadSource: "Email Campaign",
-    },
-    {
-      id: 8,
-      userName: "Helen Jacob",
-      userRole: "User",
-      userStatus: "Pending",
-      userBranch: "Pune",
-      leadSource: "Referral",
-    },
-    {
-      id: 9,
-      userName: "Ibrahim Nasar",
-      userRole: "Admin",
-      userStatus: "Active",
-      userBranch: "Trivandrum",
-      leadSource: "Website",
-    },
-    {
-      id: 10,
-      userName: "Jasmine Paul",
-      userRole: "User",
-      userStatus: "Active",
-      userBranch: "Kochi",
-      leadSource: "LinkedIn",
-    }
-  ];
 
-  useEffect(() => {
-    fetchUsersData();
-  }, [currentPage]);
 
-  // useEffect(() => {
-  //   setUsers(dummyUsers);
-  //   setTotalPages(1);
-  // }, []);
+    useEffect(() => {
+        fetchUserData();
+    }, [currentPage]);
 
-  const handleCreateUser = () => {
+
+    const handleCreateUser = () => {
     navigate('/users/create');
   };
 
@@ -129,7 +53,26 @@ const UserManagement = () => {
     navigate(`/users/edit/${row?.id}`);
   };
 
-  const handleDelete = (row) => {
+
+
+    const handleApplyFilter = (newFiltersArray) => {
+        const filterMap = {};
+        newFiltersArray.forEach(({ field, operator, value }) => {
+            filterMap[field] = {
+                condition: operator,
+                value: Array.isArray(value)
+                    ? value.map(v => (typeof v === 'string' ? v : v.name))
+                    : []
+            };
+        });
+
+        setSelectedFilters(filterMap); // Update selected filters for reinitialization
+        setFilters(newFiltersArray); // Store transformed filters for API or UI
+        setCurrentPage(1); // Reset to page 1 when filters applied
+        fetchUserData(newFiltersArray); // Fetch data with new filters
+    };
+
+    const handleDelete = (row) => {
     setSelectedRow(row);
     setIsDeleteOpen(true);
   };
@@ -144,46 +87,9 @@ const UserManagement = () => {
     setIsDeleteOpen(false);
   };
 
-  const handleRowsPerPageChange = (newRowsPerPage) => {
-    setRowsPerPage(newRowsPerPage);
-    setCurrentPage(1);
-    fetchUsersData(newRowsPerPage, 1);
-  };
 
-  const fetchUsersData = (
-    customRowsPerPage = rowsPerPage,
-    customPage = currentPage,
-    customSearchTerm = searchTerm,
-    customFilters = filters
-  ) => {
-    const output = customFilters.map(item => ({
-      field: item.field,
-      operator: typeof item.operator === 'string' ? item.operator : item.operator.name,
-      value: Array.isArray(item.value)
-        ? item.value.map(v => (typeof v === 'string' ? v : v.name))
-        : []
-    }));
 
-    const payload = {
-      filters: output,
-      pageSize: customRowsPerPage,
-      pageNumber: customPage,
-      search: customSearchTerm,
-      filterApplied: customFilters.length > 0
-    };
-
-    getUserList(payload)
-      .then(response => {
-        const responseData = response?.data;
-        setUsers(responseData?.data || []);
-        setTotalPages(responseData?.totalPages || 1);
-      })
-      .catch(error => {
-        console.error('Error fetching users:', error);
-      });
-  };
-
-  const getRow = (columnId, value, row = {}) => {
+    const getRow = (columnId, value, row = {}) => {
     switch (columnId) {
       case "userName":
         return (
@@ -239,51 +145,142 @@ const UserManagement = () => {
         return value;
     }
   };
-  return (
-    <div>
-      <div className="pt-3 flex flex-col">
-        <div className="flex items-center justify-between mb-6">
-          <CustomSearch
-            placeHolder="Search"
-            width="264px"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onSearch={(term) => {
-              if (term.length >= 3 || term.length === 0) {
-                setCurrentPage(1);
-                fetchUsersData(rowsPerPage, 1, term);
-              }
-            }}
-          />
 
-          <CustomButton text="Add User" onClick={handleCreateUser} endIcon={false} />
-        </div>
-      </div>
 
-      <div className="bg-white shadow-card overflow-hidden">
-        <div className="w-full overflow-x-auto">
-          <div className="min-w-max">
-            <CustomTable
-              columns={columns}
-              data={users}
-              showCheckboxes={false}
-              getRow={getRow}
-            />
-          </div>
-        </div>
-      </div>
 
-      <div className="p-4 flex justify-end">
-        <CustomPagination
-          totalPages={totalPages}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          rowsPerPage={rowsPerPage}
-          setRowsPerPage={handleRowsPerPageChange}
-        />
-      </div>
 
-      {isDeleteOpen && (
+    // const handleSelectAll = (e) => {
+    //     if (e.target.checked) {
+    //         setSelectedLeads(leads.map(lead => lead.id));
+    //     } else {
+    //         setSelectedLeads([]);
+    //     }
+    // };
+
+    // const handleSelectLead = (e, leadId) => {
+    //     if (e.target.checked) {
+    //         setSelectedLeads([...selectedLeads, leadId]);
+    //     } else {
+    //         setSelectedLeads(selectedLeads.filter(id => id !== leadId));
+    //     }
+    // };
+
+
+    const handleRowsPerPageChange = (newRowsPerPage) => {
+        setRowsPerPage(newRowsPerPage);
+        setCurrentPage(1);
+        fetchUserData(filters, newRowsPerPage, 1); // Pass newRowsPerPage and reset page to 1
+    };
+
+
+    const fetchUserData = (
+        customFilters = filters,
+        customRowsPerPage = rowsPerPage,
+        customPage = currentPage,
+        customSearchTerm = searchTerm
+    ) => {
+
+        const output = customFilters.map(item => ({
+            field: item.field,
+            operator: typeof item.operator === 'string' ? item.operator : item.operator.name,
+            value: Array.isArray(item.value)
+                ? item.value.map(v => (typeof v === 'string' ? v : v.name))
+                : []
+        }));
+
+        const payload = {
+            filters: output,
+            pageSize: customRowsPerPage,
+            pageNumber: customPage,
+            filterApplied: customFilters.length > 0,
+            search: customSearchTerm
+        };
+
+
+        getUserList(payload)
+            .then(response => {
+                const responseData = response?.data;
+                setUser(responseData?.data || []);
+                setTotalPages(responseData?.totalPages || 1);
+            })
+            .catch(error => {
+                console.error('Error fetching leads:', error);
+            });
+    };
+
+    const debouncedSearch = useMemo(
+        () =>
+            debounce((value) => {
+                console.log("inside", value)
+                fetchUserData(filters, rowsPerPage, 1, value);
+            }, 500),
+        [filters, rowsPerPage] // Do NOT include `searchTerm` here
+    );
+
+
+    const handleChange = (e) => {
+        const value = e.target.value;
+        setSearchTerm(value);
+
+        if (value.length >= 3 || value.length === 0) {
+            debouncedSearch(value);
+        }
+
+    };
+
+    return (
+        <>
+            {/* Header */}
+
+            <div className="pt-3 flex flex-col">
+                <div className="flex items-center justify-between" />
+                <div className="flex items-center justify-between mb-6">
+                    <CustomSearch
+                        placeHolder="Search"
+                        width="264px"
+                        value={searchTerm}
+                        onChange={(e) => {
+                            console.log("yyy")
+                            setCurrentPage(1);
+                            handleChange(e);
+                        }}
+                    />
+
+                    <div className="flex items-center gap-4" />
+
+                    <div className="flex items-center gap-3">
+                        <CustomButton text="Add User" onClick={handleCreateUser} endIcon={false} />
+                        {/* <CustomButton variant="icon" showText={false} startIcon={true} endIcon={false} iconImg={FilterIcon} onClick={toggleFilter} /> */}
+                    </div>
+                </div>
+            </div>
+
+            {/* Table */}
+            <div className="bg-white shadow-card overflow-hidden">
+                <div className="w-full overflow-x-auto">
+                    <div className="min-w-max">
+                        <CustomTable
+                            columns={columns}
+                            data={user}
+                            showCheckboxes={false}
+                            getRow={getRow}
+                        />
+                    </div>
+                </div>
+            </div>
+
+            {/* Pagination */}
+            <div className="p-4 flex justify-end">
+                <CustomPagination
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    rowsPerPage={rowsPerPage}
+                    setRowsPerPage={handleRowsPerPageChange}
+                />
+
+            </div>
+            {isDeleteOpen && (
         <DeletePopup
           onClose={() => setIsDeleteOpen(false)}
           onConfirm={confirmDelete}
@@ -291,8 +288,26 @@ const UserManagement = () => {
         />
       )}
 
-    </div>
-  );
+
+            {/* Filter Panel */}
+            {isFilterOpen && (
+                <CustomOffCanvasModal
+                    isOpen={isFilterOpen}
+                    onClose={toggleFilter}
+                    title="Filter"
+                    position="right"
+                    width="649px"
+                >
+                    <FilterContent
+                        onClose={toggleFilter}
+                        onApplyFilter={handleApplyFilter}
+                        initialFilters={selectedFilters}
+                        isFilterOpen={isFilterOpen}
+                    />
+                </CustomOffCanvasModal>
+            )}
+        </>
+    );
 };
 
 export default UserManagement;

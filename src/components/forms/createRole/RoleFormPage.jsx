@@ -2,7 +2,8 @@
 import React from 'react';
 import { Formik, Form } from 'formik';
 import RoleInformationForm from '../createRole/RoleInformationForm';
-import RoleAccessPermission from './RoleAccessPermission';
+import RoleAccessPermission from '../createRole/RoleAccessPermission';
+import * as Yup from 'yup';
 
 const initialAccess = {
     "Lead Management Module": {
@@ -74,7 +75,7 @@ const initialAccess = {
                 "Country": false,
                 "Opportunity ID": false,
                 "Counsellor": false,
-                "Opportunity Status" : false,
+                "Opportunity Status": false,
                 "Preferred Intake": false,
             }
         },
@@ -146,7 +147,7 @@ const initialAccess = {
                 "Country": false,
                 "Opportunity ID": false,
                 "Counsellor": false,
-                "Opportunity Status" : false,
+                "Opportunity Status": false,
                 "Preferred Intake": false,
             }
         }
@@ -154,13 +155,33 @@ const initialAccess = {
 };
 
 const RoleFormPage = () => {
+
+    const roleSchema = Yup.object().shape({
+        roleName: Yup.string().required('Required'),
+        roleType: Yup.string().required('Required'),
+        parentRole: Yup.string().required('Required'),
+        copyRoleTemplte: Yup.string().required('Required'),
+        insertionMode: Yup.string().required('Required'),
+        organisation: Yup.string().required('Required'),
+        hierarchyLevel: Yup.string().required('Required'),
+        description: Yup.string()
+    });
+
+
     return (
         <Formik
             initialValues={{
-                firstName: '',
+                roleName: '',
                 roleType: '',
+                parentRole:'',
+                copyRoleTemplte:'',
+                insertionMode:'',
+                organisation:'',
+                hierarchyLevel:'',
+                description: '',
                 access: initialAccess
             }}
+            validationSchema={roleSchema}
             onSubmit={(values) => {
                 console.log("Submitted Payload:", values);
                 alert(JSON.stringify(values, null, 2));
