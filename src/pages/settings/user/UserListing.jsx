@@ -25,88 +25,33 @@ const UserManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState([]);
 
-  const dummyUsers = [
-    {
-      id: 1,
-      userName: "Alice Thomas",
-      userRole: "Admin",
-      userStatus: "Active",
-      userBranch: "Kochi",
-      leadSource: "Website",
-    },
-    {
-      id: 2,
-      userName: "Bob Mathew",
-      userRole: "User",
-      userStatus: "Inactive",
-      userBranch: "Bangalore",
-      leadSource: "Referral",
-    },
-    {
-      id: 3,
-      userName: "Catherine Joseph",
-      userRole: "Manager",
-      userStatus: "Pending",
-      userBranch: "Chennai",
-      leadSource: "Event",
-    },
-    {
-      id: 4,
-      userName: "David Raj",
-      userRole: "Admin",
-      userStatus: "Active",
-      userBranch: "Mumbai",
-      leadSource: "Social Media",
-    },
-    {
-      id: 5,
-      userName: "Eva Kurian",
-      userRole: "User",
-      userStatus: "Active",
-      userBranch: "Delhi",
-      leadSource: "Website",
-    },
-    {
-      id: 6,
-      userName: "Faisal Khan",
-      userRole: "User",
-      userStatus: "Inactive",
-      userBranch: "Hyderabad",
-      leadSource: "Direct Visit",
-    },
-    {
-      id: 7,
-      userName: "George Antony",
-      userRole: "Manager",
-      userStatus: "Active",
-      userBranch: "Kolkata",
-      leadSource: "Email Campaign",
-    },
-    {
-      id: 8,
-      userName: "Helen Jacob",
-      userRole: "User",
-      userStatus: "Pending",
-      userBranch: "Pune",
-      leadSource: "Referral",
-    },
-    {
-      id: 9,
-      userName: "Ibrahim Nasar",
-      userRole: "Admin",
-      userStatus: "Active",
-      userBranch: "Trivandrum",
-      leadSource: "Website",
-    },
-    {
-      id: 10,
-      userName: "Jasmine Paul",
-      userRole: "User",
-      userStatus: "Active",
-      userBranch: "Kochi",
-      leadSource: "LinkedIn",
-    }
-  ];
+  // Dummy data for testing
+  // const dummyUsers = [
+  //   {
+  //     id: 1,
+  //     userName: "Alice Thomas",
+  //     userRole: "Admin",
+  //     userStatus: "Active",
+  //     userBranch: "Kochi",
+  //     leadSource: "Website",
+  //   },
+  //   {
+  //     id: 2,
+  //     userName: "Bob Mathew",
+  //     userRole: "User",
+  //     userStatus: "Inactive",
+  //     userBranch: "Bangalore",
+  //     leadSource: "Referral",
+  //   },
+  //   {
+  //     id: 3,
+  //     userName: "Catherine Joseph",
+  //     userRole: "Manager",
+  //     userStatus: "Pending",
+  //     userBranch: "Chennai",
+  //     leadSource: "Event",
+  //   },
+  // ];
 
   useEffect(() => {
     fetchUsersData();
@@ -133,21 +78,18 @@ const UserManagement = () => {
   const debouncedSearch = useMemo(
     () =>
       debounce((value) => {
-        console.log("se", searchTerm, value)
-        fetchLeadsData(filters, rowsPerPage, 1, value);
+        fetchUsersData(filters, rowsPerPage, 1, value);
       }, 500),
     [filters, rowsPerPage]
   );
 
   const handleChange = (e) => {
-    console.log("search term", e.target.value)
     const value = e.target.value;
     setSearchTerm(value);
 
     if (value.length >= 3 || value.length === 0) {
       debouncedSearch(value);
     }
-
   };
 
   const confirmDelete = () => {
@@ -170,7 +112,7 @@ const UserManagement = () => {
     customRowsPerPage = rowsPerPage,
     customPage = currentPage,
     customSearchTerm = searchTerm,
-    customFilters = filters
+    customFilters = filters,
   ) => {
     const output = customFilters.map(item => ({
       field: item.field,
@@ -185,7 +127,7 @@ const UserManagement = () => {
       pageSize: customRowsPerPage,
       pageNumber: customPage,
       search: customSearchTerm,
-      filterApplied: customFilters.length > 0
+      filterApplied: customFilters.length > 0,
     };
 
     getUserList(payload)
@@ -269,26 +211,6 @@ const UserManagement = () => {
               handleChange(e);
             }}
           />
-          {/* <CustomSearch
-            placeHolder="Search"
-            width="264px"
-            value={searchTerm}
-
-            onChange={(e) => {
-              const term = e.target.value;
-              console.log("Search term:", e.target.value);
-              setSearchTerm(term);
-              
-              // Reset only if input is cleared completely
-              if (term.length <= 2) {
-                console.log("term length: ", term.length);
-                setCurrentPage(1);
-                fetchUsersData(rowsPerPage, 1, ""); // load full list again
-              }
-            }} */}
-
-
-          {/* /> */}
 
           <CustomButton text="Add User" onClick={handleCreateUser} endIcon={false} />
         </div>
