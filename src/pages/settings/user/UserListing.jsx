@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-import React, { useEffect, useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { CustomTable, CustomPagination, CustomButton, CustomSearch } from 'react-mui-tailwind';
-import EditIcon from "../../../assets/edit-icon.svg";
-import DeleteIcon from "../../../assets/delete-icon.svg";
-import DeletePopup from '../../../utils/DeletePopup';
-import debounce from "lodash.debounce";
-
-// import userAvatar from "../../assets/user-avatar.png";
-import { getUserList } from '../../../api/services/settingsAPI/userAPI';
-=======
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -23,7 +10,6 @@ import DeleteIcon from "../../../assets/delete-icon.svg";
 import DeletePopup from '../../../utils/DeletePopup';
 import { getUserList } from '../../../api/services/settingsAPI/userAPI';
 
->>>>>>> testing/sprint2
 
 const UserManagement = () => {
 
@@ -44,87 +30,11 @@ const UserManagement = () => {
   const [users, setUsers] = useState([]);
 
 
-<<<<<<< HEAD
-  // Dummy data for testing
-  const dummyUsers = [
-    {
-      id: 1,
-      userName: "Alice Thomas",
-      userRole: "Admin",
-      orgName:"123",
-      orgType: "Private",
-      userStatus: "Active",
-      userBranch: "Kochi",
-      leadSource: "Website",
-    },
-    {
-      id: 2,
-      userName: "Bob Mathew",
-      userRole: "User",
-      orgName:"123",
-      orgType: "Public",
-      userStatus: "Inactive",
-      userBranch: "Bangalore",
-      leadSource: "Referral",
-    },
-    {
-      id: 3,
-      userName: "Catherine Joseph",
-      userRole: "Manager",
-      orgName:"123",
-      orgType: "Private",
-      userStatus: "Pending",
-      userBranch: "Chennai",
-      leadSource: "Event",
-    }
-  ];
-
-  useEffect(() => {
-    // fetchUsersData();
-
-    // mock data
-    setUsers(dummyUsers);
-  }, [currentPage]);
-
-  const fetchUsersData = (
-    customRowsPerPage = rowsPerPage,
-    customPage = currentPage,
-    customSearchTerm = searchTerm,
-    customFilters = filters
-  ) => {
-    const output = customFilters.map(item => ({
-      field: item.field,
-      operator: typeof item.operator === 'string' ? item.operator : item.operator.name,
-      value: Array.isArray(item.value)
-        ? item.value.map(v => (typeof v === 'string' ? v : v.name))
-        : []
-    }));
-
-    const payload = {
-      filters: output,
-      pageSize: customRowsPerPage,
-      pageNumber: customPage,
-      search: customSearchTerm,
-      filterApplied: customFilters.length > 0
-    };
-
-    getUserList(payload)
-      .then(response => {
-        const responseData = response?.data;
-        setUsers(responseData?.data || []);
-        setTotalPages(responseData?.totalPages || 1);
-      })
-      .catch(error => {
-        console.error('Error fetching users:', error);
-      });
-  };
-=======
 
   useEffect(() => {
     fetchUserData();
   }, [currentPage]);
 
->>>>>>> testing/sprint2
 
   const handleCreateUser = () => {
     navigate('/users/create');
@@ -173,40 +83,6 @@ const UserManagement = () => {
     setIsDeleteOpen(false);
   };
 
-<<<<<<< HEAD
-  const handleRowsPerPageChange = (newRowsPerPage) => {
-    setRowsPerPage(newRowsPerPage);
-    setCurrentPage(1);
-    fetchUsersData(newRowsPerPage, 1);
-  };
-
-  const debouncedSearch = useMemo(
-    () =>
-      debounce((value) => {
-        fetchUsersData(filters, rowsPerPage, 1, value);
-      }, 500),
-    [filters, rowsPerPage] // Do NOT include searchTerm here
-  );
-
-  const handleChange = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    console.log("value length: ", value.length);
-
-    // Call the debounced function only if the length is 3 or more
-    if (value.length >= 3) {
-      console.log("inside if", value.length)
-      debouncedSearch(value);
-    }
-
-    else if (value.length < 3) {
-      console.log("inside else-if", value.length)
-      fetchUsersData(rowsPerPage, 1, value);
-    }
-  };
-
-=======
->>>>>>> testing/sprint2
   const getRow = (columnId, value, row = {}) => {
     switch (columnId) {
       case "userName":
@@ -336,10 +212,7 @@ const UserManagement = () => {
             width="264px"
             value={searchTerm}
             onChange={(e) => {
-<<<<<<< HEAD
-=======
               console.log("yyy")
->>>>>>> testing/sprint2
               setCurrentPage(1);
               handleChange(e);
             }}
