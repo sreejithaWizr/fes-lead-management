@@ -26,44 +26,44 @@ const UserManagement = () => {
   const [filters, setFilters] = useState([]);
 
   // Dummy data for testing
-  const dummyUsers = [
-    {
-      id: 1,
-      userName: "Alice Thomas",
-      userRole: "Admin",
-      orgName:"123",
-      orgType: "Private",
-      userStatus: "Active",
-      userBranch: "Kochi",
-      leadSource: "Website",
-    },
-    {
-      id: 2,
-      userName: "Bob Mathew",
-      userRole: "User",
-      orgName:"123",
-      orgType: "Public",
-      userStatus: "Inactive",
-      userBranch: "Bangalore",
-      leadSource: "Referral",
-    },
-    {
-      id: 3,
-      userName: "Catherine Joseph",
-      userRole: "Manager",
-      orgName:"123",
-      orgType: "Private",
-      userStatus: "Pending",
-      userBranch: "Chennai",
-      leadSource: "Event",
-    }
-  ];
+  // const dummyUsers = [
+  //   {
+  //     id: 1,
+  //     userName: "Alice Thomas",
+  //     userRole: "Admin",
+  //     orgName:"123",
+  //     orgType: "Private",
+  //     userStatus: "Active",
+  //     userBranch: "Kochi",
+  //     leadSource: "Website",
+  //   },
+  //   {
+  //     id: 2,
+  //     userName: "Bob Mathew",
+  //     userRole: "User",
+  //     orgName:"123",
+  //     orgType: "Public",
+  //     userStatus: "Inactive",
+  //     userBranch: "Bangalore",
+  //     leadSource: "Referral",
+  //   },
+  //   {
+  //     id: 3,
+  //     userName: "Catherine Joseph",
+  //     userRole: "Manager",
+  //     orgName:"123",
+  //     orgType: "Private",
+  //     userStatus: "Pending",
+  //     userBranch: "Chennai",
+  //     leadSource: "Event",
+  //   }
+  // ];
 
   useEffect(() => {
-    // fetchUsersData();
+    fetchUsersData();
 
     // mock data
-    setUsers(dummyUsers);
+    // setUsers(dummyUsers);
   }, [currentPage]);
 
   const fetchUsersData = (
