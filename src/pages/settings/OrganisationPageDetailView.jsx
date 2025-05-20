@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Formik, useFormikContext } from 'formik';
-import { CustomButton } from 'react-mui-tailwind';
-import { createLead, getStatus } from '../../api/services/masterAPIs/createLeadApi';
-import { useNavigate, useParams } from 'react-router-dom';
-import LeftArrowIcon from "../../assets/arrow-left.svg";
-import RightArrowIcon from "../../assets/arrow-right.svg";
+import { Formik } from 'formik';
+import { useParams } from 'react-router-dom';
 import OrganisationBasicInfoForm from '../../components/forms/createOrganisation/orgBasicInfoForm';
 import OrganisationAccountInfoForm from '../../components/forms/createOrganisation/orgAccountInfoForm';
 import { validationSchema } from '../../components/forms/createOrganisation/schema';
-import { createOrganisation, getOrganisationById, updateOrganisation } from '../../api/services/settingsAPI/organisationAPI';
+import { getOrganisationById } from '../../api/services/settingsAPI/organisationAPI';
 import OrganisationDetailsHeader from '../../components/OrganisationDetailsHeader';
 export const formRef = React.createRef();
 
-const EditOrganisationPage = () => {
+const OrganisationPageDetailView = () => {
     const { id } = useParams();
-    const navigate = useNavigate();
     const [orgData, setOrgData] = useState(null);
     const [initialValues, setInitialValues] = useState(null);
 
@@ -79,65 +74,16 @@ const EditOrganisationPage = () => {
         }, 100);
     }, [orgData]);
 
-    const handleSubmit = async (values) => {
-        console.log('Form submitted with values:', values);
-
-        const payload = {
-            id: +id,
-            orgName: values?.orgName,
-            type: values?.type,
-            // region: values?.region?.name,
-            business_mail: values?.business_mail,
-            mobileNumber: values?.mobileNumber,
-            primary_admin_user_name: values?.primary_admin_user_name,
-            admin_mail: values?.admin_mail,
-            parent_org: values?.parent_org,
-            service_enabled: Array.isArray(values?.service_enabled)
-                ? values.service_enabled
-                : [],
-            status: values?.status,
-            notes: values?.notes,
-            street: values?.street,
-            city: values?.city,
-            state: values?.state,
-            country: values?.country,
-            gst_no: values?.gst_no,
-            primary_poc: values?.primary_poc,
-            poc_mail: values?.poc_mail,
-            poc_mobileNumber: values?.poc_mobileNumber,
-
-            // add_account_info: values?.add_account_info?.map(info => ({
-            //     name: info.name || null,
-            //     account_id: info.account_id || null,
-            // })),
-        }
-
-        try {
-            const response = await updateOrganisation(id, payload);
-            if (response?.data?.succeeded === true) {
-                navigate("/settings")
-                // alert("Updated")
-            }
-            else {
-                alert("Updation Failed")
-            }
-            // alert("Created")
-            // Optional: reset form or show toast
-        } catch (err) {
-            console.error('Error creating user:', err);
-        }
-    };
 
     if (!initialValues) return <div>Loading...</div>;
 
     return (
         <div className="w-full h-full">
-            <OrganisationDetailsHeader organisation={orgDetails} />
+            <OrganisationDetailsHeader organisation={orgDetails} id={id} mode="view" />
             <div className="w-full h-full rounded-md">
                 <Formik
                     initialValues={initialValues}
                     validationSchema={validationSchema}
-                    onSubmit={handleSubmit}
                     innerRef={formRef}
                     enableReinitialize={true}
                 >
@@ -158,7 +104,7 @@ const EditOrganisationPage = () => {
                                 handleChange={handleChange}
                                 handleBlur={handleBlur}
                                 setFieldValue={setFieldValue}
-                                mode="edit"
+                                mode="view"
                             />
 
                             <OrganisationAccountInfoForm
@@ -168,7 +114,7 @@ const EditOrganisationPage = () => {
                                 handleChange={handleChange}
                                 handleBlur={handleBlur}
                                 setFieldValue={setFieldValue}
-                                mode="edit"
+                                mode="view"
                             />
 
                         </form>
@@ -180,4 +126,4 @@ const EditOrganisationPage = () => {
     );
 };
 
-export default EditOrganisationPage;
+export default OrganisationPageDetailView;

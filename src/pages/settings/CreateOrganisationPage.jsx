@@ -17,7 +17,6 @@ const CreateOrganisationPage = () => {
     const navigate = useNavigate();
 
     const handleCancel = () => {
-        console.log("here")
         navigate('/settings');
     };
 
@@ -95,6 +94,7 @@ const CreateOrganisationPage = () => {
             country: values?.country,
             gst_no: values?.gst_no,
             primary_poc: values?.primary_poc,
+            poc_mail: values?.poc_mail,
             poc_mobileNumber: values?.poc_mobileNumber,
 
             // add_account_info: values?.add_account_info?.map(info => ({
@@ -120,7 +120,6 @@ const CreateOrganisationPage = () => {
         }
     };
 
-    console.log(isCreateOrganisationPage, "isCreateOrganisationPage")
     return (
         <div className="w-full">
             {isCreateOrganisationPage && (
@@ -151,8 +150,6 @@ const CreateOrganisationPage = () => {
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
                 innerRef={formRef}
-                
-            // enableReinitialize={true}
             >
                 {({
                     values,
@@ -161,7 +158,6 @@ const CreateOrganisationPage = () => {
                     handleChange,
                     handleBlur,
                     handleSubmit,
-                    isSubmitting,
                     setFieldValue,
                 }) => (
                     <form onSubmit={handleSubmit}>
@@ -182,6 +178,7 @@ const CreateOrganisationPage = () => {
                             handleChange={handleChange}
                             handleBlur={handleBlur}
                             setFieldValue={setFieldValue}
+                            mode='create'
                         />
 
                     </form>

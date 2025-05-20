@@ -67,7 +67,12 @@ export const requiredEmailField = () =>
     );
 
 export const optionalEmailField = () =>
-  Yup.string().email("Invalid email format").nullable();
+  Yup.string()
+    .trim()
+    .matches(
+      /^(?!.*\.\.)(?!\.)(?!.*\.$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      "Invalid email format"
+    );
 
 export const requiredTenDigitNumber = () =>
   Yup.string()

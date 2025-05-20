@@ -1,11 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { CustomTable, CustomPagination, CustomButton, CustomOffCanvasModal, CustomSearch } from 'react-mui-tailwind';
-import PhoneIcon from "../../assets/phone-icon.svg";
-import CalenderIcon from "../../assets/calendar.svg";
-import MailIcon from "../../assets/mail.svg";
-import LocationIcon from "../../assets/location.svg";
 import EditIcon from "../../assets/edit-icon.svg";
 import FilterIcon from "../../assets/filter.svg";
 import FilterContent from '../../pages/FilterContent';
@@ -16,12 +12,9 @@ import { getOrganisationList } from '../../api/services/settingsAPI/organisation
 
 const OrganisationManagement = () => {
 
-    const dispatch = useDispatch();
     const navigate = useNavigate();
     const { columns } = useSelector((state) => state.organisations);
-
-    const [leads, setLeads] = useState([]);
-    const [selectedLeads, setSelectedLeads] = useState([]);
+    const [org, setOrg] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(15);
     const [totalPages, setTotalPages] = useState(1);  // <-- NEW
@@ -37,18 +30,14 @@ const OrganisationManagement = () => {
     }, [currentPage]);
 
 
-    // const handleView = () => {
-    //   navigate('/leads/detailsview');
-    // };
-
     const handleCreateLead = () => {
         navigate('/settings/organisation/create');
     };
 
     const handleView = (value) => {
-        const selectedLeadId = leads.find(lead => lead.leadNumber === value);
-        console.log("selectedLeadId", selectedLeadId);
-        navigate(`/leads/detailsview/${selectedLeadId?.id}`);
+        const selectedOrgId = org.find(organisation => organisation.organizationName === value);
+        console.log("selectedOrgId", selectedOrgId);
+        navigate(`/settings/organisation/detailsview/${selectedOrgId?.id}`);
     }
 
     const handleApplyFilter = (newFiltersArray) => {
@@ -69,7 +58,6 @@ const OrganisationManagement = () => {
     };
 
     const getRow = (columnId, value, row = {}) => {
-        console.log("bb", row)
         switch (columnId) {
             case "organizationName":
                 return (
@@ -80,23 +68,21 @@ const OrganisationManagement = () => {
                     </div>
                 );
             case "status":
-  return (
-    <span
-      className={`inline-flex items-center justify-center font-bold ${getStatusClass(value)}`}
-      style={{
-        fontSize: "11px",
-        lineHeight: "15.4px", // 140% of 11px
-        fontFamily: "Proxima Nova, sans-serif",
-        width: value ? '56px' : '64px',
-        height: '23px',
-        padding: '4px 12px',
-        borderRadius: '4px', // Assuming Corner/Small = 4px
-      }}
-    >
-      {value ? "Active" : "Inactive"}
-    </span>
-  );
-
+                return (
+                    <span
+                        className={`inline-flex items-center justify-center font-bold ${getStatusClass(value)}`}
+                        style={{
+                            fontSize: "11px",
+                            lineHeight: "15.4px", // 140% of 11px
+                            width: value ? '56px' : '64px',
+                            height: '23px',
+                            padding: '4px 12px',
+                            borderRadius: '4px', // Assuming Corner/Small = 4px
+                        }}
+                    >
+                        {value ? "Active" : "Inactive"}
+                    </span>
+                );
 
 
             case "action":
@@ -116,20 +102,20 @@ const OrganisationManagement = () => {
     };
 
     const getStatusClass = (status) => {
-  switch (status) {
-    case true:
-      return 'text-[#14AE5C] bg-[#EBF5ED]';
-    case false:
-      return 'text-[#EC221F] bg-[#FDE9E9]';
-    default:
-      return 'text-gray-700 bg-gray-100';
-  }
-};
+        switch (status) {
+            case true:
+                return 'text-[#14AE5C] bg-[#EBF5ED]';
+            case false:
+                return 'text-[#EC221F] bg-[#FDE9E9]';
+            default:
+                return 'text-gray-700 bg-gray-100';
+        }
+    };
 
 
     const handleEdit = (row) => {
         console.log("Row data:", row);
-        navigate(`/leads/edit/${row?.id}`);
+        navigate(`/settings/organisation/edit/${row?.id}`);
     };
 
 
@@ -184,7 +170,7 @@ const OrganisationManagement = () => {
         getOrganisationList(payload)
             .then(response => {
                 const responseData = response?.data;
-                setLeads(responseData?.data || []);
+                setOrg(responseData?.data || []);
                 setTotalPages(responseData?.totalPages || 1);
             })
             .catch(error => {
@@ -244,7 +230,7 @@ const OrganisationManagement = () => {
                     <div className="min-w-max">
                         <CustomTable
                             columns={columns}
-                            data={leads}
+                            data={org}
                             showCheckboxes={false}
                             getRow={getRow}
                         />

@@ -1,21 +1,17 @@
-// services/leadService.js
 import apiClient from '../../config/axios';
-
-// This function fetches a lead's details from the server using its ID
-export const getOrganisationById = async (leadId) => {
+export const getOrganisationById = async (orgId) => {
     try {
-        const response = await apiClient.get(`api/LeadListView/GetLeadListViewById/${leadId}`); //LeadListView/GetLeadListViewById/1
+        const response = await apiClient.get(`api/Organization/${orgId}`); 
         return response.data;
     } catch (error) {
-        console.error("Error fetching lead:", error);
+        console.error("Error fetching Organisation:", error);
         throw error;
     }
 };
 
-// This function updates a lead's details on the server using its ID and the new data
 export const updateOrganisation = (id, payload) => {
     try {
-        return apiClient.put(`/api/LeadProfile/${id}`, payload);
+        return apiClient.put(`/api/Organization/${id}`, payload);
     } catch (error) {
         console.error("Error fetching lead:", error);
         throw error;

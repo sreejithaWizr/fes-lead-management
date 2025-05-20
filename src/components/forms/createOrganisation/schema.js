@@ -13,7 +13,7 @@ export const validationSchema = Yup.object({
 
   // Business Information
   gst_no: requiredStringField(),
-  primary_poc: requiredTenDigitNumber(),
+  primary_poc: requiredStringField(),
   poc_mail: requiredEmailField(),
 
   // Account Information

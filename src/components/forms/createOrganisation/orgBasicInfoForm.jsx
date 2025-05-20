@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { CustomInputField, CustomDropDown, CustomToggle } from "react-mui-tailwind";
-import { getCountry, getOrganization, getParentOrganisation, getServiceEnabled, getState } from "../../../api/services/masterAPIs/createLeadApi"
+import { getCountry, getOrganization, getOrganizationType, getParentOrganisation, getServiceEnabled, getState } from "../../../api/services/masterAPIs/createLeadApi"
 
 const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode = "edit" }) => {
   const isEditable = mode === "edit";
 
+  console.log("initialValues11", values)
   const isCreateMode = mode === "create";
 
   const [typeOptions, setTypeOptions] = useState([]);
@@ -19,7 +20,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
       try {
         const [countryRes, orgRes, stateRes, parentOrgRes, serviceRes] = await Promise.allSettled([
           getCountry(),
-          getOrganization(),
+          getOrganizationType(),
           getState(),
           getParentOrganisation(),
           getServiceEnabled()

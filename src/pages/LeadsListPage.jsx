@@ -177,7 +177,7 @@ const LeadsTable = () => {
       case 'May be Prospective':
         return 'status-prospective';
       default:
-        return value;
+        return status;
     }
   };
 

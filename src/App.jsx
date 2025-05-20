@@ -17,6 +17,7 @@ import CreateOrganisationPage from "./pages/settings/CreateOrganisationPage";
 import BulkUpload from "./pages/BulkUpload";
 import RoleFormPage from "./components/forms/tesxt2/RoleFormPage";
 import EditOrganisationPage from "./pages/settings/EditOrganisationPage";
+import OrganisationPageDetailView from "./pages/settings/OrganisationPageDetailView";
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
             <Route path="settings" element={<SettingsPage />} />
             <Route path="settings/organisation/create" element={<CreateOrganisationPage />} />
             <Route path="settings/organisation/edit/:id" element={<EditOrganisationPage />} />
+            <Route path="settings/organisation/detailsview/:id" element={<OrganisationPageDetailView />} />
             <Route path="role-create" element={<RoleFormPage />} />
             <Route path="*" element={<NotFound />} />
             </Route>

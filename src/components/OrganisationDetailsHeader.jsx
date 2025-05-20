@@ -7,9 +7,11 @@ import PersonalCard from "../assets/personalcard.svg";
 import MailIcon from "../assets/sms.svg";
 import { useNavigate } from 'react-router-dom';
 import { formRef } from '../pages/settings/EditOrganisationPage';
+import EditIcon from '../assets/edit.svg';
 
-const OrganisationDetailsHeader = ({ organisation }) => {
+const OrganisationDetailsHeader = ({ organisation, id, mode }) => {
     const navigate = useNavigate();
+    console.log("mode", mode, id)
 
     const handleBack = () => {
         navigate('/settings');
@@ -36,6 +38,23 @@ const OrganisationDetailsHeader = ({ organisation }) => {
             // });
         }
     };
+
+    const handleEditClick = () => {
+        navigate(`/settings/organisation/edit/${id}`);
+    };
+
+    const getStatusClass = (status) => {
+        console.log("stta", status)
+        switch (status) {
+            case true:
+                return 'text-[#14AE5C] bg-[#EBF5ED]';
+            case false:
+                return 'text-[#EC221F] bg-[#FDE9E9]';
+            default:
+                return 'text-gray-700 bg-gray-100';
+        }
+    };
+
     return (
         <header className="w-full shadow-card">
             <div className="flex items-center justify-between mb-4">
@@ -68,20 +87,30 @@ const OrganisationDetailsHeader = ({ organisation }) => {
                                 {organisation.initials}
                             </div>
 
-                            <div style={{display: "flex", height: "100%", flexDirection: "column", gap: "16px",}}>
+                            <div style={{ display: "flex", height: "100%", flexDirection: "column", gap: "16px", }}>
                                 <div className="flex items-center gap-2 ">
                                     <h3 className="font-bold text-[19px] leading-[140%] tracking-[0%]">{organisation.name}</h3>
-                                    {organisation.status && (
-                                        <span className="bg-[#FFF3E6] text-[#FF8400] text-xs px-2 py-[2px] rounded-[8px] border border-[#FFB86B] font-bold text-[13px] leading-[140%] tracking-[0%] ">
-                                            {organisation.status}
+                                    {/* {organisation.status && ( */}
+                                        <span
+                                            className={`inline-flex items-center justify-center font-bold ${getStatusClass(organisation.status)}`}
+                                            style={{
+                                                fontSize: "11px",
+                                                lineHeight: "15.4px", // 140% of 11px
+                                                width: organisation.status ? '56px' : '64px',
+                                                height: '23px',
+                                                padding: '4px 12px',
+                                                borderRadius: '4px', // Assuming Corner/Small = 4px
+                                            }}
+                                        >
+                                            {organisation.status ? "Active" : "Inactive"}
                                         </span>
-                                    )}
+                                    {/* )} */}
                                 </div>
                                 <div className="flex flex-wrap items-center text-sm text-gray-600 gap-4 mt-1">
-                                    <span className="flex items-center gap-1">
+                                    {/* <span className="flex items-center gap-1">
                                         <img src={PersonalCard} alt="ID" className="w-[16px] h-[16px]" />
                                         {organisation.id}
-                                    </span>
+                                    </span> */}
                                     <span className="flex items-center gap-1">
                                         <img src={MailIcon} alt="Email" className="w-[16px] h-[16px]" />
                                         {organisation.email}
@@ -93,11 +122,27 @@ const OrganisationDetailsHeader = ({ organisation }) => {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex items-center gap-3">
-                            <CustomButton text="Cancel" variant="secondary" startIcon={false} endIcon={false} onClick={handleBack} />
-                            <CustomButton text="Update" startIcon={false} endIcon={true} iconImg={RightArrowIcon} onClick={handleFormSubmit} />
-                        </div>
+                        {mode != "view" && (
+                            <div className="flex items-center gap-3">
+                                <CustomButton text="Cancel" variant="secondary" startIcon={false} endIcon={false} onClick={handleBack} />
+                                <CustomButton text="Update" startIcon={false} endIcon={true} iconImg={RightArrowIcon} onClick={handleFormSubmit} />
+                            </div>
+                        )}
+                        {mode == "view" && (
+                            <div>
+                                <CustomButton
+                                    variant="icon"
+                                    iconImg={EditIcon}
+                                    endIcon={false}
+                                    showText={false}
+                                    onClick={() => handleEditClick()}
+                                />
+                            </div>
+                        )}
+
                     </div>
+
+
 
                 </div>
 
