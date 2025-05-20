@@ -8,6 +8,8 @@ import FilterContent from '../../pages/FilterContent';
 import { getLeadList } from '../../api/services/leadAPI/leadAPIs';
 import debounce from "lodash.debounce";
 import { getOrganisationList } from '../../api/services/settingsAPI/organisationAPI';
+import DeleteIcon from "../../assets/delete-icon.svg";
+import DeletePopup from '../../utils/DeletePopup';
 
 
 const OrganisationManagement = () => {
@@ -24,6 +26,9 @@ const OrganisationManagement = () => {
     const toggleFilter = () => setIsFilterOpen(prev => !prev);
 
     const [searchTerm, setSearchTerm] = useState('');
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+    const [selectedRow, setSelectedRow] = useState(null);
+    const [organisations, setOrganisations] = useState([]);
 
     useEffect(() => {
         fetchLeadsData();
@@ -55,6 +60,21 @@ const OrganisationManagement = () => {
         setFilters(newFiltersArray); // Store transformed filters for API or UI
         setCurrentPage(1); // Reset to page 1 when filters applied
         fetchLeadsData(newFiltersArray); // Fetch data with new filters
+    };
+
+    const handleDelete = (row) => {
+        setSelectedRow(row);
+        setIsDeleteOpen(true);
+    };
+
+    const confirmDelete = () => {
+        if (selectedRow) {
+            console.log("Deleting organisation:", selectedRow.organizationName);
+
+            // Example: remove from local list
+            setOrganisations((prev) => prev.filter(organisation => organisation.id !== selectedRow.id));
+        }
+        setIsDeleteOpen(false);
     };
 
     const getRow = (columnId, value, row = {}) => {
@@ -93,6 +113,12 @@ const OrganisationManagement = () => {
                             alt="Edit"
                             className="w-4 h-4 cursor-pointer"
                             onClick={() => handleEdit(row)} // Pass the full row
+                        />
+                        <img
+                            src={DeleteIcon}
+                            alt="Delete"
+                            className="w-4 h-4 cursor-pointer"
+                            onClick={() => handleDelete(row)}
                         />
                     </div>
                 );
@@ -250,6 +276,14 @@ const OrganisationManagement = () => {
                 />
 
             </div>
+
+            {isDeleteOpen && (
+                <DeletePopup
+                    onClose={() => setIsDeleteOpen(false)}
+                    onConfirm={confirmDelete}
+                    title={`Are you sure you want to delete ${selectedRow?.userName}?`}
+                />
+            )}
 
             {/* Filter Panel */}
             {isFilterOpen && (
