@@ -83,8 +83,6 @@ const UserManagement = () => {
     setIsDeleteOpen(false);
   };
 
-
-
   const getRow = (columnId, value, row = {}) => {
     switch (columnId) {
       case "userName":

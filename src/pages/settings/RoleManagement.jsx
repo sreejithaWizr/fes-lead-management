@@ -10,8 +10,9 @@ import LocationIcon from "../../assets/location.svg";
 import EditIcon from "../../assets/edit-icon.svg";
 import FilterIcon from "../../assets/filter.svg";
 import FilterContent from '../../pages/FilterContent';
-import { getLeadList } from '../../api/services/leadAPI/leadAPIs';
 import { getRoleList } from '../../api/services/settingsAPI/roleAPIs';
+import DeleteIcon from "../../assets/delete-icon.svg";
+import DeletePopup from '../../utils/DeletePopup';
 
 const RoleManagement = () => {
   const dispatch = useDispatch();
@@ -19,7 +20,6 @@ const RoleManagement = () => {
   const { columns } = useSelector((state) => state.roles);
 
   const [leads, setLeads] = useState([]);
-  const [selectedLeads, setSelectedLeads] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(15);
   const [totalPages, setTotalPages] = useState(1);
@@ -29,6 +29,10 @@ const RoleManagement = () => {
   const toggleFilter = () => setIsFilterOpen(prev => !prev);
 
   const [searchTerm, setSearchTerm] = useState('');
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [roles, setRoles] = useState([]);
+
 
   useEffect(() => {
     let payload = {
@@ -68,6 +72,21 @@ const RoleManagement = () => {
     // navigate(`/leads/detailsview/${selectedLeadId?.id}`);
   }
 
+  const handleDelete = (row) => {
+    setSelectedRow(row);
+    setIsDeleteOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (selectedRow) {
+      console.log("Deleting user:", selectedRow.userName);
+
+      // Example: remove from local list
+      setRoles((prev) => prev.filter(role => role.id !== selectedRow.id));
+    }
+    setIsDeleteOpen(false);
+  };
+
   const handleApplyFilter = (newFiltersArray) => {
     const filterMap = {};
     newFiltersArray.forEach(({ field, operator, value }) => {
@@ -84,7 +103,6 @@ const RoleManagement = () => {
     setCurrentPage(1); // Reset to page 1 when filters applied
     fetchLeadsData(newFiltersArray); // Fetch data with new filters
   };
-
 
   const getRow = (columnId, value, row = {}) => {
     console.log("kkkkkkkkk", row)
@@ -133,6 +151,12 @@ const RoleManagement = () => {
               alt="Edit"
               className="w-4 h-4 cursor-pointer"
               onClick={() => handleEdit(row)} // Pass the full row
+            />
+            <img
+              src={DeleteIcon}
+              alt="Delete"
+              className="w-4 h-4 cursor-pointer"
+              onClick={() => handleDelete(row)}
             />
           </div>
         );
@@ -202,8 +226,8 @@ const RoleManagement = () => {
 
 
   const fetchLeadsData = (
-    customFilters = filters, 
-    customRowsPerPage = rowsPerPage, 
+    customFilters = filters,
+    customRowsPerPage = rowsPerPage,
     customPage = currentPage,
     customSearchTerm = searchTerm
   ) => {
@@ -220,7 +244,7 @@ const RoleManagement = () => {
       pageSize: customRowsPerPage,
       pageNumber: customPage,
       filterApplied: customFilters.length > 0,
-      search : customSearchTerm
+      search: customSearchTerm
     };
 
     getRoleList(payload)
@@ -287,6 +311,14 @@ const RoleManagement = () => {
         />
 
       </div>
+
+      {isDeleteOpen && (
+        <DeletePopup
+          onClose={() => setIsDeleteOpen(false)}
+          onConfirm={confirmDelete}
+          title={`Are you sure you want to delete ${selectedRow?.userName}?`}
+        />
+      )}
 
       {/* Filter Panel */}
       {isFilterOpen && (
