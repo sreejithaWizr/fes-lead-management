@@ -12,7 +12,7 @@ const UserManagement = () => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); 
   const navigate = useNavigate();
   const { columns } = useSelector((state) => state.users);
 
@@ -22,7 +22,7 @@ const UserManagement = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [filters, setFilters] = useState([]);
 
-  // Dummy data for testing
+  // Dummy data for testing 
   // const dummyUsers = [
   //   {
   //     id: 1,
