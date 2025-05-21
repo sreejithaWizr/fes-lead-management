@@ -52,18 +52,23 @@ const CreateUserPage = () => {
         console.log('Form submitted with values:', values);
 
         const payload = {
-            first_name: values?.userFirstName || '',
-            last_name: values?.userLastName || '',
-            email: values?.userEmail || '',
-            phone: values?.userPhoneNumber || '',
-            login_id: values?.userLoginMethod || '',
-            status_id: values?.userStatus || '',
-            org_id: values?.userOrganisationName || '',
-            role_id: values?.userRoles || null,
-            branch_id: values?.userBranch || null,
-            manager_id: values?.userManagerReportTo,
-            country_specialisation: values?.userCountrySpecialisation || '',
-            contact_center_id: values?.userContactCenterId || '',
+            userFirstName: values?.userFirstName || '',
+            userLastName: values?.userLastName || '',
+            userEmail: values?.userEmail || '',
+            userPhoneNumber: values?.userPhoneNumber || '',
+            // password: values?.userPassword || '',
+            userLoginMethod: values?.userLoginMethod || '',
+            userStatus: values?.userStatus || '',
+            orgId: values?.userOrganisationName || '',
+            roleId: values?.userRoles || null,
+            branchId: values?.userBranch || null,
+            managerId: values?.userManagerReportTo,
+            // userRoles: 0,
+            // userBranch: 0,
+            // userManagerReportTo: values?.userManagerReportTo,
+            userCountrySpecialisation: values?.userCountrySpecialisation || '',
+            userContactCenterId: values?.userContactCenterId || '',
+
         }
 
         try {
