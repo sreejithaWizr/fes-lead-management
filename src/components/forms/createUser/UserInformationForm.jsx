@@ -5,7 +5,6 @@ import { CustomInputField, CustomDropDown } from "react-mui-tailwind";
 import { getFESManager, getLoginMethod, getOrganisation, getUserRole, getBranch, getStatus, getCountry } from '../../../api/services/masterAPIs/createUserApi';
 
 const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode = "edit" }) => {
-    const isEditable = mode === "edit";
 
     const isCreateMode = mode === "create";
 
@@ -17,8 +16,8 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
     const [managerOptions, setManagerOptions] = useState([]);
     const [countryOptions, setCountryOptions] = useState([]);
 
-    const [priorityOptions, setPriorityOptions] = useState([]);
-    const [selectedPriorityOption, setSelectedPriorityOption] = useState("");
+    // const [priorityOptions, setPriorityOptions] = useState([]);
+    // const [selectedPriorityOption, setSelectedPriorityOption] = useState("");
 
 
     useEffect(() => {
@@ -49,12 +48,12 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
         fetchDropdownData();
     }, []);
 
-    useEffect(() => {
-        if (values.priority && priorityOptions?.length > 0) {
-            const selected = priorityOptions.find(option => option.id === values.priority);
-            setSelectedPriorityOption(selected || "");
-        }
-    }, [values.priority, priorityOptions]);
+    // useEffect(() => {
+    //     if (values.priority && priorityOptions?.length > 0) {
+    //         const selected = priorityOptions.find(option => option.id === values.priority);
+    //         // setSelectedPriorityOption(selected || "");
+    //     }
+    // }, [values.priority, priorityOptions]);
 
     return (
         <div className="form-section animate-fade-in ml-0 mb-6">
@@ -64,7 +63,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
             <div className="form-grid">
                 <div className="form-field flex flex-row items-start">
                     <CustomInputField
-                        state={isEditable || isCreateMode ? "default" : "non-editable"}
+                        // state={isEditable || isCreateMode ? "default" : "non-editable"}
                         label="First Name"
                         value={values.userFirstName}
                         onChange={(value) => {
@@ -82,7 +81,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
                 <div className="form-field">
                     <CustomInputField
-                        state={isEditable || isCreateMode ? "default" : "non-editable"}
+                        // state={isEditable || isCreateMode ? "default" : "non-editable"}
                         label="Last Name"
                         value={values.userLastName}
                         onChange={(value) => {
@@ -97,7 +96,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
                 <div className="form-field">
                     <CustomInputField
-                        state={isEditable || isCreateMode ? "default" : "non-editable"}
+                        // state={isEditable || isCreateMode ? "default" : "non-editable"}
                         label="Email"
                         value={values.userEmail}
                         onChange={(value) => {
@@ -112,7 +111,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
                 <div className="form-field">
                     <CustomInputField
-                        state={isEditable || isCreateMode ? "default" : "non-editable"}
+                        // state={isEditable || isCreateMode ? "default" : "non-editable"}
                         label="Phone Number"
                         value={values.userPhoneNumber}
                         showAsterisk={true}
@@ -132,12 +131,11 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         options={loginMethodOptions}
                         required={false}
                         placeHolder="Select"
-                        // value={organisationOptions?.find(option => option.id === values.priority) || ""}
-                        value={isEditable ? selectedPriorityOption : (loginMethodOptions?.find(option => option.id === values.priority) || "")}
-                        disabled={!isEditable && !isCreateMode}
+                        value={loginMethodOptions?.find(option => option.id === values.userLoginMethod) || ""}
+                        // disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
                             // setFieldValue('priority', value.target.value);
-                            setSelectedPriorityOption(value?.target?.value);   // update local selected object
+                            // setSelectedPriorityOption(value?.target?.value);   // update local selected object
                             setFieldValue('userLoginMethod', value?.target?.value?.id); // update formik value
                         }}
                         onBlur={() => handleBlur({ target: { name: 'userLoginMethod' } })}
@@ -152,12 +150,12 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         options={statusOptions}
                         required={true}
                         placeHolder="Select"
-                        // value={organisationOptions?.find(option => option.id === values.priority) || ""}
-                        value={isEditable ? selectedPriorityOption : (statusOptions?.find(option => option.id === values.priority) || "")}
-                        disabled={!isEditable && !isCreateMode}
+                        value={statusOptions?.find(option => option.id === values.userStatus) || ""}
+                        // value={isEditable ? selectedPriorityOption : (statusOptions?.find(option => option.id === values.priority) || "")}
+                        // disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
                             // setFieldValue('priority', value.target.value);
-                            setSelectedPriorityOption(value?.target?.value);   // update local selected object
+                            // setSelectedPriorityOption(value?.target?.value);   // update local selected object
                             setFieldValue('userStatus', value?.target?.value?.id); // update formik value
                         }}
                         onBlur={() => handleBlur({ target: { name: 'userStatus' } })}
@@ -172,12 +170,12 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         options={organisationOptions}
                         required={true}
                         placeHolder="Select"
-                        // value={organisationOptions?.find(option => option.id === values.priority) || ""}
-                        value={isEditable ? selectedPriorityOption : (organisationOptions?.find(option => option.id === values.priority) || "")}
-                        disabled={!isEditable && !isCreateMode}
+                        value={organisationOptions?.find(option => option?.id === values?.userOrganisationName) || ""}
+                        // value={isEditable ? selectedPriorityOption : (organisationOptions?.find(option => option.id === values.priority) || "")}
+                        // disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
                             // setFieldValue('priority', value.target.value);
-                            setSelectedPriorityOption(value?.target?.value);   // update local selected object
+                            // setSelectedPriorityOption(value?.target?.value);   // update local selected object
                             setFieldValue('userOrganisationName', value?.target?.value?.id); // update formik value
                         }}
                         onBlur={() => handleBlur({ target: { name: 'userOrganisationName' } })}
@@ -192,12 +190,12 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         options={userRoleOptions}
                         required={true}
                         placeHolder="Select"
-                        // value={priorityOptions?.find(option => option.id === values.priority) || ""}
-                        value={isEditable ? selectedPriorityOption : (userRoleOptions?.find(option => option.id === values.priority) || "")}
-                        disabled={!isEditable && !isCreateMode}
+                        value={userRoleOptions?.find(option => option.id === values.userRoles) || ""}
+                        // value={isEditable ? selectedPriorityOption : (userRoleOptions?.find(option => option.id === values.priority) || "")}
+                        // disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
                             // setFieldValue('priority', value.target.value);
-                            setSelectedPriorityOption(value?.target?.value);   // update local selected object
+                            // setSelectedPriorityOption(value?.target?.value);   // update local selected object
                             setFieldValue('userRoles', value?.target?.value?.id); // update formik value
                         }}
                         onBlur={() => handleBlur({ target: { name: 'userRoles' } })}
@@ -212,8 +210,8 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         options={branchOptions}
                         required={true}
                         placeHolder="Select"
-                        value={branchOptions?.find(option => option.id === values?.teleCallerName) || ""}
-                        disabled={!isEditable && !isCreateMode}
+                        value={branchOptions?.find(option => option.id === values?.userBranch) || ""}
+                        // disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
                             setFieldValue('userBranch', value.target.value?.id);
                         }}
@@ -229,8 +227,8 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         options={managerOptions}
                         required={true}
                         placeHolder="Select"
-                        value={managerOptions?.find(option => option.id === values?.teleCallerName) || ""}
-                        disabled={!isEditable && !isCreateMode}
+                        value={managerOptions?.find(option => option.id === values?.userManagerReportTo) || ""}
+                        // disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
                             setFieldValue('userManagerReportTo', value.target.value?.id);
                         }}
@@ -246,8 +244,8 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         options={countryOptions}
                         required={true}
                         placeHolder="Select"
-                        value={countryOptions?.find(option => option.id === values?.teleCallerName) || ""}
-                        disabled={!isEditable && !isCreateMode}
+                        value={countryOptions?.find(option => option.id === values?.userCountrySpecialisation) || ""}
+                        // disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
                             setFieldValue('userCountrySpecialisation', value.target.value?.id);
                         }}
@@ -259,7 +257,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
                 <div className="form-field">
                     <CustomInputField
-                        state={isEditable || isCreateMode ? "default" : "non-editable"}
+                        // state={isEditable || isCreateMode ? "default" : "non-editable"}
                         label="Contact Center ID"
                         value={values.userContactCenterId}
                         showAsterisk={false}

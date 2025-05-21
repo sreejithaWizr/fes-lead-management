@@ -17,5 +17,5 @@ export const getCountry = () => apiClient.get('api/Country');
 
 // Endpoint for Creating a User
 export const createUser = (payload) => {
-    return apiClient.post('api/CreateUser', payload);
+    return apiClient.post('api/User/CreateUser', payload);
 };

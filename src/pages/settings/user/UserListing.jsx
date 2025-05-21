@@ -10,7 +10,6 @@ import DeleteIcon from "../../../assets/delete-icon.svg";
 import DeletePopup from '../../../utils/DeletePopup';
 import { getUserList } from '../../../api/services/settingsAPI/userAPI';
 
-
 const UserManagement = () => {
 
   const navigate = useNavigate();
@@ -146,7 +145,6 @@ const UserManagement = () => {
     fetchUserData(filters, newRowsPerPage, 1); // Pass newRowsPerPage and reset page to 1
   };
 
-
   const fetchUserData = (
     customFilters = filters,
     customRowsPerPage = rowsPerPage,
@@ -187,7 +185,7 @@ const UserManagement = () => {
         console.log("inside", value)
         fetchUserData(filters, rowsPerPage, 1, value);
       }, 500),
-    [filters, rowsPerPage] // Do NOT include `searchTerm` here
+    [filters, rowsPerPage]
   );
 
   const handleChange = (e) => {
