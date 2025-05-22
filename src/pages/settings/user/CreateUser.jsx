@@ -57,7 +57,7 @@ const CreateUserPage = () => {
             userEmail: values?.userEmail || '',
             userPhoneNumber: values?.userPhoneNumber || '',
             // password: values?.userPassword || '',
-            userLoginMethod: values?.userLoginMethod || '',
+            loginMethodId: values?.userLoginMethod || '',
             userStatus: values?.userStatus || '',
             orgId: values?.userOrganisationName || '',
             roleId: values?.userRoles || null,
@@ -66,9 +66,9 @@ const CreateUserPage = () => {
             // userRoles: 0,
             // userBranch: 0,
             // userManagerReportTo: values?.userManagerReportTo,
-            userCountrySpecialisation: values?.userCountrySpecialisation || '',
-            user_number: values?.userNumber || '',
-
+            countryId: values?.userCountrySpecialisation || '',
+            // user_number: values?.userNumber || '',
+            userNumber: "user001",
         }
 
         try {
@@ -77,8 +77,6 @@ const CreateUserPage = () => {
             if (response?.data?.succeeded === true) {
                 navigate("/settings?tab=User+Management")
             }
-            alert("Created")
-            // Optional: reset form or show toast
         } catch (err) {
             console.error('Error creating user:', err);
         }

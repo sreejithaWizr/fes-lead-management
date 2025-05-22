@@ -257,24 +257,23 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                     />
                 </div>
 
-                {
-                    !isCreateMode && (
-                        <div className="form-field">
-                            <CustomInputField
-                                state="non-editable"
-                                label="User ID"
-                                value={values?.userNumber}
-                                showAsterisk={false}
-                                onChange={(value) => {
-                                    setFieldValue('userNumber', value.target.value)
-                                }}
-                                // placeholder="Enter contact center ID"
-                                onBlur={handleBlur}
-                                hasError={touched.userNumber && Boolean(errors.userNumber)}
-                                error={touched.userNumber && errors.userNumber}
-                            />
-                        </div>
-                    )
+                {!isCreateMode && (
+                    <div className="form-field">
+                        <CustomInputField
+                            // state={isEditable || isCreateMode ? "default" : "non-editable"}
+                            label="User ID"
+                            value={values.userContactCenterId}
+                            showAsterisk={false}
+                            onChange={(value) => {
+                                setFieldValue('userContactCenterId', value.target.value)
+                            }}
+                            placeholder="Enter contact center ID"
+                            onBlur={handleBlur}
+                            hasError={touched.userContactCenterId && Boolean(errors.userContactCenterId)}
+                            error={touched.userContactCenterId && errors.userContactCenterId}
+                        />
+                    </div>
+                )
                 }
             </div>
         </div>
