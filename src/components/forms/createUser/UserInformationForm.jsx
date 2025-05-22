@@ -4,7 +4,7 @@ import { CustomInputField, CustomDropDown } from "react-mui-tailwind";
 // import EditableFieldWrapper from '../../../utils/EditableFieldWrapper';
 import { getFESManager, getLoginMethod, getOrganisation, getUserRole, getBranch, getStatus, getCountry } from '../../../api/services/masterAPIs/createUserApi';
 
-const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode = "edit" }) => {
+const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode }) => {
 
     const isCreateMode = mode === "create";
 
@@ -55,6 +55,8 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
     //     }
     // }, [values.priority, priorityOptions]);
 
+    console.log("UserInformationForm values:", values);
+
     return (
         <div className="form-section animate-fade-in ml-0 mb-6">
             <h2 className="font-bold text-[19px] leading-[140%] tracking-[0%] text-[#17222B] font-[Proxima Nova] mb-4">
@@ -65,7 +67,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                     <CustomInputField
                         // state={isEditable || isCreateMode ? "default" : "non-editable"}
                         label="First Name"
-                        value={values.userFirstName}
+                        value={values?.userFirstName}
                         onChange={(value) => {
                             setFieldValue('userFirstName', value.target.value)
                         }}
@@ -83,7 +85,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                     <CustomInputField
                         // state={isEditable || isCreateMode ? "default" : "non-editable"}
                         label="Last Name"
-                        value={values.userLastName}
+                        value={values?.userLastName}
                         onChange={(value) => {
                             setFieldValue('userLastName', value.target.value)
                         }}
@@ -98,7 +100,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                     <CustomInputField
                         // state={isEditable || isCreateMode ? "default" : "non-editable"}
                         label="Email"
-                        value={values.userEmail}
+                        value={values?.userEmail}
                         onChange={(value) => {
                             setFieldValue('userEmail', value.target.value)
                         }}
@@ -113,7 +115,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                     <CustomInputField
                         // state={isEditable || isCreateMode ? "default" : "non-editable"}
                         label="Phone Number"
-                        value={values.userPhoneNumber}
+                        value={values?.userPhoneNumber}
                         showAsterisk={true}
                         onChange={(value) => {
                             setFieldValue('userPhoneNumber', value.target.value)
@@ -255,21 +257,25 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                     />
                 </div>
 
-                <div className="form-field">
-                    <CustomInputField
-                        // state={isEditable || isCreateMode ? "default" : "non-editable"}
-                        label="Contact Center ID"
-                        value={values.userContactCenterId}
-                        showAsterisk={false}
-                        onChange={(value) => {
-                            setFieldValue('userContactCenterId', value.target.value)
-                        }}
-                        placeholder="Enter contact center ID"
-                        onBlur={handleBlur}
-                        hasError={touched.userContactCenterId && Boolean(errors.userContactCenterId)}
-                        error={touched.userContactCenterId && errors.userContactCenterId}
-                    />
-                </div>
+                {
+                    !isCreateMode && (
+                        <div className="form-field">
+                            <CustomInputField
+                                state="non-editable"
+                                label="User ID"
+                                value={values?.userNumber}
+                                showAsterisk={false}
+                                onChange={(value) => {
+                                    setFieldValue('userNumber', value.target.value)
+                                }}
+                                // placeholder="Enter contact center ID"
+                                onBlur={handleBlur}
+                                hasError={touched.userNumber && Boolean(errors.userNumber)}
+                                error={touched.userNumber && errors.userNumber}
+                            />
+                        </div>
+                    )
+                }
             </div>
         </div>
     );

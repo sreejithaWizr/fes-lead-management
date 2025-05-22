@@ -48,8 +48,6 @@ const UserManagement = () => {
     navigate(`/users/edit/${row?.id}`);
   };
 
-
-
   const handleApplyFilter = (newFiltersArray) => {
     const filterMap = {};
     newFiltersArray.forEach(({ field, operator, value }) => {

@@ -2,29 +2,90 @@ import React, { useEffect, useState } from 'react';
 import { Formik, useFormikContext } from 'formik';
 import UserInformationForm from '../../../components/forms/createUser/UserInformationForm';
 // import { validationSchema } from '../../../components/forms/createUser/schema';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { CustomButton } from 'react-mui-tailwind';
 import LeftArrowIcon from "../../../assets/arrow-left.svg";
 import TickIcon from "../../../assets/tick.svg";
+import { getUserById } from '../../../api/services/settingsAPI/userAPI';
 
 export const formRef = React.createRef();
 
 const EditUserPage = () => {
+    const { id } = useParams();
     const navigate = useNavigate();
-    const initialValues = {
-        userFirstName: '',
-        userLastName: '',
-        userEmail: '',
-        userPhoneNumber: '',
-        userLoginMethod: '',
-        userStatus: '',
-        userOrganisationName: '',
-        userRoles: '',
-        userBranch: '',
-        userManagerReportTo: '',
-        userCountrySpecialisation: '',
-        userContactCenterId: '',
+    const [userData, setUserData] = useState(null);
+    const [initialValues, setInitialValues] = useState(null);
+
+    // get user by id
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await getUserById(id);
+                setUserData(response?.data);
+            } catch (err) {
+                console.error("Failed to fetch user:", err);
+            } finally {
+                // setLoading(false);
+            }
+        };
+
+        fetchUser();
+    }, [id]);
+
+    // console.log("User Data:", userData);
+
+    const userDetails = {
+        initials: `${userData?.first_name?.charAt(0) || ''}${userData?.last_name?.charAt(0) || ''}`,
+        name: `${userData?.first_name} ${userData?.last_name}`,
+        status: 'Active',
+        // id: `${userData?.lead_number}`,
+        email: `${userData?.email}`,
+        phone: `${userData?.phone}`,
     };
+
+    // console.log("User Details:", userDetails);
+
+    // JSON object to simulate prefilled data (could come from API)
+    useEffect(() => {
+        const prefilledUserData = {
+            userFirstName: userData?.first_name || '',
+            userLastName: userData?.last_name || '',
+            userEmail: userData?.email || '',
+            userPhoneNumber: userData?.phone || '',
+            userLoginMethod: userData?.login_id || '',
+            userStatus: userData?.status_id || '',
+            userOrganisationName: userData?.org_id || '',
+            userRoles: userData?.role_id || null,
+            userBranch: userData?.branch_id || null,
+            userManagerReportTo: userData?.manager_id || null,
+            userCountrySpecialisation: userData?.country_specialisation || '',
+            userNumber: userData?.user_number || '',
+
+        };
+
+        // Simulate delay and set data
+        setTimeout(() => {
+            setInitialValues(prefilledUserData);
+        }, 1000);
+    }, [userData]);
+
+    // console.log("Initial Values:", initialValues);
+
+    // Set the initial values of the form
+    // const initialValues = {
+    //     userFirstName: '',
+    //     userLastName: '',
+    //     userEmail: '',
+    //     userPhoneNumber: '',
+    //     userLoginMethod: '',
+    //     userStatus: '',
+    //     userOrganisationName: '',
+    //     userRoles: '',
+    //     userBranch: '',
+    //     userManagerReportTo: '',
+    //     userCountrySpecialisation: '',
+    //     userNumber: '',
+    // };
 
     const handleCancel = () => {
         navigate('/settings?tab=User+Management');
@@ -41,7 +102,6 @@ const EditUserPage = () => {
             );
 
             formRef.current.submitForm();
-
         }
     };
 
@@ -60,14 +120,14 @@ const EditUserPage = () => {
             branch_id: values?.userBranch || null,
             manager_id: values?.userManagerReportTo,
             country_specialisation: values?.userCountrySpecialisation || '',
-            contact_center_id: values?.userContactCenterId || '',
+            user_number: values?.userNumber || '',
         }
 
         try {
             const response = await createLead(payload);
             console.log('User created:', response.data);
             if (response?.data?.succeeded === true) {
-                navigate("/leads")
+                navigate("/settings?tab=User+Management")
             }
             alert("Created")
             // Optional: reset form or show toast
@@ -97,7 +157,7 @@ const EditUserPage = () => {
                 <div className="flex items-center gap-3">
                     <CustomButton text="Cancel" variant="secondary" startIcon={false} endIcon={false} onClick={handleCancel} />
                     <CustomButton text="Update" startIcon={true} endIcon={false} iconImg={TickIcon} onClick={handleFormSubmit} />
-                </div> 
+                </div>
             </div>
 
             <Formik
@@ -142,13 +202,13 @@ const EditUserPage = () => {
 
                         {/* {(activeTab === 'All Info' || activeTab === 'Lead Information') && ( */}
                         <UserInformationForm
+                            userDetails={userDetails}
                             values={values}
                             errors={errors}
                             touched={touched}
                             handleChange={handleChange}
                             handleBlur={handleBlur}
                             setFieldValue={setFieldValue}
-                            mode='create'
                         />
                         {/* )} */}
 

@@ -26,7 +26,7 @@ const CreateUserPage = () => {
         userBranch: '',
         userManagerReportTo: '',
         userCountrySpecialisation: '',
-        userContactCenterId: '',
+        userNumber: '',
     };
 
     const handleCancel = () => {
@@ -67,7 +67,7 @@ const CreateUserPage = () => {
             // userBranch: 0,
             // userManagerReportTo: values?.userManagerReportTo,
             userCountrySpecialisation: values?.userCountrySpecialisation || '',
-            userContactCenterId: values?.userContactCenterId || '',
+            user_number: values?.userNumber || '',
 
         }
 
