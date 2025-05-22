@@ -16,10 +16,6 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
     const [managerOptions, setManagerOptions] = useState([]);
     const [countryOptions, setCountryOptions] = useState([]);
 
-    // const [priorityOptions, setPriorityOptions] = useState([]);
-    // const [selectedPriorityOption, setSelectedPriorityOption] = useState("");
-
-
     useEffect(() => {
         const fetchDropdownData = async () => {
             try {
@@ -47,15 +43,6 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
         fetchDropdownData();
     }, []);
-
-    // useEffect(() => {
-    //     if (values.priority && priorityOptions?.length > 0) {
-    //         const selected = priorityOptions.find(option => option.id === values.priority);
-    //         // setSelectedPriorityOption(selected || "");
-    //     }
-    // }, [values.priority, priorityOptions]);
-
-    console.log("UserInformationForm values:", values);
 
     return (
         <div className="form-section animate-fade-in ml-0 mb-6">
@@ -133,7 +120,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         options={loginMethodOptions}
                         required={false}
                         placeHolder="Select"
-                        value={loginMethodOptions?.find(option => option.id === values.userLoginMethod) || ""}
+                        value={loginMethodOptions?.find(option => option.id === values?.userLoginMethod) || ""}
                         // disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
                             // setFieldValue('priority', value.target.value);
@@ -152,7 +139,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         options={statusOptions}
                         required={true}
                         placeHolder="Select"
-                        value={statusOptions?.find(option => option.id === values.userStatus) || ""}
+                        value={statusOptions?.find(option => option.id === values?.userStatus) || ""}
                         // value={isEditable ? selectedPriorityOption : (statusOptions?.find(option => option.id === values.priority) || "")}
                         // disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
@@ -192,7 +179,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         options={userRoleOptions}
                         required={true}
                         placeHolder="Select"
-                        value={userRoleOptions?.find(option => option.id === values.userRoles) || ""}
+                        value={userRoleOptions?.find(option => option.id === values?.userRoles) || ""}
                         // value={isEditable ? selectedPriorityOption : (userRoleOptions?.find(option => option.id === values.priority) || "")}
                         // disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
@@ -246,14 +233,14 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         options={countryOptions}
                         required={true}
                         placeHolder="Select"
-                        value={countryOptions?.find(option => option.id === values?.userCountrySpecialisation) || ""}
+                        value={countryOptions?.find(option => option.id === values?.countryId) || ""}
                         // disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
-                            setFieldValue('userCountrySpecialisation', value.target.value?.id);
+                            setFieldValue('countryId', value.target.value?.id);
                         }}
-                        onBlur={() => handleBlur({ target: { name: 'userCountrySpecialisation' } })}
-                        hasError={touched.userCountrySpecialisation && Boolean(errors.userCountrySpecialisation)}
-                        errorMessage={touched.userCountrySpecialisation && errors.userCountrySpecialisation}
+                        onBlur={() => handleBlur({ target: { name: 'countryId' } })}
+                        hasError={touched.countryId && Boolean(errors.countryId)}
+                        errorMessage={touched.countryId && errors.countryId}
                     />
                 </div>
 
@@ -262,15 +249,15 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         <CustomInputField
                             // state={isEditable || isCreateMode ? "default" : "non-editable"}
                             label="User ID"
-                            value={values.userContactCenterId}
+                            value={values?.userNumber}
                             showAsterisk={false}
                             onChange={(value) => {
-                                setFieldValue('userContactCenterId', value.target.value)
+                                setFieldValue('userNumber', value.target.value)
                             }}
                             placeholder="Enter contact center ID"
                             onBlur={handleBlur}
-                            hasError={touched.userContactCenterId && Boolean(errors.userContactCenterId)}
-                            error={touched.userContactCenterId && errors.userContactCenterId}
+                            hasError={touched.userNumber && Boolean(errors.userNumber)}
+                            error={touched.userNumber && errors.userNumber}
                         />
                     </div>
                 )
