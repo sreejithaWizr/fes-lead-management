@@ -4,7 +4,7 @@ import { CustomInputField, CustomDropDown } from "react-mui-tailwind";
 // import EditableFieldWrapper from '../../../utils/EditableFieldWrapper';
 import { getFESManager, getLoginMethod, getOrganisation, getUserRole, getBranch, getStatus, getCountry } from '../../../api/services/masterAPIs/createUserApi';
 
-const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode = "edit" }) => {
+const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode }) => {
 
     const isCreateMode = mode === "create";
 
@@ -255,21 +255,24 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                     />
                 </div>
 
-                <div className="form-field">
-                    <CustomInputField
-                        // state={isEditable || isCreateMode ? "default" : "non-editable"}
-                        label="Contact Center ID"
-                        value={values.userContactCenterId}
-                        showAsterisk={false}
-                        onChange={(value) => {
-                            setFieldValue('userContactCenterId', value.target.value)
-                        }}
-                        placeholder="Enter contact center ID"
-                        onBlur={handleBlur}
-                        hasError={touched.userContactCenterId && Boolean(errors.userContactCenterId)}
-                        error={touched.userContactCenterId && errors.userContactCenterId}
-                    />
-                </div>
+                {!isCreateMode && (
+                    <div className="form-field">
+                        <CustomInputField
+                            // state={isEditable || isCreateMode ? "default" : "non-editable"}
+                            label="User ID"
+                            value={values.userContactCenterId}
+                            showAsterisk={false}
+                            onChange={(value) => {
+                                setFieldValue('userContactCenterId', value.target.value)
+                            }}
+                            placeholder="Enter contact center ID"
+                            onBlur={handleBlur}
+                            hasError={touched.userContactCenterId && Boolean(errors.userContactCenterId)}
+                            error={touched.userContactCenterId && errors.userContactCenterId}
+                        />
+                    </div>
+                )
+                }
             </div>
         </div>
     );
