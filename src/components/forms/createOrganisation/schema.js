@@ -4,16 +4,16 @@ import { optionalDropdown, optionalEmailField, optionalTenDigitNumber, requiredB
 export const validationSchema = Yup.object({
   orgName: requiredStringField(),
   type: requiredStringField(),
-  region: requiredDropdown(),
+  // region: requiredDropdown(),
   business_mail: optionalEmailField(),
   mobileNumber: requiredTenDigitNumber(),
   admin_mail: requiredEmailField(),
   parent_org: requiredStringField(),
-  service_enabled: requiredMultiSelect(),
+  // service_enabled: requiredMultiSelect(),
 
   // Business Information
   gst_no: requiredStringField(),
-  primary_poc: requiredTenDigitNumber(),
+  primary_poc: requiredStringField(),
   poc_mail: requiredEmailField(),
 
   // Account Information

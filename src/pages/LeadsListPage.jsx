@@ -55,8 +55,8 @@ const LeadsTable = () => {
       filterMap[field] = {
         condition: operator,
         value: Array.isArray(value)
-  ? value.map(v => (typeof v === 'string' ? v : v.name))
-  : []
+          ? value.map(v => (typeof v === 'string' ? v : v.name))
+          : []
       };
     });
 
@@ -104,6 +104,13 @@ const LeadsTable = () => {
             <span>{value}</span>
           </div>
         );
+      case "status":
+        return (
+          <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusClass(value)}`}>
+            {value}
+          </span>
+        );
+
       case "action":
         return (
           <div className="flex items-center gap-2">
@@ -169,7 +176,7 @@ const LeadsTable = () => {
       case 'May be Prospective':
         return 'status-prospective';
       default:
-        return value;
+        return status;
     }
   };
 
@@ -178,7 +185,7 @@ const LeadsTable = () => {
     setCurrentPage(1);
     fetchLeadsData(filters, newRowsPerPage, 1); // Pass newRowsPerPage and reset page to 1
   };
-  
+
 
   const fetchLeadsData = (customFilters = filters, customRowsPerPage = rowsPerPage, customPage = currentPage) => {
     const output = customFilters.map(item => ({
@@ -188,14 +195,14 @@ const LeadsTable = () => {
         ? item.value.map(v => (typeof v === 'string' ? v : v.name))
         : []
     }));
-  
+
     const payload = {
       filters: output,
       pageSize: customRowsPerPage,
       pageNumber: customPage,
       filterApplied: customFilters.length > 0
     };
-  
+
     getLeadList(payload)
       .then(response => {
         const responseData = response?.data;
@@ -206,7 +213,7 @@ const LeadsTable = () => {
         console.error('Error fetching leads:', error);
       });
   };
-  
+
 
   return (
     <>
@@ -216,11 +223,11 @@ const LeadsTable = () => {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4" />
           <div className="flex items-center gap-3">
-            <CustomButton text="Create Lead" onClick={handleCreateLead} endIcon={false}  />
+            <CustomButton text="Create Lead" onClick={handleCreateLead} endIcon={false} />
             <CustomButton text="Bulk Upload" variant="secondary" endIcon={false} iconImg={BulkUploadIcon}
-               onClick={() => {
-                    navigate('/bulk');
-                  }} />
+              onClick={() => {
+                navigate('/bulk');
+              }} />
             <CustomButton variant="icon" showText={false} startIcon={true} endIcon={false} iconImg={FilterIcon} onClick={toggleFilter} />
           </div>
         </div>

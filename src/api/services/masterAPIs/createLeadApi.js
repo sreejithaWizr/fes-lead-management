@@ -11,6 +11,12 @@ export const getCity = () => apiClient.get('api/City');
 
 export const getCountry = () => apiClient.get('api/Country');
 
+export const getState = () => apiClient.get('api/State');
+
+export const getParentOrganisation = () => apiClient.get('api/ParentOrganization');
+
+export const getServiceEnabled = () => apiClient.get('api/Modules');
+
 export const getFESUser = () => apiClient.get('api/FESUser');
 
 export const getOrganization = () => apiClient.get('api/Organization');

@@ -1,35 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import { CustomInputField, CustomDropDown, CustomDatePicker, CustomCheckboxField, CustomToggle } from "react-mui-tailwind";
-import { getFESUser, getPriority } from "../../../api/services/masterAPIs/createLeadApi"
-import { data } from 'autoprefixer';
-import EditableFieldWrapper from '../../../utils/EditableFieldWrapper';
+import { CustomInputField, CustomDropDown, CustomToggle } from "react-mui-tailwind";
+import { getCountry, getOrganization, getOrganizationType, getParentOrganisation, getServiceEnabled, getState } from "../../../api/services/masterAPIs/createLeadApi"
 
 const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode = "edit" }) => {
   const isEditable = mode === "edit";
 
+  console.log("initialValues11", values)
   const isCreateMode = mode === "create";
 
-  const [userOptions, setUserOptions] = useState([]);
-
   const [typeOptions, setTypeOptions] = useState([]);
-  const [regionOptions, setRegionOptions] = useState([]);
   const [oganisationOptions, setOrganaisationOptions] = useState([]);
   const [serviceOptions, setServiceOptions] = useState([]);
   const [stateOptions, setStateOptions] = useState([]);
   const [countryOptions, setCountryOptions] = useState([]);
-  const [selectedPriorityOption, setSelectedPriorityOption] = useState("");
-  const [areaOfStudyOptions, setAreaOfStudyOptions] = useState([]);
+  const [defaultMultiValue, setDefaultMultiValue] = useState([]);
 
   useEffect(() => {
     const fetchDropdownData = async () => {
       try {
-        const [userRes, priorityRes] = await Promise.allSettled([
-          getFESUser(),
-          getPriority(),
+        const [countryRes, orgRes, stateRes, parentOrgRes, serviceRes] = await Promise.allSettled([
+          getCountry(),
+          getOrganizationType(),
+          getState(),
+          getParentOrganisation(),
+          getServiceEnabled()
         ]);
 
-        setUserOptions(userRes?.value?.data?.data || []);
-        setTypeOptions(priorityRes?.value?.data?.data || []);
+        setCountryOptions(countryRes?.value?.data?.data || []);
+        setTypeOptions(orgRes?.value?.data?.data || []);
+        setStateOptions(stateRes?.value?.data?.data || []);
+        setOrganaisationOptions(parentOrgRes?.value?.data?.data || []);
+        setServiceOptions(serviceRes?.value?.data?.data || []);
       } catch (err) {
         console.error('Error loading dropdown data:', err);
       }
@@ -39,17 +40,15 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
   }, []);
 
   useEffect(() => {
-    if (values.priority && typeOptions?.length > 0) {
-      const selected = typeOptions.find(option => option.id === values.priority);
-      setSelectedPriorityOption(selected || "");
-    }
-  }, [values.priority, typeOptions]);
+        if (values?.service_enabled?.length > 0) {
+            const selectedOptions = serviceOptions?.filter(option =>
+                values?.service_enabled.includes(option?.id)
+            );
+            setDefaultMultiValue(selectedOptions);
+        }
+    }, [values?.service_enabled, serviceOptions]);
 
-  const handleAgreeToReceiveOnChange = (event) => {
-    const { checked } = event.target;
-    setFieldValue('agreeToReceiveBoolean', checked);
-  }
-
+    
   return (
     <div className="form-section animate-fade-in ml-0 mb-6">
       <h2 className="font-bold text-[19px] leading-[140%] tracking-[0%] text-[#17222B] font-[Proxima Nova] mb-4">
@@ -79,7 +78,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
             options={typeOptions}
             required={true}
             placeHolder="Select"
-            value={typeOptions?.find(option => option.id === values.priority) || ""}
+            value={typeOptions?.find(option => option.id === values.type) || ""}
             // value={isEditable ? selectedPriorityOption : (typeOptions?.find(option => option.id === values.type) || "")}
             disabled={!isEditable && !isCreateMode}
             onChange={(value) => {
@@ -91,14 +90,14 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
           />
         </div>
 
-        <div className="form-field">
+        {/* <div className="form-field">
           <CustomDropDown
             label="Country/Region"
-            options={regionOptions}
+            options={countryOptions}
             required={true}
             placeHolder="Select"
-            value={regionOptions?.find(option => option.id === values.region) || ""}
-            // value={isEditable ? selectedPriorityOption : (regionOptions?.find(option => option.id === values.region) || "")}
+            value={countryOptions?.find(option => option.id === values.region) || ""}
+            // value={isEditable ? selectedPriorityOption : (countryOptions?.find(option => option.id === values.region) || "")}
             disabled={!isEditable && !isCreateMode}
             onChange={(value) => {
               setFieldValue('region', value?.target?.value?.id); // update formik value
@@ -107,7 +106,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
             hasError={touched.region && Boolean(errors.region)}
             errorMessage={touched.region && errors.region}
           />
-        </div>
+        </div> */}
 
         <div className="form-field">
           <CustomInputField
@@ -210,13 +209,13 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
           <CustomDropDown
             label="Servise Enabled"
             options={serviceOptions}
-            required={true}
+            required={false}
             multiple={true}
             placeHolder="Select"
             // value={defaultMultiValue}
-            // value={serviceOptions?.find(option => option?.id === values?.preferredDestination) || ""}
+            // value={serviceOptions?.find(option => option?.id === values?.service_enabled) || ""}
             value={isEditable ? defaultMultiValue : serviceOptions?.filter(option => values?.service_enabled?.includes(option?.id)) || []}
-            disabled={!isEditable}
+            // disabled={!isEditable}
             onChange={(value) => {
               setDefaultMultiValue(value.target.value); // Update dropdown visible values
               // setFieldValue('service_enabled', value.target.value)
@@ -238,7 +237,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
             label="Status"
             position="right"
             checked={values?.status}
-            onChange={(e) => setFieldValue("notes", e)}
+            onChange={(e) => setFieldValue("status", e)}
           />
         </div>
 
@@ -302,9 +301,9 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
             showAsterisk={false}
             placeHolder="Select"
             value={stateOptions?.find(option => option.id === values.state) || ""}
-            disabled={!isEditable}
+            // disabled={!isEditable}
             onChange={(value) => {
-              setFieldValue('state', value.target.value);
+              setFieldValue('state', value.target.value.id);
             }}
             onBlur={() => handleBlur({ target: { name: 'state' } })}
             hasError={touched.state && Boolean(errors.state)}
@@ -335,7 +334,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
             showAsterisk={false}
             placeHolder="Select"
             value={countryOptions?.find(option => option?.id === values?.country) || ""}
-            disabled={!isEditable}
+            // disabled={!isEditable}
             onChange={(value) => {
               setFieldValue('country', value.target.value?.id);
             }}
@@ -347,7 +346,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
 
         <div className="form-field">
           <CustomInputField
-            state={isEditable ? "default" : "non-editable"}
+            state={isEditable || isCreateMode ? "default" : "non-editable"}
             label="GST No"
             value={values.gst_no}
             placeholder="Enter GST number"

@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { CustomTable, CustomPagination, CustomButton, CustomSearch } from 'react-mui-tailwind';
+import { useSelector } from 'react-redux';
+import { CustomTable, CustomPagination, CustomButton, CustomOffCanvasModal, CustomSearch } from 'react-mui-tailwind';
 import EditIcon from "../../../assets/edit-icon.svg";
+import FilterIcon from "../../../assets/filter.svg";
+import FilterContent from '../../../pages/FilterContent';
+import debounce from "lodash.debounce";
 import DeleteIcon from "../../../assets/delete-icon.svg";
 import DeletePopup from '../../../utils/DeletePopup';
-import debounce from "lodash.debounce";
-
-// import userAvatar from "../../assets/user-avatar.png";
 import { getUserList } from '../../../api/services/settingsAPI/userAPI';
 
 const UserManagement = () => {
@@ -47,8 +47,6 @@ const UserManagement = () => {
   const handleEdit = (row) => {
     navigate(`/users/edit/${row?.id}`);
   };
-
-
 
   const handleApplyFilter = (newFiltersArray) => {
     const filterMap = {};

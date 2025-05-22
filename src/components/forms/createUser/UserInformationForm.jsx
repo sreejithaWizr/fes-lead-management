@@ -4,7 +4,7 @@ import { CustomInputField, CustomDropDown } from "react-mui-tailwind";
 // import EditableFieldWrapper from '../../../utils/EditableFieldWrapper';
 import { getFESManager, getLoginMethod, getOrganisation, getUserRole, getBranch, getStatus, getCountry } from '../../../api/services/masterAPIs/createUserApi';
 
-const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode = "edit" }) => {
+const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode }) => {
 
     const isCreateMode = mode === "create";
 
@@ -15,10 +15,6 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
     const [branchOptions, setBranchOptions] = useState([]);
     const [managerOptions, setManagerOptions] = useState([]);
     const [countryOptions, setCountryOptions] = useState([]);
-
-    // const [priorityOptions, setPriorityOptions] = useState([]);
-    // const [selectedPriorityOption, setSelectedPriorityOption] = useState("");
-
 
     useEffect(() => {
         const fetchDropdownData = async () => {
@@ -48,13 +44,6 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
         fetchDropdownData();
     }, []);
 
-    // useEffect(() => {
-    //     if (values.priority && priorityOptions?.length > 0) {
-    //         const selected = priorityOptions.find(option => option.id === values.priority);
-    //         // setSelectedPriorityOption(selected || "");
-    //     }
-    // }, [values.priority, priorityOptions]);
-
     return (
         <div className="form-section animate-fade-in ml-0 mb-6">
             <h2 className="font-bold text-[19px] leading-[140%] tracking-[0%] text-[#17222B] font-[Proxima Nova] mb-4">
@@ -65,7 +54,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                     <CustomInputField
                         // state={isEditable || isCreateMode ? "default" : "non-editable"}
                         label="First Name"
-                        value={values.userFirstName}
+                        value={values?.userFirstName}
                         onChange={(value) => {
                             setFieldValue('userFirstName', value.target.value)
                         }}
@@ -83,7 +72,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                     <CustomInputField
                         // state={isEditable || isCreateMode ? "default" : "non-editable"}
                         label="Last Name"
-                        value={values.userLastName}
+                        value={values?.userLastName}
                         onChange={(value) => {
                             setFieldValue('userLastName', value.target.value)
                         }}
@@ -98,7 +87,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                     <CustomInputField
                         // state={isEditable || isCreateMode ? "default" : "non-editable"}
                         label="Email"
-                        value={values.userEmail}
+                        value={values?.userEmail}
                         onChange={(value) => {
                             setFieldValue('userEmail', value.target.value)
                         }}
@@ -113,7 +102,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                     <CustomInputField
                         // state={isEditable || isCreateMode ? "default" : "non-editable"}
                         label="Phone Number"
-                        value={values.userPhoneNumber}
+                        value={values?.userPhoneNumber}
                         showAsterisk={true}
                         onChange={(value) => {
                             setFieldValue('userPhoneNumber', value.target.value)
@@ -131,7 +120,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         options={loginMethodOptions}
                         required={false}
                         placeHolder="Select"
-                        value={loginMethodOptions?.find(option => option.id === values.userLoginMethod) || ""}
+                        value={loginMethodOptions?.find(option => option.id === values?.userLoginMethod) || ""}
                         // disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
                             // setFieldValue('priority', value.target.value);
@@ -150,7 +139,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         options={statusOptions}
                         required={true}
                         placeHolder="Select"
-                        value={statusOptions?.find(option => option.id === values.userStatus) || ""}
+                        value={statusOptions?.find(option => option.id === values?.userStatus) || ""}
                         // value={isEditable ? selectedPriorityOption : (statusOptions?.find(option => option.id === values.priority) || "")}
                         // disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
@@ -190,7 +179,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         options={userRoleOptions}
                         required={true}
                         placeHolder="Select"
-                        value={userRoleOptions?.find(option => option.id === values.userRoles) || ""}
+                        value={userRoleOptions?.find(option => option.id === values?.userRoles) || ""}
                         // value={isEditable ? selectedPriorityOption : (userRoleOptions?.find(option => option.id === values.priority) || "")}
                         // disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
@@ -244,32 +233,35 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         options={countryOptions}
                         required={true}
                         placeHolder="Select"
-                        value={countryOptions?.find(option => option.id === values?.userCountrySpecialisation) || ""}
+                        value={countryOptions?.find(option => option.id === values?.countryId) || ""}
                         // disabled={!isEditable && !isCreateMode}
                         onChange={(value) => {
-                            setFieldValue('userCountrySpecialisation', value.target.value?.id);
+                            setFieldValue('countryId', value.target.value?.id);
                         }}
-                        onBlur={() => handleBlur({ target: { name: 'userCountrySpecialisation' } })}
-                        hasError={touched.userCountrySpecialisation && Boolean(errors.userCountrySpecialisation)}
-                        errorMessage={touched.userCountrySpecialisation && errors.userCountrySpecialisation}
+                        onBlur={() => handleBlur({ target: { name: 'countryId' } })}
+                        hasError={touched.countryId && Boolean(errors.countryId)}
+                        errorMessage={touched.countryId && errors.countryId}
                     />
                 </div>
 
-                <div className="form-field">
-                    <CustomInputField
-                        // state={isEditable || isCreateMode ? "default" : "non-editable"}
-                        label="Contact Center ID"
-                        value={values.userContactCenterId}
-                        showAsterisk={false}
-                        onChange={(value) => {
-                            setFieldValue('userContactCenterId', value.target.value)
-                        }}
-                        placeholder="Enter contact center ID"
-                        onBlur={handleBlur}
-                        hasError={touched.userContactCenterId && Boolean(errors.userContactCenterId)}
-                        error={touched.userContactCenterId && errors.userContactCenterId}
-                    />
-                </div>
+                {!isCreateMode && (
+                    <div className="form-field">
+                        <CustomInputField
+                            // state={isEditable || isCreateMode ? "default" : "non-editable"}
+                            label="User ID"
+                            value={values?.userNumber}
+                            showAsterisk={false}
+                            onChange={(value) => {
+                                setFieldValue('userNumber', value.target.value)
+                            }}
+                            placeholder="Enter contact center ID"
+                            onBlur={handleBlur}
+                            hasError={touched.userNumber && Boolean(errors.userNumber)}
+                            error={touched.userNumber && errors.userNumber}
+                        />
+                    </div>
+                )
+                }
             </div>
         </div>
     );
