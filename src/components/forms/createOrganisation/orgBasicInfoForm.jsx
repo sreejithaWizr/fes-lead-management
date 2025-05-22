@@ -40,15 +40,15 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
   }, []);
 
   useEffect(() => {
-        if (values?.service_enabled?.length > 0) {
-            const selectedOptions = serviceOptions?.filter(option =>
-                values?.service_enabled.includes(option?.id)
-            );
-            setDefaultMultiValue(selectedOptions);
-        }
-    }, [values?.service_enabled, serviceOptions]);
+    if (values?.service_enabled?.length > 0) {
+      const selectedOptions = serviceOptions?.filter(option =>
+        values?.service_enabled.includes(option?.id)
+      );
+      setDefaultMultiValue(selectedOptions);
+    }
+  }, [values?.service_enabled, serviceOptions]);
 
-    
+
   return (
     <div className="form-section animate-fade-in ml-0 mb-6">
       <h2 className="font-bold text-[19px] leading-[140%] tracking-[0%] text-[#17222B] font-[Proxima Nova] mb-4">
@@ -207,9 +207,9 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
 
         <div className="form-field">
           <CustomDropDown
-            label="Servise Enabled"
+            label="Services Enabled"
             options={serviceOptions}
-            required={false}
+            required={true}
             multiple={true}
             placeHolder="Select"
             // value={defaultMultiValue}
@@ -228,18 +228,18 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
         </div>
 
 
-        <div className="form-field mt-4">
-          {/* <CustomToggle
-          label="Status"
-          position="right"
-        /> */}
+        <div className="form-field">
+          <span className="font-bold text-[11px] leading-[140%] align-middle text-[#858585]">
+            Status
+          </span>
           <CustomToggle
-            label="Status"
+            label={values?.status == true ? "Active" : "Inactive"}
             position="right"
             checked={values?.status}
             onChange={(e) => setFieldValue("status", e)}
           />
         </div>
+
 
       </div>
       <div className="form-field mt-6">
@@ -297,7 +297,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
           <CustomDropDown
             label="State"
             options={stateOptions}
-            required={true}
+            required={false}
             showAsterisk={false}
             placeHolder="Select"
             value={stateOptions?.find(option => option.id === values.state) || ""}
