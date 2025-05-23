@@ -39,9 +39,8 @@ const UserManagement = () => {
     navigate('/users/create');
   };
 
-  const handleView = (value) => {
-    const selectedUser = users.find(user => user.userName === value);
-    navigate(`/users/view/${selectedUser?.id}`);
+  const handleView = (row) => {
+    navigate(`/users/view/${row?.id}`);
   };
 
   const handleEdit = (row) => {
@@ -90,7 +89,7 @@ const UserManagement = () => {
               alt={value}
               className="w-8 h-8 rounded-full object-cover"
             /> */}
-            <span className="font-bold cursor-pointer" onClick={() => handleView(value)}>
+            <span className="font-bold cursor-pointer" onClick={() => handleView(row)}>
               {value}
             </span>
           </div>
@@ -104,7 +103,6 @@ const UserManagement = () => {
 
         return (
           <span
-            className="font-semibold"
             style={{ color: statusColor }}
           >
             {value}
@@ -190,7 +188,6 @@ const UserManagement = () => {
     if (value.length >= 3 || value.length === 0) {
       debouncedSearch(value);
     }
-
   };
 
   return (
@@ -252,7 +249,6 @@ const UserManagement = () => {
           title={`Are you sure you want to delete ${selectedRow?.userName}?`}
         />
       )}
-
 
       {/* Filter Panel */}
       {isFilterOpen && (

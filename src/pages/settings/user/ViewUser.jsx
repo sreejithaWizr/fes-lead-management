@@ -2,79 +2,93 @@ import React, { useEffect, useState } from 'react';
 import { Formik, useFormikContext } from 'formik';
 import UserInformationForm from '../../../components/forms/createUser/UserInformationForm';
 // import { validationSchema } from '../../../components/forms/createUser/schema';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { CustomButton } from 'react-mui-tailwind';
 import LeftArrowIcon from "../../../assets/arrow-left.svg";
-import PersonalCard from "../../../assets/personalcard.svg";
-import EditIcon from "../../../assets/edit.svg";
-import { MailIcon, PhoneIcon } from 'lucide-react';
+import EditIcon from "../../../assets/edit-icon.svg";
+import MailIcon from "../../../assets/sms.svg";
+import PhoneIcon from "../../../assets/phone-icon.svg";
+import { getUserById } from '../../../api/services/settingsAPI/userAPI';
+import { getStatus } from '../../../api/services/masterAPIs/createUserApi';
 
 export const formRef = React.createRef();
 
 const ViewUserPage = () => {
+    const { id } = useParams();
     const navigate = useNavigate();
-    const initialValues = {
-        userFirstName: '',
-        userLastName: '',
-        userEmail: '',
-        userPhoneNumber: '',
-        userLoginMethod: '',
-        userStatus: '',
-        userOrganisationName: '',
-        userRoles: '',
-        userBranch: '',
-        userManagerReportTo: '',
-        userCountrySpecialisation: '',
-        userContactCenterId: '',
+    const [userData, setUserData] = useState(null);
+    const [initialValues, setInitialValues] = useState(null);
+    const [statusOptions, setStatusOptions] = useState([]);
+
+    // get user by id
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await getUserById(id);
+                setUserData(response?.data);
+            } catch (err) {
+                console.error("Failed to fetch user:", err);
+            } finally {
+                // setLoading(false);
+            }
+        };
+
+        fetchUser();
+    }, [id]);
+
+    // get the status of the user
+    useEffect(() => {
+        const fetchStatus = async () => {
+            try {
+                const response = await getStatus();
+                setStatusOptions(response?.data?.data || []);
+            } catch (err) {
+                console.error("Error fetching status options:", err);
+            }
+        };
+
+        fetchStatus();
+    }, []);
+
+    const userStatusLabel = statusOptions.find(status => status.id === userData?.status_id)?.name || '';
+
+    const userDetails = {
+        initials: `${userData?.first_name?.charAt(0) || ''}${userData?.last_name?.charAt(0) || ''}`,
+        name: `${userData?.first_name} ${userData?.last_name}`,
+        status: userStatusLabel,
+        email: `${userData?.email}`,
+        phone: `${userData?.phone}`,
     };
+
+    // JSON object to simulate prefilled data (could come from API)
+    useEffect(() => {
+        const fetchedUserData = {
+            userFirstName: userData?.first_name || '',
+            userLastName: userData?.last_name || '',
+            userEmail: userData?.email || '',
+            userPhoneNumber: userData?.phone || '',
+            userLoginMethod: userData?.login_method_id || '',
+            userStatus: userData?.status_id || '',
+            userOrganisationName: userData?.org_id || '',
+            userRoles: userData?.role_id || null,
+            userBranch: userData?.branch_id || null,
+            userManagerReportTo: userData?.manager_id || null,
+            countryId: userData?.countryId || '',
+            userNumber: userData?.user_number || '',
+        };
+
+        // Simulate delay and set data
+        setTimeout(() => {
+            setInitialValues(fetchedUserData);
+        }, 1000);
+    }, [userData]);
 
     const handleCancel = () => {
         navigate('/settings?tab=User+Management');
     };
 
-    const handleFormSubmit = () => {
-        if (formRef.current) {
-            // Set all fields as touched to trigger validation
-            formRef.current.setTouched(
-                Object.keys(formRef.current.values).reduce((acc, key) => {
-                    acc[key] = true;
-                    return acc;
-                }, {})
-            );
-
-            formRef.current.submitForm();
-        }
-    };
-
-    const handleSubmit = async (values, { setSubmitting }) => {
-        alert("User Created.");
-
-        const payload = {
-            first_name: values?.userFirstName || '',
-            last_name: values?.userLastName || '',
-            email: values?.userEmail || '',
-            phone: values?.userPhoneNumber || '',
-            login_id: values?.userLoginMethod || '',
-            status_id: values?.userStatus || '',
-            org_id: values?.userOrganisationName || '',
-            role_id: values?.userRoles || null,
-            branch_id: values?.userBranch || null,
-            manager_id: values?.userManagerReportTo,
-            country_specialisation: values?.userCountrySpecialisation || '',
-            contact_center_id: values?.userContactCenterId || '',
-        }
-
-        try {
-            const response = await createLead(payload);
-            console.log('User created:', response.data);
-            if (response?.data?.succeeded === true) {
-                navigate("/settings?tab=User+Management")
-            }
-            alert("Created")
-            // Optional: reset form or show toast
-        } catch (err) {
-            console.error('Error creating user:', err);
-        }
+    const handleEdit = (userData) => {
+        navigate(`/users/edit/${id}`);
     };
 
     return (
@@ -90,43 +104,43 @@ const ViewUserPage = () => {
                     />
                     <h1 className="text-2xl font-bold text-[#17222B]">User Details</h1>
                 </div>
-                <CustomButton
-                    text="Edit"
-                    iconImg={EditIcon}
-                    startIcon={true}
-                    endIcon={false}
-                    onClick={handleFormSubmit}
-                />
+                <div className='flex items-center gap-4'>
+                    <img
+                        src={EditIcon}
+                        alt="Edit"
+                        className="w-6 h-6 cursor-pointer"
+                        onClick={() => handleEdit(userData)}
+                    />
+                </div>
             </div>
 
             {/* Top Card: Avatar + Basic Info */}
             <div className="flex items-start gap-4 mb-6">
                 <div className="w-16 h-16 bg-[#030229B2] text-white rounded-full flex items-center justify-center text-lg font-bold">
-                    UN
+                    {userDetails?.initials}
                 </div>
                 <div className="flex flex-col gap-2">
                     <div className="flex items-center gap-2">
-                        <h2 className="text-lg font-bold text-[#17222B]">User Name</h2>
-                        Active
-                        {/* && (
+                        <h2 className="text-lg font-bold text-[#17222B]">{userDetails?.name}</h2>
+                        {userStatusLabel === "Active" && (
                             <span className="bg-[#E6F4EE] text-[#14AE5C] text-xs font-semibold px-3 py-1 rounded-full border border-[#B6E3CE]">
                                 Active
                             </span>
                         )}
-                        {user?.userStatus === "Inactive" && (
+                        {userStatusLabel === "Inactive" && (
                             <span className="bg-[#FFF3E6] text-[#FF8400] text-xs font-semibold px-3 py-1 rounded-full border border-[#FFB86B]">
                                 Inactive
                             </span>
-                        )} */}
+                        )}
                     </div>
                     <div className="flex items-center gap-4 text-sm text-[#6B7280]">
                         <span className="flex items-center gap-1">
                             <img src={MailIcon} className="w-4 h-4" alt="Email" />
-                            username@gmail.com
+                            {userDetails?.email}
                         </span>
                         <span className="flex items-center gap-1">
                             <img src={PhoneIcon} className="w-4 h-4" alt="Phone" />
-                            +1 234 567 890
+                            {userDetails?.phone}
                         </span>
                     </div>
                 </div>
@@ -135,7 +149,7 @@ const ViewUserPage = () => {
             <Formik
                 initialValues={initialValues}
                 // validationSchema={validationSchema}
-                onSubmit={handleSubmit}
+                // onSubmit={handleSubmit}
                 innerRef={formRef}
             // enableReinitialize={true}
             >
@@ -145,12 +159,13 @@ const ViewUserPage = () => {
                     touched,
                     handleChange,
                     handleBlur,
-                    handleSubmit,
+                    // handleSubmit,
                     setFieldValue,
                 }) => (
-                    <form onSubmit={handleSubmit}>
+                    // <form onSubmit={handleSubmit}>
+                    <form>
                         <UserInformationForm
-                            values={values}
+                            values={initialValues}
                             errors={errors}
                             touched={touched}
                             handleChange={handleChange}

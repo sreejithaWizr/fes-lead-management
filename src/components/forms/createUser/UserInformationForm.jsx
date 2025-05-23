@@ -7,6 +7,7 @@ import { getFESManager, getLoginMethod, getOrganisation, getUserRole, getBranch,
 const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode }) => {
 
     const isCreateMode = mode === "create";
+    const isViewable = mode === "view";
 
     const [loginMethodOptions, setLoginMethodOptions] = useState([]);
     const [statusOptions, setStatusOptions] = useState([]);
@@ -52,7 +53,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
             <div className="form-grid">
                 <div className="form-field flex flex-row items-start">
                     <CustomInputField
-                        // state={isEditable || isCreateMode ? "default" : "non-editable"}
+                        state={isViewable ? "disabled" : "default"}
                         label="First Name"
                         value={values?.userFirstName}
                         onChange={(value) => {
@@ -70,7 +71,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
                 <div className="form-field">
                     <CustomInputField
-                        // state={isEditable || isCreateMode ? "default" : "non-editable"}
+                       state={isViewable ? "disabled" : "default"}
                         label="Last Name"
                         value={values?.userLastName}
                         onChange={(value) => {
@@ -85,7 +86,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
                 <div className="form-field">
                     <CustomInputField
-                        // state={isEditable || isCreateMode ? "default" : "non-editable"}
+                       state={isViewable ? "disabled" : "default"}
                         label="Email"
                         value={values?.userEmail}
                         onChange={(value) => {
@@ -100,7 +101,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
 
                 <div className="form-field">
                     <CustomInputField
-                        // state={isEditable || isCreateMode ? "default" : "non-editable"}
+                        state={isViewable ? "disabled" : "default"}
                         label="Phone Number"
                         value={values?.userPhoneNumber}
                         showAsterisk={true}
@@ -121,7 +122,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         required={false}
                         placeHolder="Select"
                         value={loginMethodOptions?.find(option => option.id === values?.userLoginMethod) || ""}
-                        // disabled={!isEditable && !isCreateMode}
+                        disabled={isViewable}
                         onChange={(value) => {
                             // setFieldValue('priority', value.target.value);
                             // setSelectedPriorityOption(value?.target?.value);   // update local selected object
@@ -141,7 +142,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         placeHolder="Select"
                         value={statusOptions?.find(option => option.id === values?.userStatus) || ""}
                         // value={isEditable ? selectedPriorityOption : (statusOptions?.find(option => option.id === values.priority) || "")}
-                        // disabled={!isEditable && !isCreateMode}
+                        disabled={isViewable}
                         onChange={(value) => {
                             // setFieldValue('priority', value.target.value);
                             // setSelectedPriorityOption(value?.target?.value);   // update local selected object
@@ -161,7 +162,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         placeHolder="Select"
                         value={organisationOptions?.find(option => option?.id === values?.userOrganisationName) || ""}
                         // value={isEditable ? selectedPriorityOption : (organisationOptions?.find(option => option.id === values.priority) || "")}
-                        // disabled={!isEditable && !isCreateMode}
+                        disabled={isViewable}
                         onChange={(value) => {
                             // setFieldValue('priority', value.target.value);
                             // setSelectedPriorityOption(value?.target?.value);   // update local selected object
@@ -181,7 +182,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         placeHolder="Select"
                         value={userRoleOptions?.find(option => option.id === values?.userRoles) || ""}
                         // value={isEditable ? selectedPriorityOption : (userRoleOptions?.find(option => option.id === values.priority) || "")}
-                        // disabled={!isEditable && !isCreateMode}
+                        disabled={isViewable}
                         onChange={(value) => {
                             // setFieldValue('priority', value.target.value);
                             // setSelectedPriorityOption(value?.target?.value);   // update local selected object
@@ -200,7 +201,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         required={true}
                         placeHolder="Select"
                         value={branchOptions?.find(option => option.id === values?.userBranch) || ""}
-                        // disabled={!isEditable && !isCreateMode}
+                        disabled={isViewable}
                         onChange={(value) => {
                             setFieldValue('userBranch', value.target.value?.id);
                         }}
@@ -217,7 +218,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         required={true}
                         placeHolder="Select"
                         value={managerOptions?.find(option => option.id === values?.userManagerReportTo) || ""}
-                        // disabled={!isEditable && !isCreateMode}
+                        disabled={isViewable}
                         onChange={(value) => {
                             setFieldValue('userManagerReportTo', value.target.value?.id);
                         }}
@@ -234,7 +235,7 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         required={true}
                         placeHolder="Select"
                         value={countryOptions?.find(option => option.id === values?.countryId) || ""}
-                        // disabled={!isEditable && !isCreateMode}
+                        disabled={isViewable}
                         onChange={(value) => {
                             setFieldValue('countryId', value.target.value?.id);
                         }}
@@ -247,8 +248,8 @@ const UserInformationForm = ({ values, errors, touched, handleChange, handleBlur
                 {!isCreateMode && (
                     <div className="form-field">
                         <CustomInputField
-                            // state={isEditable || isCreateMode ? "default" : "non-editable"}
-                            label="User ID"
+                            state={isViewable ? "disabled" : "non-editable"}
+                            label="User Number"
                             value={values?.userNumber}
                             showAsterisk={false}
                             onChange={(value) => {

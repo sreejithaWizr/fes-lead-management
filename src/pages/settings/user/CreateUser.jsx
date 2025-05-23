@@ -25,7 +25,7 @@ const CreateUserPage = () => {
         userRoles: '',
         userBranch: '',
         userManagerReportTo: '',
-        userCountrySpecialisation: '',
+        countryId: '',
         userNumber: '',
     };
 
@@ -49,8 +49,6 @@ const CreateUserPage = () => {
     };
 
     const handleSubmit = async (values) => {
-        console.log('Form submitted with values:', values);
-
         const payload = {
             userFirstName: values?.userFirstName || '',
             userLastName: values?.userLastName || '',
@@ -66,7 +64,7 @@ const CreateUserPage = () => {
             // userRoles: 0,
             // userBranch: 0,
             // userManagerReportTo: values?.userManagerReportTo,
-            countryId: values?.userCountrySpecialisation || '',
+            countryId: values?.countryId || '',
             // user_number: values?.userNumber || '',
             userNumber: "user001",
         }

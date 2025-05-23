@@ -32,15 +32,6 @@ const EditUserPage = () => {
         fetchUser();
     }, [id]);
 
-    const userDetails = {
-        initials: `${userData?.first_name?.charAt(0) || ''}${userData?.last_name?.charAt(0) || ''}`,
-        name: `${userData?.first_name} ${userData?.last_name}`,
-        status: 'Active',
-        // id: `${userData?.lead_number}`,
-        email: `${userData?.email}`,
-        phone: `${userData?.phone}`,
-    };
-
     // JSON object to simulate prefilled data (could come from API)
     useEffect(() => {
         const fetchedUserData = {
@@ -83,9 +74,8 @@ const EditUserPage = () => {
     };
 
     const handleSubmit = async (values, { setSubmitting }) => {
-        alert("User Updated.");
-
         const payload = {
+            id: id,
             userFirstName: values?.userFirstName || '',
             userLastName: values?.userLastName || '',
             userEmail: values?.userEmail || '',
@@ -97,11 +87,12 @@ const EditUserPage = () => {
             branchId: values?.userBranch || null,
             managerId: values?.userManagerReportTo,
             countryId: values?.countryId || '',
-            userNumber: "user001",
+            userNumber: values?.userNumber || '',
         }
 
         try {
-            const response = await updateUser(id, payload);
+            // Call the API to update the user
+            const response = await updateUser(payload);
             console.log('User updated:', response.data);
             if (response?.data?.succeeded === true) {
                 navigate("/settings?tab=User+Management")
@@ -109,7 +100,7 @@ const EditUserPage = () => {
             // alert("Updated")
             // Optional: reset form or show toast
         } catch (err) {
-            console.error('Error creating user:', err);
+            console.error('Error updating user:', err);
         }
     };
 

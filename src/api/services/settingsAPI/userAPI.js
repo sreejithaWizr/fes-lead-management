@@ -14,11 +14,11 @@ export const getUserById = async (userId) => {
   }
 };
 
-export const updateUser = (id, payload) => {
+export const updateUser = (payload) => {
   try {
-      return apiClient.put(`/api/User/Edit${id}`, payload);
+    return apiClient.put(`/api/User`, payload);
   } catch (error) {
-      console.error("Error fetching user:", error);
-      throw error;
+    console.error("Error updating user:", error);
+    throw error;
   }
 };
