@@ -253,7 +253,7 @@ const UserManagement = () => {
           onConfirm={confirmDelete}
           title={
             <>
-              Are you sure you want to delete <strong> {selectedRow?.userName} ? </strong>
+              Are you sure you want to delete <span className='text-[#009CDC]'> <strong> {selectedRow?.userName} </strong> </span> ?
             </>
           }
         />

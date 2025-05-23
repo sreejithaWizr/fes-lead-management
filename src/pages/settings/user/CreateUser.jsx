@@ -54,14 +54,14 @@ const CreateUserPage = () => {
             userLastName: values?.userLastName || '',
             userEmail: values?.userEmail || '',
             userPhoneNumber: values?.userPhoneNumber || '',
-            loginMethodId: values?.userLoginMethod || '',
+            loginMethodId: values?.userLoginMethod || null,
             userStatus: values?.userStatus || '',
             orgId: values?.userOrganisationName || '',
             roleId: values?.userRoles || null,
             branchId: values?.userBranch || null,
             managerId: values?.userManagerReportTo,
             countryId: values?.countryId || '',
-            userNumber: "user001",
+            userNumber: "",
         }
 
         try {
