@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, useFormikContext } from 'formik';
 import UserInformationForm from '../../../components/forms/createUser/UserInformationForm';
-// import { validationSchema } from '../../../components/forms/createUser/schema';
+import { userValidationSchema } from '../../../components/forms/createUser/schema';
 import { useNavigate } from 'react-router-dom';
 import { CustomButton } from 'react-mui-tailwind';
 import LeftArrowIcon from "../../../assets/arrow-left.svg";
@@ -54,24 +54,18 @@ const CreateUserPage = () => {
             userLastName: values?.userLastName || '',
             userEmail: values?.userEmail || '',
             userPhoneNumber: values?.userPhoneNumber || '',
-            // password: values?.userPassword || '',
             loginMethodId: values?.userLoginMethod || '',
             userStatus: values?.userStatus || '',
             orgId: values?.userOrganisationName || '',
             roleId: values?.userRoles || null,
             branchId: values?.userBranch || null,
             managerId: values?.userManagerReportTo,
-            // userRoles: 0,
-            // userBranch: 0,
-            // userManagerReportTo: values?.userManagerReportTo,
             countryId: values?.countryId || '',
-            // user_number: values?.userNumber || '',
             userNumber: "user001",
         }
 
         try {
             const response = await createUser(payload);
-            console.log('User created:', response.data);
             if (response?.data?.succeeded === true) {
                 navigate("/settings?tab=User+Management")
             }
@@ -106,10 +100,10 @@ const CreateUserPage = () => {
 
             <Formik
                 initialValues={initialValues}
-                // validationSchema={validationSchema}
+                validationSchema={userValidationSchema}
                 onSubmit={handleSubmit}
                 innerRef={formRef}
-            // enableReinitialize={true}
+                enableReinitialize={true}
             >
                 {({
                     values,

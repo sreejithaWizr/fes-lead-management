@@ -27,7 +27,6 @@ const Sidebar = () => {
     { icon: NotificationIcon, path: '#', name: 'Notification' },
     { icon: ProfileIcon, path: '#', name: 'Profile',
       onClick: () => setIsProfileOpen((prev) => !prev),
-
      },
   ];
 

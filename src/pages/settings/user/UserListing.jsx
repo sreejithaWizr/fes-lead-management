@@ -8,7 +8,7 @@ import FilterContent from '../../../pages/FilterContent';
 import debounce from "lodash.debounce";
 import DeleteIcon from "../../../assets/delete-icon.svg";
 import DeletePopup from '../../../utils/DeletePopup';
-import { getUserList } from '../../../api/services/settingsAPI/userAPI';
+import { getUserList, deleteUser } from '../../../api/services/settingsAPI/userAPI';
 
 const UserManagement = () => {
 
@@ -27,8 +27,6 @@ const UserManagement = () => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [users, setUsers] = useState([]);
-
-
 
   useEffect(() => {
     fetchUserData();
@@ -69,14 +67,21 @@ const UserManagement = () => {
     setIsDeleteOpen(true);
   };
 
-  const confirmDelete = () => {
-    if (selectedRow) {
-      console.log("Deleting user:", selectedRow.userName);
+  const confirmDelete = async () => {
+    // if (selectedRow) {
+    //   // Example: remove from local list
+    //   setUsers((prev) => prev.filter(user => user.id !== selectedRow.id));
+    // }
+    // setIsDeleteOpen(false);
 
-      // Example: remove from local list
-      setUsers((prev) => prev.filter(user => user.id !== selectedRow.id));
+    try {
+      await deleteUser(selectedRow.id);
+      setIsDeleteOpen(false);
+      setSelectedRow(null);
+      fetchUserData(); // re-fetch user list after deletion
+    } catch (error) {
+      console.error("Failed to delete user:", error);
     }
-    setIsDeleteOpen(false);
   };
 
   const getRow = (columnId, value, row = {}) => {
@@ -246,7 +251,11 @@ const UserManagement = () => {
         <DeletePopup
           onClose={() => setIsDeleteOpen(false)}
           onConfirm={confirmDelete}
-          title={`Are you sure you want to delete ${selectedRow?.userName}?`}
+          title={
+            <>
+              Are you sure you want to delete <strong> {selectedRow?.userName} ? </strong>
+            </>
+          }
         />
       )}
 

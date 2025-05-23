@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, useFormikContext } from 'formik';
 import UserInformationForm from '../../../components/forms/createUser/UserInformationForm';
-// import { validationSchema } from '../../../components/forms/createUser/schema';
+import { userValidationSchema } from '../../../components/forms/createUser/schema';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CustomButton } from 'react-mui-tailwind';
 import LeftArrowIcon from "../../../assets/arrow-left.svg";
@@ -96,8 +96,6 @@ const EditUserPage = () => {
             if (response?.data?.succeeded === true) {
                 navigate("/settings?tab=User+Management")
             }
-            // alert("Updated")
-            // Optional: reset form or show toast
         } catch (err) {
             console.error('Error updating user:', err);
         }
@@ -131,7 +129,7 @@ const EditUserPage = () => {
                 <Formik
                     initialValues={initialValues}
                     enableReinitialize={true}  // Needed to re-init values after API loads
-                    // validationSchema={validationSchema}
+                    validationSchema={userValidationSchema}
                     onSubmit={handleSubmit}
                     innerRef={formRef}
                 >
@@ -145,32 +143,7 @@ const EditUserPage = () => {
                         setFieldValue,
                     }) => (
                         <form onSubmit={handleSubmit}>
-                            {/* <ErrorObserver setTabErrors={setTabErrors} /> */}
-                            {/* <div className="pb-2">
-                            <div className="mb-4">
-                                <div className="flex space-x-2">
-                                    {tabs.map((tab) => (
-                                        <div key={tab}>
-                                            <CustomButton
-                                                key={tab}
-                                                text={tab}
-                                                variant="chips"
-                                                rounded="full"
-                                                startIcon={false}
-                                                endIcon={tabErrors[tab] || false}
-                                                iconImg={tabErrors[tab] ? WarningIcon : undefined}
-                                                onClick={() => setActiveTab(tab)}
-                                                selected={activeTab === tab}
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div> */}
-
-                            {/* {(activeTab === 'All Info' || activeTab === 'Lead Information') && ( */}
                             <UserInformationForm
-                                // userDetails={userData}
                                 values={values}
                                 errors={errors}
                                 touched={touched}

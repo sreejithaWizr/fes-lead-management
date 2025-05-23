@@ -22,3 +22,12 @@ export const updateUser = (payload) => {
     throw error;
   }
 };
+
+export const deleteUser = (id) => {
+  try {
+    return apiClient.delete(`/api/User/${id}`);
+  } catch (error) {
+    console.error("Error updating user:", error);
+    throw error;
+  }
+};

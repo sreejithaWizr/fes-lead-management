@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, useFormikContext } from 'formik';
 import UserInformationForm from '../../../components/forms/createUser/UserInformationForm';
-// import { validationSchema } from '../../../components/forms/createUser/schema';
 import { useNavigate, useParams } from 'react-router-dom';
-import { CustomButton } from 'react-mui-tailwind';
 import LeftArrowIcon from "../../../assets/arrow-left.svg";
 import EditIcon from "../../../assets/edit-icon.svg";
 import MailIcon from "../../../assets/sms.svg";
@@ -148,10 +146,8 @@ const ViewUserPage = () => {
 
             <Formik
                 initialValues={initialValues}
-                // validationSchema={validationSchema}
-                // onSubmit={handleSubmit}
                 innerRef={formRef}
-            // enableReinitialize={true}
+                enableReinitialize={true}
             >
                 {({
                     values,
@@ -159,10 +155,8 @@ const ViewUserPage = () => {
                     touched,
                     handleChange,
                     handleBlur,
-                    // handleSubmit,
                     setFieldValue,
                 }) => (
-                    // <form onSubmit={handleSubmit}>
                     <form>
                         <UserInformationForm
                             values={initialValues}
