@@ -71,11 +71,9 @@ const LeadDetailsHeader = ({ lead }) => {
                             <div style={{display: "flex", height: "100%", flexDirection: "column", gap: "16px",}}>
                                 <div className="flex items-center gap-2 ">
                                     <h3 className="font-bold text-[19px] leading-[140%] tracking-[0%]">{lead.name}</h3>
-                                    {lead.status && (
-                                        <span className="bg-[#FFF3E6] text-[#FF8400] text-xs px-2 py-[2px] rounded-[8px] border border-[#FFB86B] font-bold text-[13px] leading-[140%] tracking-[0%] ">
-                                            {lead.status}
-                                        </span>
-                                    )}
+                                    <span className="text-xs px-2 py-1 rounded-full bg-[#FFF3E6] text-[#FF8400] font-medium border border-[#FFB86B]">
+                          {lead?.status}
+                        </span>
                                 </div>
                                 <div className="flex flex-wrap items-center text-sm text-gray-600 gap-4 mt-1">
                                     <span className="flex items-center gap-1">
