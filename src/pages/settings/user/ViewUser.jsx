@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Formik, useFormikContext } from 'formik';
+import { Formik } from 'formik';
 import UserInformationForm from '../../../components/forms/createUser/UserInformationForm';
 import { useNavigate, useParams } from 'react-router-dom';
+import { CustomButton } from 'react-mui-tailwind';
 import LeftArrowIcon from "../../../assets/arrow-left.svg";
 import EditIcon from "../../../assets/edit-icon.svg";
 import MailIcon from "../../../assets/sms.svg";
@@ -103,10 +104,11 @@ const ViewUserPage = () => {
                     <h1 className="text-2xl font-bold text-[#17222B]">User Details</h1>
                 </div>
                 <div className='flex items-center gap-4'>
-                    <img
-                        src={EditIcon}
-                        alt="Edit"
-                        className="w-6 h-6 cursor-pointer"
+                    <CustomButton
+                        text="Edit"
+                        variant="secondary"
+                        iconImg={EditIcon}
+                        endIcon={false}
                         onClick={() => handleEdit(userData)}
                     />
                 </div>
