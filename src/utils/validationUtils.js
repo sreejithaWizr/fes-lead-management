@@ -62,7 +62,7 @@ export const requiredEmailField = () =>
     .trim()
     .required("Required")
     .matches(
-      /^(?!.*\.\.)(?!\.)(?!.*\.$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      /^(?!.\.\.)(?!\.)(?!.\.$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
       "Invalid email format"
     );
 
@@ -70,7 +70,7 @@ export const optionalEmailField = () =>
   Yup.string()
     .trim()
     .matches(
-      /^(?!.*\.\.)(?!\.)(?!.*\.$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      /^(?!.\.\.)(?!\.)(?!.\.$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
       "Invalid email format"
     );
 
