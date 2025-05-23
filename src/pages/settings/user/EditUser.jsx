@@ -93,7 +93,6 @@ const EditUserPage = () => {
         try {
             // Call the API to update the user
             const response = await updateUser(payload);
-            console.log('User updated:', response.data);
             if (response?.data?.succeeded === true) {
                 navigate("/settings?tab=User+Management")
             }
