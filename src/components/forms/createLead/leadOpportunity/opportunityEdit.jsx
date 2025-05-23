@@ -66,7 +66,7 @@ const EditOpportunityRow = ({ key, data, onCancel, onUpdate }) => {
 
     const initialValues = {
         countryName: data?.country_name || '',
-        countryID : editData?.preffered_study_destination || '',
+        countryID: editData?.preffered_study_destination || '',
         opportunityID: data?.id || '',
         opportunityIDFormat: editData?.opportunityId || '',
         counsellor1: editData?.opportunity_owner || '',
@@ -111,7 +111,7 @@ const EditOpportunityRow = ({ key, data, onCancel, onUpdate }) => {
             className="grid grid-cols-[repeat(auto-fit,_minmax(250px,_1fr))] gap-4 p-5 border border-[#CBDBE4] rounded-[12px] bg-white animate-fade-in"
         >
             <div style={{ width: '100%' }}>
-                <label style={labelStyle}>Country</label>
+                {/* <label style={labelStyle}>Country</label>
                 <CustomInputField
                     name="countryName"
                     value={formik.values.countryName}
@@ -122,11 +122,23 @@ const EditOpportunityRow = ({ key, data, onCancel, onUpdate }) => {
                     onBlur={formik.handleBlur}
                     error={formik.touched.countryName && formik.errors.countryName}
                     hasError={formik.touched.countryName && Boolean(formik.errors.countryName)}
+                /> */}
+
+                <CustomInputField
+                    state="disabled"
+                    label="Country"
+                    value={formik.values.countryName}
+                    required={true}
+                    onChange={(e) => formik.setFieldValue('countryName', countryOptions?.find((o)=> o?.formik.values.countryName === o.id ) )}
+                    placeholder="Enter value"
+                    onBlur={formik.handleBlur}
+                    hasError={formik.touched.countryName && Boolean(formik.errors.countryName)}
+                    error={formik.touched.countryName && formik.errors.countryName}
                 />
             </div>
 
             <div style={{ width: '100%' }}>
-                <label style={labelStyle}>Opportunity ID</label>
+                {/* <label style={labelStyle}>Opportunity ID</label>
                 <CustomInputField
                     name="opportunityIDFormat"
                     value={formik.values.opportunityIDFormat}
@@ -136,11 +148,22 @@ const EditOpportunityRow = ({ key, data, onCancel, onUpdate }) => {
                     onBlur={formik.handleBlur}
                     error={formik.touched.opportunityIDFormat && formik.errors.opportunityIDFormat}
                     hasError={formik.touched.opportunityIDFormat && Boolean(formik.errors.opportunityIDFormat)}
+                /> */}
+                <CustomInputField
+                    state="disabled"
+                    label="Opportunity ID"
+                    value={formik.values.opportunityIDFormat}
+                    showAsterisk={false}
+                    onChange={(e) => formik.setFieldValue('opportunityIDFormat', e.target.value)}
+                    placeholder="Enter value"
+                    onBlur={formik.handleBlur}
+                    hasError={formik.touched.opportunityIDFormat && Boolean(formik.errors.opportunityIDFormat)}
+                    error={formik.touched.opportunityIDFormat && formik.errors.opportunityIDFormat}
                 />
             </div>
 
             <div style={{ width: '100%' }}>
-                <label style={labelStyle}>Counsellor 1</label>
+                {/* <label style={labelStyle}>Counsellor 1</label>
                 <CustomDropDown
                     name="counsellor1"
                     options={userOptions}
@@ -151,11 +174,25 @@ const EditOpportunityRow = ({ key, data, onCancel, onUpdate }) => {
                     onBlur={formik.handleBlur}
                     hasError={formik.touched.counsellor1 && Boolean(formik.errors.counsellor1)}
                     error={formik.touched.counsellor1 && formik.errors.counsellor1}
+                /> */}
+
+                <CustomDropDown
+                    label="Counsellor 1"
+                    options={userOptions}
+                    required={true}
+                    placeHolder="Select"
+                    // value={userOptions?.find(option => option.id === values.priority) || ""}
+                    value={userOptions?.find((option) => option.id === formik.values.counsellor1) || ""}
+                    // disabled={!isEditable && !isCreateMode}
+                    onChange={(e) => formik.setFieldValue('counsellor1', e.target.value?.id)}
+                    onBlur={formik.handleBlur}
+                    hasError={formik.touched.counsellor1 && Boolean(formik.errors.counsellor1)}
+                    errorMessage={formik.touched.counsellor1 && formik.errors.counsellor1}
                 />
             </div>
 
             <div style={{ width: '100%' }}>
-                <label style={labelStyle}>Counsellor 2</label>
+                {/* <label style={labelStyle}>Counsellor 2</label>
                 <CustomDropDown
                     name="counsellor2"
                     options={userOptions}
@@ -166,11 +203,25 @@ const EditOpportunityRow = ({ key, data, onCancel, onUpdate }) => {
                     onBlur={formik.handleBlur}
                     hasError={formik.touched.counsellor2 && Boolean(formik.errors.counsellor2)}
                     error={formik.touched.counsellor2 && formik.errors.counsellor2}
+                /> */}
+
+                <CustomDropDown
+                    label="Counsellor 2"
+                    options={userOptions}
+                    required={false}
+                    placeHolder="Select"
+                    // value={userOptions?.find(option => option.id === values.priority) || ""}
+                    value={userOptions?.find((option) => option.id === formik.values.counsellor2) || ""}
+                    // disabled={!isEditable && !isCreateMode}
+                    onChange={(e) => formik.setFieldValue('counsellor2', e.target.value?.id)}
+                    onBlur={formik.handleBlur}
+                    hasError={formik.touched.counsellor2 && Boolean(formik.errors.counsellor2)}
+                    errorMessage={formik.touched.counsellor2 && formik.errors.counsellor2}
                 />
             </div>
 
             <div style={{ width: '100%' }}>
-                <label style={labelStyle}>Preferred Intake</label>
+                {/* <label style={labelStyle}>Preferred Intake</label>
                 <CustomInputField
                     name="intake"
                     state="disabled"
@@ -181,11 +232,23 @@ const EditOpportunityRow = ({ key, data, onCancel, onUpdate }) => {
                     onBlur={formik.handleBlur}
                     error={formik.touched.intake && formik.errors.intake}
                     hasError={formik.touched.intake && Boolean(formik.errors.intake)}
+                /> */}
+
+                <CustomInputField
+                    state="disabled"
+                    label="Preferred Intake"
+                    value={formik.values.intake}
+                    required={true}
+                    onChange={(e) => formik.setFieldValue('intake', e.target.value)}
+                    placeholder="Enter value"
+                    onBlur={formik.handleBlur}
+                    hasError={formik.touched.intake && Boolean(formik.errors.intake)}
+                    error={formik.touched.intake && formik.errors.intake}
                 />
             </div>
 
             <div style={{ width: '100%' }}>
-                <label style={labelStyle}>Opportunity Status</label>
+                {/* <label style={labelStyle}>Opportunity Status</label>
                 <CustomDropDown
                     name="opportunityStatus"
                     options={statusOptions}
@@ -193,14 +256,29 @@ const EditOpportunityRow = ({ key, data, onCancel, onUpdate }) => {
                     onChange={(e) => formik.setFieldValue('opportunityStatus', e?.target?.value?.id)}
                     errorMessage={formik.touched.opportunityStatus && formik.errors.opportunityStatus}
                     hasError={formik.touched.opportunityStatus && Boolean(formik.errors.opportunityStatus)}
+                /> */}
+
+                <CustomDropDown
+                    label="Opportunity Status"
+                    options={statusOptions}
+                    required={true}
+                    placeHolder="Select"
+                    // value={statusOptions?.find(option => option.id === values.priority) || ""}
+                    value={statusOptions?.find((option) => option.id === formik.values.opportunityStatus) || ""}
+                    // disabled={!isEditable && !isCreateMode}
+                    onChange={(e) => formik.setFieldValue('opportunityStatus', e.target.value?.id)}
+                    onBlur={formik.handleBlur}
+                    hasError={formik.touched.opportunityStatus && Boolean(formik.errors.opportunityStatus)}
+                    errorMessage={formik.touched.opportunityStatus && formik.errors.opportunityStatus}
                 />
             </div>
 
             <div style={{ width: '100%' }}>
-                <label style={labelStyle}>Opportunity Category</label>
+                {/* <label style={labelStyle}>Opportunity Category</label> */}
                 <CustomDropDown
-                    name="opportunityCategory"
+                    label="Opportunity Category"
                     options={categoryOptions}
+                    required={true}
                     value={categoryOptions?.find((option) => option.id === formik.values.opportunityCategory) || ''}
                     // onChange={(e) => {
                     //     formik.setFieldValue('opportunityCategory', e?.target?.value?.id)
@@ -208,10 +286,10 @@ const EditOpportunityRow = ({ key, data, onCancel, onUpdate }) => {
                     // }}
                     onChange={async (e) => {
                         const selectedCategoryId = e?.target?.value?.id;
-                
+
                         formik.setFieldValue('opportunityCategory', selectedCategoryId);
                         formik.setFieldValue('opportunitySubCatergory', '');
-                
+
                         try {
                             const res = await getSubCategory(selectedCategoryId);
                             setSubCategoryOptions(res?.data?.data || []);
@@ -220,17 +298,18 @@ const EditOpportunityRow = ({ key, data, onCancel, onUpdate }) => {
                             setSubCategoryOptions([]);
                         }
                     }}
-                
+
                     errorMessage={formik.touched.opportunityCategory && formik.errors.opportunityCategory}
                     hasError={formik.touched.opportunityCategory && Boolean(formik.errors.opportunityCategory)}
                 />
             </div>
 
             <div style={{ width: '100%' }}>
-                <label style={labelStyle}>Opportunity Sub Category</label>
+                {/* <label style={labelStyle}>Opportunity Sub Category</label> */}
                 <CustomDropDown
-                    name="opportunitySubCatergory"
+                    label="Opportunity Sub Category"
                     options={subCategoryOptions}
+                    required={true}
                     // value={formik.values.opportunitySubCatergory}
                     value={
                         subCategoryOptions?.find(
