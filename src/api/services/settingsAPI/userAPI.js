@@ -21,7 +21,7 @@ export const updateUser = (payload) => {
     console.error("Error updating user:", error);
     throw error;
   }
-};
+}; 
 
 export const deleteUser = (id) => {
   try {
