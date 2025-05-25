@@ -80,7 +80,7 @@ const EditUserPage = () => {
             userLastName: values?.userLastName || '',
             userEmail: values?.userEmail || '',
             userPhoneNumber: values?.userPhoneNumber || '',
-            loginMethodId: values?.userLoginMethod || '',
+            loginMethodId: values?.userLoginMethod || null,
             userStatus: values?.userStatus || '',
             orgId: values?.userOrganisationName || '',
             roleId: values?.userRoles || null,
