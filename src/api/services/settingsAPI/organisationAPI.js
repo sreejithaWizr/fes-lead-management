@@ -11,7 +11,7 @@ export const getOrganisationById = async (orgId) => {
 
 export const updateOrganisation = (id, payload) => {
     try {
-        return apiClient.put(`/api/Organization/${id}`, payload);
+        return apiClient.put(`/api/Organization`, payload);
     } catch (error) {
         console.error("Error fetching lead:", error);
         throw error;

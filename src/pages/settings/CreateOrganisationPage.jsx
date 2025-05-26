@@ -53,9 +53,9 @@ const CreateOrganisationPage = () => {
         // Business Information
         street: '',
         city: '',
-        state: '',
+        state: null,
         postal_code: '',
-        country: '',
+        country: null,
         gst_no: '',
         primary_poc: '',
         poc_mail: '',
