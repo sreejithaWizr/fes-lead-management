@@ -16,8 +16,9 @@ import SettingsPage from "./components/SettingsPage";
 import RoleFormPage from "./components/forms/createRole/RoleFormPage";
 import CreateOrganisationPage from "./pages/settings/CreateOrganisationPage";
 import BulkUpload from "./pages/BulkUpload";
-import EditOrganisationPage from "./pages/settings/EditOrganisationPage";
-import OrganisationPageDetailView from "./pages/settings/OrganisationPageDetailView";
+import CreateUserPage from "./pages/settings/user/CreateUser";
+import EditUserPage from "./pages/settings/user/EditUser";
+import ViewUserPage from "./pages/settings/user/ViewUser";
 
 const App = () => {
   return (
@@ -25,21 +26,22 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="login" element={<Login />} />
-           <Route path="reset-password" element={<ResetPasswordPage />} />
-           <Route element={<ProtectedRoute />}>
-           <Route path="/" element={<Layout />}>
-            <Route index element={<Navigate to="/leads" replace />} />
-            <Route path="leads" element={<LeadsPage />} />
-            <Route path="bulk" element={<BulkUpload/> } />
-            <Route path="leads/create" element={<CreateLeadPage />} />
-            <Route path="leads/detailsview/:id" element={<LeadDetailsViewPage />} />
-            <Route path="leads/edit/:id" element={<EditLeadPage />} />
-            <Route path="settings" element={<SettingsPage />} />
-            <Route path="settings/organisation/create" element={<CreateOrganisationPage />} />
-            <Route path="settings/organisation/edit/:id" element={<EditOrganisationPage />} />
-            <Route path="settings/organisation/detailsview/:id" element={<OrganisationPageDetailView />} />
-            <Route path="role-create" element={<RoleFormPage />} />
-            <Route path="*" element={<NotFound />} />
+          <Route path="reset-password" element={<ResetPasswordPage />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Navigate to="/leads" replace />} />
+              <Route path="leads" element={<LeadsPage />} />
+              <Route path="bulk" element={<BulkUpload />} />
+              <Route path="leads/create" element={<CreateLeadPage />} />
+              <Route path="leads/detailsview/:id" element={<LeadDetailsViewPage />} />
+              <Route path="leads/edit/:id" element={<EditLeadPage />} />
+              <Route path="settings" element={<SettingsPage />} />
+              <Route path="settings/organisation/create" element={<CreateOrganisationPage />} />
+              <Route path="role-create" element={<RoleFormPage />} />
+              <Route path="users/create" element={<CreateUserPage />} />
+              <Route path="users/edit/:id" element={<EditUserPage />} />
+              <Route path="users/view/:id" element={<ViewUserPage />} />
+              <Route path="*" element={<NotFound />} />
             </Route>
           </Route>
         </Routes>

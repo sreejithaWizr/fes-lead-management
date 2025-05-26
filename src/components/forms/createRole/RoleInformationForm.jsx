@@ -38,7 +38,6 @@ const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur
         }
     }, [values.priority, priorityOptions]);
 
-
     return (
         <div className="form-section animate-fade-in ml-0 mb-6 p-[16px]">
             <h2 className="font-bold text-[19px] leading-[140%] tracking-[0%] text-[#17222B] font-[Proxima Nova] mb-4">

@@ -1,0 +1,163 @@
+import React, { useEffect, useState } from 'react';
+import { Formik, useFormikContext } from 'formik';
+import UserInformationForm from '../../../components/forms/createUser/UserInformationForm';
+import { userValidationSchema } from '../../../components/forms/createUser/schema';
+import { useNavigate, useParams } from 'react-router-dom';
+import { CustomButton } from 'react-mui-tailwind';
+import LeftArrowIcon from "../../../assets/arrow-left.svg";
+import TickIcon from "../../../assets/tick.svg";
+import { getUserById, updateUser } from '../../../api/services/settingsAPI/userAPI';
+
+export const formRef = React.createRef();
+
+const EditUserPage = () => {
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const [userData, setUserData] = useState(null);
+    const [initialValues, setInitialValues] = useState(null);
+
+    // get user by id
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await getUserById(id);
+                setUserData(response?.data);
+            } catch (err) {
+                console.error("Failed to fetch user:", err);
+            } finally {
+                // setLoading(false);
+            }
+        };
+
+        fetchUser();
+    }, [id]);
+
+    // JSON object to simulate prefilled data (could come from API)
+    useEffect(() => {
+        const fetchedUserData = {
+            userFirstName: userData?.first_name || '',
+            userLastName: userData?.last_name || '',
+            userEmail: userData?.email || '',
+            userPhoneNumber: userData?.phone || '',
+            userLoginMethod: userData?.login_method_id || '',
+            userStatus: userData?.status_id || '',
+            userOrganisationName: userData?.org_id || '',
+            userRoles: userData?.role_id || null,
+            userBranch: userData?.branch_id || null,
+            userManagerReportTo: userData?.manager_id || null,
+            countryId: userData?.countryId || '',
+            userNumber: userData?.user_number || '',
+        };
+
+        // Simulate delay and set data
+        setTimeout(() => {
+            setInitialValues(fetchedUserData);
+        }, 1000);
+    }, [userData]);
+
+    const handleCancel = () => {
+        navigate('/settings?tab=User+Management');
+    };
+
+    const handleFormSubmit = () => {
+        if (formRef.current) {
+            // Set all fields as touched to trigger validation
+            formRef.current.setTouched(
+                Object.keys(formRef.current.values).reduce((acc, key) => {
+                    acc[key] = true;
+                    return acc;
+                }, {})
+            );
+
+            formRef.current.submitForm();
+        }
+    };
+
+    const handleSubmit = async (values, { setSubmitting }) => {
+        const payload = {
+            id: id,
+            userFirstName: values?.userFirstName || '',
+            userLastName: values?.userLastName || '',
+            userEmail: values?.userEmail || '',
+            userPhoneNumber: values?.userPhoneNumber || '',
+            loginMethodId: values?.userLoginMethod || null,
+            userStatus: values?.userStatus || '',
+            orgId: values?.userOrganisationName || '',
+            roleId: values?.userRoles || null,
+            branchId: values?.userBranch || null,
+            managerId: values?.userManagerReportTo,
+            countryId: values?.countryId || '',
+            userNumber: values?.userNumber || '',
+        }
+
+        try {
+            // Call the API to update the user
+            const response = await updateUser(payload);
+            if (response?.data?.succeeded === true) {
+                navigate("/settings?tab=User+Management")
+            }
+        } catch (err) {
+            console.error('Error updating user:', err);
+        }
+    };
+
+    return (
+        <div className="w-full">
+            <div className="pb-6 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                    <img
+                        src={LeftArrowIcon}
+                        alt="FES Logo"
+                        className="size-[24px] rounded-md cursor-pointer"
+                        onClick={handleCancel}
+                    />
+                    <div className="flex items-center gap-2">
+                        <h1
+                            className="font-proxima font-bold text-[28px] leading-[140%] align-middle text-[#17222B]">
+                            Edit user
+                        </h1>
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                    <CustomButton text="Cancel" variant="secondary" startIcon={false} endIcon={false} onClick={handleCancel} />
+                    <CustomButton text="Update" startIcon={true} endIcon={false} iconImg={TickIcon} onClick={handleFormSubmit} />
+                </div>
+            </div>
+
+            {initialValues && (
+                <Formik
+                    initialValues={initialValues}
+                    enableReinitialize={true}  // Needed to re-init values after API loads
+                    validationSchema={userValidationSchema}
+                    onSubmit={handleSubmit}
+                    innerRef={formRef}
+                >
+                    {({
+                        values,
+                        errors,
+                        touched,
+                        handleChange,
+                        handleBlur,
+                        handleSubmit,
+                        setFieldValue,
+                    }) => (
+                        <form onSubmit={handleSubmit}>
+                            <UserInformationForm
+                                values={values}
+                                errors={errors}
+                                touched={touched}
+                                handleChange={handleChange}
+                                handleBlur={handleBlur}
+                                setFieldValue={setFieldValue}
+                                mode="edit"
+                            />
+                        </form>
+                    )}
+                </Formik>
+            )}
+        </div>
+    );
+};
+
+export default EditUserPage;
