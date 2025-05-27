@@ -59,13 +59,15 @@ const RoleManagement = () => {
   // };
 
   const handleCreateRole = () => {
-    navigate('/role-create');
+    navigate('/settings/role/create');
   };
 
-  const handleView = (value) => {
-    // const selectedLeadId = leads.find(lead => lead.leadNumber === value);
+  const handleView = (row) => {
+    // const selectedLeadId = leads.find(lead => lead.id === value);
     // console.log("selectedLeadId", selectedLeadId);
-    // navigate(`/leads/detailsview/${selectedLeadId?.id}`);
+    // navigate(`/settings/role/edit/${selectedLeadId?.id}`);
+    console.log("Row data:", row);
+    navigate(`/settings/role/view/${row?.id}`);
   }
 
   const handleApplyFilter = (newFiltersArray) => {
@@ -89,10 +91,10 @@ const RoleManagement = () => {
   const getRow = (columnId, value, row = {}) => {
     console.log("kkkkkkkkk", row)
     switch (columnId) {
-      case "leadNumber":
+      case "roleName":
         return (
           <div className="flex items-center gap-2">
-            <span className="font-bold cursor-pointer" onClick={() => handleView(value)}>
+            <span className="cursor-pointer" onClick={() => handleView(row)}>
               {value}
             </span>
           </div>
@@ -111,11 +113,10 @@ const RoleManagement = () => {
             <span>{value}</span>
           </div>
         );
-      case "email":
+      case "description":
         return (
           <div className="flex items-center gap-2">
-            <img src={MailIcon} alt="Mail" className="w-4 h-4" />
-            <span>{value}</span>
+            <span>{value ? value : "-"}</span>
           </div>
         );
       case "location":
@@ -154,7 +155,7 @@ const RoleManagement = () => {
 
   const handleEdit = (row) => {
     console.log("Row data:", row);
-    // navigate(`/leads/edit/${row?.id}`);
+    navigate(`/settings/role/edit/${row?.id}`);
   };
 
   // useEffect(() => {
@@ -256,7 +257,7 @@ const RoleManagement = () => {
 
           <div className="flex items-center gap-4" />
           <div className="flex items-center gap-3">
-            <CustomButton text="Create Role" onClick={handleCreateRole} endIcon={false} />
+            <CustomButton text="Add Role" onClick={handleCreateRole} endIcon={false} />
             {/* <CustomButton variant="icon" showText={false} startIcon={true} endIcon={false} iconImg={FilterIcon} onClick={toggleFilter} /> */}
           </div>
         </div>

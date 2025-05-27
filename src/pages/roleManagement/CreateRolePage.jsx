@@ -1,209 +1,163 @@
-import React, { useEffect, useState } from 'react';
-import { Formik, useFormikContext } from 'formik';
-import { CustomButton } from 'react-mui-tailwind'
-import WarningIcon from '../../assets/warning-icon.svg'
-import { useNavigate } from 'react-router-dom';
-import RoleInformationForm from '../../components/forms/createRole/RoleInformationForm';
-import { validationSchema } from '../../components/forms/createLead/schema';
-import LeadNumberIcon from '../../assets/personalcard.svg';
+import React, { useEffect, useState } from "react";
+import { Formik, Form, useFormikContext } from "formik";
+import * as Yup from "yup";
+import { CustomButton } from "react-mui-tailwind";
+import { useNavigate } from "react-router-dom";
 import LeftArrowIcon from "../../assets/arrow-left.svg";
 import RightArrowIcon from "../../assets/arrow-right.svg";
+import {
+  createRole,
+  roleAccess,
+} from "../../api/services/settingsAPI/roleAPIs";
+import { roleSchemaValidations } from "../../components/forms/createRole/schema";
+import RoleInformationForm from "../../components/forms/createRole/RoleInformationForm";
+import RoleAccessForm from "../../components/forms/createRole/RoleAccessForm";
+import RoleModuleFetcher from "./RoleFetcher";
 
-const CreateRole = () => {
+const CreateRolePage = () => {
 
-    const navigate = useNavigate()
+  const navigate = useNavigate();
 
-    const initialValues = {
-        //Role Info
-        roleName: '',
-        roleType: '',
-        parentRole: '',
-        childRole: '',
-        insertionMode: '',
-        organization: '',
-        description: '',
+  const [loadingModules, setLoadingModules] = useState(false);
 
-        // Role Access
+  const handleBack = () => {
+    navigate("/settings?tab=Role+Management");
+  };
 
-        // Lead Form View Permission
-        leadFormViewPermission: false,
-        leadInformationView: false,
-        educationQualificationView: false,
-        leadSourceView: false,
-        leadStatusView: false,
-        opportunityView: false,
-
-        // Lead Form Edit Permission
-        leadFormEditPermission: false,
-        leadInformationEdit: false,
-        educationQualificationEdit: false,
-        leadSourceEdit: false,
-        leadStatusEdit: false,
-        opportunityEdit: false,
-
-        // Masked Data View
-        maskedDataView: false,
-        email: false,
-        secondaryEmail: false,
-        phone: false,
-        whatsAppNumber: false,
-        source1: false,
-
-        // Delete Access
-        deleteAccess: true,
-        opportunityLead: false,
-        leadDelete: false,
-
+  const handleSubmit = async (values) => {
+    const payload = {
+      role_name: values?.roleName,
+      role_type_id: values?.roleType,
+      parent_role_id: values?.parentRole,
+      hierarchy_level: values?.hierarchyLevel,
+      insertion_mode_id: values?.insertionMode,
+      description: values?.description,
+      org_id: values?.organisation,
+      role_modules: values?.roleModules,
     };
 
-    const handleSubmit = async (values, { setSubmitting }) => {
+    // console.log("payload", payload);
 
-        console.log("Valuees", values)
-
-        // try {
-        //     const response = await createLead(payload);
-        //     console.log('User created:', response.data);
-        //     if (response?.data?.succeeded === true) {
-        //         navigate("/leads")
-        //     }
-        //     alert("Created")
-        //     // Optional: reset form or show toast
-        // } catch (err) {
-        //     console.error('Error creating user:', err);
-        // }
-    };
-
-    const leadData = {
-        first_name: "Anjana",
-        last_name: "James",
-        lead_number: "o9090",
-        email: "akskksksk@fjma0.com",
-        mobile_number: "0909389489"
+    try {
+      const response = await createRole(payload);
+      console.log("User created:", response.data);
+      if (response?.data?.succeeded === true) {
+        navigate("/settings?tab=Role+Management");
+      }
+    } catch (err) {
+      console.error("Error creating user:", err);
     }
+  };
 
-    const handleBack = () => {
-        navigate("/settings?tab=Role+Management")
-    }
+  return (
+    <Formik
+      initialValues={{
+        roleName: "",
+        roleType: "",
+        parentRole: "",
+        copyRoleTemplte: "",
+        insertionMode: "",
+        organisation: "",
+        hierarchyLevel: "",
+        description: "",
+        roleModules: [],
+      }}
+      validationSchema={roleSchemaValidations}
+      onSubmit={(values) => handleSubmit(values)}
+    >
+      {(formik) => {
+        // For Fetching the data when organization and copyrole changes
+        useEffect(() => {
+          const fetchModules = async () => {
+              const selectedOrg = formik?.values?.organisation;
+              const selectedCopyRole = formik?.values?.copyRoleTemplte;
+      
+              console.log("copy role template", selectedCopyRole);
+      
+              if (selectedOrg) {
+                  setLoadingModules(true);
+                  const payload = {
+                      orgid: selectedOrg || null,
+                      copyparentrole_id: selectedCopyRole || null,
+                  };
+                  console.log("Payload:", payload);
+      
+                  try {
+                      const data = await roleAccess(payload);
+                      console.log("Fetched data:", data);
+                      formik.setFieldValue(
+                          "roleModules",
+                          data?.data?.data?.role_modules || []
+                      );
+                  } catch (error) {
+                      console.error("Failed to fetch role modules:", error);
+                      formik.setFieldValue("roleModules", []);
+                  } finally {
+                      setLoadingModules(false); // <-- this always runs
+                  }
+              } else {
+                  formik.setFieldValue("roleModules", []);
+              }
+          };
+      
+          fetchModules();
+      }, [formik?.values?.organisation, formik?.values?.copyRoleTemplte]);
 
-    return (
-        <div className="w-full">
-            <Formik
-                initialValues={initialValues}
-                validationSchema={validationSchema}
-                onSubmit={handleSubmit}
-                enableReinitialize={true}
-            >
-                {({
-                    values,
-                    errors,
-                    touched,
-                    handleChange,
-                    handleBlur,
-                    handleSubmit,
-                    isSubmitting,
-                    setFieldValue,
-                }) => (
-                    <form onSubmit={handleSubmit}>
-                        <div className="flex w-full justify-between mb-4">
-                            <div className="flex items-center gap-4">
-                                <img
-                                    src={LeftArrowIcon}
-                                    alt="FES Logo"
-                                    className="size-[24px] rounded-md cursor-pointer"
-                                    onClick={handleBack}
-                                />
-                                <div className="flex items-center gap-2">
-                                    <h1
-                                        className="font-proxima font-bold text-[28px] leading-[140%] align-middle text-[#17222B]">
-                                        Add new role
-                                    </h1>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <CustomButton text="Cancel" variant="secondary" startIcon={false} endIcon={false} onClick={handleBack} />
-                                <CustomButton text="Submit" startIcon={false} endIcon={true} iconImg={RightArrowIcon} onClick={handleSubmit} />
-                            </div>
-                            {/* for search button if needed */}
-                            <></>
-                            {/* <div className="flex items-center gap-3">
-                                                    <CustomButton text="Cancel" variant="secondary" startIcon={false} endIcon={false} onClick={handleBack} />
-                                                    <CustomButton text="Update" startIcon={false} endIcon={true} iconImg={RightArrowIcon} onClick={handleFormSubmit} />
-                                                </div> */}
-                        </div>
-                        {/* <div className="p-4 rounded-lg mb-4">
-                            <div className="flex items-start justify-between flex-wrap">
-                                <div className="flex items-center space-x-4">
-                                    <div className="w-14 h-14 bg-slate-700 text-white rounded-full flex items-center justify-center text-lg font-semibold">
-                                        {leadData?.first_name?.charAt(0)} {leadData?.last_name?.charAt(0)}
-                                    </div>
-                                    <div className="space-y-1">
-                                        <div className="flex items-center space-x-2 mb-2">
-                                            <h1 className="font-bold text-[19px] text-[#17222B]">{leadData?.first_name} {leadData?.last_name}</h1>
-                                            <span className="text-xs px-2 py-1 rounded-full bg-[#FFF3E6] text-[#FF8400] font-medium border border-[#FFB86B]">
-                                                May be Prospective
-                                            </span>
-                                        </div>
-                                        <div className="text-sm text-gray-600 flex flex-wrap gap-x-4">
-                                            <div className="flex items-center space-x-2">
-                                                <img src={LeadNumberIcon} alt="Lead Icon" className="w-5 h-5" />
-                                                <span className="text-[13px]">{leadData?.lead_number}</span>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <CustomButton
-                                        variant="button"
-                                        text="Submit"
-                                        endIcon={false}
-                                        showText={true}
-                                        onClick={handleSubmit}
-                                    />
-                                </div>
-                            </div>
-                        </div> */}
-                        {/* <div className="pb-2">
-                            <div className="mb-4">
-                                <div className="flex space-x-2">
-                                    {tabs.map((tab) => (
-                                        <div key={tab}>
-                                            <CustomButton
-                                                key={tab}
-                                                text={tab}
-                                                variant="chips"
-                                                rounded="full"
-                                                startIcon={false}
-                                                endIcon={tabErrors[tab] || false}
-                                                iconImg={tabErrors[tab] ? WarningIcon : undefined}
-                                                onClick={() => setActiveTab(tab)}
-                                                selected={activeTab === tab}
-                                            />
-                                        </div>
-                                    ))}
-
-                                </div>
-                            </div>
-                        </div> */}
-
-                        <RoleInformationForm
-                            values={values}
-                            errors={errors}
-                            touched={touched}
-                            handleChange={handleChange}
-                            handleBlur={handleBlur}
-                            setFieldValue={setFieldValue}
-                        />
-                    </form>
-                )}
-            </Formik>
-        </div>
-    )
+        return (
+          <Form>
+            <div className="flex w-full justify-between mb-4">
+              <div className="flex items-center gap-4">
+                <img
+                  src={LeftArrowIcon}
+                  alt="FES Logo"
+                  className="size-[24px] rounded-md cursor-pointer"
+                  onClick={handleBack}
+                />
+                <div className="flex items-center gap-2">
+                  <h1 className="font-proxima font-bold text-[28px] leading-[140%] align-middle text-[#17222B]">
+                    Add new role
+                  </h1>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <CustomButton
+                  text="Cancel"
+                  variant="secondary"
+                  startIcon={false}
+                  endIcon={false}
+                  onClick={handleBack}
+                />
+                <CustomButton
+                  type="Submit"
+                  text="Submit"
+                  startIcon={false}
+                  endIcon={true}
+                  iconImg={RightArrowIcon}
+                />
+              </div>
+            </div>
+            <RoleInformationForm {...formik} mode="create" />
+            {formik?.values?.organisation &&
+              (loadingModules ? (
+                <div className="flex justify-center items-center py-10">
+                  <div
+                    // className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-900"
+                    className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-blue-500 border-solid  border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                  ></div>
+                </div>
+              ) : (
+                formik?.values?.roleModules?.length > 0 && (
+                  <RoleAccessForm
+                    values={formik?.values}
+                    setFieldValue={formik.setFieldValue}
+                  />
+                )
+              ))}
+          </Form>
+        );
+      }}
+    </Formik>
+  );
 };
 
-export default CreateRole;
+export default CreateRolePage;

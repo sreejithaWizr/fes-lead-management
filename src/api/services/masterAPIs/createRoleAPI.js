@@ -1,12 +1,14 @@
 import apiClient from "../../config/axios";
 
-export const getUserRoleType= () => apiClient.get('api/UserRoleType');
+export const getUserRoleType = () => apiClient.get("api/UserRoleType");
 
-export const getStatus = () => apiClient.get('api/Status');
+export const getInsertionMode = () => apiClient.get("api/InsertionMode");
 
-export const getSubCategory = (id) => apiClient.get(`api/SubCategory/GetSubCategoryByCategoryId/${id}`);
+export const getUserRole = () => apiClient.get("/api/UserRole");
 
-export const getTestName = () => apiClient.get('api/TestName');
+// export const getCopyRoleTemplate = (id) => apiClient.get(`api/UserRole/getCopyRoleTemplate/${id}`);
+export const getCopyRoleTemplate = (payload) => {
+  return apiClient.post("/api/UserRole/GetChildRoleByParentRoleId", payload);
+};
 
-export const getVertical = () => apiClient.get('api/Vertical');
- 
+export const getOrganization = () => apiClient.get("api/Organization");
