@@ -16,7 +16,7 @@ const CreateOrganisationPage = () => {
     const navigate = useNavigate();
 
     const handleCancel = () => {
-        navigate('/settings');
+        navigate('/settings?tab=Organisation+Management');
     };
 
     const handleFormSubmit = () => {
@@ -106,7 +106,7 @@ const CreateOrganisationPage = () => {
             const response = await createOrganisation(payload);
             console.log('User created:', response.data);
             if (response?.data?.succeeded === true) {
-                navigate("/settings")
+                navigate("/settings?tab=Organisation+Management")
                 // alert("Created")
             }
             else {

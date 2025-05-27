@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { CustomInputField, CustomDropDown, CustomToggle } from "react-mui-tailwind";
-import { getCountry, getOrganization, getOrganizationType, getParentOrganisation, getServiceEnabled, getState } from '../../../api/services/masterAPIs/createLeadApi';
-// import { getCountry, getOrganization, getOrganizationType, getParentOrganisation, getServiceEnabled, getState } from "../../../api/services/masterAPIs/createLeadApi"
+import { getCountry, getOrganizationType, getParentOrganisation, getServiceEnabled, getState } from "../../../api/services/masterAPIs/createLeadApi"
 
 const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode = "edit" }) => {
   const isEditable = mode === "edit";
@@ -59,7 +58,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
         <div className="form-field flex flex-row items-start">
           <CustomInputField
             required
-            state={isEditable || isCreateMode ? "default" : "non-editable"}
+            state={isEditable || isCreateMode ? "default" : "disabled"}
             label="Organisation Name"
             value={values.orgName}
             onChange={(value) => {
@@ -111,7 +110,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
 
         <div className="form-field">
           <CustomInputField
-            state={isEditable || isCreateMode ? "default" : "non-editable"}
+            state={isEditable || isCreateMode ? "default" : "disabled"}
             label="Business Email"
             showAsterisk={false}
             value={values.business_mail}
@@ -127,7 +126,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
 
         <div className="form-field">
           <CustomInputField
-            state={isEditable || isCreateMode ? "default" : "non-editable"}
+            state={isEditable || isCreateMode ? "default" : "disabled"}
             label="Contact Number"
             value={values.mobileNumber}
             onChange={(value) => {
@@ -143,7 +142,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
         <div className="form-field">
           <CustomInputField
             state="disabled"
-            // state={isEditable || isCreateMode ? "default" : "non-editable"}
+            // state={isEditable || isCreateMode ? "default" : "disabled"}
             label="File Uploads"
             value={values.alternativeNumber}
             showAsterisk={false}
@@ -159,7 +158,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
 
         <div className="form-field">
           <CustomInputField
-            state={isEditable || isCreateMode ? "default" : "non-editable"}
+            state={isEditable || isCreateMode ? "default" : "disabled"}
             label="Primary Admin User Name"
             value={values.primary_admin_user_name}
             showAsterisk={false}
@@ -175,7 +174,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
 
         <div className="form-field">
           <CustomInputField
-            state={isEditable || isCreateMode ? "default" : "non-editable"}
+            state={isEditable || isCreateMode ? "default" : "disabled"}
             label="Admin Email"
             value={values.admin_mail}
             onChange={(value) => {
@@ -238,6 +237,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
             position="right"
             checked={values?.status}
             onChange={(e) => setFieldValue("status", e)}
+            disabled={!isEditable && !isCreateMode}
           />
         </div>
 
@@ -264,7 +264,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
       <div className="form-grid">
         <div className="form-field">
           <CustomInputField
-            state={isEditable || isCreateMode ? "default" : "non-editable"}
+            state={isEditable || isCreateMode ? "default" : "disabled"}
             showAsterisk={false}
             label="Street"
             value={values.street}
@@ -280,7 +280,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
 
         <div className="form-field">
           <CustomInputField
-            state={isEditable || isCreateMode ? "default" : "non-editable"}
+            state={isEditable || isCreateMode ? "default" : "disabled"}
             showAsterisk={false}
             label="City"
             value={values.city}
@@ -315,7 +315,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
 
         <div className="form-field">
           <CustomInputField
-            state={isEditable || isCreateMode ? "default" : "non-editable"}
+            state={isEditable || isCreateMode ? "default" : "disabled"}
             showAsterisk={false}
             label="Postal Code"
             value={values.postal_code}
@@ -347,7 +347,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
 
         <div className="form-field">
           <CustomInputField
-            state={isEditable || isCreateMode ? "default" : "non-editable"}
+            state={isEditable || isCreateMode ? "default" : "disabled"}
             label="GST No"
             value={values.gst_no}
             placeholder="Enter GST number"
@@ -362,7 +362,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
 
         <div className="form-field">
           <CustomInputField
-            state={isEditable || isCreateMode ? "default" : "non-editable"}
+            state={isEditable || isCreateMode ? "default" : "disabled"}
             label="Primary Point of Contact (POC)"
             value={values.primary_poc}
             onChange={(value) => {
@@ -377,7 +377,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
 
         <div className="form-field">
           <CustomInputField
-            state={isEditable || isCreateMode ? "default" : "non-editable"}
+            state={isEditable || isCreateMode ? "default" : "disabled"}
             label="POC Email"
             value={values.poc_mail}
             onChange={(value) => {
@@ -392,7 +392,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
 
         <div className="form-field">
           <CustomInputField
-            state={isEditable || isCreateMode ? "default" : "non-editable"}
+            state={isEditable || isCreateMode ? "default" : "disabled"}
             showAsterisk={false}
             label="POC Phone Number"
             value={values.poc_mobileNumber}

@@ -19,6 +19,8 @@ import CreateUserPage from "./pages/settings/user/CreateUser";
 import EditUserPage from "./pages/settings/user/EditUser";
 import ViewUserPage from "./pages/settings/user/ViewUser";
 import CreateOrganisationPage from "./pages/settings/organization/CreateOrganisationPage";
+import OrganisationPageDetailView from "./pages/settings/organization/OrganisationPageDetailView";
+import EditOrganisationPage from "./pages/settings/organization/EditOrganisationPage";
 
 const App = () => {
   return (
@@ -37,6 +39,8 @@ const App = () => {
               <Route path="leads/edit/:id" element={<EditLeadPage />} />
               <Route path="settings" element={<SettingsPage />} />
               <Route path="settings/organisation/create" element={<CreateOrganisationPage />} />
+              <Route path="settings/organisation/detailsview/:id" element={<OrganisationPageDetailView />} />
+              <Route path="settings/organisation/edit/:id" element={<EditOrganisationPage />} />
               <Route path="role-create" element={<RoleFormPage />} />
               <Route path="users/create" element={<CreateUserPage />} />
               <Route path="users/edit/:id" element={<EditUserPage />} />

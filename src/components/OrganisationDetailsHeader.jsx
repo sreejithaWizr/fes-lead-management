@@ -6,7 +6,7 @@ import PhoneIcon from "../assets/phone-icon.svg";
 import PersonalCard from "../assets/personalcard.svg";
 import MailIcon from "../assets/sms.svg";
 import { useNavigate } from 'react-router-dom';
-import { formRef } from '../pages/settings/EditOrganisationPage';
+import { formRef } from '../pages/settings/organization/EditOrganisationPage';
 import EditIcon from '../assets/edit.svg';
 
 const OrganisationDetailsHeader = ({ organisation, id, mode }) => {
