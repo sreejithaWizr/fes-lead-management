@@ -36,8 +36,6 @@ const CreateRolePage = () => {
       role_modules: values?.roleModules,
     };
 
-    // console.log("payload", payload);
-
     try {
       const response = await createRole(payload);
       console.log("User created:", response.data);
@@ -45,7 +43,6 @@ const CreateRolePage = () => {
         navigate("/settings?tab=Role+Management");
       }
     } catch (err) {
-      console.error("Error creating user:", err);
     }
   };
 

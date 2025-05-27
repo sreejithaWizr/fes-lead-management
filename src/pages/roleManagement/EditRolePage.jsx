@@ -8,6 +8,7 @@ import TickIcon from "../../assets/tick.svg";
 import DeleteIcon from "../../assets/delete-icon-red.svg";
 import {
     createRole,
+    deleteRole,
     roleAccess,
 } from "../../api/services/settingsAPI/roleAPIs";
 import { roleSchemaValidations } from "../../components/forms/createRole/schema";
@@ -124,8 +125,17 @@ const EditViewRolePage = ({ mode = "edit" }) => {
         setIsDeleteOpen(true);
     };
 
-    const confirmDelete = () => {
-        setIsDeleteOpen(false);
+    const confirmDelete = async () => {
+        try {
+            const response = await deleteRole(id);
+            console.log("Role delete:", response.data);
+            if (response?.data?.succeeded === true) {
+                setIsDeleteOpen(false);
+                navigate("/settings?tab=Role+Management");
+            }
+        } catch (err) {
+            console.error("Error deleting user:", err);
+        }
     };
 
     return (
