@@ -15,21 +15,22 @@ import RoleInformationForm from "../../components/forms/createRole/RoleInformati
 import RoleAccessForm from "../../components/forms/createRole/RoleAccessForm";
 import EditIcon from "../../assets/edit.svg";
 import { getLeadById } from "../../api/services/leadAPI/leadAPIs";
+import DeletePopup from "../../utils/DeletePopup";
 
 
 const deleteButtonStyles = {
-  border: "1px solid #F7A4A3",
-  borderRadius: "12px",
-  backgroundColor: "#ffffff",
-  color: "#EC221F",
-  "&:hover": {
-    backgroundColor: "#ffffff",
-  },
-  "&:focus": {
-    color: "#EC221F !important",
     border: "1px solid #F7A4A3",
+    borderRadius: "12px",
     backgroundColor: "#ffffff",
-  },
+    color: "#EC221F",
+    "&:hover": {
+        backgroundColor: "#ffffff",
+    },
+    "&:focus": {
+        color: "#EC221F !important",
+        border: "1px solid #F7A4A3",
+        backgroundColor: "#ffffff",
+    },
 };
 
 const EditViewRolePage = ({ mode = "edit" }) => {
@@ -37,10 +38,9 @@ const EditViewRolePage = ({ mode = "edit" }) => {
     const { id } = useParams();
 
     const [loadingModules, setLoadingModules] = useState(false);
-
     const [formMode, setFormMode] = useState(mode);
-
     const [roleData, setRoleData] = useState();
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
     const [initialValues, setInitialValues] = useState({
         roleName: "",
@@ -104,8 +104,6 @@ const EditViewRolePage = ({ mode = "edit" }) => {
             role_modules: values?.roleModules,
         };
 
-        console.log("payload", payload);
-
         try {
             const response = await createRole(payload);
             console.log("User created:", response.data);
@@ -122,152 +120,168 @@ const EditViewRolePage = ({ mode = "edit" }) => {
         setFormMode("edit");
     };
 
-    console.log("FormMode", formMode);
+    const handleDelete = () => {
+        setIsDeleteOpen(true);
+    };
+
+    const confirmDelete = () => {
+        setIsDeleteOpen(false);
+    };
 
     return (
-        <Formik
-            initialValues={initialValues}
-            validationSchema={roleSchemaValidations}
-            onSubmit={(values) => handleSubmit(values)}
-        >
-            {(formik) => {
-                // Fetch data when organization changes
-                useEffect(() => {
-                    const fetchModules = async () => {
-                        const selectedOrg = formik?.values?.organisation;
-                        const selectedCopyRole = formik?.values?.copyRoleTemplte;
+        <>
+            <Formik
+                initialValues={initialValues}
+                validationSchema={roleSchemaValidations}
+                onSubmit={(values) => handleSubmit(values)}
+            >
+                {(formik) => {
+                    // Fetch data when organization changes
+                    useEffect(() => {
+                        const fetchModules = async () => {
+                            const selectedOrg = formik?.values?.organisation;
+                            const selectedCopyRole = formik?.values?.copyRoleTemplte;
 
-                        console.log("copy role template", selectedCopyRole);
+                            console.log("copy role template", selectedCopyRole);
 
-                        if (selectedOrg) {
-                            setLoadingModules(true);
-                            const payload = {
-                                orgid: selectedOrg || null,
-                                copyparentrole_id: selectedCopyRole || null,
-                            };
-                            console.log("Payload:", payload);
+                            if (selectedOrg) {
+                                setLoadingModules(true);
+                                const payload = {
+                                    orgid: selectedOrg || null,
+                                    copyparentrole_id: selectedCopyRole || null,
+                                };
+                                console.log("Payload:", payload);
 
-                            try {
-                                const data = await roleAccess(payload);
-                                console.log("Fetched data:", data);
-                                formik.setFieldValue(
-                                    "roleModules",
-                                    data?.data?.data?.role_modules || []
-                                );
-                            } catch (error) {
-                                console.error("Failed to fetch role modules:", error);
+                                try {
+                                    const data = await roleAccess(payload);
+                                    console.log("Fetched data:", data);
+                                    formik.setFieldValue(
+                                        "roleModules",
+                                        data?.data?.data?.role_modules || []
+                                    );
+                                } catch (error) {
+                                    console.error("Failed to fetch role modules:", error);
+                                    formik.setFieldValue("roleModules", []);
+                                } finally {
+                                    setLoadingModules(false); // <-- this always runs
+                                }
+                            } else {
                                 formik.setFieldValue("roleModules", []);
-                            } finally {
-                                setLoadingModules(false); // <-- this always runs
                             }
-                        } else {
-                            formik.setFieldValue("roleModules", []);
-                        }
-                    };
+                        };
 
-                    fetchModules();
-                }, [formik?.values?.organisation, formik?.values?.copyRoleTemplte]);
+                        fetchModules();
+                    }, [formik?.values?.organisation, formik?.values?.copyRoleTemplte]);
 
-                return (
-                    <Form>
-                        <div className="flex w-full justify-between mb-4">
-                            <div className="flex items-center gap-4">
-                                <img
-                                    src={LeftArrowIcon}
-                                    alt="FES Logo"
-                                    className="size-[24px] rounded-md cursor-pointer"
-                                    onClick={handleBack}
-                                />
-                                <div className="flex items-center gap-2">
-                                    <h1 className="font-proxima font-bold text-[28px] leading-[140%] align-middle text-[#17222B]">
-                                        {formMode == "edit" ? "Edit Role" : "Role Details"}
-                                    </h1>
+                    return (
+                        <Form>
+                            <div className="flex w-full justify-between mb-4">
+                                <div className="flex items-center gap-4">
+                                    <img
+                                        src={LeftArrowIcon}
+                                        alt="FES Logo"
+                                        className="size-[24px] rounded-md cursor-pointer"
+                                        onClick={handleBack}
+                                    />
+                                    <div className="flex items-center gap-2">
+                                        <h1 className="font-proxima font-bold text-[28px] leading-[140%] align-middle text-[#17222B]">
+                                            {formMode == "edit" ? "Edit Role" : "Role Details"}
+                                        </h1>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div
-                            style={{
-                                height: "max-content",
-                                padding: "12px 0",
-                                margin: "10px 0",
-                                display: "flex",
-                                width: "100%",
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                            }}
-                        >
-                            <div className="flex flex-row items-center gap-4">
-                                <div className="bg-[#030229B2] text-white w-[64px] h-[64px] rounded-full flex items-center justify-center text-sm p-[12px] font-bold text-[23px] leading-[140%] tracking-[0%]">
-                                    EK
+                            <div
+                                style={{
+                                    height: "max-content",
+                                    padding: "12px 0",
+                                    margin: "10px 0",
+                                    display: "flex",
+                                    width: "100%",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                }}
+                            >
+                                <div className="flex flex-row items-center gap-4">
+                                    <div className="bg-[#030229B2] text-white w-[64px] h-[64px] rounded-full flex items-center justify-center text-sm p-[12px] font-bold text-[23px] leading-[140%] tracking-[0%]">
+                                        EK
+                                    </div>
+                                    <label style={{ fontWeight: "700", fontSize: "19px" }}>
+                                        Project Manager
+                                    </label>
                                 </div>
-                                <label style={{ fontWeight: "700", fontSize: "19px" }}>
-                                    Project Manager
-                                </label>
+                                <div>
+                                    {formMode == "view" ? (
+                                        <div className="flex items-center gap-3">
+                                            <CustomButton
+                                                type="button"
+                                                text="Delete"
+                                                variant="secondary"
+                                                startIcon={true}
+                                                endIcon={false}
+                                                iconImg={DeleteIcon}
+                                                sx={deleteButtonStyles}
+                                                onClick={handleDelete}
+                                            />
+                                            <CustomButton
+                                                // type="button"
+                                                variant="secondary"
+                                                iconImg={EditIcon}
+                                                startIcon={true}
+                                                endIcon={false}
+                                                showText={true}
+                                                text={"Edit"}
+                                                onClick={handleEditClick}
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center gap-3">
+                                            <CustomButton
+                                                text="Cancel"
+                                                variant="secondary"
+                                                startIcon={false}
+                                                endIcon={false}
+                                                onClick={handleBack}
+                                            />
+                                            <CustomButton
+                                                // type="Submit"
+                                                text="Update" s
+                                                startIcon={true}
+                                                endIcon={false}
+                                                iconImg={TickIcon}
+                                                onClick={formik.handleSubmit}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-                            <div>
-                                {formMode == "view" ? (
-                                    <div className="flex items-center gap-3">
-                                        <CustomButton
-                                            type="button"
-                                            text="Delete"
-                                            variant="secondary"
-                                            startIcon={true}
-                                            endIcon={false}
-                                            iconImg={DeleteIcon}
-                                            sx={deleteButtonStyles}
-                                        />
-                                        <CustomButton
-                                            // type="button"
-                                            variant="secondary"
-                                            iconImg={EditIcon}
-                                            startIcon={true}
-                                            endIcon={false}
-                                            showText={true}
-                                            text={"Edit"}
-                                            onClick={handleEditClick}
-                                        />
+                            <RoleInformationForm {...formik} mode={formMode} />
+                            {formik?.values?.organisation &&
+                                (loadingModules ? (
+                                    <div className="flex justify-center items-center py-10">
+                                        <div className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-blue-500 border-solid  border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
                                     </div>
                                 ) : (
-                                    <div className="flex items-center gap-3">
-                                        <CustomButton
-                                            text="Cancel"
-                                            variant="secondary"
-                                            startIcon={false}
-                                            endIcon={false}
-                                            onClick={handleBack}
+                                    formik?.values?.roleModules.length > 0 && (
+                                        <RoleAccessForm
+                                            values={formik.values}
+                                            setFieldValue={formik.setFieldValue}
+                                            mode={"view"}
                                         />
-                                        <CustomButton
-                                            // type="Submit"
-                                            text="Update" s
-                                            startIcon={true}
-                                            endIcon={false}
-                                            iconImg={TickIcon}
-                                            onClick={formik.handleSubmit}
-                                        />
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                        <RoleInformationForm {...formik} mode={formMode} />
-                        {formik?.values?.organisation &&
-                            (loadingModules ? (
-                                <div className="flex justify-center items-center py-10">
-                                    <div className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-blue-500 border-solid  border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
-                                </div>
-                            ) : (
-                                formik?.values?.roleModules.length > 0 && (
-                                    <RoleAccessForm
-                                        values={formik.values}
-                                        setFieldValue={formik.setFieldValue}
-                                        mode={"view"}
-                                    />
-                                )
-                            ))}
-                    </Form>
-                );
-            }}
-        </Formik>
+                                    )
+                                ))}
+                        </Form>
+                    );
+                }}
+            </Formik>
+            {isDeleteOpen && (
+                <DeletePopup
+                    onClose={() => setIsDeleteOpen(false)}
+                    onConfirm={confirmDelete}
+                    title={`Are you sure you want to delete ?`}
+                />
+            )}
+        </>
     );
 };
 

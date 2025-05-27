@@ -90,7 +90,7 @@ const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         required={true}
                         placeHolder="Select"
                         value={roleTypeOptions?.find(option => option.id === values?.roleType) || ""}
-                        disabled={!isEditMode && !isCreateMode}
+                        disabled={isViewMode}
                         onChange={(value) => {
                             setFieldValue('roleType', value.target.value?.id);
                         }}
@@ -107,7 +107,7 @@ const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         required={true}
                         placeHolder="Select"
                         value={parentRoleOptions?.find(option => option.id === values?.parentRole) || ""}
-                        disabled={!isEditMode && !isCreateMode}
+                        disabled={isViewMode}
                         onChange={(value) => {
                             setFieldValue('parentRole', value.target.value?.id);
                             setFieldValue('copyRoleTemplte', '');
@@ -126,7 +126,7 @@ const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur
                             required={false}
                             placeHolder="Select"
                             value={copyRoleTemplateOptions?.find(option => option.id === values?.copyRoleTemplte) || ""}
-                            disabled={!isEditMode && !isCreateMode}
+                            disabled={isViewMode}
                             onChange={(value) => {
                                 setFieldValue('copyRoleTemplte', value.target.value?.id);
                             }}
@@ -144,7 +144,7 @@ const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         required={true}
                         placeHolder="Select"
                         value={organisationOptions?.find(option => option.id === values?.organisation) || ""}
-                        disabled={!isEditMode && !isCreateMode}
+                        disabled={isViewMode}
                         onChange={(value) => {
                             setFieldValue('organisation', value.target.value?.id);
                         }}
@@ -161,7 +161,7 @@ const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         required={true}
                         placeHolder="Select"
                         value={insertionModeOptions?.find(option => option.id === values?.insertionMode) || ""}
-                        disabled={!isEditMode && !isCreateMode}
+                        disabled={isViewMode}
                         onChange={(value) => {
                             setFieldValue('insertionMode', value.target.value?.id);
                         }}
@@ -178,7 +178,7 @@ const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         required={true}
                         placeHolder="Select"
                         value={hierarchyLevelOptions?.find(option => option.id === values?.hierarchyLevel) || ""}
-                        disabled={!isEditMode && !isCreateMode}
+                        disabled={isViewMode}
                         onChange={(value) => {
                             setFieldValue('hierarchyLevel', value.target.value?.id);
                         }}
