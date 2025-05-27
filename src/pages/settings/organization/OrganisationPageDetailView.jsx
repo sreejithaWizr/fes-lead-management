@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import { useParams } from 'react-router-dom';
-import OrganisationBasicInfoForm from '../../components/forms/createOrganisation/orgBasicInfoForm';
-import OrganisationAccountInfoForm from '../../components/forms/createOrganisation/orgAccountInfoForm';
-import { validationSchema } from '../../components/forms/createOrganisation/schema';
-import { getOrganisationById } from '../../api/services/settingsAPI/organisationAPI';
-import OrganisationDetailsHeader from '../../components/OrganisationDetailsHeader';
+import OrganisationBasicInfoForm from '../../../../components/forms/createOrganisation/orgBasicInfoForm';
+import OrganisationAccountInfoForm from '../../../../components/forms/createOrganisation/orgAccountInfoForm';
+import { validationSchema } from '../../../../components/forms/createOrganisation/schema';
+import { getOrganisationById } from '../../../../api/services/settingsAPI/organisationAPI';
+import OrganisationDetailsHeader from '../../../../components/OrganisationDetailsHeader';
 export const formRef = React.createRef();
 
 const OrganisationPageDetailView = () => {

@@ -14,11 +14,11 @@ import Login from "./pages/Login";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import SettingsPage from "./components/SettingsPage";
 import RoleFormPage from "./components/forms/createRole/RoleFormPage";
-import CreateOrganisationPage from "./pages/settings/CreateOrganisationPage";
 import BulkUpload from "./pages/BulkUpload";
 import CreateUserPage from "./pages/settings/user/CreateUser";
 import EditUserPage from "./pages/settings/user/EditUser";
 import ViewUserPage from "./pages/settings/user/ViewUser";
+import CreateOrganisationPage from "./pages/settings/organization/CreateOrganisationPage";
 
 const App = () => {
   return (

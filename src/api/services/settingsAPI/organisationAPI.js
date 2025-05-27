@@ -26,3 +26,12 @@ export const createOrganisation = (payload) => {
     return apiClient.post('api/Organization', payload);
 };
 
+export const deleteOrg = (id) => {
+  try {
+    return apiClient.delete(`/api/Organization/${id}`);
+  } catch (error) {
+    console.error("Error updating organisation:", error);
+    throw error;
+  }
+};
+

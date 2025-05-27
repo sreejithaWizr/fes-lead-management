@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, useFormikContext } from 'formik';
 import { CustomButton } from 'react-mui-tailwind';
-import { createLead, getStatus } from '../../api/services/masterAPIs/createLeadApi';
+import { createLead, getStatus } from '../../../../api/services/masterAPIs/createLeadApi';
 import { useNavigate, useParams } from 'react-router-dom';
-import LeftArrowIcon from "../../assets/arrow-left.svg";
-import RightArrowIcon from "../../assets/arrow-right.svg";
-import OrganisationBasicInfoForm from '../../components/forms/createOrganisation/orgBasicInfoForm';
-import OrganisationAccountInfoForm from '../../components/forms/createOrganisation/orgAccountInfoForm';
-import { validationSchema } from '../../components/forms/createOrganisation/schema';
-import { createOrganisation, getOrganisationById, updateOrganisation } from '../../api/services/settingsAPI/organisationAPI';
-import OrganisationDetailsHeader from '../../components/OrganisationDetailsHeader';
+import LeftArrowIcon from "../../../assets/arrow-left.svg";
+import RightArrowIcon from "../../../assets/arrow-right.svg";
+import OrganisationBasicInfoForm from '../../../../components/forms/createOrganisation/orgBasicInfoForm';
+import OrganisationAccountInfoForm from '../../../../components/forms/createOrganisation/orgAccountInfoForm';
+import { validationSchema } from '../../../../components/forms/createOrganisation/schema';
+import { createOrganisation, getOrganisationById, updateOrganisation } from '../../../../api/services/settingsAPI/organisationAPI';
+import OrganisationDetailsHeader from '../../../../components/OrganisationDetailsHeader';
 export const formRef = React.createRef();
 
 const EditOrganisationPage = () => {
