@@ -116,7 +116,7 @@ const BulkStepper = ({
   if (index === 0 && !file) {
     return (
       <CustomButton
-        text="Download template file"
+        text="Download Template File"
         variant="secondary"
         endIcon={false}
         iconImg={BulkTemplateIcon}
