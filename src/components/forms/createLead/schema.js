@@ -25,6 +25,7 @@ export const validationSchema = Yup.object({
   highestQualification: requiredDropdown(),
   graduationYear: requiredDropdown(),
   fieldOfStudy: requiredDropdown(),
+  other: requiredStringField(),
   // cgpaGrade: Yup.string(),
   preferredDestination:requiredMultiSelect(),
   intake_year: requiredDropdown(),

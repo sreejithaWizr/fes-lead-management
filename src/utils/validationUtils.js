@@ -76,13 +76,14 @@ export const optionalEmailField = () =>
 
 export const requiredTenDigitNumber = () =>
   Yup.string()
-    .matches(/^[0-9]{10}$/, `Must be exactly 10 digits`)
-    .required(`Required`);
+    .matches(/^\d{10,15}$/, "Must be between 10 and 15 digits")
+    .required("Required");
 
 export const optionalTenDigitNumber = () =>
   Yup.string()
-    .matches(/^[0-9]{10}$/, `Must be exactly 10 digits`)
+    .matches(/^\d{10,15}$/, "Must be between 10 and 15 digits")
     .nullable();
+
 
 export const requiredBooleanTrue = () =>
   Yup.boolean().oneOf([true], "Required");

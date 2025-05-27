@@ -158,6 +158,23 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                         errorMessage={touched.fieldOfStudy && errors.fieldOfStudy}
                     />
                 </div>
+                {values?.fieldOfStudy === 6 && (
+                    <div className="form-field">
+                        <CustomInputField
+                            state={isEditable ? "default" : "non-editable"}
+                            label="Other"
+                            value={values.other}
+                            placeholder="Enter field of study"
+                            onChange={(value) => {
+                                setFieldValue('other', value.target.value)
+                            }}
+                            onBlur={handleBlur}
+                            hasError={touched.other && Boolean(errors.other)}
+                            error={touched.other && errors.other}
+                        />
+                    </div>
+                )}
+
 
                 <div className="form-field">
                     <CustomInputField

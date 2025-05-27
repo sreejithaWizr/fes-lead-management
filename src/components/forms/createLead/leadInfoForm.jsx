@@ -44,6 +44,8 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
     setFieldValue('agreeToReceiveBoolean', checked);
   }
 
+  console.log("err", errors, touched)
+
   return (
     <div className="form-section animate-fade-in ml-0 mb-6">
       <h2 className="font-bold text-[19px] leading-[140%] tracking-[0%] text-[#17222B] font-[Proxima Nova] mb-4">
@@ -244,7 +246,7 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
             <CustomDatePicker
               label="Lead Created"
               value={values?.leadCreated}
-              disabled={!isEditable && !isCreateMode}
+              disabled={true}
               onChange={(value) => {
                 setFieldValue('leadCreated', value)
               }}
@@ -279,6 +281,8 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
           onChange={handleAgreeToReceiveOnChange} 
           disabled={!isEditable && !isCreateMode} 
           checked={values?.agreeToReceiveBoolean ? true : false} 
+          hasError={touched.agreeToReceiveBoolean && Boolean(errors.agreeToReceiveBoolean)}
+          error={errors.agreeToReceiveBoolean}
           />
         <span className='text-red-600'>*</span>
       </div>
