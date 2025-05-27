@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import LeftArrowIcon from "../../../assets/arrow-left.svg";
 import RightArrowIcon from "../../../assets/arrow-right.svg";
 import OrganisationBasicInfoForm from '../../../components/forms/createOrganisation/orgBasicInfoForm';
-import OrganisationAccountInfoForm from '../../../components/forms/createOrganisation/orgBasicInfoForm';
+import OrganisationAccountInfoForm from '../../../components/forms/createOrganisation/orgAccountInfoForm';
 import { validationSchema } from '../../../components/forms/createOrganisation/schema';
 import { createOrganisation } from '../../../api/services/settingsAPI/organisationAPI';
 export const formRef = React.createRef();
