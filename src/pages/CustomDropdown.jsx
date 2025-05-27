@@ -165,7 +165,7 @@ const CustomDropdownComponent = ({
                                     key={option.id}
                                     onClick={() => handleSelect(option)}
                                     className={`px-3 py-2.5 text-sm cursor-pointer border-b border-gray-100 last:border-b-0
-                                        ${selected ? "bg-red-300 text-gray-900" : "hover:bg-red-100 text-gray-700"}`}
+                                        ${selected ? "bg-gray-100 text-gray-900" : "hover:bg-gray-100 text-gray-700"}`}
                                 >
                                     {option.name}
                                 </div>
