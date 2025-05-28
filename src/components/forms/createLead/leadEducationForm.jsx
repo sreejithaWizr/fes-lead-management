@@ -5,7 +5,7 @@ import { getAreaOfStudy, getCountry, getQualification, getTestName } from "../..
 const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, setFieldValue, mode = "edit" }) => {
     const isEditable = mode === "edit";
 
-    const yearOptions = [...Array.from({ length: 26 }, (_, i) => `${new Date().getFullYear() - i}`)];
+    const yearOptions = Array.from({ length: 31 }, (_, i) => `${2030 - i}`);
     const numberOfYears = [...Array.from({ length: 26 }, (_, i) => i)];
     const monthOptions = [{ id: "Q1", name: "Q1" }, { id: "Q2", name: "Q2" }, { id: "Q3", name: "Q3" }, { id: "Q4", name: "Q4" }]
 
@@ -158,6 +158,23 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                         errorMessage={touched.fieldOfStudy && errors.fieldOfStudy}
                     />
                 </div>
+                {values?.fieldOfStudy === 6 && (
+                    <div className="form-field">
+                        <CustomInputField
+                            state={isEditable ? "default" : "non-editable"}
+                            label="Other"
+                            value={values.other}
+                            placeholder="Enter field of study"
+                            onChange={(value) => {
+                                setFieldValue('other', value.target.value)
+                            }}
+                            onBlur={handleBlur}
+                            hasError={touched.other && Boolean(errors.other)}
+                            error={touched.other && errors.other}
+                        />
+                    </div>
+                )}
+
 
                 <div className="form-field">
                     <CustomInputField

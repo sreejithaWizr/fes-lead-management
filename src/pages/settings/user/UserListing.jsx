@@ -8,8 +8,7 @@ import FilterContent from '../../../pages/FilterContent';
 import debounce from "lodash.debounce";
 import DeleteIcon from "../../../assets/delete-icon.svg";
 import DeletePopup from '../../../utils/DeletePopup';
-import { getUserList } from '../../../api/services/settingsAPI/userAPI';
-
+import { getUserList, deleteUser } from '../../../api/services/settingsAPI/userAPI';
 
 const UserManagement = () => {
 
@@ -29,8 +28,6 @@ const UserManagement = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [users, setUsers] = useState([]);
 
-
-
   useEffect(() => {
     fetchUserData();
   }, [currentPage]);
@@ -40,16 +37,13 @@ const UserManagement = () => {
     navigate('/users/create');
   };
 
-  const handleView = (value) => {
-    const selectedUser = users.find(user => user.userName === value);
-    navigate(`/users/detailsview/${selectedUser?.id}`);
+  const handleView = (row) => {
+    navigate(`/users/view/${row?.id}`);
   };
 
   const handleEdit = (row) => {
     navigate(`/users/edit/${row?.id}`);
   };
-
-
 
   const handleApplyFilter = (newFiltersArray) => {
     const filterMap = {};
@@ -73,30 +67,34 @@ const UserManagement = () => {
     setIsDeleteOpen(true);
   };
 
-  const confirmDelete = () => {
-    if (selectedRow) {
-      console.log("Deleting user:", selectedRow.userName);
+  const confirmDelete = async () => {
+    // if (selectedRow) {
+    //   // Example: remove from local list
+    //   setUsers((prev) => prev.filter(user => user.id !== selectedRow.id));
+    // }
+    // setIsDeleteOpen(false);
 
-      // Example: remove from local list
-      setUsers((prev) => prev.filter(user => user.id !== selectedRow.id));
+    try {
+      await deleteUser(selectedRow.id);
+      setIsDeleteOpen(false);
+      setSelectedRow(null);
+      fetchUserData(); // re-fetch user list after deletion
+    } catch (error) {
+      console.error("Failed to delete user:", error);
     }
-    setIsDeleteOpen(false);
   };
 
   const getRow = (columnId, value, row = {}) => {
     switch (columnId) {
       case "userName":
         return (
-          // <span className="font-bold cursor-pointer" onClick={() => handleView(value)}>
-          //   {value}
-          // </span>
           <div className="flex items-center gap-3">
             {/* <img
               src={userAvatar}
               alt={value}
               className="w-8 h-8 rounded-full object-cover"
             /> */}
-            <span className="font-bold cursor-pointer" onClick={() => handleView(value)}>
+            <span className="font-bold cursor-pointer" onClick={() => handleView(row)}>
               {value}
             </span>
           </div>
@@ -110,7 +108,6 @@ const UserManagement = () => {
 
         return (
           <span
-            className="font-semibold"
             style={{ color: statusColor }}
           >
             {value}
@@ -145,7 +142,6 @@ const UserManagement = () => {
     setCurrentPage(1);
     fetchUserData(filters, newRowsPerPage, 1); // Pass newRowsPerPage and reset page to 1
   };
-
 
   const fetchUserData = (
     customFilters = filters,
@@ -187,7 +183,7 @@ const UserManagement = () => {
         console.log("inside", value)
         fetchUserData(filters, rowsPerPage, 1, value);
       }, 500),
-    [filters, rowsPerPage] // Do NOT include `searchTerm` here
+    [filters, rowsPerPage]
   );
 
   const handleChange = (e) => {
@@ -197,7 +193,6 @@ const UserManagement = () => {
     if (value.length >= 3 || value.length === 0) {
       debouncedSearch(value);
     }
-
   };
 
   return (
@@ -256,10 +251,13 @@ const UserManagement = () => {
         <DeletePopup
           onClose={() => setIsDeleteOpen(false)}
           onConfirm={confirmDelete}
-          title={`Are you sure you want to delete ${selectedRow?.userName}?`}
+          title={
+            <>
+              Are you sure you want to delete <span className='text-[#009CDC]'> <strong> {selectedRow?.userName} </strong> </span> ?
+            </>
+          }
         />
       )}
-
 
       {/* Filter Panel */}
       {isFilterOpen && (

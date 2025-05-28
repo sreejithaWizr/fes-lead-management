@@ -100,7 +100,6 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {}, isFilterOp
 
               const results = await Promise.allSettled(fetches);
 
-              // Build a new map from all successful results
               const newOptionsMap = {};
               results.forEach((result) => {
                 if (result.status === "fulfilled") {
@@ -109,12 +108,31 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {}, isFilterOp
                 }
               });
 
+              // Update dropdown options
               setDropdownOptionsMap(newOptionsMap);
+
+              // 🛠️ Convert string array values into object arrays
+              selectedFields.forEach((field) => {
+                const currentVal = values.filters[field]?.value;
+                const condition = values.filters[field]?.condition;
+
+                if (
+                  Array.isArray(currentVal) &&
+                  typeof currentVal[0] === "string" &&
+                  Array.isArray(newOptionsMap[field])
+                ) {
+                  const mappedBack = newOptionsMap[field].filter((opt) =>
+                    currentVal.includes(opt.name)
+                  );
+                  setFieldValue(`filters.${field}.value`, mappedBack);
+                }
+              });
             };
 
             fetchInitialOptions();
           }
         }, [isFilterOpen]);
+
 
 
 
@@ -220,20 +238,20 @@ const FilterContent = ({ onClose, onApplyFilter, initialFilters = {}, isFilterOp
                 Clear all
               </button> */}
               <CustomButton text="Clear all" variant="secondary" onClick={() => {
-                  resetForm(); // Reset form values
-                  setSearchTerm(''); // Reset search input
-                  onApplyFilter([]); // Clear applied filters in parent
-                  onClose(); // Close the modal/drawer
-                }} 
+                resetForm(); // Reset form values
+                setSearchTerm(''); // Reset search input
+                onApplyFilter([]); // Clear applied filters in parent
+                onClose(); // Close the modal/drawer
+              }}
                 iconImg={ClearAllIcon}
-                endIcon={false}  />
+                endIcon={false} />
               {/* <button
                 type="submit"
                 className="bg-primary text-white px-4 py-2 rounded text-sm"
               >
                 Apply Filter
               </button> */}
-              <CustomButton text="Apply Filter" type="submit" iconImg={TickIcon} endIcon={false}  />
+              <CustomButton text="Apply Filter" type="submit" iconImg={TickIcon} endIcon={false} />
             </div>
           </Form>
         );

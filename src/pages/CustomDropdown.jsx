@@ -17,19 +17,27 @@ const CustomDropdownComponent = ({
     const normalizedValue = Array.isArray(value) ? value : [];
 
     const filteredOptions = Array.isArray(options)
-        ? options.filter(
-            (option) =>
-                option?.name?.toLowerCase().includes(searchTerm.toLowerCase()) &&
-                !normalizedValue.some((item) => {
-                    const itemId = typeof item === "string" ? item : item?.id;
-                    return itemId === option?.id;
-                })
+        ? options.filter((option) =>
+            option?.name?.toLowerCase().includes(searchTerm.toLowerCase())
         )
         : [];
 
+    const isSelected = (option) => {
+        return normalizedValue.some((item) => {
+            const itemId = typeof item === "string" ? item : item?.id;
+            return itemId === option?.id;
+        });
+    };
+
+    console.log("valu", value)
     const handleSelect = (option) => {
+        console.log("op", option)
         if (multiple) {
-            onChange([...normalizedValue, option]);
+            if (isSelected(option)) {
+                handleDelete(option); // toggle off
+            } else {
+                onChange([...normalizedValue, option]); // toggle on
+            }
         } else {
             onChange([option]);
             setIsOpen(false);
@@ -150,15 +158,19 @@ const CustomDropdownComponent = ({
             {isOpen && (
                 <div className="absolute left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-md z-50 max-h-60 overflow-y-auto">
                     {filteredOptions.length > 0 ? (
-                        filteredOptions.map((option) => (
-                            <div
-                                key={option.id}
-                                onClick={() => handleSelect(option)}
-                                className="px-3 py-2.5 text-sm cursor-pointer hover:bg-gray-100 border-b border-gray-100 last:border-b-0"
-                            >
-                                {option.name}
-                            </div>
-                        ))
+                        filteredOptions.map((option) => {
+                            const selected = isSelected(option);
+                            return (
+                                <div
+                                    key={option.id}
+                                    onClick={() => handleSelect(option)}
+                                    className={`px-3 py-2.5 text-sm cursor-pointer border-b border-gray-100 last:border-b-0
+                                        ${selected ? "bg-gray-100 text-gray-900" : "hover:bg-gray-100 text-gray-700"}`}
+                                >
+                                    {option.name}
+                                </div>
+                            );
+                        })
                     ) : (
                         <div className="px-3 py-2.5 text-sm text-gray-500">No options found</div>
                     )}

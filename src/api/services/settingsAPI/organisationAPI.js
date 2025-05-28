@@ -11,7 +11,7 @@ export const getOrganisationById = async (orgId) => {
 
 export const updateOrganisation = (id, payload) => {
     try {
-        return apiClient.put(`/api/Organization/${id}`, payload);
+        return apiClient.put(`/api/Organization`, payload);
     } catch (error) {
         console.error("Error fetching lead:", error);
         throw error;
@@ -24,5 +24,14 @@ export const getOrganisationList = (payload) => {
 
 export const createOrganisation = (payload) => {
     return apiClient.post('api/Organization', payload);
+};
+
+export const deleteOrg = (id) => {
+  try {
+    return apiClient.delete(`/api/Organization/${id}`);
+  } catch (error) {
+    console.error("Error updating organisation:", error);
+    throw error;
+  }
 };
 

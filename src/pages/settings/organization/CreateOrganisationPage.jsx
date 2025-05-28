@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, useFormikContext } from 'formik';
 import { CustomButton } from 'react-mui-tailwind';
-import { createLead, getStatus } from '../../api/services/masterAPIs/createLeadApi';
 import { useNavigate } from 'react-router-dom';
-import LeftArrowIcon from "../../assets/arrow-left.svg";
-import RightArrowIcon from "../../assets/arrow-right.svg";
-import OrganisationBasicInfoForm from '../../components/forms/createOrganisation/orgBasicInfoForm';
-import OrganisationAccountInfoForm from '../../components/forms/createOrganisation/orgAccountInfoForm';
-import { validationSchema } from '../../components/forms/createOrganisation/schema';
-import { createOrganisation } from '../../api/services/settingsAPI/organisationAPI';
+import LeftArrowIcon from "../../../assets/arrow-left.svg";
+import RightArrowIcon from "../../../assets/arrow-right.svg";
+import OrganisationBasicInfoForm from '../../../components/forms/createOrganisation/orgBasicInfoForm';
+import OrganisationAccountInfoForm from '../../../components/forms/createOrganisation/orgAccountInfoForm';
+import { validationSchema } from '../../../components/forms/createOrganisation/schema';
+import { createOrganisation } from '../../../api/services/settingsAPI/organisationAPI';
 export const formRef = React.createRef();
 
 const CreateOrganisationPage = () => {
@@ -17,7 +16,7 @@ const CreateOrganisationPage = () => {
     const navigate = useNavigate();
 
     const handleCancel = () => {
-        navigate('/settings');
+        navigate('/settings?tab=Organisation+Management');
     };
 
     const handleFormSubmit = () => {
@@ -107,7 +106,7 @@ const CreateOrganisationPage = () => {
             const response = await createOrganisation(payload);
             console.log('User created:', response.data);
             if (response?.data?.succeeded === true) {
-                navigate("/settings")
+                navigate("/settings?tab=Organisation+Management")
                 // alert("Created")
             }
             else {

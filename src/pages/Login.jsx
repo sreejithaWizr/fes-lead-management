@@ -54,6 +54,34 @@ const Login = () => {
     }
   };
 
+  // mock function to simulate login success
+  // const handleSubmit = async (values, { setSubmitting, setErrors }) => {
+  //   try {
+  //     console.log('Form submitted with values:', values);
+
+  //     // ✅ Simulate server login logic
+  //     if (
+  //       values.username !== "av@gmail.com" ||
+  //       values.password !== "Password@01"
+  //     ) {
+  //       setErrors({ form: "Incorrect username or password" });
+  //       return;
+  //     }
+
+  //     // ✅ Simulate a token response
+  //     const mockToken = "mock-refresh-token-12345";
+  //     localStorage.setItem("token", mockToken);
+  //     console.log("Mock token saved:", mockToken);
+
+  //     // Redirect
+  //     setLoginSuccess(true);
+  //     navigate('/leads');
+  //   } catch (error) {
+  //     setErrors({ form: 'Something went wrong. Please try again.' });
+  //   } finally {
+  //     setSubmitting(false);
+  //   }
+  // };
 
 
   return (

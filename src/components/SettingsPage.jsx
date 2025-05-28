@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import RoleManagement from '../pages/settings/RoleManagement';
 import UserManagement from '../pages/settings/user/UserListing';
-import OrganisationManagement from '../pages/settings/OrganisationManagement';
+import OrganisationManagement from '../pages/settings/organization/OrganisationManagement';
 
 const tabs = [
   { name: "Role Management", component: RoleManagement },

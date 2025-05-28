@@ -2,14 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   CustomButton,
   CustomInputField,
-  CustomDropDown
 } from "react-mui-tailwind";
-import {
-  getStatus,
-  getCategory,
-  getSubCategory,
-  getBranch
-} from '../../../api/services/masterAPIs/createLeadApi';
 import { FieldArray, getIn } from 'formik';
 import TrashIcon  from '../../../assets/bulk-trash-icon.svg';
 import { X } from 'lucide-react';
@@ -43,7 +36,7 @@ const OrganisationAccountInfoForm = ({
             >
               <div style={{width:"fit-content", marginRight:"30px"}}>
                 <CustomInputField
-                  state={isEditable ? "default" : "non-editable"}
+                  state={isEditable ? "default" : "disabled"}
                   showAsterisk={false}
                   label="Account Name"
                   value={entry.name}
@@ -61,7 +54,7 @@ const OrganisationAccountInfoForm = ({
             
               <div style={{width:"fit-content", marginRight:"30px"}}>
                 <CustomInputField
-                  state={isEditable ? "default" : "non-editable"}
+                  state={isEditable ? "default" : "disabled"}
                   showAsterisk={false}
                   label="Ad Account ID"
                   value={entry.account_id}

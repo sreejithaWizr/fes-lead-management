@@ -2,14 +2,14 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { CustomTable, CustomPagination, CustomButton, CustomOffCanvasModal, CustomSearch } from 'react-mui-tailwind';
-import EditIcon from "../../assets/edit-icon.svg";
-import FilterIcon from "../../assets/filter.svg";
-import FilterContent from '../../pages/FilterContent';
-import { getLeadList } from '../../api/services/leadAPI/leadAPIs';
+import EditIcon from "../../../assets/edit-icon.svg";
+// import FilterIcon from "../../../assets/filter.svg";
 import debounce from "lodash.debounce";
-import { getOrganisationList } from '../../api/services/settingsAPI/organisationAPI';
-import DeleteIcon from "../../assets/delete-icon.svg";
-import DeletePopup from '../../utils/DeletePopup';
+// import { deleteOrg, getOrganisationList } from '../../../../api/services/settingsAPI/organisationAPI';
+import DeleteIcon from "../../../assets/delete-icon.svg";
+import DeletePopup from '../../../utils/DeletePopup';
+import FilterContent from '../../FilterContent';
+import { deleteOrg, getOrganisationList } from '../../../api/services/settingsAPI/organisationAPI';
 
 
 const OrganisationManagement = () => {
@@ -63,19 +63,26 @@ const OrganisationManagement = () => {
     };
 
     const handleDelete = (row) => {
-        setSelectedRow(row);
-        setIsDeleteOpen(true);
-    };
+    setSelectedRow(row);
+    setIsDeleteOpen(true);
+  };
 
-    const confirmDelete = () => {
-        if (selectedRow) {
-            console.log("Deleting organisation:", selectedRow.organizationName);
+  const confirmDelete = async () => {
+    // if (selectedRow) {
+    //   // Example: remove from local list
+    //   setUsers((prev) => prev.filter(user => user.id !== selectedRow.id));
+    // }
+    // setIsDeleteOpen(false);
 
-            // Example: remove from local list
-            setOrganisations((prev) => prev.filter(organisation => organisation.id !== selectedRow.id));
-        }
-        setIsDeleteOpen(false);
-    };
+    try {
+      await deleteOrg(selectedRow.id);
+      setIsDeleteOpen(false);
+      setSelectedRow(null);
+      fetchUserData(); // re-fetch user list after deletion
+    } catch (error) {
+      console.error("Failed to delete user:", error);
+    }
+  };
 
     const getRow = (columnId, value, row = {}) => {
         switch (columnId) {

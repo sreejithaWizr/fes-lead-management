@@ -62,7 +62,7 @@ export const requiredEmailField = () =>
     .trim()
     .required("Required")
     .matches(
-      /^(?!.*\.\.)(?!\.)(?!.*\.$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      /^(?!.\.\.)(?!\.)(?!.\.$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
       "Invalid email format"
     );
 
@@ -70,19 +70,20 @@ export const optionalEmailField = () =>
   Yup.string()
     .trim()
     .matches(
-      /^(?!.*\.\.)(?!\.)(?!.*\.$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      /^(?!.\.\.)(?!\.)(?!.\.$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
       "Invalid email format"
     );
 
 export const requiredTenDigitNumber = () =>
   Yup.string()
-    .matches(/^[0-9]{10}$/, `Must be exactly 10 digits`)
-    .required(`Required`);
+    .matches(/^\d{10,15}$/, "Must be between 10 and 15 digits")
+    .required("Required");
 
 export const optionalTenDigitNumber = () =>
   Yup.string()
-    .matches(/^[0-9]{10}$/, `Must be exactly 10 digits`)
+    .matches(/^\d{10,15}$/, "Must be between 10 and 15 digits")
     .nullable();
+
 
 export const requiredBooleanTrue = () =>
   Yup.boolean().oneOf([true], "Required");
