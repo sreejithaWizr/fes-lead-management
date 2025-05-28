@@ -110,7 +110,9 @@ const RoleInformationForm = ({ values, errors, touched, handleChange, handleBlur
                         disabled={isViewMode}
                         onChange={(value) => {
                             setFieldValue('parentRole', value.target.value?.id);
-                            setFieldValue('copyRoleTemplte', '');
+                            if(mode == "create"){
+                                setFieldValue('copyRoleTemplte', '');
+                            }
                         }}
                         onBlur={() => handleBlur({ target: { name: 'parentRole' } })}
                         hasError={touched.parentRole && Boolean(errors.parentRole)}

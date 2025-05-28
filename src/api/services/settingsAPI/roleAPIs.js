@@ -16,6 +16,10 @@ export const getRolebyId = (roleID) => {
   return apiClient.get(`/api/UserRoleListView/GetUserRoleListViewById/${roleID}`);
 };
 
+export const updateRole = (roleID, payload) => {
+  return apiClient.put(`api/UserRole/updateRole/${roleID}`, payload);
+};
+
 export const deleteRole = (roleID) => {
-  return apiClient.delete(`api/UserRole/delete/${roleID}`);
+  return apiClient.delete(`api/UserRole/${roleID}`);
 };

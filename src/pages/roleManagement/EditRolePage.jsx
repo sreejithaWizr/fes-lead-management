@@ -11,6 +11,7 @@ import {
     deleteRole,
     getRolebyId,
     roleAccess,
+    updateRole,
 } from "../../api/services/settingsAPI/roleAPIs";
 import { roleSchemaValidations } from "../../components/forms/createRole/schema";
 import RoleInformationForm from "../../components/forms/createRole/RoleInformationForm";
@@ -113,7 +114,7 @@ const EditViewRolePage = ({ mode = "edit" }) => {
         };
 
         try {
-            const response = await createRole(payload);
+            const response = await updateRole(id, payload);
             console.log("User created:", response.data);
             if (response?.data?.succeeded === true) {
                 navigate("/settings?tab=Role+Management");
