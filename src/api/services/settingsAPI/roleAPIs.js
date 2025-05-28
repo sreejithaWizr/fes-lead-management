@@ -12,6 +12,10 @@ export const roleAccess = (payload) => {
   return apiClient.post("/api/Modules/GetModuleFeatureByOrgId", payload);
 };
 
+export const getRolebyId = (roleID) => {
+  return apiClient.get(`/api/UserRoleListView/GetUserRoleListViewById/${roleID}`);
+};
+
 export const deleteRole = (roleID) => {
   return apiClient.delete(`api/UserRole/delete/${roleID}`);
 };

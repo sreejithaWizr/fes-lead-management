@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Checkbox, Typography } from "@mui/material";
 import { CustomButton } from "react-mui-tailwind";
 
-const RoleAccessForm = ({ values, setFieldValue, mode }) => {
+const RoleAccessForm = ({ values, setFieldValue, mode='create' }) => {
     
     const isDisabled = mode === "view"
 
@@ -52,12 +52,32 @@ const RoleAccessForm = ({ values, setFieldValue, mode }) => {
         });
     };
 
+    // const checkBoxStyle = {
+    //    ".MuiSvgIcon-root": {
+    //         color: "#17222B",
+    //       },
+    //     "&.Mui-disabled .MuiSvgIcon-root": {
+    //         color: "#BFBFBF",
+    //       },
+    // };
+
     const checkBoxStyle = {
-        // height: "16px",
-        // width: "16px",
-        color: "#17222B",
-        borderRadius: "5px",
-    };
+        // Default (enabled)
+        "& .MuiSvgIcon-root": {
+          color: "#17222B",
+        },
+      
+        // Disabled (unchecked)
+        "&.Mui-disabled .MuiSvgIcon-root": {
+          color: "#BFBFBF",
+        },
+      
+        // Disabled and checked
+        "&.Mui-disabled.Mui-checked .MuiSvgIcon-root": {
+          color: "#BFBFBF",
+        },
+      };
+      
 
     return (
         <div className="form-section p-[16px] animate-fade-in">
@@ -281,7 +301,7 @@ const RoleAccessForm = ({ values, setFieldValue, mode }) => {
                                         >
                                             <Box display="flex" alignItems="center" gap={1}>
                                                 <Checkbox
-                                                    style={checkBoxStyle}
+                                                    sx={checkBoxStyle}
                                                     checked={isAllFieldChecked(privilege)}
                                                     indeterminate={
                                                         isSomeFieldChecked(privilege) &&
@@ -324,7 +344,7 @@ const RoleAccessForm = ({ values, setFieldValue, mode }) => {
 
                                                             {field.hasOwnProperty("view") && (
                                                                 <Checkbox
-                                                                    style={checkBoxStyle}
+                                                                    sx={checkBoxStyle}
                                                                     checked={field.view}
                                                                     onChange={(e) =>
                                                                         setFieldValue(
@@ -411,7 +431,7 @@ const RoleAccessForm = ({ values, setFieldValue, mode }) => {
                                                                 {type}
                                                             </Typography>
                                                             <Checkbox
-                                                                style={checkBoxStyle}
+                                                                sx={checkBoxStyle}
                                                                 checked={isAllChecked(privilege, type)}
                                                                 indeterminate={
                                                                     privilege.fields?.some((f) => f[type]) &&
@@ -454,7 +474,7 @@ const RoleAccessForm = ({ values, setFieldValue, mode }) => {
                                                         <Box display="flex" gap={4}>
                                                             {field.hasOwnProperty("view") && (
                                                                 <Checkbox
-                                                                    style={checkBoxStyle}
+                                                                    sx={checkBoxStyle}
                                                                     checked={field.view}
                                                                     onChange={(e) => {
                                                                         const checked = e.target.checked;
@@ -468,7 +488,7 @@ const RoleAccessForm = ({ values, setFieldValue, mode }) => {
                                                             )}
                                                             {field.hasOwnProperty("edit") && (
                                                                 <Checkbox
-                                                                    style={checkBoxStyle}
+                                                                    sx={checkBoxStyle}
                                                                     checked={field.edit}
                                                                     onChange={(e) => {
                                                                         const checked = e.target.checked;
@@ -480,7 +500,7 @@ const RoleAccessForm = ({ values, setFieldValue, mode }) => {
                                                             )}
                                                             {field.hasOwnProperty("mask") && (
                                                                 <Checkbox
-                                                                    style={checkBoxStyle}
+                                                                    sx={checkBoxStyle}
                                                                     checked={field.mask}
                                                                     onChange={(e) =>
                                                                         setFieldValue(

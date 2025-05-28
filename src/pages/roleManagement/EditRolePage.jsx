@@ -9,6 +9,7 @@ import DeleteIcon from "../../assets/delete-icon-red.svg";
 import {
     createRole,
     deleteRole,
+    getRolebyId,
     roleAccess,
 } from "../../api/services/settingsAPI/roleAPIs";
 import { roleSchemaValidations } from "../../components/forms/createRole/schema";
@@ -17,7 +18,7 @@ import RoleAccessForm from "../../components/forms/createRole/RoleAccessForm";
 import EditIcon from "../../assets/edit.svg";
 import { getLeadById } from "../../api/services/leadAPI/leadAPIs";
 import DeletePopup from "../../utils/DeletePopup";
-
+import { getInitials } from "../../utils/commonFunction";
 
 const deleteButtonStyles = {
     border: "1px solid #F7A4A3",
@@ -39,9 +40,12 @@ const EditViewRolePage = ({ mode = "edit" }) => {
     const { id } = useParams();
 
     const [loadingModules, setLoadingModules] = useState(false);
+    const [loadingRoleData, setLoadingRoleData] = useState(true);
     const [formMode, setFormMode] = useState(mode);
-    const [roleData, setRoleData] = useState();
+    const [roleData, setRoleData] = useState(null);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+
+    const [hasOrgChanged, setHasOrgChanged] = useState(false);
 
     const [initialValues, setInitialValues] = useState({
         roleName: "",
@@ -57,14 +61,15 @@ const EditViewRolePage = ({ mode = "edit" }) => {
 
     useEffect(() => {
         const fetchRoleDetails = async () => {
+            setLoadingRoleData(true); //
             try {
-                const response = await getLeadById(id);
-                setRoleData(response?.data);
-                console.log("Role data fetched:", response?.data);
+                const response = await getRolebyId(id);
+                setRoleData(response?.data?.data);
+                console.log("Role data fetched:", response?.data?.data);
             } catch (err) {
                 console.error("Failed to fetch role:", err);
             } finally {
-                // setLoading(false);
+                setLoadingRoleData(false);
             }
         };
 
@@ -76,7 +81,7 @@ const EditViewRolePage = ({ mode = "edit" }) => {
             roleName: roleData?.role_name,
             roleType: roleData?.role_type_id,
             parentRole: roleData?.parent_role_id,
-            copyRoleTemplte: roleData?.parent_role_id,
+            copyRoleTemplte: Number(id),
             insertionMode: roleData?.insertion_mode_id,
             organisation: roleData?.org_id,
             hierarchyLevel: roleData?.hierarchy_level,
@@ -84,14 +89,16 @@ const EditViewRolePage = ({ mode = "edit" }) => {
             roleModules: roleData?.role_modules || [],
         };
 
-        setTimeout(() => {
-            setInitialValues(roleDataByID);
-        }, 1000);
+        // setTimeout(() => {
+        setInitialValues(roleDataByID);
+        // }, 1000);
     }, [roleData]);
 
     const handleBack = () => {
         navigate("/settings?tab=Role+Management");
     };
+
+    console.log("roleData", roleData)
 
     const handleSubmit = async (values) => {
         const payload = {
@@ -117,7 +124,7 @@ const EditViewRolePage = ({ mode = "edit" }) => {
     };
 
     const handleEditClick = () => {
-        navigate(`/settings/role/edit/${id}`)
+        navigate(`/settings/role/edit/${id}`);
         setFormMode("edit");
     };
 
@@ -138,23 +145,41 @@ const EditViewRolePage = ({ mode = "edit" }) => {
         }
     };
 
+    if (loadingRoleData) {
+        return (
+            <div className="fixed inset-0 flex items-center justify-center z-50">
+                <div className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-blue-500 border-solid  border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
+            </div>
+        );
+    }
+
     return (
         <>
             <Formik
                 initialValues={initialValues}
                 validationSchema={roleSchemaValidations}
                 onSubmit={(values) => handleSubmit(values)}
+                enableReinitialize={true}
             >
                 {(formik) => {
-                    // Fetch data when organization changes
+
+                    useEffect(() => {
+                        if (
+                            roleData &&
+                            formik?.values?.organisation &&
+                            formik?.values?.organisation !== roleData?.org_id
+                        ) {
+                            setHasOrgChanged(true);
+                        }
+                    }, [formik?.values?.organisation]);
+
+                    // For Fetching the data when organization and copyrole changes
                     useEffect(() => {
                         const fetchModules = async () => {
                             const selectedOrg = formik?.values?.organisation;
                             const selectedCopyRole = formik?.values?.copyRoleTemplte;
 
-                            console.log("copy role template", selectedCopyRole);
-
-                            if (selectedOrg) {
+                            if (hasOrgChanged && selectedOrg) {
                                 setLoadingModules(true);
                                 const payload = {
                                     orgid: selectedOrg || null,
@@ -175,13 +200,12 @@ const EditViewRolePage = ({ mode = "edit" }) => {
                                 } finally {
                                     setLoadingModules(false); // <-- this always runs
                                 }
-                            } else {
-                                formik.setFieldValue("roleModules", []);
                             }
                         };
 
                         fetchModules();
-                    }, [formik?.values?.organisation, formik?.values?.copyRoleTemplte]);
+
+                    }, [formik?.values?.organisation, formik?.values?.copyRoleTemplte, hasOrgChanged]);
 
                     return (
                         <Form>
@@ -213,11 +237,11 @@ const EditViewRolePage = ({ mode = "edit" }) => {
                                 }}
                             >
                                 <div className="flex flex-row items-center gap-4">
-                                    <div className="bg-[#030229B2] text-white w-[64px] h-[64px] rounded-full flex items-center justify-center text-sm p-[12px] font-bold text-[23px] leading-[140%] tracking-[0%]">
-                                        EK
+                                    <div className="bg-[#030229B2] text-white w-[64px] h-[64px] rounded-full flex items-center justify-center p-[12px] font-bold text-[23px] leading-[140%] tracking-[0%]">
+                                        {getInitials(formik?.values?.roleName)}
                                     </div>
-                                    <label style={{ fontWeight: "700", fontSize: "19px" }}>
-                                        Project Manager
+                                    <label style={{ fontWeight: "700", fontSize: "19px", wordBreak: "break-word" }}>
+                                        {formik.values.roleName}
                                     </label>
                                 </div>
                                 <div>
@@ -255,7 +279,8 @@ const EditViewRolePage = ({ mode = "edit" }) => {
                                             />
                                             <CustomButton
                                                 // type="Submit"
-                                                text="Update" s
+                                                text="Update"
+                                                showText={true}
                                                 startIcon={true}
                                                 endIcon={false}
                                                 iconImg={TickIcon}
@@ -276,7 +301,7 @@ const EditViewRolePage = ({ mode = "edit" }) => {
                                         <RoleAccessForm
                                             values={formik.values}
                                             setFieldValue={formik.setFieldValue}
-                                            mode={"view"}
+                                            mode={formMode}
                                         />
                                     )
                                 ))}

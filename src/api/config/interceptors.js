@@ -6,10 +6,12 @@ export const setupInterceptors = (apiClient) => {
   // Request interceptor
   apiClient.interceptors.request.use(
     (config) => {
-      const token = ""
+
+      const token = localStorage.getItem('token');
+      
       if (token) {
         config.headers = config.headers || {};
-        config.headers['Authorization'] = `Token ${token}`;
+        config.headers['Authorization'] = `Bearer ${token}`;
       }
       return config;
     },

@@ -20,6 +20,13 @@ const CreateRolePage = () => {
 
   const [loadingModules, setLoadingModules] = useState(false);
 
+  // const [alert, setAlert] = useState({
+  //   open: false,
+  //   severity: "success",
+  //   title: "",
+  //   description: "",
+  // });
+
   const handleBack = () => {
     navigate("/settings?tab=Role+Management");
   };
@@ -35,6 +42,13 @@ const CreateRolePage = () => {
       org_id: values?.organisation,
       role_modules: values?.roleModules,
     };
+
+    // setAlert({
+    //   open: true,
+    //   severity: "success",
+    //   title: "Success",
+    //   description: "Item created successfully!",
+    // });
 
     try {
       const response = await createRole(payload);
@@ -66,91 +80,105 @@ const CreateRolePage = () => {
         // For Fetching the data when organization and copyrole changes
         useEffect(() => {
           const fetchModules = async () => {
-              const selectedOrg = formik?.values?.organisation;
-              const selectedCopyRole = formik?.values?.copyRoleTemplte;
-      
-              console.log("copy role template", selectedCopyRole);
-      
-              if (selectedOrg) {
-                  setLoadingModules(true);
-                  const payload = {
-                      orgid: selectedOrg || null,
-                      copyparentrole_id: selectedCopyRole || null,
-                  };
-                  console.log("Payload:", payload);
-      
-                  try {
-                      const data = await roleAccess(payload);
-                      console.log("Fetched data:", data);
-                      formik.setFieldValue(
-                          "roleModules",
-                          data?.data?.data?.role_modules || []
-                      );
-                  } catch (error) {
-                      console.error("Failed to fetch role modules:", error);
-                      formik.setFieldValue("roleModules", []);
-                  } finally {
-                      setLoadingModules(false); // <-- this always runs
-                  }
-              } else {
-                  formik.setFieldValue("roleModules", []);
+            const selectedOrg = formik?.values?.organisation;
+            const selectedCopyRole = formik?.values?.copyRoleTemplte;
+
+            console.log("copy role template", selectedCopyRole);
+
+            if (selectedOrg) {
+              setLoadingModules(true);
+              const payload = {
+                orgid: selectedOrg || null,
+                copyparentrole_id: selectedCopyRole || null,
+              };
+              console.log("Payload:", payload);
+
+              try {
+                const data = await roleAccess(payload);
+                console.log("Fetched data:", data);
+                formik.setFieldValue(
+                  "roleModules",
+                  data?.data?.data?.role_modules || []
+                );
+              } catch (error) {
+                console.error("Failed to fetch role modules:", error);
+                formik.setFieldValue("roleModules", []);
+              } finally {
+                setLoadingModules(false); // <-- this always runs
               }
+            } else {
+              formik.setFieldValue("roleModules", []);
+            }
           };
-      
+
           fetchModules();
-      }, [formik?.values?.organisation, formik?.values?.copyRoleTemplte]);
+        }, [formik?.values?.organisation, formik?.values?.copyRoleTemplte]);
 
         return (
-          <Form>
-            <div className="flex w-full justify-between mb-4">
-              <div className="flex items-center gap-4">
-                <img
-                  src={LeftArrowIcon}
-                  alt="FES Logo"
-                  className="size-[24px] rounded-md cursor-pointer"
-                  onClick={handleBack}
-                />
-                <div className="flex items-center gap-2">
-                  <h1 className="font-proxima font-bold text-[28px] leading-[140%] align-middle text-[#17222B]">
-                    Add new role
-                  </h1>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <CustomButton
-                  text="Cancel"
-                  variant="secondary"
-                  startIcon={false}
-                  endIcon={false}
-                  onClick={handleBack}
-                />
-                <CustomButton
-                  type="Submit"
-                  text="Submit"
-                  startIcon={false}
-                  endIcon={true}
-                  iconImg={RightArrowIcon}
-                />
-              </div>
-            </div>
-            <RoleInformationForm {...formik} mode="create" />
-            {formik?.values?.organisation &&
-              (loadingModules ? (
-                <div className="flex justify-center items-center py-10">
-                  <div
-                    // className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-900"
-                    className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-blue-500 border-solid  border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-                  ></div>
-                </div>
-              ) : (
-                formik?.values?.roleModules?.length > 0 && (
-                  <RoleAccessForm
-                    values={formik?.values}
-                    setFieldValue={formik.setFieldValue}
+          <>
+            <Form>
+              <div className="flex w-full justify-between mb-4">
+                <div className="flex items-center gap-4">
+                  <img
+                    src={LeftArrowIcon}
+                    alt="FES Logo"
+                    className="size-[24px] rounded-md cursor-pointer"
+                    onClick={handleBack}
                   />
-                )
-              ))}
-          </Form>
+                  <div className="flex items-center gap-2">
+                    <h1 className="font-proxima font-bold text-[28px] leading-[140%] align-middle text-[#17222B]">
+                      Add new role
+                    </h1>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <CustomButton
+                    text="Cancel"
+                    variant="secondary"
+                    startIcon={false}
+                    endIcon={false}
+                    onClick={handleBack}
+                  />
+                  <CustomButton
+                    type="Submit"
+                    text="Submit"
+                    startIcon={false}
+                    endIcon={true}
+                    iconImg={RightArrowIcon}
+                  />
+                </div>
+              </div>
+              <RoleInformationForm {...formik} mode="create" />
+              {formik?.values?.organisation &&
+                (loadingModules ? (
+                  <div className="flex justify-center items-center py-10">
+                    <div
+                      // className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-900"
+                      className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-blue-500 border-solid  border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                    ></div>
+                  </div>
+                ) : (
+                  formik?.values?.roleModules?.length > 0 && (
+                    <RoleAccessForm
+                      values={formik?.values}
+                      setFieldValue={formik.setFieldValue}
+                      mode="create"
+                    />
+                  )
+                ))}
+            </Form>
+            {/* {alert.open && (
+              <Snackbar
+                severity={alert.severity}
+                variant="filled"
+                hasTitle={true}
+                title={alert.title}
+                hasDescription={true}
+                description={alert.description}
+                hasClose={true}
+              />
+            )} */}
+          </>
         );
       }}
     </Formik>
