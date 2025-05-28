@@ -17,8 +17,8 @@ const validationSchema = Yup.object().shape({
     countryName: requiredStringField(),
     // opportunityIDFormat: requiredStringField(),
     counsellor1: requiredDropdown(),
-    counsellor2: requiredDropdown(),
-    // intake: requiredDropdown(),
+    counsellor2: optionalDropdown(),
+    intake: requiredDropdown(),
     opportunityStatus: requiredDropdown(),
     opportunityCategory: requiredDropdown(),
     opportunitySubCatergory: requiredDropdown(),
@@ -118,7 +118,7 @@ const EditOpportunityRow = ({ key, data, onCancel, onUpdate }) => {
                     state="disabled"
                     disabled={true}
                     hasLabel={false}
-                    onChange={(e) => formik.setFieldValue('countryName', countryOptions?.find((o) => o?.formik.values.countryName === o.id))}
+                    onChange={(e) => formik.setFieldValue('countryName', countryOptions?.find((o)=> o?.formik.values.countryName === o.id ) )}
                     onBlur={formik.handleBlur}
                     error={formik.touched.countryName && formik.errors.countryName}
                     hasError={formik.touched.countryName && Boolean(formik.errors.countryName)}
@@ -165,7 +165,6 @@ const EditOpportunityRow = ({ key, data, onCancel, onUpdate }) => {
             <div style={{ width: '100%' }}>
                 {/* <label style={labelStyle}>Counsellor 1</label>
                 <CustomDropDown
-                    label="Counsellor 1"
                     name="counsellor1"
                     options={userOptions}
                     value={userOptions?.find((option) => option.id === formik.values.counsellor1) || ""}
@@ -195,7 +194,6 @@ const EditOpportunityRow = ({ key, data, onCancel, onUpdate }) => {
             <div style={{ width: '100%' }}>
                 {/* <label style={labelStyle}>Counsellor 2</label>
                 <CustomDropDown
-                    label="Counsellor 2"
                     name="counsellor2"
                     options={userOptions}
                     value={userOptions?.find((option) => option.id === formik.values.counsellor2) || ""}
@@ -247,28 +245,11 @@ const EditOpportunityRow = ({ key, data, onCancel, onUpdate }) => {
                     hasError={formik.touched.intake && Boolean(formik.errors.intake)}
                     error={formik.touched.intake && formik.errors.intake}
                 />
-
-                 {/* <CustomInputField
-                            state="disabled"
-                            label="Preferred Intake"
-                            showAsterisk={false}
-                            value={formik.values.intake}
-                            onChange={(value) => {
-                              setFieldValue('intake', value.target.value)
-                            }}
-                            onBlur={formik.handleBlur}
-                            placeholder="Enter value"
-                            hasError={formik.touched.intake && Boolean(formik.errors.intake)}
-                            error={formik.touched.intake && formik.errors.intake}
-                            className="w-full max-w-[calc(100%-40px)]"
-                          /> */}
             </div>
 
             <div style={{ width: '100%' }}>
                 {/* <label style={labelStyle}>Opportunity Status</label>
                 <CustomDropDown
-                    label="Opportunity Status"
-                    required={true}
                     name="opportunityStatus"
                     options={statusOptions}
                     value={statusOptions?.find((option) => option?.id === formik.values.opportunityStatus) || ''}
