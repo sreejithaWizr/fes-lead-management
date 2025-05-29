@@ -65,6 +65,7 @@ const RoleAccessForm = ({ values, setFieldValue, mode='create' }) => {
         // Default (enabled)
         "& .MuiSvgIcon-root": {
           color: "#17222B",
+          height:"19px",
         },
       
         // Disabled (unchecked)
@@ -82,7 +83,7 @@ const RoleAccessForm = ({ values, setFieldValue, mode='create' }) => {
     return (
         <div className="form-section p-[16px] animate-fade-in">
             <h2 className="font-bold text-[19px] ">Role Access</h2>
-            <Box pt={2} pb={2}>
+            <div className="pt-1 pb-1">
                 <div className="flex space-x-2 pt-3 pb-3">
                     {values?.roleModules?.map((tab, index) => (
                         <div key={tab?.moduleID}>
@@ -100,183 +101,14 @@ const RoleAccessForm = ({ values, setFieldValue, mode='create' }) => {
                     ))}
                 </div>
 
-                <div className="text-[17px] font-bold text-[#17222B] break-words mt-[16px]">
+                <div className="text-[15px] font-bold text-[#17222B] break-words mt-[16px]">
                     {selectedModule ? selectedModule?.module_name : "No module"}
                 </div>
 
-                {/* <Box display="flex" width={"100%"} gap={"24px"} mt={4}>
-             
-                    <div style={{ width: "33%" }}>
-                        {selectedModule?.privilege
-                            ?.filter((p) => !p.field_level)
-                            ?.map((privilege, pIndex) => {
-                                const realIndex = selectedModule.privilege.findIndex(
-                                    (pr) => pr.privilege_id === privilege.privilege_id
-                                );
-
-                                return (
-                                    <div key={privilege?.privilege_id} style={{ backgroundColor: "#F2F6F8", padding: "12px", borderRadius: "12px", width: "408px", }} >
-                                        <Box display="flex" alignItems="center" gap={1}>
-                                            <Checkbox
-                                                style={checkBoxStyle}
-                                                checked={isAllFieldChecked(privilege)}
-                                                indeterminate={
-                                                    isSomeFieldChecked(privilege) &&
-                                                    !isAllFieldChecked(privilege)
-                                                }
-                                                onChange={(e) =>
-                                                    handleTogglePrivilegeAll(realIndex, e.target.checked)
-                                                }
-                                            />
-                                            <Typography style={{ wordBreak: "break-all" }} fontWeight="700">
-                                                {privilege?.privilege_name}
-                                            </Typography>
-                                        </Box>
-
-                                        {privilege?.fields?.map((field, fIndex) => {
-                                            const basePath = `roleModules[${selectedModuleIndex}].privilege[${realIndex}].fields[${fIndex}]`;
-
-                                            return (
-                                                <Box
-                                                    key={field?.field_id}
-                                                    display="flex"
-                                                    justifyContent="space-between"
-                                                    alignItems="center"
-                                                    mt={1}
-                                                    px={2}
-                                                >
-                                                    <Typography style={{ wordBreak: "break-all" }} flex={1}>{field?.field_name}</Typography>
-
-                                                    {field.hasOwnProperty("view") && (
-                                                        <Checkbox
-                                                            style={checkBoxStyle}
-                                                            checked={field.view}
-                                                            onChange={(e) =>
-                                                                setFieldValue(`${basePath}.view`, e.target.checked)
-                                                            }
-                                                        />
-                                                    )}
-                                                </Box>
-                                            );
-                                        })}
-                                    </div>
-                                );
-                            })}
-                    </div>
-
-                    
-                    <div style={{ width: "66%", display: "flex", flexWrap: "wrap", gap: "24px" }}>
-                        {selectedModule?.privilege
-                            ?.filter((p) => p.field_level)
-                            ?.map((privilege, pIndex) => {
-                                const realIndex = selectedModule.privilege.findIndex(
-                                    (pr) => pr.privilege_id === privilege.privilege_id
-                                );
-
-                                return (
-                                    <div key={privilege?.privilege_id} style={{ backgroundColor: "#F2F6F8", padding: "12px", borderRadius: "12px", width: "408px" }} >
-                                        <div display="flex" alignItems="center">
-                                            <Typography style={{ wordBreak: "break-all" }} fontWeight="bold">
-                                                {privilege?.privilege_name}
-                                            </Typography>
-                                        </div>
-
-                                        <Box display="flex" justifyContent="space-between" pt={1} style={{ borderBottom: "1px solid #CBDBE4" }}>
-                                            <Box flex={1}>Select all</Box>
-                                            <Box display="flex" gap={4}>
-                                                {["view", "edit", "mask"].map((type) =>
-                                                    privilege.fields?.some((f) => f.hasOwnProperty(type)) ? (
-                                                        <Box
-                                                            key={type}
-                                                            display="flex"
-                                                            flexDirection="column"
-                                                            alignItems="center"
-                                                        >
-                                                            <Typography
-                                                                fontWeight="bold"
-                                                                sx={{ textTransform: "capitalize" }}
-                                                            >
-                                                                {type}
-                                                            </Typography>
-                                                            <Checkbox
-                                                                style={checkBoxStyle}
-                                                                checked={isAllChecked(privilege, type)}
-                                                                indeterminate={
-                                                                    privilege.fields?.some((f) => f[type]) &&
-                                                                    !isAllChecked(privilege, type)
-                                                                }
-                                                                onChange={(e) =>
-                                                                    handleToggleAll(realIndex, type, e.target.checked)
-                                                                }
-                                                            />
-                                                        </Box>
-                                                    ) : null
-                                                )}
-                                            </Box>
-                                        </Box>
-
-                                        {privilege?.fields?.map((field, fIndex) => {
-                                            const basePath = `roleModules[${selectedModuleIndex}].privilege[${realIndex}].fields[${fIndex}]`;
-
-                                            return (
-                                                <Box
-                                                    key={field?.field_id}
-                                                    display="flex"
-                                                    justifyContent="space-between"
-                                                    alignItems="center"
-                                                    mt={1}
-                                                // px={2}
-                                                >
-                                                    <Typography style={{ wordBreak: "break-all" }} flex={1}>{field?.field_name}</Typography>
-
-                                                    <Box display="flex" gap={4}>
-                                                        {field.hasOwnProperty("view") && (
-                                                            <Checkbox
-                                                                style={checkBoxStyle}
-                                                                checked={field.view}
-                                                                onChange={(e) => {
-                                                                    const checked = e.target.checked;
-                                                                    setFieldValue(`${basePath}.view`, checked);
-                                                                    if (!checked && field.edit) {
-                                                                        setFieldValue(`${basePath}.edit`, false);
-                                                                    }
-                                                                }}
-                                                            />
-                                                        )}
-                                                        {field.hasOwnProperty("edit") && (
-                                                            <Checkbox
-                                                                style={checkBoxStyle}
-                                                                checked={field.edit}
-                                                                onChange={(e) => {
-                                                                    const checked = e.target.checked;
-                                                                    setFieldValue(`${basePath}.edit`, checked);
-                                                                    setFieldValue(`${basePath}.view`, checked);
-                                                                }}
-                                                            />
-                                                        )}
-                                                        {field.hasOwnProperty("mask") && (
-                                                            <Checkbox
-                                                                style={checkBoxStyle}
-                                                                checked={field.mask}
-                                                                onChange={(e) =>
-                                                                    setFieldValue(`${basePath}.mask`, e.target.checked)
-                                                                }
-                                                            />
-                                                        )}
-                                                    </Box>
-                                                </Box>
-                                            );
-                                        })}
-                                    </div>
-                                );
-                            })}
-                    </div>
-                </Box> */}
-
-                <Box display="flex" width="100%" gap="24px" mt="16px">
+                <div className="flex w-full gap-6 mt-4">
                     {/* Left Column: field_level false */}
-                    <Box>
-                        <Box display="flex" flexDirection="column" gap="24px">
+                    <div className="mt-2">
+                        <div className="flex flex-col gap-[24px]">
                             {selectedModule?.privilege
                                 ?.filter((p) => !p.field_level)
                                 ?.map((privilege) => {
@@ -285,21 +117,21 @@ const RoleAccessForm = ({ values, setFieldValue, mode='create' }) => {
                                     );
 
                                     return (
-                                        <Box
+                                        <div
                                             key={privilege?.privilege_id}
-                                            sx={{
-                                                backgroundColor: "#F2F6F8",
-                                                padding: "12px",
-                                                borderRadius: "12px",
-                                                minWidth: "408px", // Take full column width
-                                                boxSizing: "border-box",
-                                                maxHeight: "325px",
-                                                display: "flex",
-                                                flexDirection: "column"
-                                            }}
-                                            className="custom-scroll"
+                                            // sx={{
+                                            //     backgroundColor: "#F2F6F8",
+                                            //     padding: "12px",
+                                            //     borderRadius: "12px",
+                                            //     minWidth: "408px", // Take full column width
+                                            //     boxSizing: "border-box",
+                                            //     maxHeight: "325px",
+                                            //     display: "flex",
+                                            //     flexDirection: "column"
+                                            // }}
+                                            className="bg-[#F2F6F8] p-3 rounded-[12px] min-w-[408px] max-h-[325px] box-border flex flex-col custom-scroll"  
                                         >
-                                            <Box display="flex" alignItems="center" gap={1}>
+                                            <div className="flex items-center gap-1">
                                                 <Checkbox
                                                     sx={checkBoxStyle}
                                                     checked={isAllFieldChecked(privilege)}
@@ -315,32 +147,26 @@ const RoleAccessForm = ({ values, setFieldValue, mode='create' }) => {
                                                     }
                                                     disabled={isDisabled}
                                                 />
-                                                <Typography
-                                                    style={{ wordBreak: "break-all" }}
-                                                    fontWeight="700"
+                                                <label
+                                                    className="break-all font-[700] text-[15px]"
                                                 >
-                                                    {privilege?.privilege_name}
-                                                </Typography>
-                                            </Box>
-                                            <div style={{ flexGrow: 1, padding: 0, overflow: "auto" }} className="custom-scroll">
+                                                    {privilege?.privilege_name} 
+                                                </label>
+                                            </div>
+                                            <div className="flex-grow p-0 overflow-auto custom-scroll">
                                                 {privilege?.fields?.map((field, fIndex) => {
                                                     const basePath = `roleModules[${selectedModuleIndex}].privilege[${realIndex}].fields[${fIndex}]`;
 
                                                     return (
-                                                        <Box
+                                                        <div
                                                             key={field?.field_id}
-                                                            display="flex"
-                                                            justifyContent="space-between"
-                                                            alignItems="center"
-                                                            mt={1}
-                                                            px={1}
+                                                            className="flex justify-between items-center mt-1 px-1"
                                                         >
-                                                            <Typography
-                                                                style={{ wordBreak: "break-all" }}
-                                                                flex={1}
+                                                            <label
+                                                               className="break-all flex-1 text-[15px]"
                                                             >
                                                                 {field?.field_name}
-                                                            </Typography>
+                                                            </label>
 
                                                             {field.hasOwnProperty("view") && (
                                                                 <Checkbox
@@ -355,26 +181,18 @@ const RoleAccessForm = ({ values, setFieldValue, mode='create' }) => {
                                                                     disabled={isDisabled}
                                                                 />
                                                             )}
-                                                        </Box>
+                                                        </div>
                                                     );
                                                 })}
                                             </div>
-                                        </Box>
+                                        </div>
                                     );
                                 })}
-                        </Box>
-                    </Box>
+                        </div>
+                    </div>
 
                     {/* Right Column: field_level true */}
-                    <Box
-                        sx={{
-                            // width: '66%',
-                            display: "flex",
-                            flexWrap: "wrap",
-                            gap: "24px",
-                            alignContent: "flex-start",
-                        }}
-                    >
+                    <div className="flex flex-wrap gap-6 content-start mt-2">
                         {selectedModule?.privilege
                             ?.filter((p) => p.field_level)
                             ?.map((privilege) => {
@@ -383,53 +201,29 @@ const RoleAccessForm = ({ values, setFieldValue, mode='create' }) => {
                                 );
 
                                 return (
-                                    <Box
+                                    <div
                                         key={privilege?.privilege_id}
-                                        sx={{
-                                            backgroundColor: "#F2F6F8",
-                                            padding: "12px",
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            borderRadius: "12px",
-                                            width: "408px",
-                                            boxSizing: "border-box",
-                                            height: "325px",
-                                        }}
-                                        className="custom-scroll"
-                                    >
+                                        className="bg-[#F2F6F8] p-3 flex flex-col rounded-[12px] w-[408px] box-border h-[325px] custom-scroll">
                                         <div display="flex" alignItems="center">
-                                            <Typography
-                                                style={{ wordBreak: "break-all" }}
-                                                fontWeight="bold"
-                                            >
+                                            <label className="break-all text-[15px] font-[700]">
                                                 {privilege?.privilege_name}
-                                            </Typography>
+                                            </label>
                                         </div>
 
-                                        <Box
-                                            display="flex"
-                                            justifyContent="space-between"
-                                            pt={1}
-                                            style={{ borderBottom: "1px solid #CBDBE4" }}
-                                        >
-                                            <Box flex={1}>Select all</Box>
-                                            <Box display="flex" gap={4}>
+                                        <div className="flex justify-between pt-1 border-b border-[#CBDBE4]">
+                                            <div className="flex-1 text-[14px]">Select all</div>
+                                            <div className="flex gap-5">
                                                 {["view", "edit", "mask"].map((type) =>
                                                     privilege.fields?.some((f) =>
                                                         f.hasOwnProperty(type)
                                                     ) ? (
-                                                        <Box
+                                                        <div
                                                             key={type}
-                                                            display="flex"
-                                                            flexDirection="column"
-                                                            alignItems="center"
+                                                            className="flex flex-col items-center"
                                                         >
-                                                            <Typography
-                                                                fontWeight="bold"
-                                                                sx={{ textTransform: "capitalize" }}
-                                                            >
+                                                            <label className="font-[700] text-[14px] capitalize">
                                                                 {type}
-                                                            </Typography>
+                                                            </label>
                                                             <Checkbox
                                                                 sx={checkBoxStyle}
                                                                 checked={isAllChecked(privilege, type)}
@@ -446,32 +240,27 @@ const RoleAccessForm = ({ values, setFieldValue, mode='create' }) => {
                                                                 }
                                                                 disabled={isDisabled}
                                                             />
-                                                        </Box>
+                                                        </div>
                                                     ) : null
                                                 )}
-                                            </Box>
-                                        </Box>
-                                        <div style={{ flexGrow: 1, padding: 0, overflow: "auto" }} className="custom-scroll">
+                                            </div>
+                                        </div>
+                                        <div className="flex-grow p-0 overflow-auto custom-scroll">
                                             {privilege?.fields?.map((field, fIndex) => {
                                                 const basePath = `roleModules[${selectedModuleIndex}].privilege[${realIndex}].fields[${fIndex}]`;
 
                                                 return (
-                                                    <Box
+                                                    <div
                                                         key={field?.field_id}
-                                                        display="flex"
-                                                        justifyContent="space-between"
-                                                        alignItems="center"
-                                                        mt={1}
-                                                    // px={2}
+                                                       className="flex justify-between mt-1 items-center"
                                                     >
-                                                        <Typography
-                                                            style={{ wordBreak: "break-all" }}
-                                                            flex={1}
+                                                        <label
+                                                        className="break-all text-[15px] flex-1" 
                                                         >
-                                                            {field?.field_name}
-                                                        </Typography>
+                                                            {field?.field_name} 
+                                                        </label>
 
-                                                        <Box display="flex" gap={4}>
+                                                        <div className="flex gap-5">
                                                             {field.hasOwnProperty("view") && (
                                                                 <Checkbox
                                                                     sx={checkBoxStyle}
@@ -511,17 +300,17 @@ const RoleAccessForm = ({ values, setFieldValue, mode='create' }) => {
                                                                     disabled={isDisabled}
                                                                 />
                                                             )}
-                                                        </Box>
-                                                    </Box>
+                                                        </div>
+                                                    </div>
                                                 );
                                             })}
                                         </div>
-                                    </Box>
+                                    </div>
                                 );
                             })}
-                    </Box>
-                </Box>
-            </Box>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };

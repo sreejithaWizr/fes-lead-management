@@ -17,7 +17,7 @@ export const getRolebyId = (roleID) => {
 };
 
 export const updateRole = (roleID, payload) => {
-  return apiClient.put(`api/UserRole/updateRole/${roleID}`, payload);
+  return apiClient.put(`api/UserRole/${roleID}`, payload);
 };
 
 export const deleteRole = (roleID) => {

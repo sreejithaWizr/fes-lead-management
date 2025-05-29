@@ -111,16 +111,17 @@ const EditViewRolePage = ({ mode = "edit" }) => {
             description: values?.description,
             org_id: values?.organisation,
             role_modules: values?.roleModules,
+            modified_by: "Admin"
         };
 
         try {
             const response = await updateRole(id, payload);
-            console.log("User created:", response.data);
+            console.log("Role updated:", response.data);
             if (response?.data?.succeeded === true) {
                 navigate("/settings?tab=Role+Management");
             }
         } catch (err) {
-            console.error("Error creating user:", err);
+            console.error("Error updating role:", err);
         }
     };
 

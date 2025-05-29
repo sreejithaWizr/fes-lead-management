@@ -41,6 +41,7 @@ const CreateRolePage = () => {
       description: values?.description,
       org_id: values?.organisation,
       role_modules: values?.roleModules,
+      created_by: "Admin"
     };
 
     // setAlert({
