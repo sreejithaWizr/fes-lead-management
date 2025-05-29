@@ -119,17 +119,7 @@ const RoleAccessForm = ({ values, setFieldValue, mode='create' }) => {
                                     return (
                                         <div
                                             key={privilege?.privilege_id}
-                                            // sx={{
-                                            //     backgroundColor: "#F2F6F8",
-                                            //     padding: "12px",
-                                            //     borderRadius: "12px",
-                                            //     minWidth: "408px", // Take full column width
-                                            //     boxSizing: "border-box",
-                                            //     maxHeight: "325px",
-                                            //     display: "flex",
-                                            //     flexDirection: "column"
-                                            // }}
-                                            className="bg-[#F2F6F8] p-3 rounded-[12px] min-w-[408px] max-h-[325px] box-border flex flex-col custom-scroll"  
+                                            className="bg-[#F2F6F8] pt-2 pr-3 pb-2 pl-2 rounded-[12px] min-w-[408px] max-h-[325px] box-border flex flex-col custom-scroll"  
                                         >
                                             <div className="flex items-center gap-1">
                                                 <Checkbox
@@ -150,7 +140,7 @@ const RoleAccessForm = ({ values, setFieldValue, mode='create' }) => {
                                                 <label
                                                     className="break-all font-[700] text-[15px]"
                                                 >
-                                                    {privilege?.privilege_name} 
+                                                    {privilege?.privilege_name}
                                                 </label>
                                             </div>
                                             <div className="flex-grow p-0 overflow-auto custom-scroll">
@@ -160,14 +150,8 @@ const RoleAccessForm = ({ values, setFieldValue, mode='create' }) => {
                                                     return (
                                                         <div
                                                             key={field?.field_id}
-                                                            className="flex justify-between items-center mt-1 px-1"
+                                                            className="flex items-center mt-1 px-1 pl-4 gap-1"
                                                         >
-                                                            <label
-                                                               className="break-all flex-1 text-[15px]"
-                                                            >
-                                                                {field?.field_name}
-                                                            </label>
-
                                                             {field.hasOwnProperty("view") && (
                                                                 <Checkbox
                                                                     sx={checkBoxStyle}
@@ -181,6 +165,11 @@ const RoleAccessForm = ({ values, setFieldValue, mode='create' }) => {
                                                                     disabled={isDisabled}
                                                                 />
                                                             )}
+                                                             <label
+                                                               className="break-all flex-1 text-[15px]"
+                                                            >
+                                                                {field?.field_name} 
+                                                            </label>
                                                         </div>
                                                     );
                                                 })}
@@ -257,7 +246,7 @@ const RoleAccessForm = ({ values, setFieldValue, mode='create' }) => {
                                                         <label
                                                         className="break-all text-[15px] flex-1" 
                                                         >
-                                                            {field?.field_name} 
+                                                            {field?.field_name}
                                                         </label>
 
                                                         <div className="flex gap-5">
