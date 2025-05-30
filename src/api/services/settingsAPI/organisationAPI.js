@@ -9,7 +9,7 @@ export const getOrganisationById = async (orgId) => {
     }
 };
 
-export const updateOrganisation = (id, payload) => {
+export const updateOrganisation = (payload) => {
     try {
         return apiClient.put(`/api/Organization`, payload);
     } catch (error) {

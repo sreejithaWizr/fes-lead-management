@@ -6,6 +6,7 @@ import OrganisationAccountInfoForm from '../../../components/forms/createOrganis
 import OrganisationBasicInfoForm from '../../../components/forms/createOrganisation/orgBasicInfoForm';
 import { validationSchema } from '../../../components/forms/createOrganisation/schema';
 import OrganisationDetailsHeader from '../../../components/OrganisationDetailsHeader';
+import { CustomAlert } from 'react-mui-tailwind';
 export const formRef = React.createRef();
 
 const EditOrganisationPage = () => {
@@ -13,6 +14,11 @@ const EditOrganisationPage = () => {
     const navigate = useNavigate();
     const [orgData, setOrgData] = useState(null);
     const [initialValues, setInitialValues] = useState(null);
+    const [alert, setAlert] = useState({
+            open: false,
+            severity: 'error',
+            description: '',
+        });
 
 
     useEffect(() => {
@@ -30,6 +36,15 @@ const EditOrganisationPage = () => {
 
         fetchOrganisation();
     }, [id]);
+
+     useEffect(() => {
+            if (alert.open) {
+                const timer = setTimeout(() => {
+                    setAlert(prev => ({ ...prev, open: false }));
+                }, 5000); // Auto-dismiss after 5s
+                return () => clearTimeout(timer);
+            }
+        }, [alert.open]);
 
 
     const orgDetails = {
@@ -107,21 +122,27 @@ const EditOrganisationPage = () => {
             //     account_id: info.account_id || null,
             // })),
         }
-
         try {
-            const response = await updateOrganisation(id, payload);
-            if (response?.data?.succeeded === true) {
-                navigate("/settings?tab=Organisation+Management")
-                // alert("Updated")
-            }
-            else {
-                alert("Updation Failed")
-            }
-            // alert("Created")
-            // Optional: reset form or show toast
-        } catch (err) {
-            console.error('Error creating user:', err);
-        }
+                    const response = await updateOrganisation(payload);
+                    if (response?.data?.succeeded === true) {
+                        navigate("/settings?tab=Organisation+Management");
+                    } else {
+                        setAlert({
+                            open: true,
+                            severity: 'error',
+                            description: response?.data?.message || 'Organisation updation failed.',
+                        });
+                        // alert(response?.data?.message);
+        
+                    }
+                } catch (err) {
+                    console.error('Error updation organisation:', err);
+                    setAlert({
+                        open: true,
+                        severity: 'error',
+                        description: err?.response?.data?.message || 'Something went wrong. Please try again.',
+                    });
+                }
     };
 
     if (!initialValues) return <div>Loading...</div>;
@@ -130,6 +151,23 @@ const EditOrganisationPage = () => {
         <div className="w-full h-full">
             <OrganisationDetailsHeader organisation={orgDetails} />
             <div className="w-full h-full rounded-md">
+                {/* Alert block */}
+                            {alert.open && (
+                                <div className="fixed top-6 right-6 z-50">
+                                    <div className="animate-slideIn">
+                                        <CustomAlert
+                                            severity={alert.severity}
+                                            variant="filled"
+                                            hasTitle={false}
+                                            hasDescription={true}
+                                            description={alert.description}
+                                            hasAction={false}
+                                            hasClose={true}
+                                            onClose={() => setAlert(prev => ({ ...prev, open: false }))}
+                                        />
+                                    </div>
+                                </div>
+                            )}
                 <Formik
                     initialValues={initialValues}
                     validationSchema={validationSchema}
