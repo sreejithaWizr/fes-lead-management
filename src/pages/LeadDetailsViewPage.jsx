@@ -14,6 +14,7 @@ import LeadMailIcon from '../assets/sms.svg';
 import LeadCallIcon from '../assets/phone-icon.svg';
 import EditIcon from '../assets/edit.svg';
 import { getLeadById } from '../api/services/leadAPI/leadAPIs';
+import { getStatus } from '../api/services/masterAPIs/createLeadApi';
 
 // Ref for external form submit
 export const formRef = React.createRef();
@@ -53,6 +54,31 @@ const LeadDetailsViewPage = () => {
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({});
   const [leadData, setLeadData] = useState(null);
+  const [statusOptions, setStatusOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [statusRes] = await Promise.allSettled([
+          getStatus()
+        ]
+        );
+        setStatusOptions(statusRes?.value?.data?.data || []);
+      } catch (err) {
+        console.error('Error loading filters:', err);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const getStatusNameById = (id) => {
+    const status = statusOptions.find(item => item.id === id);
+    return status ? status.name : "Status not found";
+}
+
+
+  console.log("Lead data:", statusOptions);
 
   const tabs = ['Opportunity', 'All Info', 'Lead Information', 'Education Qualification', 'Lead Status', 'Lead Source'];
 
@@ -179,7 +205,7 @@ const LeadDetailsViewPage = () => {
                       <div className="flex items-center space-x-2 mb-2">
                         <h1 className="font-bold text-[19px] text-[#17222B]">{leadData?.first_name} {leadData?.last_name}</h1>
                         <span className="text-xs px-2 py-1 rounded-full bg-[#FFF3E6] text-[#FF8400] font-medium border border-[#FFB86B]">
-                          May be Prospective
+                          {getStatusNameById(leadData?.status)}
                         </span>
                       </div>
                       <div className="text-sm text-gray-600 flex flex-wrap gap-x-4">

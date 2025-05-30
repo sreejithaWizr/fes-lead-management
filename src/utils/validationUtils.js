@@ -6,7 +6,7 @@ export const isEmpty = (value) => {
 };
 
 export const isEmailValid = (email) => {
-  const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,10}$/;
   return regex.test(email);
 };
 

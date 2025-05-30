@@ -6,7 +6,11 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
     const isEditable = mode === "edit";
 
     const yearOptions = Array.from({ length: 31 }, (_, i) => `${2030 - i}`);
-    const numberOfYears = [...Array.from({ length: 26 }, (_, i) => i)];
+    const numberOfYears = Array.from({ length: 26 }, (_, i) => ({
+  id: i.toString(),
+  name: i.toString()
+}));
+
     const monthOptions = [{ id: "Q1", name: "Q1" }, { id: "Q2", name: "Q2" }, { id: "Q3", name: "Q3" }, { id: "Q4", name: "Q4" }]
 
     const [areaOfStudyOptions, setAreaOfStudyOptions] = useState([]);
@@ -97,7 +101,7 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
     //     preferredCountryOptions?.filter(option => values?.preferredDestination?.includes(option?.id))
     // );
 
-    console
+
 
     return (
         <div className="form-section animate-fade-in ml-0 mb-6">
@@ -199,7 +203,8 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
                         required={false}
                         showAsterisk={false}
                         placeHolder="Select"
-                        value={values?.workExperience}
+                        // value={values?.workExperience}
+                        value={numberOfYears?.find(option => option?.id === values?.workExperience?.name)}
                         disabled={!isEditable}
                         onChange={(value) => {
                             setFieldValue('workExperience', value.target.value)

@@ -10,6 +10,7 @@ import WarningIcon from '../assets/warning-icon.svg';
 import LeadDetailsHeader from '../components/LeadDetailsHeader';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getLeadById, updateLead } from '../api/services/leadAPI/leadAPIs';
+import { getStatus } from '../api/services/masterAPIs/createLeadApi';
 
 const ErrorObserver = ({ setTabErrors }) => {
     const { errors, touched } = useFormikContext();
@@ -47,6 +48,32 @@ const EditLeadPage = () => {
     const [activeTab, setActiveTab] = useState('All Info');
     const [tabErrors, setTabErrors] = useState({});
     const [initialValues, setInitialValues] = useState(null);
+    const [statusOptions, setStatusOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [statusRes] = await Promise.allSettled([
+          getStatus()
+        ]
+        );
+        setStatusOptions(statusRes?.value?.data?.data || []);
+      } catch (err) {
+        console.error('Error loading filters:', err);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const getStatusNameById = (ids) => {
+    console.log("ids", id )
+    const status = statusOptions.find(item => item.id === ids);
+    return status ? status.name : "Status not found";
+}
+
+
+  console.log("Lead data:", statusOptions);
 
     // Simulated lead details (could come from API)
     useEffect(() => {
@@ -68,7 +95,7 @@ const EditLeadPage = () => {
     const leadDetails = {
         initials: `${leadData?.first_name?.charAt(0) || ''}${leadData?.last_name?.charAt(0) || ''}`,
         name: `${leadData?.first_name} ${leadData?.last_name}`,
-        status: 'May be Prospective',
+        status: getStatusNameById(leadData?.status),
         id: `${leadData?.lead_number}`,
         email: `${leadData?.email}`,
         phone: `${leadData?.mobile_number}`,
@@ -98,7 +125,7 @@ const EditLeadPage = () => {
             graduationYear: { name: leadData?.graduation_year },
             fieldOfStudy: leadData?.fieldofstudy_id,
             cgpaGrade: leadData?.cgpa_grade,
-            workExperience: { name: leadData?.work_experience },
+            workExperience: { name: leadData?.work_experience.toString() },
             intake_year: { name: leadData?.intake_year },
             intakeMonth: { name: leadData?.intake_month },
             preferredDestination: leadData?.preffered_destination || [], //['USA', 'Canada'],

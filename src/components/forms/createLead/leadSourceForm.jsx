@@ -387,7 +387,7 @@ const LeadSourceForm = ({ values, errors, touched, handleChange, handleBlur, set
 
                 <div className="form-field">
                     <CustomInputField
-                        state={isEditable ? "default" : "non-editable"}
+                        state={"non-editable"}
                         label="IP Address"
                         value={values.ipAddress}
                         showAsterisk={false}
