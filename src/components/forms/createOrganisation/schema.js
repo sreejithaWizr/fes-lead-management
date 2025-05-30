@@ -15,6 +15,7 @@ export const validationSchema = Yup.object({
   gst_no: requiredStringField(),
   primary_poc: requiredStringField(),
   poc_mail: requiredEmailField(),
+  poc_mobileNumber: optionalTenDigitNumber(),
 
   // Account Information
   // add_account_info: Yup.array().of(

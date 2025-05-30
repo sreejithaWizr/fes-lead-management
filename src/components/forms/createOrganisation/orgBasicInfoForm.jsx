@@ -368,7 +368,7 @@ const OrganisationBasicInfoForm = ({ values, errors, touched, handleChange, hand
             onChange={(value) => {
               setFieldValue('primary_poc', value.target.value)
             }}
-            placeholder="Enter number"
+            placeholder="Enter name"
             onBlur={handleBlur}
             hasError={touched.primary_poc && Boolean(errors.primary_poc)}
             error={touched.primary_poc && errors.primary_poc}
