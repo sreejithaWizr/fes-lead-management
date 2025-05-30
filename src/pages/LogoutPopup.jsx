@@ -1,5 +1,6 @@
 import React from 'react';
 import {useNavigate } from 'react-router-dom';
+import { logout } from '../utils/auth';
 import {CustomButton} from 'react-mui-tailwind'; // Adjust the import path as needed
 import { createPortal } from 'react-dom';
 
@@ -7,13 +8,10 @@ const LogoutPopup = ({ onClose }) => {
     const navigate = useNavigate(); // <-- for redirecting
 
 
-  const handleConfirmLogout = () => {
-    // Implement logout logic here (e.g., clear auth tokens, redirect, etc.)
-    localStorage.removeItem("token");
-    setTimeout(() => {
-      navigate('/login'); // redirect after short delay
-    }, 1000);
-    onClose();
+const handleConfirmLogout = () => {
+    logout(); // Use centralized logout function
+    navigate('/login', { replace: true }); // Redirect to login page
+    onClose(); // Close the logout modal or UI component
   };
 
   return createPortal(
@@ -27,7 +25,7 @@ const LogoutPopup = ({ onClose }) => {
         </p>
         <div className="flex gap-[8px]">
           <CustomButton
-            text="Yes Logout"
+            text="Yes, Logout"
             startIcon={false}
             endIcon={false}
             width="auto"

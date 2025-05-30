@@ -53,21 +53,25 @@ const UserProfileMenu = ({ onClose }) => {
 
       {/* View Profile */}
       <Link 
-        to="/profile" 
-        className="flex items-center gap-3 text-gray-600 hover:text-gray-800 transition"
-        onClick={onClose}
+      to="/profile" 
+      className="flex items-center gap-3 text-gray-600 hover:text-gray-800 transition"
+      onClick={onClose}
       >
-        <img src={ViewProfileIcon} alt="View Profile" className="w-5 h-5" />
-        <span>View Profile</span>
+      <img src={ViewProfileIcon} alt="View Profile" className="w-5 h-5" />
+      <span className="font-sans font-bold text-base leading-relaxed text-gray-800">
+      View Profile
+      </span>
       </Link>
 
       {/* Logout */}
       <button 
-        className="flex items-center gap-3 text-gray-600 hover:text-gray-800 transition"
-        onClick={handleLogoutClick} // Replace with actual logout function
+      className="flex items-center gap-3 text-gray-600 hover:text-gray-800 transition"
+      onClick={handleLogoutClick}
       >
-        <img src={LogoutIcon} alt="Logout" className="w-5 h-5" />
-        <span>Logout</span>
+      <img src={LogoutIcon} alt="Logout" className="w-5 h-5" />
+      <span className="font-sans font-bold text-base leading-relaxed text-gray-800">
+      Logout
+      </span>
       </button>
       {isPopupOpen && <LogoutPopup onClose={handleClosePopup} />}
       </div>

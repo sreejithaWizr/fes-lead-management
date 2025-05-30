@@ -6,7 +6,10 @@ import * as Yup from 'yup';
 
 export const emailRule = Yup.string()
   .required('Email is required')
-  .email('Enter a valid email address');
+  .matches(
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    'Enter a valid email address (e.g., user@domain.com)'
+  );
 
 export const userNameRule = Yup.string()
   .required('Username is required')

@@ -45,6 +45,10 @@ export const getResetPassword = async (email, newPassword, verificationCode) => 
     });
     return response?.data;
   } catch (error) {
+     if (error.response?.data) {
+      return error.response.data; //  Still return structured API error response for Invalid OTP
+    }
+
     throw error; // Let caller handle error
   }
 };

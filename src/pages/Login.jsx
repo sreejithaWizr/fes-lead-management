@@ -2,49 +2,56 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import FesLogo from '../assets/fes-logo-full.svg';
-import KeyIcon from '../assets/key-icon.svg';
 import DisplayDashboardImage from '../assets/login-display-image-static.svg';
-// import DisplayDashboardImage from '../assets/dashboard-static-image.svg';
 import { CustomButton, CustomCheckboxField, CustomInputField } from 'react-mui-tailwind';
 import { LoginValidationSchema } from '../utils/LoginValidationUtils';
-import { getLoginUser } from '../api/services/Login/loginEndpoints'; // update with correct path
-import { isAuthenticated } from "../utils/auth";
+import { getLoginUser } from '../api/services/Login/loginEndpoints';
+import { isAuthenticated, getStoredToken, isTokenValid, storeToken} from '../utils/auth';
 
 const Login = () => {
   const navigate = useNavigate(); // <-- for redirecting
   const [loginSuccess, setLoginSuccess] = useState(false); // <-- for showing success message
 
   const initialValues = {
-    username: '',
+    username: localStorage.getItem('rememberedUsername') || '',
     password: '',
-    rememberMe: false,
+    rememberMe: localStorage.getItem('rememberMe') === 'true',
   };
 
   useEffect(() => {
     const checkAuth = async () => {
-      if (await isAuthenticated()) {
-        navigate("/leads", { replace: true });
+      const { token, expiresAt, rememberMe } = getStoredToken();
+
+      if (token && isTokenValid(token, expiresAt)) {
+        if (await isAuthenticated()) {
+          navigate('/leads', { replace: true });
+        }
+      } else if (!rememberMe) {
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('tokenExpiresAt');
       }
     };
+
     checkAuth();
   }, [navigate]);
 
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
-      console.log('Form submitted with values:', values);
+      //  console.log('Form submitted with values:', values);
 
       const data = await getLoginUser(values.username, values.password); // just returns the data
-      if (!data?.token?.succeeded) {
 
+      if (!data?.token?.succeeded) {
         setErrors({ form: data?.errors || 'Incorrect username or password' });
         return;
       }
-      // Save token
-      const token = data?.token?.refreshToken;
-      localStorage.setItem("token", token);
-      console.log("Token saved:", token);
 
-      // Redirect
+      const token = data.token.accessToken;
+      const expiresAt = data.token.expiresAt;
+      
+          // console.log("Token expiresAt saved:", token, expiresAt);
+      storeToken(token, expiresAt, values.username, values.rememberMe);
+
       setLoginSuccess(true);
       navigate('/leads');
     } catch (error) {
@@ -54,60 +61,23 @@ const Login = () => {
     }
   };
 
-  // mock function to simulate login success
-  // const handleSubmit = async (values, { setSubmitting, setErrors }) => {
-  //   try {
-  //     console.log('Form submitted with values:', values);
-
-  //     // ✅ Simulate server login logic
-  //     if (
-  //       values.username !== "av@gmail.com" ||
-  //       values.password !== "Password@01"
-  //     ) {
-  //       setErrors({ form: "Incorrect username or password" });
-  //       return;
-  //     }
-
-  //     // ✅ Simulate a token response
-  //     const mockToken = "mock-refresh-token-12345";
-  //     localStorage.setItem("token", mockToken);
-  //     console.log("Mock token saved:", mockToken);
-
-  //     // Redirect
-  //     setLoginSuccess(true);
-  //     navigate('/leads');
-  //   } catch (error) {
-  //     setErrors({ form: 'Something went wrong. Please try again.' });
-  //   } finally {
-  //     setSubmitting(false);
-  //   }
-  // };
-
-
   return (
-    <div className="flex flex-col lg:flex-row bg-gradient-to-tr from-[#c5deec] via-[#F2FAFF] to-white 2xl:px-[39px] xl:px-[10px] min-h-screen 
-overflow-hidden">
+    <div className="flex flex-col lg:flex-row bg-gradient-to-tr from-[#c5deec] via-[#F2FAFF] to-white 2xl:px-[39px] xl:px-[10px] min-h-screen overflow-hidden">
       {/* Login Container */}
-      <div className="w-full lg:w-[40%] xl:w-[45%] flex justify-center items-center px-6 
-  lg:px-[52px] 
-  xl:pt-0 2xl:pl-[100px] 2xl:pt-0 
-  md:items-center md:justify-center 
-  lg:py-[10px] lg:gap-10">
-
+      <div className="w-full lg:w-[40%] xl:w-[45%] flex justify-center items-center px-6 lg:px-[52px] xl:pt-0 2xl:pl-[100px] 2xl:pt-0 md:items-center md:justify-center lg:py-[10px] lg:gap-10">
         <div className="w-full max-w-[424px] h-auto rounded-[12px] flex flex-col justify-center items-center gap-[12px] py-[34px]">
           <img src={FesLogo} alt="Logo" className="w-[132px] h-[32px]" />
 
-          <h1 className="flex flex-col justify-center items-center font-proxima font-bold text-[28px] text-black">Login
-            <span>    <p className="font-proxima font-normal text-[16px] sm:text-[14px] text-neutral-400 text-center">
-              Please login to continue using FES platform
-            </p></span>
+          <h1 className="flex flex-col justify-center items-center font-proxima font-bold text-[28px] text-black">
+            Login
+            <span>
+              <p className="font-proxima font-normal text-[16px] sm:text-[14px] text-neutral-400 text-center">
+                Please login to continue using FES platform
+              </p>
+            </span>
           </h1>
 
           <div className="w-[356px] border-t border-[#CBDBE4]"></div>
-
-          {/* <p className="font-proxima font-normal text-[16px] sm:text-[14px] text-neutral-500 text-center">
-        Please login to continue using FES platform
-      </p> */}
 
           <Formik
             initialValues={initialValues}

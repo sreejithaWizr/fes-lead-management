@@ -56,31 +56,35 @@ const ResetPasswordPage = () => {
     }
   };
 
-  const handleReset = async (values, { setSubmitting, resetForm }) => {
-    try {
-      setApiError('');
-      const data = await getResetPassword(
-        values.email,
-        values.newPassword,
-        values.verificationCode,
-      );
-      if (data?.succeeded) {
-        setLoginPasswordReset(true);
-        resetForm();
-        setTimeout(() => {
-          navigate('/login');
-        }, 2000);
-      } else {
-        setApiError(data.message || 'Failed to reset password. Please check your OTP.');
-      }
-    } catch (error) {
-      setApiError(
-        error.response?.data?.message ||
-          'Network error. Please check your connection and try again.'
-      );
+const handleReset = async (values, { setSubmitting, resetForm }) => {
+  setSubmitting(true); // always set this first to avoid re-submission issues
+  try {
+    setApiError('');
+    const data = await getResetPassword(
+      values.email,
+      values.newPassword,
+      values.verificationCode
+    );
+
+    if (data?.succeeded) {
+      setLoginPasswordReset(true);
+      resetForm();
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+    } else {
+      // Always prefer detailed API message fallback
+      setApiError(data?.message || 'Failed to reset password. Please check your OTP.');
     }
+  } catch (error) {
+    setApiError(
+      error.response?.data?.message ||
+        'Network error. Please check your connection and try again.'
+    );
+  } finally {
     setSubmitting(false);
-  };
+  }
+};
 
   return (
     <div
