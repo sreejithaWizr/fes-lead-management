@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Formik, Form, useFormikContext } from "formik";
-import * as Yup from "yup";
 import { CustomButton } from "react-mui-tailwind";
+import { Snackbar, Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import LeftArrowIcon from "../../assets/arrow-left.svg";
 import RightArrowIcon from "../../assets/arrow-right.svg";
@@ -15,17 +15,15 @@ import RoleAccessForm from "../../components/forms/createRole/RoleAccessForm";
 import RoleModuleFetcher from "./RoleFetcher";
 
 const CreateRolePage = () => {
-
   const navigate = useNavigate();
 
   const [loadingModules, setLoadingModules] = useState(false);
 
-  // const [alert, setAlert] = useState({
-  //   open: false,
-  //   severity: "success",
-  //   title: "",
-  //   description: "",
-  // });
+  const [alert, setAlert] = useState({
+    open: false,
+    severity: "",
+    description: "",
+  });
 
   const handleBack = () => {
     navigate("/settings?tab=Role+Management");
@@ -41,23 +39,33 @@ const CreateRolePage = () => {
       description: values?.description,
       org_id: values?.organisation,
       role_modules: values?.roleModules,
-      created_by: "Admin"
+      created_by: "Admin",
     };
-
-    // setAlert({
-    //   open: true,
-    //   severity: "success",
-    //   title: "Success",
-    //   description: "Item created successfully!",
-    // });
 
     try {
       const response = await createRole(payload);
-      console.log("User created:", response.data);
-      if (response?.data?.succeeded === true) {
-        navigate("/settings?tab=Role+Management");
+      if (response?.data?.succeeded == true) {
+        setAlert({
+          open: true,
+          severity: "success",
+          description: "Role created successfully.",
+        });
+        setTimeout(() => {
+          navigate("/settings?tab=Role+Management");
+        }, 2000);
+      } else if (response?.data?.succeeded == false) {
+        setAlert({
+          open: true,
+          severity: "error",
+          description: response?.data?.message || "Something went wrong !",
+        });
       }
     } catch (err) {
+      setAlert({
+        open: true,
+        severity: "error",
+        description: "Something went wrong !",
+      });
     }
   };
 
@@ -79,12 +87,11 @@ const CreateRolePage = () => {
     >
       {(formik) => {
         // For Fetching the data when organization and copyrole changes
+
         useEffect(() => {
           const fetchModules = async () => {
             const selectedOrg = formik?.values?.organisation;
             const selectedCopyRole = formik?.values?.copyRoleTemplte;
-
-            console.log("copy role template", selectedCopyRole);
 
             if (selectedOrg) {
               setLoadingModules(true);
@@ -92,17 +99,14 @@ const CreateRolePage = () => {
                 orgid: selectedOrg || null,
                 copyparentrole_id: selectedCopyRole || null,
               };
-              console.log("Payload:", payload);
 
               try {
                 const data = await roleAccess(payload);
-                console.log("Fetched data:", data);
                 formik.setFieldValue(
                   "roleModules",
                   data?.data?.data?.role_modules || []
                 );
               } catch (error) {
-                console.error("Failed to fetch role modules:", error);
                 formik.setFieldValue("roleModules", []);
               } finally {
                 setLoadingModules(false); // <-- this always runs
@@ -168,17 +172,22 @@ const CreateRolePage = () => {
                   )
                 ))}
             </Form>
-            {/* {alert.open && (
+            {alert.open && (
               <Snackbar
-                severity={alert.severity}
-                variant="filled"
-                hasTitle={true}
-                title={alert.title}
-                hasDescription={true}
-                description={alert.description}
-                hasClose={true}
-              />
-            )} */}
+                open={alert.open}
+                autoHideDuration={3000}
+                onClose={() => setAlert(false)}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+              >
+                <Alert
+                  onClose={() => setAlert(false)}
+                  severity={alert?.severity}
+                  sx={{ width: "100%" }}
+                >
+                  {alert?.description}
+                </Alert>
+              </Snackbar>
+            )}
           </>
         );
       }}
