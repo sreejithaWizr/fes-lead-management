@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { useFormikContext } from "formik";
 import { roleAccess } from "../../api/services/settingsAPI/roleAPIs";
 
+// Modules for fetching the role Privileges
 const RoleModuleFetcher = ({ setLoadingModules }) => {
+
   const { values, setFieldValue } = useFormikContext();
 
   useEffect(() => {
