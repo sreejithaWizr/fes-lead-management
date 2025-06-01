@@ -6,7 +6,7 @@ import {
 } from "../../../utils/validationUtils";
 
 export const roleSchemaValidations = Yup.object().shape({
-  roleName: requiredStringField().max(50, "Maximum 50 characters"),
+  roleName: requiredStringField().max(40, "Maximum 40 characters"),
   roleType: requiredDropdown(),
   parentRole:  requiredDropdown(),
   copyRoleTemplte: optionalDropdown(),

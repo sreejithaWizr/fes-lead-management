@@ -168,10 +168,20 @@ const EditViewRolePage = ({ mode = "edit" }) => {
         });
         setTimeout(() => {
           navigate("/settings?tab=Role+Management");
-        }, 2000);
+        }, 1500);
+      } else if (response?.data?.succeeded == false) {
+        setAlert({
+          open: true,
+          severity: "error",
+          description: response?.data?.message || "Something went wrong !",
+        });
       }
     } catch (err) {
-      console.error("Error deleting user:", err);
+      setAlert({
+        open: true,
+        severity: "error",
+        description: "Something went wrong !",
+      });
     }
   };
 
@@ -354,6 +364,7 @@ const EditViewRolePage = ({ mode = "edit" }) => {
           autoHideDuration={3000}
           onClose={() => setAlert(false)}
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          sx={{zIndex:"99999"}}
         >
           <Alert
             onClose={() => setAlert(false)}
