@@ -7,9 +7,9 @@ const LeadEducationForm = ({ values, errors, touched, handleChange, handleBlur, 
 
     const yearOptions = Array.from({ length: 31 }, (_, i) => `${2030 - i}`);
     const numberOfYears = Array.from({ length: 26 }, (_, i) => ({
-  id: i.toString(),
-  name: i.toString()
-}));
+        id: i.toString(),
+        name: i.toString()
+    }));
 
     const monthOptions = [{ id: "Q1", name: "Q1" }, { id: "Q2", name: "Q2" }, { id: "Q3", name: "Q3" }, { id: "Q4", name: "Q4" }]
 

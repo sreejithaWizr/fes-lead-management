@@ -278,12 +278,12 @@ const LeadInformationForm = ({ values, errors, touched, handleChange, handleBlur
         <CustomCheckboxField
           name="agreeToReceiveBoolean"
           label="I agree to receive communications"
-          onChange={handleAgreeToReceiveOnChange} 
-          disabled={!isEditable && !isCreateMode} 
-          checked={values?.agreeToReceiveBoolean ? true : false} 
+          onChange={handleAgreeToReceiveOnChange}
+          disabled={!isEditable && !isCreateMode}
+          checked={values?.agreeToReceiveBoolean ? true : false}
           hasError={touched.agreeToReceiveBoolean && Boolean(errors.agreeToReceiveBoolean)}
           error={errors.agreeToReceiveBoolean}
-          />
+        />
         <span className='text-red-600'>*</span>
       </div>
 
